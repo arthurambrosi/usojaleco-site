@@ -1,0 +1,2649 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>UsoJaleco | Orçamento</title>
+  <style>
+    :root{
+      --bg:#0a0b0f;
+      --card:#12141b;
+      --card2:#171a23;
+      --muted:#9aa4b2;
+      --text:#e6e9ef;
+      --line:#232838;
+      --accent:#4f7cff;
+
+      --orange1:#ff7a18;
+      --orange2:#ffb703;
+
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --req:#ff3b3b;
+    }
+    *{box-sizing:border-box}
+
+    /* ✅ CORREÇÃO DEFINITIVA DE SCROLL MOBILE */
+    html{
+      min-height:100%;
+      height:auto;
+      overflow-x:hidden;
+    }
+    body{
+      min-height:100vh;
+      height:auto;
+      margin:0;
+      padding:18px;
+      overflow-x:hidden;
+      overflow-y:visible;
+      position:static;
+
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+    }
+
+    .btn,
+    .numBlock,
+    details summary,
+    .social a,
+    .goPay,
+    .stepCard,
+    .option{
+      touch-action:manipulation;
+    }
+
+    /* ===== NAV ===== */
+    .navBar{
+      background:linear-gradient(180deg,rgba(18,20,27,.92),rgba(10,11,15,.88));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:12px 14px;
+      box-shadow:0 12px 30px rgba(0,0,0,.28);
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+      overflow:hidden;
+    }
+    .navLeft{display:flex;align-items:center;gap:12px;min-width:220px;}
+    .logoMark{
+      width:40px;height:40px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      color:#0a0b0f;font-weight:950;letter-spacing:.5px;
+      background:linear-gradient(135deg,var(--orange1),var(--orange2));
+      box-shadow:0 10px 24px rgba(0,0,0,.35);
+      flex:0 0 auto;
+    }
+    .brandText{display:inline-block;width:max-content;line-height:1.05;}
+    .brandName{font-size:18px;font-weight:900;letter-spacing:.2px;margin:0;}
+    .brandSub{
+      margin-top:5px;width:100%;
+      color:rgba(230,233,239,.78);
+      font-size:11px;font-weight:500;display:block;
+    }
+    .navRight{
+      display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:270px;
+    }
+    .social{display:flex;align-items:center;gap:8px;}
+    .social a{
+      width:34px;height:34px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      transition:border-color .15s ease, background .15s ease;
+      text-decoration:none;
+    }
+    .social a:hover{border-color:rgba(255,122,24,.55);background:rgba(255,122,24,.08);}
+    .social svg{display:block}
+    .goPay{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      padding:10px 12px;border-radius:14px;
+      cursor:pointer;font-weight:850;font-size:12.5px;
+      transition:border-color .15s ease, background .15s ease;
+      user-select:none;white-space:nowrap;
+    }
+    .goPay:hover{border-color:rgba(255,122,24,.60);}
+
+    /* ===== CARD BASE ===== */
+    .card{
+      background:linear-gradient(180deg,var(--card), var(--card2));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      margin-bottom:14px;
+    }
+
+    /* ===== TOPO ===== */
+    .topPanel{
+      padding:14px;
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      justify-content:space-between;
+    }
+
+    .stepsBar{
+      flex:1 1 auto;
+      display:grid;
+      grid-template-columns:repeat(6, minmax(0, 1fr));
+      gap:10px;
+      align-items:stretch;
+      width:100%;
+      overflow:visible;
+    }
+
+    .stepCard{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      padding:10px 10px 12px;
+      cursor:pointer;
+      user-select:none;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      transition:border-color .15s ease, background .15s ease, color .15s ease;
+      transform:none !important;
+      min-width:0;
+    }
+    .stepCard:hover{border-color:rgba(255,122,24,.55);}
+    .stepCard.on{
+      border-color:rgba(255,122,24,.70);
+      background:rgba(255,122,24,.08);
+    }
+
+    .stepIco{
+      width:38px;height:38px;border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      background:transparent;
+      border:1px solid rgba(255,122,24,.40);
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.10);
+    }
+    .stepIco svg{width:18px;height:18px;stroke:url(#stepGrad);}
+
+    .stepTitle{
+      font-size:12.5px;font-weight:900;letter-spacing:.15px;
+      text-align:center;margin:0;line-height:1.1;color:#e6e9ef;
+    }
+    .stepSub{
+      font-size:11px;color:#e6e9ef;font-style:italic;text-align:center;
+      margin-top:-3px;line-height:1.05;opacity:.78;
+    }
+
+    .budgetBox{
+      flex:0 0 320px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background:rgba(255,255,255,.02);
+      padding:10px;
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+    }
+
+    /* ===== Resumo ===== */
+    .miniResumo{
+      display:flex;
+      gap:12px;
+      flex-wrap:nowrap;
+      align-items:stretch;
+      justify-content:flex-start;
+      margin:0;
+      padding:0;
+      border:none;
+      background:transparent;
+      width:100%;
+    }
+    .miniResumo .item{
+      flex:1 1 0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background:transparent;
+      min-width:0;
+    }
+
+    .miniResumo .k{
+      font-size:12px;
+      line-height:1.2;
+      opacity:.75;
+      color:rgba(255,255,255,.72);
+    }
+    .miniResumo .v{
+      font-size:10px;
+      font-weight:600;
+      line-height:1.3;
+      color:var(--text);
+    }
+    .miniResumo .v strong{color:#fff}
+
+    /* ===== Conteúdo ===== */
+    .h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+    .h h2{margin:0;font-size:15px;letter-spacing:.2px;}
+    .h span{color:var(--muted);font-size:12px;line-height:1.35;text-align:right;}
+    .grid{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:10px;}
+
+    .option{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 12px 12px 44px;
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      transition:border-color .15s ease, background .15s ease;
+      min-height:56px;
+      display:flex;flex-direction:column;justify-content:center;gap:2px;
+    }
+    .option:hover{ border-color:rgba(255,122,24,.55)}
+    .option input{
+      position:absolute;left:12px;top:50%;
+      transform:translateY(-50%);
+      width:20px;height:20px;
+      accent-color:var(--orange1);
+    }
+    .option .t{font-weight:650;font-size:13px;}
+    .option .d{color:var(--muted);font-size:12px;}
+
+    label.small{display:block;color:var(--muted);font-size:12px;margin:10px 0 6px;}
+    .req{color:var(--req);font-weight:800;margin-left:6px;}
+
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select, input[type="number"]{
+      width:100%;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:none;
+      font-size:16px;
+      line-height:1.2;
+      -webkit-text-size-adjust:100%;
+    }
+    .inputSm{font-size:14px !important;padding:10px 12px !important;}
+    textarea{min-height:92px;resize:vertical}
+    input:focus, textarea:focus, select:focus{border-color:rgba(255,122,24,.55)}
+    .muted{color:var(--muted);font-size:12px;line-height:1.45}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+    .actions{
+      display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .actions.left{justify-content:flex-start;}
+    .actions.bottom{margin-top:14px;}
+    .btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:650;
+      font-size:13px;
+      transition:border-color .15s ease, background .15s ease, opacity .15s ease;
+      user-select:none;
+    }
+    .btn:hover{border-color:rgba(255,122,24,.60)}
+    .btn.primary{
+      color:#0a0b0f;
+      border-color:rgba(255,122,24,.0);
+      background:linear-gradient(135deg,var(--orange1),var(--orange2));
+      font-weight:900;
+    }
+    .btn.good{
+      color:#0a0b0f;
+      border-color:rgba(255,122,24,.0);
+      background:linear-gradient(135deg,var(--orange1),var(--orange2));
+      font-weight:900;
+    }
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+    .summary{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.02);
+      white-space:pre-wrap;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+      font-size:12px;line-height:1.45;
+      margin-top:12px;
+    }
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .tag b{color:var(--text)}
+    .tag.warn{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.12)}
+    .tag.bad{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.12)}
+    .tag.orange{border-color:rgba(255,122,24,.45);background:rgba(255,122,24,.10)}
+
+    .priceLine{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .oldPrice{color:rgba(255,255,255,.45);text-decoration:line-through}
+    .newPrice{color:var(--text);font-weight:700}
+
+details{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.03);
+  padding:10px 12px;
+
+  margin-top:18px;
+  margin-bottom:10px;
+}
+details[open]{
+  margin-bottom:18px;
+}
+    details summary{
+      cursor:pointer;
+      user-select:none;
+      font-weight:700;
+      color:var(--text);
+      outline:none;
+    }
+
+    .diffBox{margin-top:8px;font-size:12px;line-height:1.45}
+    .diffTitle{
+      font-weight:950;font-size:15px;
+      margin:12px 0 4px;
+      background:linear-gradient(135deg,var(--orange1),var(--orange2));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      filter:drop-shadow(0 2px 10px rgba(0,0,0,.55));
+      letter-spacing:.2px;
+    }
+    .diffSub{color:rgba(255,255,255,.65);font-size:11.5px;font-style:italic;margin:0 0 6px;}
+    .diffDesc{color:rgba(230,233,239,.92);font-size:12.5px;font-weight:800;margin:0 0 12px;line-height:1.45}
+    .yellowStar{color:var(--warn);font-weight:900}
+
+    .highlightOrange{color:var(--orange1);text-shadow:none;font-weight:400;letter-spacing:.3px;}
+
+    .numGrid{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px;}
+    .numBlock{
+      width:48px;height:48px;
+      border:2px solid var(--orange1);
+      border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:800;font-size:15px;
+      cursor:pointer;
+      background:rgba(255,122,24,0.02);
+      transition:all .15s ease;
+      user-select:none;
+    }
+    .numBlock:hover{
+      transform:translateY(-3px);
+      background:rgba(255,122,24,0.15);
+      box-shadow:0 4px 15px rgba(255,122,24,0.25);
+    }
+    .numBlock.active{
+      background:var(--orange1);
+      color:#0a0b0f;
+      box-shadow:0 0 15px rgba(255,122,24,0.6);
+      border-color:var(--orange1);
+    }
+
+    /* =========================
+       ✅ PRÉVIA DE IMAGENS (CURRÍCULOS)
+       ========================= */
+    .previewWrap{
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .previewTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .previewTitle{
+      font-size:12.5px;
+      font-weight:900;
+      letter-spacing:.15px;
+      margin:0;
+      color:#e6e9ef;
+    }
+    .previewHint{
+      color:rgba(230,233,239,.72);
+      font-size:11px;
+      font-style:italic;
+      margin:0;
+      text-align:right;
+    }
+    .previewEmpty{
+      margin-top:8px;
+      color:rgba(230,233,239,.72);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .previewTabs{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    .previewTab{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      padding:10px 12px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      font-size:12.5px;
+      text-align:center;
+      transition:border-color .15s ease, background .15s ease, transform .15s ease;
+      transform:none !important;
+      color:rgba(230,233,239,.95);
+    }
+    .previewTab:hover{
+      border-color:rgba(255,122,24,.55);
+      background:rgba(255,122,24,.08);
+      transform:translateY(-1px) !important;
+    }
+    .previewTab.on{
+      border-color:rgba(255,122,24,.70);
+      background:rgba(255,122,24,.12);
+    }
+
+    .previewHeader{
+      width:100%;
+      padding:10px 12px;
+      border-radius:14px;
+      background:linear-gradient(135deg, rgba(255,122,24,.30), rgba(255,183,3,.20));
+      border:1px solid rgba(255,255,255,.16);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:rgba(230,233,239,.95);
+      font-weight:950;
+      font-size:12.5px;
+      letter-spacing:.2px;
+      box-shadow:0 10px 24px rgba(0,0,0,.28);
+      margin-top:10px;
+    }
+
+    .previewGrid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+    .previewTile{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+      cursor:pointer;
+      transition:border-color .15s ease, background .15s ease, transform .15s ease;
+      transform:none !important;
+      padding:10px;
+    }
+    .previewTile:hover{
+      border-color:rgba(255,122,24,.55);
+      background:rgba(255,122,24,.08);
+      transform:translateY(-2px) !important;
+    }
+    .previewImg{
+      width:auto;height:auto;
+      max-width:100%;
+      display:block;
+      margin:0 auto;
+      object-fit:contain;
+    }
+
+    /* =========================
+       ✅ CERTIFICADOS (NAMESPACE .cert*)
+       ========================= */
+    .certCard{
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(1200px 380px at 50% -120px, rgba(255,255,255,.08), transparent 55%),
+        linear-gradient(180deg, rgba(18,20,27,.92), rgba(10,11,15,.88));
+      box-shadow:0 22px 60px rgba(0,0,0,.55);
+      padding:18px 18px 14px;
+      margin-top:10px;
+    }
+    .certTopRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .certTitle{
+      font-weight:950;
+      font-size:15px;
+      letter-spacing:.2px;
+      margin:0;
+    }
+    .certTopHint{
+      color:rgba(230,233,239,.68);
+      font-size:12px;
+      margin:0;
+      text-align:right;
+      padding-top:2px;
+    }
+    .certLabelRow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:rgba(230,233,239,.88);
+      font-size:12px;
+      margin:10px 0 8px;
+    }
+    .certReq{color:var(--req);font-weight:900;margin-left:6px;}
+    .certInput{
+      width:100%;
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      outline:none;
+      font-size:15px;
+      line-height:1.2;
+      transition:border-color .15s ease, background .15s ease;
+    }
+    .certInput:focus{
+      border-color:rgba(255,122,24,.55);
+      background:rgba(255,255,255,.04);
+    }
+    .certHelper{
+      margin:10px 0 14px;
+      color:rgba(230,233,239,.65);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .certDropzone{
+      border-radius:18px;
+      border:2px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.02);
+      padding:24px 16px;
+      text-align:center;
+      cursor:pointer;
+      user-select:none;
+      transition:border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    .certDropzone:hover{
+      border-color:rgba(255,122,24,.45);
+      background:rgba(255,122,24,.05);
+      transform:translateY(-1px);
+    }
+    .certDropzone.dragover{
+      border-color:rgba(255,122,24,.70);
+      background:rgba(255,122,24,.08);
+      transform:translateY(-1px);
+    }
+    .certDzTitle{
+      margin:0;
+      font-weight:950;
+      color:rgba(230,233,239,.96);
+      font-size:13.5px;
+    }
+    .certDzSub{
+      margin:6px 0 0;
+      color:rgba(154,164,178,.95);
+      font-size:12px;
+    }
+
+    .certProgressWrap{
+      width:100%;
+      margin-top:12px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      display:none;
+    }
+    .certProgressTop{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      margin-bottom:8px;font-size:12px;
+    }
+    .certProgressTop .l{font-weight:900}
+    .certProgressTop .r{color:rgba(230,233,239,.70)}
+    .certBar{
+      height:10px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+    }
+    .certBar > div{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--orange1),var(--orange2));
+      transition:width .18s ease;
+    }
+
+    .certFileList{
+      margin-top:10px;
+      display:none;
+      flex-direction:column;
+      gap:6px;
+      max-height:210px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    .certFileList::-webkit-scrollbar{width:8px}
+    .certFileList::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:999px}
+    .certFileList::-webkit-scrollbar-track{background:transparent}
+
+    .certFileTile{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      padding:8px 10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .certIcoBox{
+      width:36px;height:36px;
+      border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      flex:0 0 auto;
+      background:rgba(255,122,24,0.10);
+      border:1px solid rgba(255,122,24,0.25);
+    }
+    .certIcoBox svg{width:16px;height:16px;stroke:var(--orange1);}
+    .certMeta{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:2px;}
+    .certFileName{
+      color:#fff;font-weight:900;font-size:12px;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .certFileStatus{color:rgba(230,233,239,.70);font-size:11.5px;}
+    .certFileStatus.warn{color:rgba(245,158,11,.95)}
+    .certFileStatus.good{color:rgba(34,197,94,.95)}
+    .certFileStatus.bad{color:rgba(239,68,68,.95)}
+
+    .certFileTile.sending .certIcoBox{
+      background:rgba(255,122,24,0.10);
+      border-color:rgba(255,122,24,0.35);
+    }
+    .certFileTile.sending .certIcoBox svg{stroke:var(--orange1);}
+    .certFileTile.sent .certIcoBox{
+      background:rgba(34,197,94,0.12);
+      border-color:rgba(34,197,94,0.35);
+    }
+    .certFileTile.sent .certIcoBox svg{stroke:var(--good);}
+    .certFileTile.error .certIcoBox{
+      background:rgba(239,68,68,0.12);
+      border-color:rgba(239,68,68,0.35);
+    }
+    .certFileTile.error .certIcoBox svg{stroke:var(--bad);}
+
+    .certMiniNote{
+      margin-top:12px;
+      color:rgba(230,233,239,.62);
+      font-size:12px;
+      line-height:1.4;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .certPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      color:rgba(230,233,239,.72);
+      font-size:12px;
+      user-select:none;
+    }
+    .certPill b{color:var(--text)}
+    .certPill.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.10)}
+    .certPill.good{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .certPill.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
+    .certPill.orange{border-color:rgba(255,122,24,.35);background:rgba(255,122,24,.10)}
+
+    #certFileInput{display:none}
+
+    @media (max-width: 860px){
+      .navBar{flex-wrap:wrap;gap:10px}
+      .navLeft{min-width:auto}
+      .navRight{min-width:auto}
+    }
+    @media (max-width: 780px){
+      .grid{grid-template-columns:1fr}
+      .h{flex-direction:column}
+      .h span{text-align:left}
+      .topPanel{flex-direction:column}
+      .budgetBox{flex:1 1 auto}
+      .stepsBar{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      .miniResumo{flex-wrap:wrap}
+      .miniResumo .item{flex:1 1 100%}
+      .previewGrid{grid-template-columns:repeat(2, minmax(0,1fr));}
+    }
+    @media (max-width: 560px){
+      body{padding:12px;}
+
+      .topPanel{padding:10px;gap:10px;}
+      .stepsBar{
+        grid-template-columns:repeat(6, minmax(0, 1fr));
+        gap:6px;
+      }
+      .stepCard{padding:8px 6px;border-radius:14px;gap:0;min-height:46px;}
+      .stepTitle,.stepSub{display:none;}
+      .stepIco{width:34px;height:34px;border-radius:14px;}
+      .stepIco svg{width:16px;height:16px;}
+
+      .budgetBox{padding:8px;border-radius:14px;}
+      .miniResumo{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;}
+      .miniResumo .item{padding:8px 8px;border-radius:12px;gap:1px;}
+      .miniResumo .k{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75;}
+      .miniResumo .v{font-size:12px;font-weight:850;line-height:1.1;}
+
+      .previewGrid{grid-template-columns:1fr;}
+      .previewTabs{grid-template-columns:1fr;}
+      .previewHint{display:none;}
+
+      .certFileList{max-height:190px;}
+    }
+    @media (max-width: 360px){
+      .stepIco{width:32px;height:32px;}
+      .miniResumo .k{display:none;}
+    }
+
+    .topPanel svg{pointer-events:none;}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="navBar">
+      <div class="navLeft">
+        <div class="logoMark">UJ</div>
+        <div class="brandText" aria-label="UsoJaleco">
+          <div class="brandName">UsoJaleco</div>
+          <span class="brandSub">Economizando tempo!</span>
+        </div>
+      </div>
+
+      <div class="navRight">
+        <div class="social" aria-label="Redes sociais">
+          <a href="https://www.instagram.com/usojaleco_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="igGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff7a18"/>
+                  <stop offset="1" stop-color="#ffb703"/>
+                </linearGradient>
+              </defs>
+              <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z" stroke="url(#igGrad)" stroke-width="2"/>
+              <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="url(#igGrad)" stroke-width="2"/>
+              <path d="M17.5 6.5h.01" stroke="url(#igGrad)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </a>
+
+          <a href="https://www.tiktok.com/@usojaleco" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="ttGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff7a18"/>
+                  <stop offset="1" stop-color="#ffb703"/>
+                </linearGradient>
+              </defs>
+              <path d="M14 3v10.2a4.8 4.8 0 1 1-3.6-4.6" stroke="url(#ttGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 6c1.2 2.3 3.2 3.7 6 3.9" stroke="url(#ttGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a id="waIconLink" href="https://wa.me/5571981577908" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="waGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff7a18"/>
+                  <stop offset="1" stop-color="#ffb703"/>
+                </linearGradient>
+              </defs>
+              <path d="M20 11.5a8 8 0 0 1-12.9 6.2L4 18l.4-3.1A8 8 0 1 1 20 11.5Z" stroke="url(#waGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8.6 9.4c.2-.5.5-.5.8-.5h.2c.2 0 .5 0 .6.3l.9 1.5c.1.2.1.5 0 .7l-.3.4c-.1.2-.2.4 0 .6.3.6 1.3 1.8 2.6 2.4.2.1.5.1.6-.1l.5-.6c.2-.2.5-.3.7-.2l1.6.6c.3.1.4.4.4.7 0 .8-.5 1.4-1.2 1.7-.6.3-1.4.4-2.6.1-1.6-.4-3.1-1.5-4.4-3-.9-1-1.6-2.1-1.7-3.2 0-.7.2-1.4.3-1.7Z"
+                    stroke="url(#waGrad)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <button class="goPay" id="goPayBtn" type="button">Ir para pagamento</button>
+      </div>
+    </header>
+
+    <div class="card topPanel">
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <linearGradient id="stepGrad" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ff7a18"/>
+            <stop offset="1" stop-color="#ffb703"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="stepsBar" id="steps"></div>
+      <div class="budgetBox" id="budgetCard"></div>
+    </div>
+
+    <div class="card" id="screen"></div>
+
+    <div class="card">
+      <div class="row">
+        <span class="tag orange"><b>Dica:</b> você pode clicar nas etapas acima para voltar/ir direto.</span>
+        <button class="btn" id="resetBtn" type="button">Limpar tudo</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  // =========================
+  // CONFIG
+  // =========================
+  const WHATSAPP_NUMBER_E164 = "5571981577908";
+  const STORAGE_KEY = "ambrosi_curriculo_flow_v4";
+  const PIX_KEY = "usojaleco@gmail.com";
+
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2UE3r_LY3wIa__-WKzUnq-iwDMTbkNrWE4lJDGhGeA7cKnr-LxZ30wjN5nbbWnNyenN-TODpx_Bgd/pub?output=csv";
+  const CERT_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbx1wbeC4BXyxX75IlxG64Xi8ozUm2Avgp4uwUjh9V59h5sT7aKEGSQfLDy4XkOHnsRxuA/exec";
+
+  const PRICES = {
+    LATTES: { label: "Lattes", price: 99, prazo: "até 48h" },
+    VITAE_COMPLETO: { label: "Vitae (Completo)", price: 229, prazo: "até 10 min" },
+    VITAE_SINT: { label: "Vitae (Sintetizado)", price: 89, prazo: "até 48h" },
+  };
+
+  const BASE_REF = 249.00;
+  const MULTIPLIERS = {
+    1: 1.000000,
+    2: 273.00 / BASE_REF,
+    3: 276.96 / BASE_REF,
+    4: 277.29 / BASE_REF,
+    5: 284.63 / BASE_REF,
+    6: 284.66 / BASE_REF,
+    7: 290.63 / BASE_REF,
+    8: 290.66 / BASE_REF
+  };
+
+  // =========================
+  // STATE
+  // =========================
+  const state = load() || {
+    person: {
+      nome:"", nascimento:"", crm:"", faculdade:"", email:"", telefone:"",
+      outrasFormacoes:"", atuacaoProf:"", estagiosCurriculares:"", outrasInfo:""
+    },
+    leadSource: "",
+    announcerName: "",
+    groupSize: 1,
+    groupResponsable: "",
+    produtos: [],
+    paymentMethod: "",
+    cardInstallments: "",
+
+    previewOpen: false,
+    previewKey: "LATTES",
+
+    certNome: "",
+    certDriveLink: "",
+  };
+
+  // ✅ compatibilidade (caso já exista storage antigo)
+  if (!state.person) state.person = {};
+  if (typeof state.previewOpen !== "boolean") state.previewOpen = false;
+  if (!state.previewKey) state.previewKey = "LATTES";
+  if (!state.certNome) state.certNome = "";
+  if (!("certDriveLink" in state)) state.certDriveLink = "";
+
+  if (!("outrasFormacoes" in state.person)) state.person.outrasFormacoes = "";
+  if (!("atuacaoProf" in state.person)) state.person.atuacaoProf = "";
+  if (!("estagiosCurriculares" in state.person)) state.person.estagiosCurriculares = "";
+  if (!("outrasInfo" in state.person)) state.person.outrasInfo = "";
+
+  const stepsEl = document.getElementById("steps");
+  const screenEl = document.getElementById("screen");
+  const budgetCardEl = document.getElementById("budgetCard");
+  const resetBtn = document.getElementById("resetBtn");
+  const goPayBtn = document.getElementById("goPayBtn");
+
+  resetBtn.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  });
+
+  // =========================
+  // IMAGENS (Planilha CSV)
+  // =========================
+  let CURRICULUM_IMAGES = null;
+  let CURRICULUM_IMAGES_ERR = null;
+
+  function parseCSVLine(line){
+    const out = [];
+    let cur = "";
+    let inQ = false;
+    for (let i = 0; i < line.length; i++){
+      const ch = line[i];
+      if (ch === '"'){
+        if (inQ && line[i+1] === '"'){ cur += '"'; i++; }
+        else inQ = !inQ;
+        continue;
+      }
+      if (ch === "," && !inQ){
+        out.push(cur);
+        cur = "";
+        continue;
+      }
+      cur += ch;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  function normalizeImgUrl(url){
+    const s = (url || "").trim();
+    if (!s) return "";
+    const m1 = s.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/i);
+    if (m1 && m1[1]) return "https://drive.google.com/uc?export=view&id=" + m1[1];
+
+    const m2 = s.match(/[?&]id=([^&]+)/i);
+    if (m2 && m2[1] && s.includes("drive.google.com")) return "https://drive.google.com/uc?export=view&id=" + m2[1];
+
+    return s;
+  }
+
+  async function fetchCurriculumImages(){
+    try{
+      const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const text = await res.text();
+
+      const lines = text.replace(/\r/g, "").split("\n").filter(l => l.trim().length);
+      if (!lines.length) throw new Error("CSV vazio");
+
+      const headers = parseCSVLine(lines[0]).map(h => (h||"").trim());
+      const idx = (name) => headers.findIndex(h => h.toLowerCase() === name.toLowerCase());
+
+      const idI = idx("id");
+      const nomeI = idx("nome");
+      const img1I = idx("imagem1");
+      const img2I = idx("imagem2");
+      const img3I = idx("imagem3");
+
+      if (idI < 0) throw new Error("Coluna id não encontrada");
+
+      const map = {};
+      for (let i = 1; i < lines.length; i++){
+        const cols = parseCSVLine(lines[i]);
+        const id = (cols[idI] || "").trim();
+        if (!id) continue;
+
+        const nome = (nomeI >= 0 ? (cols[nomeI] || "").trim() : "");
+        const rawImgs = [];
+        if (img1I >= 0) rawImgs.push(cols[img1I] || "");
+        if (img2I >= 0) rawImgs.push(cols[img2I] || "");
+        if (img3I >= 0) rawImgs.push(cols[img3I] || "");
+
+        const images = rawImgs.map(normalizeImgUrl).filter(Boolean);
+        map[id] = { nome, images };
+      }
+
+      CURRICULUM_IMAGES = map;
+      CURRICULUM_IMAGES_ERR = null;
+
+      if (currentStep === "PRODUTOS") render();
+    }catch(e){
+      CURRICULUM_IMAGES = {};
+      CURRICULUM_IMAGES_ERR = (e && e.message) ? e.message : "Falha ao carregar imagens";
+      if (currentStep === "PRODUTOS") render();
+    }
+  }
+  fetchCurriculumImages();
+
+  // =========================
+  // CERTIFICADOS (STATE EM MEMÓRIA)
+  // =========================
+  let certItems = [];
+
+  function certUid(){
+    return Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+  }
+  function certEscapeHtml(s){
+    return String(s || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;");
+  }
+  function certDocIconSvg(){
+    return `
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z"/>
+        <path d="M14 2v5h5"/>
+        <path d="M8 13h8"/>
+        <path d="M8 17h6"/>
+      </svg>
+    `;
+  }
+  function certFileToBase64(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onerror = () => reject(new Error("Falha ao ler arquivo"));
+      r.onload = () => {
+        const res = String(r.result || "");
+        const base64 = res.includes(",") ? res.split(",")[1] : res;
+        resolve(base64);
+      };
+      r.readAsDataURL(file);
+    });
+  }
+
+  // =========================
+  // STEPS
+  // =========================
+  const stepList = [
+    { key:"DADOS",      title:"Dados",        sub:"Cadastro",   icon:"doc" },
+    { key:"ORIGEM",     title:"Origem",       sub:"Desconto",   icon:"megaphone" },
+    { key:"PRODUTOS",   title:"Currículos",   sub:"Seleção",    icon:"file" },
+    { key:"PAGAMENTO",  title:"Pagamento",    sub:"Pix/Cartão", icon:"card" },
+    { key:"CERTS",      title:"Certificados", sub:"Envio",      icon:"upload" },
+    { key:"RESUMO",     title:"Enviar",       sub:"WhatsApp",   icon:"check" },
+  ];
+
+  let currentStep = "DADOS";
+
+  function stepIconSvg(kind){
+    const s = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+    if (kind === "doc") return s(`<path d="M7 3h7l3 3v15H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v4h4"/><path d="M9 12h6"/><path d="M9 16h6"/>`);
+    if (kind === "megaphone") return s(`<path d="M3 11v2"/><path d="M5 10v4"/><path d="M7 9v6"/><path d="M9 10l10-4v12l-10-4"/><path d="M9 14v3a2 2 0 0 1-2 2H6"/>`);
+    if (kind === "file") return s(`<path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M8 13h8"/><path d="M8 17h6"/>`);
+    if (kind === "card") return s(`<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/>`);
+    if (kind === "upload") return s(`<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 20h16"/>`);
+    return s(`<path d="M20 6 9 17l-5-5"/>`);
+  }
+
+  function renderSteps(){
+    stepsEl.innerHTML = "";
+    stepList.forEach(s=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "stepCard" + (s.key === currentStep ? " on" : "");
+      btn.innerHTML = `
+        <div class="stepIco">${stepIconSvg(s.icon)}</div>
+        <div class="stepTitle">${s.title}</div>
+        <div class="stepSub">${s.sub}</div>
+      `;
+      btn.addEventListener("click", () => go(s.key));
+      stepsEl.appendChild(btn);
+    });
+  }
+
+  function go(stepKey){
+    currentStep = stepKey;
+    save();
+    render();
+  }
+
+  if (goPayBtn){
+    goPayBtn.addEventListener("click", ()=> go("PAGAMENTO"));
+  }
+
+  function nextStep(){
+    const idx = stepList.findIndex(s=>s.key===currentStep);
+    if (idx >= 0 && idx < stepList.length-1) go(stepList[idx+1].key);
+  }
+  function prevStep(){
+    const idx = stepList.findIndex(s=>s.key===currentStep);
+    if (idx > 0) go(stepList[idx-1].key);
+  }
+
+  // =========================
+  // HELPERS
+  // =========================
+  function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  function moneyBRL(n){
+    const num = Number(n || 0);
+    return num.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+  }
+
+  function groupDiscountPercent(groupSize){
+    const n = Math.max(1, parseInt(groupSize || 1, 10));
+    if (n <= 1) return 0;
+    if (n >= 6) return 50;
+    return (n - 1) * 10;
+  }
+  function currentDiscountPercent(){
+    if (state.leadSource === "3") return groupDiscountPercent(state.groupSize);
+    return 0;
+  }
+  function discountedPrice(base){
+    const pct = currentDiscountPercent();
+    const val = base * (1 - pct/100);
+    return Math.round(val * 100) / 100;
+  }
+  function calcTotals(){
+    let subtotal = 0;
+    let total = 0;
+    for (const k of state.produtos){
+      const p = PRICES[k];
+      if (!p) continue;
+      subtotal += p.price;
+      total += discountedPrice(p.price);
+    }
+    subtotal = Math.round(subtotal * 100)/100;
+    total = Math.round(total * 100)/100;
+    const desconto = Math.round((subtotal - total) * 100)/100;
+    return { subtotal, desconto, total };
+  }
+
+  function optionCard({type, name, value, checked, title, desc, onChange, id}){
+    const wrap = document.createElement("label");
+    wrap.className = "option";
+    wrap.setAttribute("for", id);
+
+    const input = document.createElement("input");
+    input.type = type;
+    input.name = name;
+    input.value = value;
+    input.id = id;
+    input.checked = !!checked;
+    input.addEventListener("change", onChange);
+
+    const t = document.createElement("div");
+    t.className = "t";
+    t.textContent = title;
+
+    const d = document.createElement("div");
+    d.className = "d";
+    d.innerHTML = desc;
+
+    wrap.appendChild(input);
+    wrap.appendChild(t);
+    wrap.appendChild(d);
+    return wrap;
+  }
+
+  function maskDate(raw){
+    const digits = (raw || "").replace(/\D/g, "").slice(0, 8);
+    const dd = digits.slice(0,2);
+    const mm = digits.slice(2,4);
+    const yy = digits.slice(4,8);
+    let out = dd;
+    if (mm.length) out += "/" + mm;
+    if (yy.length) out += "/" + yy;
+    return out;
+  }
+
+  function maskPhone(raw){
+    const digits = (raw || "").replace(/\D/g, "").slice(0, 11);
+    if (!digits.length) return "";
+    const ddd = digits.slice(0,2);
+    const rest = digits.slice(2);
+
+    if (ddd.length < 2) return digits;
+
+    if (rest.length <= 8){
+      const p1 = rest.slice(0,4);
+      const p2 = rest.slice(4,8);
+      return `(${ddd}) ${p1}${p2.length ? "-" + p2 : ""}`.trim();
+    } else {
+      const p1 = rest.slice(0,5);
+      const p2 = rest.slice(5,9);
+      return `(${ddd}) ${p1}${p2.length ? "-" + p2 : ""}`.trim();
+    }
+  }
+
+  function isValidEmail(v){
+    const s = (v || "").trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  }
+  function isValidDateBR(v){
+    const s = (v || "").trim();
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return false;
+    const [dd,mm,yy] = s.split("/").map(Number);
+    if (yy < 1900 || yy > 2100) return false;
+    if (mm < 1 || mm > 12) return false;
+    const maxDay = new Date(yy, mm, 0).getDate();
+    return dd >= 1 && dd <= maxDay;
+  }
+  function phoneDigits(){ return (state.person.telefone || "").replace(/\D/g,""); }
+  function isValidPhoneBR(){
+    const d = phoneDigits();
+    return d.length === 10 || d.length === 11;
+  }
+
+  // ✅ helper Parceria
+  function isParceria(){
+    return state.leadSource === "4";
+  }
+
+  // ✅ NOVO: trava Parceria (Vitae Completo + Gratuito) e impede alterações indiretas
+  function enforceParceriaDefaults(){
+    if (!isParceria()) return;
+    const must = ["VITAE_COMPLETO"];
+    const same = (state.produtos && state.produtos.length === 1 && state.produtos[0] === "VITAE_COMPLETO");
+    if (!same) state.produtos = must;
+    state.paymentMethod = "";
+    state.cardInstallments = "";
+    if (!state.previewKey) state.previewKey = "VITAE_COMPLETO";
+  }
+
+  function requiredDadosOk(){
+    const p = state.person;
+    return !!(p.nome && isValidDateBR(p.nascimento) && p.faculdade && isValidEmail(p.email) && isValidPhoneBR());
+  }
+  function requiredOrigemOk(){
+    if (!state.leadSource) return false;
+    if (state.leadSource === "3"){
+      return parseInt(state.groupSize || 1, 10) >= 1 && !!(state.groupResponsable && state.groupResponsable.trim());
+    }
+    if (state.leadSource === "2"){
+      return !!state.announcerName.trim();
+    }
+    return true;
+  }
+
+  function requiredProdutosOk(){
+    if (isParceria()) return true;
+    return state.produtos.length > 0;
+  }
+
+  function canGoPagamento(){
+    if (isParceria()) return true;
+    if (!state.paymentMethod) return false;
+    if (state.paymentMethod === "cartao"){
+      const n = parseInt(state.cardInstallments || "", 10);
+      return !!n && n >= 1 && n <= 8;
+    }
+    return true;
+  }
+
+  function cardCalc(){
+    const { total } = calcTotals();
+    const n = parseInt(state.cardInstallments || "", 10);
+    if (!total || !n || !MULTIPLIERS[n]) return null;
+    const totalCard = Math.round((total * MULTIPLIERS[n]) * 100) / 100;
+    const per = Math.round((totalCard / n) * 100) / 100;
+    return { n, totalCard, per };
+  }
+
+  async function copyPix(){
+    try{
+      await navigator.clipboard.writeText(PIX_KEY);
+      toast("Chave PIX copiada ✅");
+    }catch(e){
+      const ta = document.createElement("textarea");
+      ta.value = PIX_KEY;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      toast("Chave PIX copiada ✅");
+    }
+  }
+
+  let toastTimer = null;
+  function toast(msg){
+    clearTimeout(toastTimer);
+    let t = document.getElementById("toast");
+    if (!t){
+      t = document.createElement("div");
+      t.id = "toast";
+      t.style.position = "fixed";
+      t.style.bottom = "18px";
+      t.style.left = "50%";
+      t.style.transform = "translateX(-50%)";
+      t.style.padding = "10px 12px";
+      t.style.borderRadius = "14px";
+      t.style.border = "1px solid rgba(255,255,255,.14)";
+      t.style.background = "rgba(10,11,15,.85)";
+      t.style.backdropFilter = "blur(8px)";
+      t.style.color = "#e6e9ef";
+      t.style.fontSize = "12px";
+      t.style.zIndex = "9999";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = "1";
+    toastTimer = setTimeout(()=>{ t.style.opacity = "0"; }, 1400);
+  }
+
+  function miniResumoNode(){
+    const { subtotal, desconto, total } = calcTotals();
+    const pct = currentDiscountPercent();
+
+    const box = document.createElement("div");
+    box.className = "miniResumo";
+
+    // ✅ Parceria: todos os blocos = "Gratuito"
+    const vSub = isParceria() ? "Gratuito" : moneyBRL(subtotal);
+    const vDesc = isParceria() ? "Gratuito" : ("-" + moneyBRL(desconto));
+    const vTot = isParceria() ? "<strong>Gratuito</strong>" : ("<strong>" + moneyBRL(total) + "</strong>");
+
+    const i1 = document.createElement("div");
+    i1.className = "item";
+    i1.innerHTML = `<div class="k">Subtotal</div><div class="v">${vSub}</div>`;
+
+    const i2 = document.createElement("div");
+    i2.className = "item";
+    i2.innerHTML = `<div class="k">Desconto ${!isParceria() && pct ? "(" + pct + "%)" : ""}</div><div class="v">${vDesc}</div>`;
+
+    const i3 = document.createElement("div");
+    i3.className = "item";
+    i3.innerHTML = `<div class="k">Total</div><div class="v">${vTot}</div>`;
+
+    box.appendChild(i1);
+    box.appendChild(i2);
+    box.appendChild(i3);
+    return box;
+  }
+
+  function summaryText(){
+    const lines = [];
+    const pct = currentDiscountPercent();
+    const { subtotal, desconto, total } = calcTotals();
+
+    lines.push("ORÇAMENTO - CURRÍCULO");
+    lines.push("—");
+
+    lines.push("RESUMO");
+
+    // ✅ Parceria: resumo do orçamento como "Gratuito"
+    if (isParceria()){
+      lines.push("• Subtotal: Gratuito");
+      lines.push("• Desconto: Gratuito");
+      lines.push("• Total: Gratuito");
+    } else {
+      lines.push("• Subtotal: " + moneyBRL(subtotal));
+      lines.push("• Desconto: -" + moneyBRL(desconto) + (pct ? " ("+pct+"%)" : ""));
+      lines.push("• Total: " + moneyBRL(total));
+    }
+
+    lines.push("");
+    lines.push("ITENS SELECIONADOS");
+
+    // ✅ Parceria: fixa Vitae Completo + Gratuito
+    if (isParceria()){
+      lines.push("• " + PRICES.VITAE_COMPLETO.label + ": Gratuito");
+    } else if (!state.produtos.length){
+      lines.push("• —");
+    } else {
+      for (const k of state.produtos){
+        const p = PRICES[k];
+        const disc = discountedPrice(p.price);
+        lines.push("• " + p.label + ": " + moneyBRL(p.price) + " → " + moneyBRL(disc));
+      }
+    }
+
+    lines.push("");
+    lines.push("DADOS");
+    lines.push("• Nome completo: " + (state.person.nome || "—"));
+    lines.push("• Data de nascimento: " + (state.person.nascimento || "—"));
+    lines.push("• CRM (se houver): " + (state.person.crm || "—"));
+    lines.push("• Faculdade: " + (state.person.faculdade || "—"));
+    lines.push("• E-mail: " + (state.person.email || "—"));
+    lines.push("• Telefone: " + (state.person.telefone || "—"));
+
+    const opt = state.person || {};
+    const hasOpt = !!(
+      (opt.outrasFormacoes || "").trim() ||
+      (opt.atuacaoProf || "").trim() ||
+      (opt.estagiosCurriculares || "").trim() ||
+      (opt.outrasInfo || "").trim()
+    );
+    if (hasOpt){
+      lines.push("");
+      lines.push("INFORMAÇÕES ACADÊMICAS/PROFISSIONAIS (OPCIONAL)");
+      if ((opt.outrasFormacoes || "").trim()) lines.push("• Outras formações acadêmicas: " + opt.outrasFormacoes.trim());
+      if ((opt.atuacaoProf || "").trim()) lines.push("• Atuação profissional: " + opt.atuacaoProf.trim());
+      if ((opt.estagiosCurriculares || "").trim()) lines.push("• Estágios curriculares (Internato): " + opt.estagiosCurriculares.trim());
+      if ((opt.outrasInfo || "").trim()) lines.push("• Outras informações: " + opt.outrasInfo.trim());
+    }
+
+    const srcMap = { "1":"Redes sociais", "2":"Grupos da faculdade", "3":"Grupo Curricular", "4":"Parceria" };
+    lines.push("");
+    lines.push("ORIGEM");
+    lines.push("• Como conheceu: " + (srcMap[state.leadSource] || "—"));
+    if (state.leadSource === "2"){
+      lines.push("• Quem anunciou: " + (state.announcerName || "—"));
+    }
+    if (state.leadSource === "3"){
+      lines.push("• Tamanho do grupo: " + (state.groupSize || "—"));
+      lines.push("• Responsável pelo grupo: " + (state.groupResponsable || "—"));
+    }
+
+    lines.push("");
+    lines.push("PAGAMENTO");
+
+    if (state.leadSource === "4"){
+      lines.push("• Forma: Parceria (pagamento não necessário nesta etapa).");
+    } else {
+      lines.push("• Forma: " + (state.paymentMethod || "—"));
+    }
+
+    if (state.paymentMethod === "pix"){
+      lines.push("• PIX: " + PIX_KEY);
+      lines.push("• Após pagar, enviarei o comprovante aqui.");
+      lines.push("• Total: " + moneyBRL(total));
+    }
+    if (state.paymentMethod === "cartao"){
+      const cc = cardCalc();
+      if (cc){
+        lines.push("• Parcelamento: " + cc.n + "x de " + moneyBRL(cc.per));
+        lines.push("• Total no cartão: " + moneyBRL(cc.totalCard));
+      }
+      lines.push("• Link: solicitar ao atendente.");
+    }
+
+    lines.push("");
+    lines.push("CERTIFICADOS");
+    lines.push("• Envio (nuvem): feito na etapa Certificados (se você tiver enviado).");
+
+    const dlink = (state.certDriveLink || "").trim();
+    if (dlink){
+      lines.push("• Link do Drive: " + dlink);
+    } else {
+      lines.push("• Se preferir, também pode mandar por Drive/WhatsApp.");
+    }
+
+    return lines.join("\n");
+  }
+
+  function openWhatsApp(){
+    const url = "https://wa.me/" + WHATSAPP_NUMBER_E164 + "?text=" + encodeURIComponent(summaryText());
+    window.open(url, "_blank");
+  }
+
+  function renderBudget(){
+    if (!budgetCardEl) return;
+    budgetCardEl.innerHTML = "";
+    budgetCardEl.appendChild(miniResumoNode());
+  }
+
+  // =========================
+  // RENDER
+  // =========================
+  function render(){
+    // ✅ garante Parceria travada sempre que renderizar
+    enforceParceriaDefaults();
+
+    renderSteps();
+    renderBudget();
+    screenEl.innerHTML = "";
+
+    if (currentStep === "DADOS") return renderDados();
+    if (currentStep === "ORIGEM") return renderOrigem();
+    if (currentStep === "PRODUTOS") return renderProdutos();
+    if (currentStep === "PAGAMENTO") return renderPagamento();
+    if (currentStep === "CERTS") return renderCertificados();
+    if (currentStep === "RESUMO") return renderResumo();
+  }
+
+  function renderHeader(title, subtitle){
+    const h = document.createElement("div");
+    h.className = "h";
+    const left = document.createElement("h2");
+    left.textContent = title;
+    const right = document.createElement("span");
+    right.textContent = subtitle || "";
+    h.appendChild(left);
+    h.appendChild(right);
+    screenEl.appendChild(h);
+  }
+
+  function renderActions({canBack=true, canNext=true, nextLabel="Próximo", backLabel="Voltar", onNext}){
+    const a = document.createElement("div");
+    a.className = "actions";
+
+    const left = document.createElement("div");
+    const back = document.createElement("button");
+    back.type = "button";
+    back.className = "btn";
+    back.textContent = backLabel;
+    back.disabled = !canBack;
+    back.addEventListener("click", prevStep);
+    left.appendChild(back);
+
+    const right = document.createElement("div");
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "btn primary";
+    next.textContent = nextLabel;
+    next.disabled = !canNext;
+    next.addEventListener("click", onNext || nextStep);
+    right.appendChild(next);
+
+    a.appendChild(left);
+    a.appendChild(right);
+    screenEl.appendChild(a);
+
+    renderActions._nextBtn = next;
+  }
+
+  function setNextEnabled(v){
+    const b = renderActions._nextBtn;
+    if (b) b.disabled = !v;
+  }
+
+  // =========================
+  // STEP 1: DADOS
+  // =========================
+  function renderDados(){
+    renderHeader("Seus dados", "Campos com * são obrigatórios.");
+
+    const row = document.createElement("div");
+    row.className = "grid";
+
+    const box1 = document.createElement("div");
+    const l1 = document.createElement("label");
+    l1.className = "small";
+    l1.innerHTML = 'Nome completo <span class="req">*</span>';
+    const i1 = document.createElement("input");
+    i1.type = "text";
+    i1.placeholder = "Ex.: Maria de Souza Silva";
+    i1.value = state.person.nome || "";
+    i1.addEventListener("input", ()=>{
+      state.person.nome = i1.value;
+      if (!state.certNome) state.certNome = i1.value;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box1.appendChild(l1); box1.appendChild(i1);
+
+    const box2 = document.createElement("div");
+    const l2 = document.createElement("label");
+    l2.className = "small";
+    l2.innerHTML = 'Data de nascimento <span class="req">*</span> <span class="muted">(dd/mm/aaaa)</span>';
+    const i2 = document.createElement("input");
+    i2.type = "text";
+    i2.inputMode = "numeric";
+    i2.placeholder = "Ex.: 10/08/2001";
+    i2.value = state.person.nascimento || "";
+    i2.addEventListener("input", ()=>{
+      const masked = maskDate(i2.value);
+      i2.value = masked;
+      state.person.nascimento = masked;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box2.appendChild(l2); box2.appendChild(i2);
+
+    const box3 = document.createElement("div");
+    const l3 = document.createElement("label");
+    l3.className = "small";
+    l3.textContent = "CRM (se houver)";
+    const i3 = document.createElement("input");
+    i3.type = "text";
+    i3.placeholder = "Ex.: CRM-BA 12345 (opcional)";
+    i3.value = state.person.crm || "";
+    i3.addEventListener("input", ()=>{
+      state.person.crm = i3.value;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box3.appendChild(l3); box3.appendChild(i3);
+
+    const box4 = document.createElement("div");
+    const l4 = document.createElement("label");
+    l4.className = "small";
+    l4.innerHTML = 'Faculdade <span class="req">*</span>';
+    const i4 = document.createElement("input");
+    i4.type = "text";
+    i4.placeholder = "Ex.: UNIFTC / UFBA / etc.";
+    i4.value = state.person.faculdade || "";
+    i4.addEventListener("input", ()=>{
+      state.person.faculdade = i4.value;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box4.appendChild(l4); box4.appendChild(i4);
+
+    const box5 = document.createElement("div");
+    const l5 = document.createElement("label");
+    l5.className = "small";
+    l5.innerHTML = 'E-mail <span class="req">*</span>';
+    const i5 = document.createElement("input");
+    i5.type = "email";
+    i5.placeholder = "Ex.: seuemail@dominio.com";
+    i5.value = state.person.email || "";
+    i5.addEventListener("input", ()=>{
+      state.person.email = i5.value;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box5.appendChild(l5); box5.appendChild(i5);
+
+    const box6 = document.createElement("div");
+    const l6 = document.createElement("label");
+    l6.className = "small";
+    l6.innerHTML = 'Telefone/WhatsApp <span class="req">*</span>';
+    const i6 = document.createElement("input");
+    i6.type = "tel";
+    i6.inputMode = "numeric";
+    i6.placeholder = "Ex.: (71) 9xxxx-xxxx";
+    i6.value = state.person.telefone || "";
+    i6.addEventListener("input", ()=>{
+      const masked = maskPhone(i6.value);
+      i6.value = masked;
+      state.person.telefone = masked;
+      save();
+      setNextEnabled(requiredDadosOk());
+    });
+    box6.appendChild(l6); box6.appendChild(i6);
+
+    row.appendChild(box1);
+    row.appendChild(box2);
+    row.appendChild(box3);
+    row.appendChild(box4);
+    row.appendChild(box5);
+    row.appendChild(box6);
+
+    screenEl.appendChild(row);
+
+    const optDetails = document.createElement("details");
+    const optSum = document.createElement("summary");
+    optSum.textContent = "Informações acadêmicas/profissionais (opcional)";
+    optDetails.appendChild(optSum);
+
+    const optBox = document.createElement("div");
+    optBox.style.marginTop = "10px";
+
+    const optHint = document.createElement("p");
+    optHint.className = "muted";
+    optHint.style.marginTop = "0";
+    optHint.textContent = "Se quiser, preencha só o que fizer sentido. Isso ajuda a deixar seu currículo mais completo.";
+    optBox.appendChild(optHint);
+
+    const optGrid = document.createElement("div");
+    optGrid.className = "grid";
+
+    function makeOptField({label, placeholder, key}){
+      const wrap = document.createElement("div");
+      const l = document.createElement("label");
+      l.className = "small";
+      l.textContent = label;
+      const ta = document.createElement("textarea");
+      ta.placeholder = placeholder;
+      ta.value = state.person[key] || "";
+      ta.addEventListener("input", ()=>{
+        state.person[key] = ta.value;
+        save();
+        setNextEnabled(requiredDadosOk());
+      });
+      wrap.appendChild(l);
+      wrap.appendChild(ta);
+      return wrap;
+    }
+
+    optGrid.appendChild(makeOptField({
+      label: "Outras formações acadêmicas",
+      key: "outrasFormacoes",
+      placeholder: "Ex.: Pós-graduação, mestrado, outra graduação, cursos longos, etc."
+    }));
+    optGrid.appendChild(makeOptField({
+      label: "Atuação profissional",
+      key: "atuacaoProf",
+      placeholder: "Ex.: plantões, clínica, UBS, preceptoria, empresa, cargos e funções."
+    }));
+    optGrid.appendChild(makeOptField({
+      label: "Estágios curriculares (Internato)",
+      key: "estagiosCurriculares",
+      placeholder: "Ex.: rodízios, serviços, períodos, locais e principais atividades."
+    }));
+    optGrid.appendChild(makeOptField({
+      label: "Outras informações",
+      key: "outrasInfo",
+      placeholder: "Ex.: idiomas, certificações relevantes, intercâmbio, prêmios, etc."
+    }));
+
+    optBox.appendChild(optGrid);
+    optDetails.appendChild(optBox);
+    screenEl.appendChild(optDetails);
+
+    const ok = requiredDadosOk();
+    const warn = document.createElement("p");
+    warn.className = "muted";
+    warn.textContent = ok ? "Tudo certo — você pode avançar." : "Preencha os campos obrigatórios (*). CRM é opcional.";
+    screenEl.appendChild(warn);
+
+    renderActions({ canBack:false, canNext: ok, nextLabel:"Continuar" });
+  }
+
+  // =========================
+  // STEP 2: ORIGEM
+  // =========================
+  function renderOrigem(){
+    renderHeader("Como você nos conheceu?", "Dependendo da origem, podemos aplicar desconto de Grupo Curricular.");
+
+    const srcTitle = document.createElement("label");
+    srcTitle.className = "small";
+    srcTitle.innerHTML = 'Selecione uma opção <span class="req">*</span>';
+    screenEl.appendChild(srcTitle);
+
+    const srcGrid = document.createElement("div");
+    srcGrid.className = "grid";
+
+    const srcOpts = [
+      { v:"1", t:"Redes sociais", d:"Instagram, TikTok, etc. (sem desconto)" },
+      { v:"2", t:"Grupos da faculdade", d:"Anúncio em grupos (sem desconto)" },
+      { v:"3", t:"Grupo Curricular", d:"Pacote em grupo (desconto varia pelo tamanho do grupo)" },
+      { v:"4", t:"Parceria", d:"Você fez uma parceria conosco" },
+    ];
+
+    srcOpts.forEach((o)=>{
+      const id = "src_" + o.v;
+      srcGrid.appendChild(optionCard({
+        type:"radio",
+        name:"leadSource",
+        value:o.v,
+        checked: state.leadSource === o.v,
+        title:o.t,
+        desc:o.d,
+        id,
+        onChange:(e)=>{
+          state.leadSource = e.target.value;
+
+          if (state.leadSource !== "3") {
+            state.groupSize = 1;
+            state.groupResponsable = "";
+          }
+          if (state.leadSource !== "2") state.announcerName = "";
+
+          // ✅ Parceria: seleciona automaticamente Vitae Completo e bloqueia pagamento
+          if (state.leadSource === "4"){
+            state.produtos = ["VITAE_COMPLETO"];
+            state.paymentMethod = "";
+            state.cardInstallments = "";
+            state.previewKey = "VITAE_COMPLETO";
+          }
+
+          save();
+          render();
+        }
+      }));
+    });
+
+    screenEl.appendChild(srcGrid);
+
+    if (state.leadSource === "2"){
+      const l = document.createElement("label");
+      l.className = "small";
+      l.innerHTML = 'Quem anunciou no grupo? <span class="req">*</span>';
+      const i = document.createElement("input");
+      i.type = "text";
+      i.placeholder = "Nome da pessoa (ou @/apelido)";
+      i.value = state.announcerName || "";
+      i.addEventListener("input", ()=>{
+        state.announcerName = i.value;
+        save();
+        setNextEnabled(requiredOrigemOk());
+      });
+      screenEl.appendChild(l);
+      screenEl.appendChild(i);
+
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "Isso ajuda a rastrear qual anúncio/grupo trouxe você.";
+      screenEl.appendChild(p);
+    }
+
+    if (state.leadSource === "3"){
+      const l = document.createElement("label");
+      l.className = "small";
+      l.innerHTML = 'Quantas pessoas no total? <span class="highlightOrange">(contando com você)</span> <span class="req">*</span>';
+
+      const numContainer = document.createElement("div");
+      numContainer.className = "numGrid";
+
+      const sizes = [2, 3, 4, 5, 6];
+      sizes.forEach(num => {
+        const btn = document.createElement("div");
+        btn.className = "numBlock";
+
+        const isSixPlus = num === 6;
+        if (isSixPlus && (state.groupSize >= 6)) btn.classList.add("active");
+        else if (!isSixPlus && state.groupSize === num) btn.classList.add("active");
+
+        btn.textContent = isSixPlus ? "6+" : num;
+
+        btn.onclick = () => {
+          state.groupSize = num;
+          save();
+          render();
+        };
+        numContainer.appendChild(btn);
+      });
+
+      screenEl.appendChild(l);
+      screenEl.appendChild(numContainer);
+
+      const lResp = document.createElement("label");
+      lResp.className = "small";
+      lResp.innerHTML = 'Nome do responsável pelo grupo <span class="req">*</span>';
+      const iResp = document.createElement("input");
+      iResp.type = "text";
+      iResp.className = "inputSm";
+      iResp.placeholder = "Quem está organizando a lista?";
+      iResp.value = state.groupResponsable || "";
+      iResp.addEventListener("input", ()=>{
+        state.groupResponsable = iResp.value;
+        save();
+        setNextEnabled(requiredOrigemOk());
+      });
+      screenEl.appendChild(lResp);
+      screenEl.appendChild(iResp);
+
+      const pct2 = currentDiscountPercent();
+      const t = document.createElement("span");
+      t.className = "tag warn";
+      t.innerHTML = "<b>Desconto atual:</b> " + pct2 + "%";
+
+      const wrapTag = document.createElement("div");
+      wrapTag.style.marginTop = "12px";
+      wrapTag.style.marginBottom = "6px";
+      wrapTag.appendChild(t);
+      screenEl.appendChild(wrapTag);
+
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "Esse desconto será aplicado automaticamente no orçamento do currículo na próxima etapa.";
+      screenEl.appendChild(p);
+    } else if (state.leadSource){
+      const t = document.createElement("span");
+      t.className = "tag";
+      t.innerHTML = "<b>Desconto:</b> 0%";
+
+      const wrapTag = document.createElement("div");
+      wrapTag.style.marginTop = "12px";
+      wrapTag.style.marginBottom = "6px";
+      wrapTag.appendChild(t);
+      screenEl.appendChild(wrapTag);
+    }
+
+    if (isParceria()){
+      const t = document.createElement("span");
+      t.className = "tag orange";
+      t.innerHTML = "<b>Parceria ativa:</b> Vitae (Completo) já foi selecionado automaticamente como <b>Gratuito</b>. Nas próximas etapas (Currículos/Pagamento) você pode apenas avançar.";
+      const wrapTag = document.createElement("div");
+      wrapTag.style.marginTop = "12px";
+      wrapTag.style.marginBottom = "6px";
+      wrapTag.appendChild(t);
+      screenEl.appendChild(wrapTag);
+    }
+
+    renderActions({ canBack:true, canNext: requiredOrigemOk(), nextLabel:"Próximo" });
+  }
+
+  // =========================
+  // STEP 3: PRODUTOS
+  // =========================
+  function renderProdutos(){
+    const pct = currentDiscountPercent();
+    renderHeader("Orçamento do currículo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrão");
+
+    // ✅ Parceria: fixo (Vitae Completo), sem opção de alterar
+    if (isParceria()){
+      const m = document.createElement("span");
+      m.className = "tag orange";
+      m.innerHTML = "<b>Parceria:</b> selecionado automaticamente <b>Vitae (Completo)</b> — <b>Gratuito</b>. Você não pode alterar esta seleção.";
+      const line = document.createElement("div");
+      line.className = "row";
+      line.style.marginTop = "10px";
+      line.appendChild(m);
+      screenEl.appendChild(line);
+
+      const note = document.createElement("p");
+      note.className = "muted";
+      note.textContent = "Você pode apenas avançar.";
+      screenEl.appendChild(note);
+
+      // mantém o bloco de diferenças/prévia (opcional), mas remove a seleção de checkboxes
+    }
+
+    const details = document.createElement("details");
+    const sum = document.createElement("summary");
+    sum.textContent = "Qual a diferença de cada currículo?";
+    details.appendChild(sum);
+
+    const diff = document.createElement("div");
+    diff.className = "diffBox";
+
+    const d1 = document.createElement("div");
+    d1.innerHTML =
+      '<div class="diffTitle">LATTES</div>' +
+      '<div class="diffSub">É o padrão acadêmico oficial do Brasil (Plataforma CNPq).</div>' +
+      '<div class="diffDesc">Foca em produção científica, pesquisas, artigos e vida universitária. É requisito em diversos processos seletivos na área médica.</div>';
+
+    const d2 = document.createElement("div");
+    d2.innerHTML =
+      '<div class="diffTitle">VITAE COMPLETO <span class="yellowStar">⭐</span></div>' +
+      '<div class="diffSub">Emprego e Residência Médica</div>' +
+      '<div class="diffDesc">É o histórico detalhado de toda a sua trajetória. Totalmente editável, sendo fácil de atualizar! O mais utilizado para vagas de emprego e editais de residência médica.</div>';
+
+    const d3 = document.createElement("div");
+    d3.innerHTML =
+      '<div class="diffTitle">VITAE SINTETIZADO</div>' +
+      '<div class="diffSub">Rápido e prático</div>' +
+      '<div class="diffDesc">Focado na leitura rápida de diretores clínicos, resume em 1 página o essencial: onde formou, CRM, RQE (se tiver), cursos práticos vigentes (ACLS, ATLS) e experiência recente.</div>';
+
+    diff.appendChild(d1);
+    diff.appendChild(d2);
+    diff.appendChild(d3);
+
+    const previewWrap = document.createElement("div");
+    previewWrap.className = "previewWrap";
+
+    const top = document.createElement("div");
+    top.className = "previewTop";
+    top.innerHTML = `
+      <p class="previewTitle">Pré-visualização dos currículos</p>
+      <p class="previewHint">Clique nas caixinhas para alternar</p>
+    `;
+    previewWrap.appendChild(top);
+
+    const toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.className = "btn primary";
+    toggleBtn.style.width = "100%";
+    toggleBtn.style.marginTop = "2px";
+    toggleBtn.textContent = state.previewOpen ? "Ocultar pré-visualização" : "Ver pré-visualização";
+    previewWrap.appendChild(toggleBtn);
+
+    const previewBody = document.createElement("div");
+    previewBody.style.display = state.previewOpen ? "block" : "none";
+    previewBody.style.marginTop = "10px";
+
+    const tabs = document.createElement("div");
+    tabs.className = "previewTabs";
+
+    const previewKeys = [
+      { key:"LATTES", label:"Lattes" },
+      { key:"VITAE_COMPLETO", label:"Vitae Completo" },
+      { key:"VITAE_SINT", label:"Vitae Sintetizado" },
+    ];
+
+    const header = document.createElement("div");
+    header.className = "previewHeader";
+    previewBody.appendChild(tabs);
+    previewBody.appendChild(header);
+
+    const imgsContainer = document.createElement("div");
+    previewBody.appendChild(imgsContainer);
+
+    function renderPreviewFor(key){
+      state.previewKey = key;
+      save();
+
+      [...tabs.children].forEach(el=>{
+        el.classList.toggle("on", el.dataset.key === key);
+      });
+
+      const rec = (CURRICULUM_IMAGES && CURRICULUM_IMAGES[key]) ? CURRICULUM_IMAGES[key] : null;
+      const title = (rec && rec.nome) ? rec.nome : (PRICES[key] ? PRICES[key].label : key);
+      header.textContent = title;
+
+      imgsContainer.innerHTML = "";
+
+      if (!CURRICULUM_IMAGES){
+        const loading = document.createElement("div");
+        loading.className = "previewEmpty";
+        loading.textContent = "Carregando imagens da prévia…";
+        imgsContainer.appendChild(loading);
+        return;
+      }
+      if (CURRICULUM_IMAGES_ERR){
+        const err = document.createElement("div");
+        err.className = "previewEmpty";
+        err.textContent = "Não foi possível carregar as imagens no momento. (" + CURRICULUM_IMAGES_ERR + ")";
+        imgsContainer.appendChild(err);
+        return;
+      }
+
+      const imgs = (rec && Array.isArray(rec.images)) ? rec.images : [];
+      if (!imgs.length){
+        const none = document.createElement("div");
+        none.className = "previewEmpty";
+        none.textContent = "Sem imagens cadastradas para este currículo na planilha.";
+        imgsContainer.appendChild(none);
+        return;
+      }
+
+      const g = document.createElement("div");
+      g.className = "previewGrid";
+
+      imgs.forEach((url)=>{
+        const tile = document.createElement("div");
+        tile.className = "previewTile";
+        tile.title = "Abrir imagem";
+
+        const img = document.createElement("img");
+        img.className = "previewImg";
+        img.loading = "lazy";
+        img.alt = title;
+        img.src = url;
+
+        tile.appendChild(img);
+        tile.addEventListener("click", ()=>{
+          window.open(url, "_blank", "noopener,noreferrer");
+        });
+
+        g.appendChild(tile);
+      });
+
+      imgsContainer.appendChild(g);
+    }
+
+    previewKeys.forEach(({key,label})=>{
+      const b = document.createElement("div");
+      b.className = "previewTab" + (state.previewKey === key ? " on" : "");
+      b.textContent = label;
+      b.dataset.key = key;
+      b.addEventListener("click", ()=> renderPreviewFor(key));
+      tabs.appendChild(b);
+    });
+
+    toggleBtn.addEventListener("click", ()=>{
+      state.previewOpen = !state.previewOpen;
+      save();
+      previewBody.style.display = state.previewOpen ? "block" : "none";
+      toggleBtn.textContent = state.previewOpen ? "Ocultar pré-visualização" : "Ver pré-visualização";
+      if (state.previewOpen) renderPreviewFor(state.previewKey || (isParceria() ? "VITAE_COMPLETO" : "LATTES"));
+    });
+
+    if (state.previewOpen) renderPreviewFor(state.previewKey || (isParceria() ? "VITAE_COMPLETO" : "LATTES"));
+
+    previewWrap.appendChild(previewBody);
+    diff.appendChild(previewWrap);
+
+    details.appendChild(diff);
+    screenEl.appendChild(details);
+
+    // ✅ Se for Parceria, não renderiza seleção de checkboxes (não dá opção de alterar)
+    if (isParceria()){
+      renderActions({ canBack:true, canNext:true, nextLabel:"Próximo" });
+      return;
+    }
+
+    const prodTitle = document.createElement("label");
+    prodTitle.className = "small";
+    prodTitle.innerHTML = 'Selecione o(s) currículo(s) <span class="req">*</span> <span class="muted">(pode marcar mais de um)</span>';
+    screenEl.appendChild(prodTitle);
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    const prodList = ["LATTES","VITAE_COMPLETO","VITAE_SINT"];
+
+    prodList.forEach((key)=>{
+      const p = PRICES[key];
+      const id = "prod_" + key;
+      const base = p.price;
+      const disc = discountedPrice(base);
+
+      let desc = "";
+      if (pct > 0){
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="priceLine"><span class="oldPrice">${moneyBRL(base)}</span><span class="newPrice">${moneyBRL(disc)}</span></span>`;
+      } else {
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">${moneyBRL(base)}</span>`;
+      }
+
+      grid.appendChild(optionCard({
+        type:"checkbox",
+        name:"produtos",
+        value:key,
+        checked: state.produtos.includes(key),
+        title: p.label,
+        desc,
+        id,
+        onChange:(e)=>{
+          const checked = e.target.checked;
+          const arr = state.produtos.slice();
+          const pos = arr.indexOf(key);
+          if (checked && pos === -1) arr.push(key);
+          if (!checked && pos >= 0) arr.splice(pos, 1);
+          state.produtos = arr;
+
+          state.cardInstallments = "";
+          save();
+          render();
+        }
+      }));
+    });
+
+    screenEl.appendChild(grid);
+
+    const { subtotal, total } = calcTotals();
+
+    const totalLine = document.createElement("div");
+    totalLine.className = "row";
+    totalLine.style.marginTop = "14px";
+
+    if (state.produtos.length === 0){
+      const t = document.createElement("span");
+      t.className = "tag bad";
+      t.innerHTML = "<b>Atenção:</b> selecione pelo menos 1 opção";
+      totalLine.appendChild(t);
+    } else {
+      const t = document.createElement("span");
+      t.className = pct > 0 ? "tag warn" : "tag";
+      t.innerHTML = pct > 0
+        ? "<b>Subtotal (com desconto):</b> " + moneyBRL(total) + " <span class='oldPrice'>(" + moneyBRL(subtotal) + ")</span>"
+        : "<b>Subtotal:</b> " + moneyBRL(total);
+      totalLine.appendChild(t);
+    }
+
+    screenEl.appendChild(totalLine);
+
+    const ok = requiredProdutosOk();
+    renderActions({ canBack:true, canNext: ok, nextLabel:"Próximo" });
+  }
+
+  // =========================
+  // STEP 4: PAGAMENTO
+  // =========================
+  function renderPagamento(){
+    renderHeader("Pagamento", "Parcelas já incluem taxas bancárias (conforme tabela).");
+
+    if (isParceria()){
+      state.paymentMethod = "";
+      state.cardInstallments = "";
+      save();
+
+      const m = document.createElement("span");
+      m.className = "tag orange";
+      m.innerHTML = "<b>Parceria:</b> você não precisa selecionar forma de pagamento. Pode apenas avançar.";
+      const line = document.createElement("div");
+      line.className = "row";
+      line.style.marginTop = "10px";
+      line.appendChild(m);
+      screenEl.appendChild(line);
+
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "Esta etapa fica desabilitada para Parceria.";
+      screenEl.appendChild(p);
+
+      renderActions({ canBack:true, canNext:true, nextLabel:"Próximo" });
+      return;
+    }
+
+    const payTitle = document.createElement("label");
+    payTitle.className = "small";
+    payTitle.innerHTML = 'Forma de pagamento <span class="req">*</span>';
+    screenEl.appendChild(payTitle);
+
+    const payGrid = document.createElement("div");
+    payGrid.className = "grid";
+
+    const payOpts = [
+      { v:"pix", t:"PIX", d:"Você paga e envia o comprovante no WhatsApp." },
+      { v:"cartao", t:"Cartão", d:"Parcelamento com taxas bancárias + link com atendente." },
+    ];
+
+    payOpts.forEach((o)=>{
+      const id = "pay_" + o.v;
+      payGrid.appendChild(optionCard({
+        type:"radio",
+        name:"paymentMethod",
+        value:o.v,
+        checked: state.paymentMethod === o.v,
+        title:o.t,
+        desc:o.d,
+        id,
+        onChange:(e)=>{
+          state.paymentMethod = e.target.value;
+          state.cardInstallments = "";
+          save();
+          render();
+        }
+      }));
+    });
+
+    screenEl.appendChild(payGrid);
+
+    if (state.paymentMethod === "pix"){
+      const box = document.createElement("div");
+      box.style.marginTop = "12px";
+
+      const t = document.createElement("span");
+      t.className = "tag orange";
+      t.innerHTML = "<b>Chave PIX:</b> " + PIX_KEY;
+      box.appendChild(t);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn primary";
+      btn.style.marginLeft = "10px";
+      btn.textContent = "📋 Copiar chave PIX";
+      btn.addEventListener("click", copyPix);
+      box.appendChild(btn);
+
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "Após pagar, envie o comprovante no WhatsApp.";
+      box.appendChild(p);
+
+      screenEl.appendChild(box);
+    }
+
+    if (state.paymentMethod === "cartao"){
+      const note = document.createElement("p");
+      note.className = "muted";
+      note.textContent = "Solicite o link de pagamento ao atendente.";
+      screenEl.appendChild(note);
+
+      const instTitle = document.createElement("label");
+      instTitle.className = "small";
+      instTitle.innerHTML = 'Parcelas <span class="req">*</span>';
+      screenEl.appendChild(instTitle);
+
+      const instGrid = document.createElement("div");
+      instGrid.className = "grid";
+
+      const { total } = calcTotals();
+      const ns = [1,2,3,4,5,6,7,8].filter(n => MULTIPLIERS[n]);
+
+      ns.forEach(n=>{
+        const id = "inst_" + n;
+        const totalCard = Math.round((total * MULTIPLIERS[n]) * 100) / 100;
+        const per = Math.round((totalCard / n) * 100) / 100;
+        const desc = `${n}x de ${moneyBRL(per)} (total ${moneyBRL(totalCard)})`;
+
+        instGrid.appendChild(optionCard({
+          type:"radio",
+          name:"installments",
+          value:String(n),
+          checked: state.cardInstallments === String(n),
+          title: n + "x",
+          desc,
+          id,
+          onChange:(e)=>{
+            state.cardInstallments = e.target.value;
+            save();
+            setNextEnabled(canGoPagamento());
+          }
+        }));
+      });
+
+      screenEl.appendChild(instGrid);
+
+      const cc = cardCalc();
+      if (cc){
+        const line = document.createElement("div");
+        line.className = "row";
+        line.style.marginTop = "12px";
+        const t = document.createElement("span");
+        t.className = "tag orange";
+        t.innerHTML = `<b>Total no cartão:</b> ${moneyBRL(cc.totalCard)} <span class="muted">(${cc.n}x de ${moneyBRL(cc.per)})</span>`;
+        line.appendChild(t);
+        screenEl.appendChild(line);
+      }
+
+      const note2 = document.createElement("p");
+      note2.className = "muted";
+      note2.textContent = "Obs: valores já consideram taxas bancárias, e o link é enviado pelo atendente.";
+      screenEl.appendChild(note2);
+    }
+
+    renderActions({ canBack:true, canNext: canGoPagamento(), nextLabel:"Próximo" });
+  }
+
+  // =========================
+  // STEP 5: CERTIFICADOS
+  // =========================
+  function renderCertificados(){
+    renderHeader("Envio de certificados", "Opcional, mas recomendado (antes de enviar no WhatsApp).");
+
+    const card = document.createElement("div");
+    card.className = "certCard";
+
+    card.innerHTML = `
+      <div class="certTopRow">
+        <h3 class="certTitle">Envio de Certificados</h3>
+        <p class="certTopHint">Envie PDFs/Imagens para nossa nuvem.</p>
+      </div>
+
+      <div class="certLabelRow">
+        <span>Seu Nome Completo</span><span class="certReq">*</span>
+      </div>
+      <input class="certInput" id="certNomeInput" type="text"
+             placeholder="Ex: Maria da Silva (para identificarmos seus arquivos)" autocomplete="name" />
+
+      <div class="certHelper">Dica: esse nome já vem preenchido com o que você informou na etapa Dados.</div>
+
+      <div class="certLabelRow">
+        <span>Link do Drive (opcional)</span>
+      </div>
+      <input class="certInput" id="certDriveInput" type="text"
+             placeholder="Cole aqui o link da pasta no Google Drive (se preferir não enviar arquivos 1 a 1)" />
+      <div class="certHelper">Se usar Drive, compartilhe a pasta como: Qualquer pessoa com o link (visualização).</div>
+
+      <input id="certFileInput" type="file" multiple accept="application/pdf,image/*" />
+
+      <div id="certDropzone" class="certDropzone" role="button" tabindex="0" aria-label="Selecionar arquivos">
+        <p class="certDzTitle">Clique para selecionar arquivos</p>
+        <p class="certDzSub">ou arraste e solte seus PDFs/Imagens aqui.</p>
+      </div>
+
+      <div class="certFileList" id="certFileList"></div>
+
+      <div class="certProgressWrap" id="certProgressWrap" aria-live="polite">
+        <div class="certProgressTop">
+          <div class="l">Progresso</div>
+          <div class="r" id="certProgressText">0/0</div>
+        </div>
+        <div class="certBar"><div id="certProgressBar"></div></div>
+      </div>
+
+      <div class="certMiniNote">
+        <span class="certPill orange" id="certStatusPill"><b>Status:</b> aguardando arquivos</span>
+        <span style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <button class="btn" id="certClearBtn" type="button">Limpar</button>
+          <button class="btn primary" id="certSendBtn" type="button">Enviar Arquivos para Nuvem</button>
+        </span>
+      </div>
+    `;
+
+    screenEl.appendChild(card);
+
+    const note = document.createElement("p");
+    note.className = "muted";
+    note.textContent = "Você pode enviar agora ou pular e mandar depois no WhatsApp/Drive. Se você enviar aqui, agiliza a produção.";
+    screenEl.appendChild(note);
+
+    renderActions({
+      canBack:true,
+      canNext:true,
+      nextLabel:"Próximo",
+      onNext: ()=> go("RESUMO")
+    });
+
+    const certNomeInput = document.getElementById("certNomeInput");
+    const certDriveInput = document.getElementById("certDriveInput");
+    const certFileInput = document.getElementById("certFileInput");
+    const certDropzone = document.getElementById("certDropzone");
+    const certFileListEl = document.getElementById("certFileList");
+
+    const certSendBtn = document.getElementById("certSendBtn");
+    const certClearBtn = document.getElementById("certClearBtn");
+
+    const certProgressWrap = document.getElementById("certProgressWrap");
+    const certProgressText = document.getElementById("certProgressText");
+    const certProgressBar = document.getElementById("certProgressBar");
+    const certStatusPill = document.getElementById("certStatusPill");
+
+    const initialName = (state.certNome || state.person.nome || "").trim();
+    certNomeInput.value = initialName;
+
+    if (certDriveInput){
+      certDriveInput.value = (state.certDriveLink || "").trim();
+      certDriveInput.addEventListener("input", ()=>{
+        state.certDriveLink = certDriveInput.value;
+        save();
+      });
+    }
+
+    certNomeInput.addEventListener("input", ()=>{
+      state.certNome = certNomeInput.value;
+      save();
+    });
+
+    function certSetPill(kind, text){
+      certStatusPill.className = "certPill";
+      if (kind) certStatusPill.classList.add(kind);
+      certStatusPill.innerHTML = "<b>Status:</b> " + text;
+    }
+
+    function certSetProgress(current, total){
+      certProgressWrap.style.display = "block";
+      certProgressText.textContent = current + "/" + total;
+      const pct = total ? Math.round((current / total) * 100) : 0;
+      certProgressBar.style.width = pct + "%";
+    }
+
+    function certRender(){
+      certFileListEl.innerHTML = "";
+
+      if (!certItems.length){
+        certFileListEl.style.display = "none";
+        certProgressWrap.style.display = "none";
+        certProgressBar.style.width = "0%";
+        certProgressText.textContent = "0/0";
+        certSetPill("orange", "aguardando arquivos");
+        return;
+      }
+
+      certFileListEl.style.display = "flex";
+
+      const sending = certItems.some(i => i.status === "sending");
+      const sent = certItems.filter(i => i.status === "sent").length;
+      const err  = certItems.filter(i => i.status === "error").length;
+
+      if (sending) certSetPill("warn", "enviando…");
+      else if (err) certSetPill("bad", "há erros (revise os itens)");
+      else if (sent === certItems.length) certSetPill("good", "todos enviados ✅");
+      else certSetPill("orange", "pronto para enviar");
+
+      certItems.forEach(it=>{
+        const tile = document.createElement("div");
+        tile.className = "certFileTile " + (it.status === "sending" ? "sending" : it.status === "sent" ? "sent" : it.status === "error" ? "error" : "");
+
+        const statusClass =
+          it.status === "sending" ? "warn" :
+          it.status === "sent" ? "good" :
+          it.status === "error" ? "bad" : "";
+
+        tile.innerHTML = `
+          <div class="certIcoBox">${certDocIconSvg()}</div>
+          <div class="certMeta">
+            <div class="certFileName" title="${certEscapeHtml(it.file.name)}">${certEscapeHtml(it.file.name)}</div>
+            <div class="certFileStatus ${statusClass}">${certEscapeHtml(it.msg || "Aguardando envio")}</div>
+          </div>
+        `;
+        certFileListEl.appendChild(tile);
+      });
+    }
+
+    function certSetFiles(files){
+      const arr = Array.from(files || []);
+      certItems = arr.map(f => ({ id: certUid(), file: f, status: "idle", msg: "Aguardando envio" }));
+      certRender();
+    }
+
+    async function certSendOne(nome, it){
+      it.status = "sending";
+      it.msg = "Enviando...";
+      certRender();
+
+      const base64 = await certFileToBase64(it.file);
+      const payload = {
+        nome,
+        filename: it.file.name,
+        mimeType: it.file.type || "application/octet-stream",
+        file: base64
+      };
+
+      await fetch(CERT_ENDPOINT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    }
+
+    async function certSendAll(){
+      const nome = (certNomeInput.value || "").trim();
+      if (!nome){
+        certSetPill("bad", "preencha seu nome");
+        certNomeInput.focus();
+        return;
+      }
+      if (!certItems.length){
+        certSetPill("bad", "selecione ao menos 1 arquivo");
+        return;
+      }
+
+      certSendBtn.disabled = true;
+      certClearBtn.disabled = true;
+      certDropzone.style.pointerEvents = "none";
+      certNomeInput.disabled = true;
+      if (certDriveInput) certDriveInput.disabled = true;
+
+      certSetProgress(0, certItems.length);
+
+      let done = 0;
+      for (const it of certItems){
+        try{
+          await certSendOne(nome, it);
+          it.status = "sent";
+          it.msg = "Enviado ✅";
+        }catch(e){
+          it.status = "error";
+          it.msg = "Erro ❌";
+        }finally{
+          done++;
+          certSetProgress(done, certItems.length);
+          certRender();
+        }
+      }
+
+      certSendBtn.disabled = false;
+      certClearBtn.disabled = false;
+      certDropzone.style.pointerEvents = "auto";
+      certNomeInput.disabled = false;
+      if (certDriveInput) certDriveInput.disabled = false;
+
+      toast("Envio concluído (verifique o status na lista) ✅");
+    }
+
+    certDropzone.addEventListener("click", ()=> certFileInput.click());
+    certDropzone.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter" || e.key === " ") certFileInput.click();
+    });
+    certFileInput.addEventListener("change", ()=> certSetFiles(certFileInput.files));
+
+    certDropzone.addEventListener("dragover", (e)=>{
+      e.preventDefault();
+      certDropzone.classList.add("dragover");
+    });
+    certDropzone.addEventListener("dragleave", ()=>{
+      certDropzone.classList.remove("dragover");
+    });
+    certDropzone.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      certDropzone.classList.remove("dragover");
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files.length){
+        try{ certFileInput.files = dt.files; }catch(_){}
+        certSetFiles(dt.files);
+      }
+    });
+
+    certSendBtn.addEventListener("click", certSendAll);
+    certClearBtn.addEventListener("click", ()=>{
+      certItems = [];
+      certFileInput.value = "";
+      certRender();
+    });
+
+    certRender();
+  }
+
+  // =========================
+  // STEP 6: RESUMO
+  // =========================
+  function renderResumo(){
+    renderHeader("Resumo final", "Revise e clique para enviar no WhatsApp.");
+
+    if (state.paymentMethod === "cartao"){
+      const cc = cardCalc();
+      if (cc){
+        const row = document.createElement("div");
+        row.className = "row";
+        row.style.marginTop = "10px";
+        const t = document.createElement("span");
+        t.className = "tag orange";
+        t.innerHTML = `<b>Cartão:</b> ${moneyBRL(cc.totalCard)} <span class="muted">(${cc.n}x de ${moneyBRL(cc.per)})</span>`;
+        row.appendChild(t);
+        screenEl.appendChild(row);
+      }
+    }
+
+    const topActions = document.createElement("div");
+    topActions.className = "actions left";
+
+    const send = document.createElement("button");
+    send.type = "button";
+    send.className = "btn good";
+    send.textContent = "Enviar no WhatsApp";
+    send.addEventListener("click", openWhatsApp);
+
+    topActions.appendChild(send);
+    screenEl.appendChild(topActions);
+
+    const box = document.createElement("div");
+    box.className = "summary";
+    box.textContent = summaryText();
+    screenEl.appendChild(box);
+
+    const bottomActions = document.createElement("div");
+    bottomActions.className = "actions left bottom";
+
+    const back = document.createElement("button");
+    back.type = "button";
+    back.className = "btn";
+    back.textContent = "Voltar";
+    back.addEventListener("click", prevStep);
+
+    bottomActions.appendChild(back);
+    screenEl.appendChild(bottomActions);
+
+    const note = document.createElement("p");
+    note.className = "muted";
+    note.textContent = "Ao clicar, o WhatsApp abre com a mensagem pronta. Você só confirma o envio.";
+    screenEl.appendChild(note);
+  }
+
+  // =========================
+  // INIT
+  // =========================
+  renderSteps();
+  render();
+})();
+</script>
+</body>
+</html>
