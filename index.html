@@ -1525,9 +1525,9 @@
 
             // 👇 Ajuste aqui para ficar maior/menor no celular:
             // base menor => scale maior => tudo maior.
-            let base = 1180;             // desktop
-            if (vw <= 540) base = 980;   // mobile padrão (maior que antes)
-            if (vw <= 410) base = 920;   // mobile pequeno (ainda maior)
+            let base = 900;             // desktop
+            if (vw <= 540) base = 920;   // mobile padrão (maior que antes)
+            if (vw <= 410) base = 780;   // mobile pequeno (ainda maior)
 
             root.style.width = base + "px";
             const scale = vw / base;
@@ -1552,3 +1552,4 @@
   </div>
 </body>
 </html>
+
