@@ -45,11 +45,14 @@
       margin:0;
       font-family:"Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
+      /* ✅ MUDANÇA: Background fixo e contínuo para todo o site (sem quebras por seção) */
       background:
         radial-gradient(1200px 900px at 75% 10%, rgba(255,122,24,.14), rgba(7,10,16,0) 55%),
         radial-gradient(900px 700px at 25% 0%, rgba(255,183,3,.10), rgba(7,10,16,0) 55%),
         radial-gradient(1200px 900px at 30% 85%, rgba(120,155,255,.06), rgba(7,10,16,0) 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
+      background-attachment: fixed; /* Isso garante que o degradê não reinicie */
+      background-size: cover;
       overflow-x:hidden;
     }
 
@@ -166,32 +169,11 @@
       overflow:hidden;
       isolation:isolate;
       padding: 72px 0;
-      box-shadow:
-        inset 0 30px 40px -46px rgba(7,10,16,.92),
-        inset 0 -30px 40px -46px rgba(7,10,16,.92);
+      /* ✅ MUDANÇA: Removido inset shadow para limpar visual */
     }
 
-    .band::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-    }
-
-    .band--a::before{
-      background:
-        radial-gradient(900px 600px at 75% 20%, rgba(255,122,24,.12), rgba(0,0,0,0) 60%),
-        radial-gradient(900px 700px at 20% 10%, rgba(255,183,3,.08), rgba(0,0,0,0) 62%),
-        linear-gradient(180deg, rgba(7,10,16,.08), rgba(7,10,16,.60));
-    }
-
-    .band--b::before{
-      background:
-        radial-gradient(900px 650px at 20% 25%, rgba(255,122,24,.10), rgba(0,0,0,0) 62%),
-        radial-gradient(900px 700px at 80% 10%, rgba(255,183,3,.10), rgba(0,0,0,0) 62%),
-        linear-gradient(180deg, rgba(7,10,16,.60), rgba(7,10,16,.08));
-    }
+    /* ✅ MUDANÇA: Removido .band::before para evitar degradês individuais */
+    .band::before{ display: none; }
 
     .band.hero{ padding: 56px 0 38px; }
     .band.features{ padding: 40px 0 54px; }
@@ -478,7 +460,6 @@
       font-weight:900;
       color:#0b0f18;
     }
-    /* ✅ NOVO: ícone por link fica bem central e sem distorção */
     .svcIcon img{
       display:block;
       object-fit:contain;
@@ -538,7 +519,6 @@
       opacity:.95;
       transform: scale(1.02);
       display:block;
-      /* ✅ default (se não vier pos_x/pos_y) */
       object-position: 50% 50%;
     }
     .mentor::after{
@@ -815,33 +795,104 @@
     .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 
     .hamb{display:none}
+
+    /* ✅ MUDANÇA DRÁSTICA: Mantém a estrutura de colunas (Grid) mas diminui tudo (fontes, gaps) para caber */
     @media (max-width: 980px){
-      :root{ --navH: 104px; }
-      .heroInner{grid-template-columns: 1fr; padding:26px 22px 0}
-      .heroTitle{font-size:44px}
-      .heroArt{justify-content:center}
-      .heroPhoto{height: 320px; transform:none}
-      .grid3{grid-template-columns: 1fr; gap:14px}
-      .tGrid{grid-template-columns: 1fr}
-      .foot{grid-template-columns: 1fr 1fr; gap:16px}
-      .brand{min-width:auto}
-      .navactions{min-width:auto}
+      :root{
+        --navH: 80px; /* Menor que antes */
+      }
+      .container { padding: 0 10px; } /* Menos padding lateral para ganhar espaço */
+
+      /* HERO: Mantém lado a lado */
+      .heroInner{
+         display: grid;
+         grid-template-columns: 1.22fr .78fr; /* Mantém proporção */
+         gap: 10px;
+         padding: 20px 10px 0;
+         min-height: auto;
+      }
+      .heroTitle{ font-size: 22px; margin-bottom: 10px; } /* Fonte muito menor */
+      .heroText { font-size: 11px; line-height: 1.4; margin: 10px 0; }
+      .kicker { font-size: 9px; margin-bottom: 8px; }
+      .btn { padding: 8px 10px; font-size: 10px; border-radius: 8px; }
+      .heroPhoto {
+         height: 200px;
+         transform: none;
+         border-radius: 12px;
+      }
+      .heroArt::before, .heroArt::after { display: none; } /* Remove bolhas grandes p/ limpar */
+
+      /* CARDS (Features): Mantém 3 colunas */
+      .grid3{
+         display: grid;
+         grid-template-columns: repeat(3, 1fr); /* FORÇA 3 colunas */
+         gap: 6px;
+      }
+      .card { padding: 10px 8px; border-radius: 12px; }
+      .ic { width: 28px; height: 28px; border-radius: 8px; margin-bottom: 6px; }
+      .ic svg { width: 14px; height: 14px; }
+      .card h4 { font-size: 11px; margin-bottom: 4px; }
+      .card p { font-size: 9px; line-height: 1.3; }
+
+      /* SERVIÇOS e MENTORES: Força 2 colunas minúsculas em vez de stackar */
+      .gridServices, .gridMentors {
+         justify-content: space-between;
+         gap: 8px;
+      }
+      .svc, .mentor {
+         flex: 0 0 48%; /* 2 por linha */
+         width: 48%;
+         max-width: none;
+         min-height: auto;
+         padding: 10px;
+         border-radius: 14px;
+      }
+      .svcIcon { width: 32px; height: 32px; border-radius: 10px; }
+      .svcIcon img { width: 14px; height: 14px; }
+      .svcTitle { font-size: 11px; }
+      .svcDesc { font-size: 9px; line-height: 1.3; }
+      .mentor img { height: 120px; }
+      .mentorMeta { padding: 6px; bottom: 6px; left: 6px; right: 6px; border-radius: 10px; }
+      .mentorMeta b { font-size: 10px; }
+      .mentorMeta span { font-size: 8px; }
+
+      /* DEPOIMENTOS: Mantém 3 colunas */
+      .tGrid {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr); /* FORÇA 3 colunas */
+         gap: 6px;
+      }
+      .tCard { padding: 10px 8px; border-radius: 14px; min-height: auto; }
+      .tTop { gap: 6px; margin-bottom: 6px; display: flex; flex-direction: column; align-items: start; }
+      .avatar { width: 24px; height: 24px; border-radius: 8px; }
+      .tTop b { font-size: 10px; }
+      .tTop small { font-size: 8px; }
+      .quote { font-size: 8px; line-height: 1.3; }
+      .quoteMark { width: 20px; height: 20px; right: 6px; top: 6px; }
+      .quoteMark svg { width: 10px; height: 10px; }
+
+      /* FOOTER: Mantém 4 colunas */
+      .foot {
+         display: grid;
+         grid-template-columns: 1.2fr .8fr .8fr .8fr; /* Mantém 4 colunas */
+         gap: 8px;
+      }
+      .brand { min-width: auto; gap: 6px; }
+      .brand b { font-size: 12px; }
+      .brand small { font-size: 8px; }
+      .logo { width: 24px; height: 24px; border-radius: 8px; }
+      .logo svg { width: 12px; height: 12px; }
+      .col h5 { font-size: 9px; margin-bottom: 6px; }
+      .col a { font-size: 9px; padding: 4px 0; }
+      .foot p { font-size: 9px; max-width: none; }
+      .social { gap: 6px; }
+      .sbtn { width: 28px; height: 28px; border-radius: 8px; }
+      .sbtn svg { width: 14px; height: 14px; }
+
+      /* NAV: Ajustes básicos */
       .navlinks{display:none}
       .hamb{display:inline-flex}
-
-      .band{padding:56px 0}
-      .band.hero{padding:46px 0 30px}
-      .band.features{padding:34px 0 40px}
-      .band.section{padding:64px 0}
-      .svc, .mentor{width: 100%; max-width: 420px;}
-    }
-    @media (max-width: 540px){
-      .heroTitle{font-size:40px}
-      .foot{grid-template-columns: 1fr}
-      .endWord{font-size:34px}
-      .svc, .mentor{max-width: 100%;}
-      .band{padding:46px 0}
-      .band.section{padding:56px 0}
+      .navactions { min-width: auto; gap: 6px; }
     }
 
     .mMenu{
