@@ -3,1554 +3,340 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UsoJaleco | Hub de Soluções na Saúde</title>
+  <title>UsoJaleco | Menu</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#070a10;
-      --bg2:#06070c;
-      --card: rgba(255,255,255,.035);
-      --card2: rgba(255,255,255,.05);
-      --line: rgba(170,195,235,.12);
-      --line2: rgba(170,195,235,.08);
+      --bg:#0a0b0f;
+      --text:#e6e9ef;
+      --muted:#9aa4b2;
 
-      --text:#e7ecf6;
-      --muted:#97a5bb;
+      --orange1:#ff7a18;
+      --orange2:#ffb703;
 
-      --accent:#ff7a18;
-      --accent2:#ffb703;
-
-      --shadow: 0 28px 90px rgba(0,0,0,.65);
-      --shadow2: 0 16px 50px rgba(0,0,0,.55);
-
-      --r-lg:26px;
-      --r-md:22px;
-      --r-sm:18px;
-
-      --container: 1180px;
-
-      --glow: 0 0 0 1px rgba(255,122,24,.12), 0 0 60px rgba(255,122,24,.10);
-      --glow2: 0 0 0 1px rgba(255,183,3,.12), 0 0 60px rgba(255,183,3,.10);
-
-      --navH: 86px;
-
-      /* ✅ TRAVA “DESKTOP LOOK” (para o scale ser fiel) */
-      --padX: 22px;
-      --gapA: 18px;
-      --gapB: 26px;
-      --bandPadA: 80px;
-      --bandPadB: 54px;
-      --bandPadHeroTop: 56px;
-      --bandPadHeroBot: 38px;
+      --icoShadow: 0 10px 22px rgba(0,0,0,.45);
     }
 
     *{box-sizing:border-box}
-    html,body{min-height:100%}
+
+    html, body{
+      height: auto;
+      overflow-x: hidden;
+    }
+
     body{
       margin:0;
-      font-family:"Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
       color:var(--text);
-      overflow-x:hidden;
-
-      /* ✅ FUNDO ÚNICO, CONTÍNUO (zero “faixas”/quebras) */
-      background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-      background-attachment: fixed;
+      padding:18px;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* ✅ Camada única de efeitos (fixa) — continua do topo ao final */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background:
-        radial-gradient(1200px 900px at 75% 10%, rgba(255,122,24,.14), rgba(7,10,16,0) 55%),
-        radial-gradient(900px 700px at 25% 0%, rgba(255,183,3,.10), rgba(7,10,16,0) 55%),
-        radial-gradient(1200px 900px at 30% 85%, rgba(120,155,255,.06), rgba(7,10,16,0) 60%);
+    .menuItem{ touch-action: manipulation; }
+
+    .home{
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding-top:32px;
     }
 
-    .bgfx{display:none !important}
-
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--container);margin:0 auto;padding:0 var(--padX)}
-
-    .nav{
-      position:sticky; top:0; z-index:50;
+    .homeMenu{
+      width:min(780px,100%);
+      border-radius:22px;
+      background: rgba(18,20,27,.55);
+      border:1px solid rgba(255,255,255,.10);
       backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(7,10,16,.78), rgba(7,10,16,.40));
-      border-bottom:1px solid var(--line2);
-    }
-    .navbar{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 18px 0;
-      gap:12px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width: 220px;
-    }
-    .logo{
-      width:34px;height:34px;border-radius:12px;
-      background: radial-gradient(circle at 30% 25%, rgba(255,183,3,.95), rgba(255,122,24,.95));
-      box-shadow: 0 12px 28px rgba(0,0,0,.45), var(--glow2);
-      display:grid;place-items:center;
-      border:1px solid rgba(255,255,255,.08);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 25px 70px rgba(0,0,0,.55);
       overflow:hidden;
     }
-    .logo svg{width:19px;height:19px;fill:#0b0f18;opacity:.95}
-    .brand b{font-weight:800; letter-spacing:.2px;}
-    .brand small{display:block; margin-top:1px; color:var(--muted); font-weight:600; font-size:12px;}
 
-    .navlinks{
-      display:flex; gap:22px; align-items:center;
-      justify-content:center;
-      flex:1;
+    .homeTop{
+      padding:36px 18px 22px;
+      text-align:center;
+      background: linear-gradient(180deg, rgba(255,122,24,.95), rgba(255,183,3,.92));
     }
-    .navlinks a{
-      color:rgba(231,236,246,.86);
+
+    .homeLogoRing{
+      width:92px;height:92px;
+      border-radius:999px;
+      margin:0 auto 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.35);
+      border:2px solid rgba(255,255,255,.45);
+    }
+
+    .homeLogo{
+      width:76px;height:76px;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .homeLogo img{ width:100%; height:100%; object-fit:cover; }
+
+    .homeTitle{
+      font-family:'Pacifico', cursive;
+      font-size:34px;
+      font-weight:400;
+      margin:0 0 4px;
+      color:#fff;
+      letter-spacing:.5px;
+      text-shadow:
+        0 2px 6px rgba(0,0,0,.35),
+        0 6px 18px rgba(0,0,0,.35);
+    }
+
+    .homeSub{
+      margin:0;
+      font-size:13px;
       font-weight:600;
-      font-size:13px;
-      padding:10px 10px;
-      border-radius:12px;
-      transition: all .18s ease;
-      position:relative;
-      white-space:nowrap;
-    }
-    .navlinks a::after{
-      content:"";
-      position:absolute; left:10px; right:10px; bottom:6px;
-      height:1px;
-      background: linear-gradient(90deg, rgba(255,122,24,0), rgba(255,122,24,.65), rgba(255,122,24,0));
-      opacity:0; transform:translateY(4px);
-      transition: all .18s ease;
-    }
-    .navlinks a:hover{
-      color:var(--text);
-      background:rgba(255,255,255,.03);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.05) inset;
-    }
-    .navlinks a:hover::after{opacity:1;transform:translateY(0)}
-
-    .navactions{
-      display:flex; align-items:center; gap:10px;
-      min-width: 220px;
-      justify-content:flex-end;
-    }
-    .linkbtn{
-      color:rgba(231,236,246,.80);
-      font-weight:700;
-      font-size:13px;
-      padding:10px 12px;
-      border-radius:12px;
-      transition:all .18s ease;
-      white-space:nowrap;
-    }
-    .linkbtn:hover{
-      color:var(--text);
-      background:rgba(255,255,255,.03);
-      box-shadow:0 0 0 1px rgba(255,255,255,.06) inset;
-    }
-    .pill{
-      font-weight:800;
-      font-size:13px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,122,24,.22), rgba(255,122,24,.12));
-      box-shadow: var(--glow);
-      transition: all .18s ease;
-      display:inline-flex; align-items:center; gap:10px;
-      white-space:nowrap;
-    }
-    .pill:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,122,24,.30);
-      background: linear-gradient(180deg, rgba(255,122,24,.30), rgba(255,122,24,.14));
+      color:rgba(255,255,255,.95);
+      text-shadow: 0 2px 6px rgba(0,0,0,.35);
     }
 
-    section[id], .hero, .features, .section, .band{
-      scroll-margin-top: calc(var(--navH) + 18px);
-    }
+    .homeBody{ padding:22px 16px 22px; }
 
-    /* ✅ BAND: totalmente neutra (sem fundo, sem sombras, sem overlays) */
-    .band{
-      position:relative;
-      overflow:hidden;
-      isolation:isolate;
-      padding: var(--bandPadA) 0;
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-    .band::before, .band--a::before, .band--b::before{
-      content:none !important;
-      background:none !important;
-    }
-
-    .band.hero{ padding: var(--bandPadHeroTop) 0 var(--bandPadHeroBot); }
-    .band.features{ padding: var(--bandPadB) 0 var(--bandPadB); }
-    .band.section{ padding: var(--bandPadA) 0; }
-
-    .heroCard{
-      border-radius: var(--r-lg);
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .heroCard::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background:
-        radial-gradient(520px 380px at 68% 30%, rgba(255,122,24,.18), rgba(0,0,0,0) 60%),
-        radial-gradient(540px 420px at 15% 15%, rgba(255,183,3,.10), rgba(0,0,0,0) 62%);
-      pointer-events:none;
-    }
-    .heroInner{
-      display:grid;
-      grid-template-columns: 1.22fr .78fr;
-      gap: var(--gapB);
-      padding: 34px 34px 0;
-      position:relative;
-      min-height: 330px;
-    }
-    .kicker{
-      display:flex; align-items:center; gap:10px;
-      color:rgba(231,236,246,.78);
-      font-weight:700;
-      font-size:12px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:14px;
-    }
-    .kicker .dot{
-      width:8px;height:8px;border-radius:999px;background:rgba(255,122,24,.85);
-      box-shadow: 0 0 0 3px rgba(255,122,24,.16);
-    }
-
-    .heroTitle{
-      font-family:"DM Serif Display", serif;
-      font-size: 50px;
-      line-height:1.02;
-      margin:0 0 22px;
-      letter-spacing:.2px;
-      max-width: 740px;
-    }
-    .accent{color:var(--accent)}
-    .heroText{
-      margin: 18px 0 28px;
-      color:rgba(151,165,187,.95);
-      font-size: 15px;
-      line-height:1.65;
-      max-width: 560px;
-    }
-
-    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; padding-bottom: 16px;}
-    .btn{
-      padding: 12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--text);
-      font-weight:800;
-      font-size: 13px;
-      display:inline-flex; align-items:center; gap:10px;
-      transition: all .18s ease;
-      box-shadow: 0 10px 26px rgba(0,0,0,.28);
-      white-space:nowrap;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.05);
-      border-color: rgba(255,255,255,.14);
-    }
-    .btnPrimary{
-      border-color: rgba(255,122,24,.30);
-      background: linear-gradient(180deg, rgba(255,122,24,.30), rgba(255,122,24,.14));
-      box-shadow: var(--glow);
-    }
-    .btnPrimary:hover{
-      border-color: rgba(255,122,24,.45);
-      background: linear-gradient(180deg, rgba(255,122,24,.36), rgba(255,122,24,.16));
-    }
-    .btn svg{width:16px;height:16px;opacity:.9}
-
-    .heroArt{
-      position:relative;
-      display:flex; align-items:flex-end; justify-content:flex-end;
-      padding-top: 6px;
-      min-height: 0;
-    }
-    .heroArt::before{
-      content:"";
-      position:absolute;
-      width: 430px; height: 430px;
-      right: -110px; top: -70px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.06);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,122,24,.12), rgba(0,0,0,0) 60%),
-        radial-gradient(circle at 70% 40%, rgba(255,183,3,.08), rgba(0,0,0,0) 58%);
-      filter: blur(.2px);
-      opacity:.9;
-    }
-    .heroArt::after{
-      content:"";
-      position:absolute;
-      width: 520px; height: 520px;
-      right: -180px; top: -120px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.04);
-      opacity:.75;
-    }
-    .heroPhoto{
-      width: 450px;
-      height: 400px;
-      object-fit: cover;
-      object-position: 30% 12%;
-      transform: translate(-50px, 0px);
-      border: none !important;
-      border-radius: 28px;
-      max-width: 100%;
-    }
-    .heroFade{
-      height: 28px;
-      background: linear-gradient(180deg, rgba(0,0,0,0), rgba(7,10,16,.9));
-      position:absolute; left:0; right:0; bottom:0;
-      z-index:3;
-      pointer-events:none;
-    }
-
-    /* FEATURES (desktop): wrap */
-    .grid3{
-      display:flex;
-      flex-wrap:wrap;
-      gap: var(--gapA);
-      justify-content:center;
-    }
-    .card{
-      border-radius: var(--r-md);
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      box-shadow: var(--shadow2);
-      padding: 18px 18px 16px;
-      position:relative;
-      overflow:hidden;
-      flex: 1 1 360px;
-      max-width: 380px;
-      min-width: 240px;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(320px 220px at 20% 0%, rgba(255,122,24,.12), rgba(0,0,0,0) 62%);
-      opacity:.55;
-      pointer-events:none;
-    }
-    .ic{
-      width:38px; height:38px;
-      border-radius:14px;
-      display:grid; place-items:center;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      box-shadow: 0 0 0 1px rgba(255,122,24,.12) inset;
-      margin-bottom:12px;
-    }
-    .ic svg{width:18px;height:18px;fill:rgba(255,122,24,.92)}
-    .card h4{
-      margin:0 0 8px;
-      font-size:15px;
-      font-weight:800;
-      letter-spacing:.1px;
-      position:relative;
-    }
-    .card p{
+    .menuList{
+      list-style:none;
+      padding:0;
       margin:0;
-      color:rgba(151,165,187,.95);
-      font-size:13px;
-      line-height:1.6;
-      position:relative;
-    }
-
-    .sectionHead{
-      display:flex; align-items:flex-end; justify-content:space-between;
-      gap:16px;
-      margin-bottom:18px;
-    }
-    .overline{
-      font-size:11px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(151,165,187,.85);
-      font-weight:800;
-      margin-bottom:6px;
-      display:flex; gap:10px; align-items:center;
-    }
-    .overline .bar{
-      width:28px; height:1px;
-      background: linear-gradient(90deg, rgba(255,122,24,0), rgba(255,122,24,.75));
-      opacity:.85;
-    }
-    .h2{
-      margin:0;
-      font-family:"DM Serif Display", serif;
-      font-size: 34px;
-      line-height:1.1;
-      letter-spacing:.2px;
-    }
-
-    .pills{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
-    }
-    .chip{
-      padding:8px 11px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:rgba(231,236,246,.86);
-      font-weight:800;
-      font-size:12px;
-      transition: all .18s ease;
-      cursor:pointer;
-      user-select:none;
-      white-space:nowrap;
-    }
-    .chip:hover{
-      border-color: rgba(255,122,24,.28);
-      box-shadow: 0 0 0 1px rgba(255,122,24,.12) inset;
-      transform: translateY(-1px);
-    }
-    .chip.active{
-      border-color: rgba(255,122,24,.45);
-      background: linear-gradient(180deg, rgba(255,122,24,.26), rgba(255,122,24,.12));
-      box-shadow: var(--glow);
-      color:var(--text);
-    }
-
-    .gridServices{
-      display:flex;
-      flex-wrap:wrap;
-      gap:16px;
-      margin-top: 18px;
-      justify-content:center;
-    }
-    .svc{
-      border-radius: 22px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      box-shadow: var(--shadow2);
-      padding:14px 14px 12px;
-      position:relative;
-      overflow:hidden;
-      transition: all .18s ease;
-      min-height: 140px;
       display:flex;
       flex-direction:column;
-      gap:10px;
-      flex: 1 1 290px;
-      width: auto;
-      max-width: 290px;
-      min-width: 240px;
+      gap:12px;
     }
-    .svc::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(300px 220px at 15% 0%, rgba(255,122,24,.10), rgba(0,0,0,0) 62%);
-      opacity:.55;
-      pointer-events:none;
-    }
-    .svc:hover{
-      transform: translateY(-2px);
-      border-color: rgba(255,122,24,.28);
-      box-shadow: 0 18px 55px rgba(0,0,0,.45), 0 0 0 1px rgba(255,122,24,.10) inset;
-    }
-    .svcTop{
-      display:flex; align-items:center; gap:12px;
-      position:relative;
-    }
-    .svcIcon{
-      width:42px;height:42px;border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      display:grid;place-items:center;
-      box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      flex:0 0 auto;
-      font-size:18px;
-      font-weight:900;
-      color:#0b0f18;
-    }
-    .svcIcon img{
-      display:block;
-      object-fit:contain;
-      width:18px;
-      height:18px;
-    }
-    .svcTitle{
-      font-weight:900;
-      letter-spacing:.1px;
-      font-size:13.5px;
-    }
-    .svcDesc{
-      margin:0;
-      color:rgba(151,165,187,.95);
-      font-size:12.3px;
-      line-height:1.6;
-      position:relative;
-    }
-    .svcArrow{
-      margin-top:auto;
-      display:inline-flex; align-items:center; gap:8px;
-      font-weight:900;
-      font-size:12px;
-      color:rgba(231,236,246,.88);
-      position:relative;
-      opacity:.95;
-    }
-    .svcArrow svg{width:15px;height:15px;fill:currentColor;opacity:.9}
 
-    .gridMentors{
+    .menuItem{
       display:flex;
-      flex-wrap:wrap;
-      gap:16px;
-      margin-top: 18px;
-      justify-content:center;
-    }
-    .mentor{
-      position:relative;
-      border-radius: 22px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.02);
-      min-height: 168px;
-      box-shadow: var(--shadow2);
-      transform: translateZ(0);
-      flex: 1 1 290px;
-      width:auto;
-      max-width: 290px;
-      min-width: 240px;
-    }
-    .mentor img{
-      width:100%;
-      height: 184px;
-      object-fit:cover;
-      filter: saturate(1.02) contrast(1.05);
-      opacity:.95;
-      transform: scale(1.02);
-      display:block;
-      object-position: 50% 50%;
-    }
-    .mentor::after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.60) 75%),
-        radial-gradient(240px 180px at 30% 20%, rgba(255,122,24,.10), rgba(0,0,0,0) 60%);
-      pointer-events:none;
-    }
-    .mentorMeta{
-      position:absolute; left:12px; right:12px; bottom:12px;
-      background: rgba(7,10,16,.62);
+      align-items:center;
+      gap:14px;
+      padding:14px 16px;
+      border-radius:18px;
+      background: rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.10);
-      border-radius: 16px;
-      padding:10px 11px;
-      backdrop-filter: blur(10px);
+      text-decoration:none;
+      color:var(--text);
+      transition:.2s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .menuItem:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,122,24,.55);
+    }
+
+    .menuIco{
+      width:48px;height:48px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      box-shadow: var(--icoShadow);
+    }
+
+    .menuIco img{
+      width:24px;
+      height:24px;
+    }
+
+    .menuIco.curriculo{
+      background: linear-gradient(135deg,var(--orange1),var(--orange2));
+    }
+
+    /* ✅ CURRÍCULO: manter cor original do PNG (sem inverter) e maior */
+    .menuIco.curriculo img{
+      width:34px;      /* maior */
+      height:34px;     /* maior */
+      filter:none;     /* remove o branco/invertido */
+    }
+
+    .menuIco.notion{ background:#ffffff; }
+    .menuIco.powerpoint{ background: transparent; }
+    .menuIco.templates{ background: transparent; }
+
+    .menuTxt{
       display:flex;
       flex-direction:column;
       gap:3px;
-    }
-    .mentorMeta b{
-      font-size:12.5px;
-      font-weight:900;
-      letter-spacing:.1px;
-    }
-    .mentorMeta span{
-      font-size:11px;
-      color: rgba(151,165,187,.95);
-      font-weight:700;
+      flex:1;
     }
 
-    .diffWrap{
-      border-radius: var(--r-lg);
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .diffWrap::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background:
-        radial-gradient(480px 320px at 20% 20%, rgba(255,122,24,.14), rgba(0,0,0,0) 60%),
-        radial-gradient(520px 340px at 85% 35%, rgba(255,183,3,.10), rgba(0,0,0,0) 62%);
-      pointer-events:none;
-      opacity:.8;
-    }
-    .diffClose{
-      position:absolute;
-      top:18px; right:18px;
-      width:40px; height:40px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:rgba(231,236,246,.85);
-      display:grid; place-items:center;
-      cursor:pointer;
-      transition: all .18s ease;
-      z-index:2;
-    }
-    .diffClose:hover{
-      border-color: rgba(255,122,24,.30);
-      box-shadow: 0 0 0 1px rgba(255,122,24,.12) inset;
-      transform: translateY(-1px);
-    }
-    .diffInner{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:16px;
-      padding: 28px;
-      position:relative;
-      z-index:1;
-    }
-    .diffTitle{
+    .menuT{
+      font-size:16px;
+      font-weight:800;
       margin:0;
-      font-family:"DM Serif Display", serif;
-      font-size: 36px;
-      line-height:1.06;
-    }
-    .diffLead{
-      margin:10px 0 0;
-      color:rgba(151,165,187,.95);
-      font-size:13.5px;
-      line-height:1.65;
-      max-width: 520px;
-    }
-    .diffGrid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:14px;
-      align-content:start;
-      padding-top: 4px;
-    }
-    .diffItem{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: 18px;
-      padding:14px 14px 12px;
-      min-height: 104px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-      position:relative;
-      overflow:hidden;
-    }
-    .diffItem::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(220px 160px at 10% 0%, rgba(255,122,24,.12), rgba(0,0,0,0) 62%);
-      opacity:.7;
-      pointer-events:none;
-    }
-    .diffItem .ic{margin-bottom:10px}
-    .diffItem b{
-      display:block;
-      font-size:13px;
-      font-weight:900;
-      margin-bottom:5px;
-      position:relative;
-    }
-    .diffItem span{
-      display:block;
-      color:rgba(151,165,187,.95);
-      font-size:11.5px;
-      line-height:1.55;
-      font-weight:650;
-      position:relative;
     }
 
-    .tNav{display:flex; gap:10px; align-items:center;}
-    .sqBtn{
-      width:38px; height:38px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      display:grid; place-items:center;
-      cursor:pointer;
-      transition: all .18s ease;
-    }
-    .sqBtn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,122,24,.28);
-      box-shadow: 0 0 0 1px rgba(255,122,24,.10) inset;
-    }
-    .sqBtn svg{width:16px;height:16px;fill:rgba(231,236,246,.86)}
-
-    .tGrid{
-      display:flex;
-      flex-wrap:wrap;
-      gap:16px;
-      margin-top: 18px;
-      justify-content:center;
-    }
-    .tCard{
-      border-radius: 22px;
-      border:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      box-shadow: var(--shadow2);
-      padding:16px 16px 14px;
-      position:relative;
-      overflow:hidden;
-      min-height: 140px;
-
-      flex: 1 1 360px;
-      max-width: 380px;
-      min-width: 240px;
-    }
-    .tCard::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(260px 180px at 0% 0%, rgba(255,122,24,.12), rgba(0,0,0,0) 62%);
-      opacity:.55;
-      pointer-events:none;
-    }
-    .tTop{
-      display:flex; align-items:center; gap:12px;
-      margin-bottom:10px;
-      position:relative;
-    }
-    .avatar{
-      width:38px; height:38px; border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      object-fit:cover;
-      box-shadow: 0 10px 22px rgba(0,0,0,.35);
-      background: rgba(255,255,255,.02);
-    }
-    .tTop b{
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:.1px;
-    }
-    .tTop small{
-      display:block;
-      color:rgba(151,165,187,.95);
-      font-weight:750;
-      font-size:11px;
-      margin-top:2px;
-    }
-    .quote{
-      margin:0;
-      color:rgba(231,236,246,.86);
-      font-size:12.5px;
-      line-height:1.65;
-      font-weight:650;
-      position:relative;
-    }
-    .quoteMark{
-      position:absolute;
-      right:14px; top:12px;
-      width:36px; height:36px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      display:grid; place-items:center;
-      opacity:.55;
-    }
-    .quoteMark svg{width:16px;height:16px;fill:rgba(255,122,24,.95)}
-
-    footer{
-      padding: 32px 0 18px;
-      margin-top: 0;
-      background: transparent !important;
-      border-top: none !important;
-    }
-    .foot{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap:18px;
-      align-items:start;
-    }
-    .foot p{
-      margin:10px 0 0;
-      color:rgba(151,165,187,.95);
-      font-size:12.2px;
-      line-height:1.65;
-      max-width: 360px;
-    }
-    .col h5{
-      margin:0 0 10px;
+    .menuD{
       font-size:12px;
-      color:rgba(231,236,246,.88);
+      color:rgba(230,233,239,.75);
+      margin:0;
+    }
+
+    /* ===== Subopções (dropdown) do Currículo ===== */
+    .subWrap{
+      display:none;
+      flex-direction:column;
+      gap:10px;
+      padding-left:14px;
+      margin-top:10px;
+    }
+    .subWrap.open{ display:flex; }
+
+    .subItem{
+      padding:12px 14px;
+      border-radius:16px;
+      background: rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.09);
+    }
+    .subItem:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.075);
+      border-color: rgba(255,183,3,.55);
+    }
+
+    .subIco{
+      width:42px;height:42px;
+      border-radius:14px;
+    }
+
+    .chev{
+      margin-left:auto;
+      opacity:.8;
       font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    .col a{
-      display:block;
-      padding:7px 0;
-      color:rgba(151,165,187,.95);
-      font-weight:750;
-      font-size:12.2px;
-      transition: all .18s ease;
-    }
-    .col a:hover{color:var(--text); transform:translateX(2px)}
-    .social{display:flex; gap:10px; margin-top: 14px;}
-    .sbtn{
-      width:40px;height:40px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      display:grid; place-items:center;
-      transition: all .18s ease;
-    }
-    .sbtn:hover{
+      font-size:18px;
+      line-height:1;
       transform: translateY(-1px);
-      border-color: rgba(255,122,24,.28);
-      box-shadow: 0 0 0 1px rgba(255,122,24,.10) inset;
     }
-    .sbtn svg{width:18px;height:18px;fill:rgba(231,236,246,.86)}
-    .endWord{
-      padding: 26px 0 34px;
-      text-align:center;
-      color: rgba(231,236,246,.70);
-      font-family:"DM Serif Display", serif;
-      font-size: 38px;
-      letter-spacing:.2px;
-    }
-
-    .muted{color:rgba(151,165,187,.95)}
-    .hide{display:none !important}
-    .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-
-    .hamb{display:none}
-    .mMenu{display:none}
-
-    /* ✅ Fit-to-width sem scroll horizontal */
-    #fitViewport{ width:100%; overflow:hidden; }
-    #fitRoot{ transform-origin: top left; will-change: transform; }
+    .chev.open{ transform: translateY(-1px) rotate(180deg); }
   </style>
 </head>
 
 <body>
-  <div id="fitViewport">
-    <div id="fitRoot">
+<div class="home">
+  <div class="homeMenu">
 
-      <header class="nav">
-        <div class="container">
-          <div class="navbar">
-            <a class="brand" href="#topo" aria-label="UsoJaleco">
-              <div class="logo" aria-hidden="true">
-                <img src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/c08b9bb1f52685ee73038af63bbb0af145976e96/Design%20sem%20nomes%20(28).png" alt="" style="width:30px;height:20px;object-fit:contain;">
+    <div class="homeTop">
+      <div class="homeLogoRing">
+        <div class="homeLogo">
+          <img src="https://i.imgur.com/KKtsmb6.jpeg" alt="UsoJaleco">
+        </div>
+      </div>
+      <h1 class="homeTitle">UsoJaleco</h1>
+      <div class="homeSub">Ajudo estudantes e profissionais a economizar tempo!</div>
+    </div>
+
+    <div class="homeBody">
+      <ul class="menuList">
+
+        <li>
+          <div class="menuItem" id="curriculoToggle" aria-expanded="false">
+            <div class="menuIco curriculo">
+              <img src="https://i.imgur.com/G9lTfbc.png" alt="Currículo">
+            </div>
+            <div class="menuTxt">
+              <p class="menuT">Currículo</p>
+              <p class="menuD">Escolha uma opção abaixo.</p>
+            </div>
+            <div class="chev" id="curriculoChev">⌄</div>
+          </div>
+
+          <div class="subWrap" id="curriculoSub">
+            <a class="menuItem subItem"
+               onclick="window.open('https://www.usojaleco.com.br/duvidas-curriculo', '_blank')">
+              <div class="menuIco curriculo subIco">
+                <img src="https://i.imgur.com/G9lTfbc.png" alt="Tirar dúvidas">
               </div>
-              <div>
-                <b>UsoJaleco</b>
-                <small>Hub de soluções na saúde</small>
+              <div class="menuTxt">
+                <p class="menuT">Tirar dúvidas</p>
+                <p class="menuD">Informações, preços, processo e exemplos.</p>
               </div>
             </a>
 
-            <nav class="navlinks" aria-label="Navegação principal">
-              <a href="#servicos">Serviços</a>
-              <a href="#parceiros">Parceiros</a>
-              <a href="#diferenciais">Diferenciais</a>
-              <a href="#sobre">Depoimentos</a>
-            </nav>
-
-            <div class="navactions">
-              <a class="linkbtn" href="#login">Log In</a>
-              <a class="pill" href="#contato">
-                <span>Sign Up</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor" d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/>
-                </svg>
-              </a>
-            </div>
+            <a class="menuItem subItem"
+               onclick="window.open('https://www.usojaleco.com.br/curriculo', '_blank')">
+              <div class="menuIco curriculo subIco">
+                <img src="https://i.imgur.com/G9lTfbc.png" alt="Produzir currículo">
+              </div>
+              <div class="menuTxt">
+                <p class="menuT">Produzir currículo</p>
+                <p class="menuD">Acessar a página para solicitar a produção.</p>
+              </div>
+            </a>
           </div>
-        </div>
-      </header>
+        </li>
 
-      <main id="topo">
-        <section class="band band--a hero" id="topoBand">
-          <div class="container">
-            <div class="heroCard">
-              <div class="heroInner">
-                <div>
-                  <div class="kicker">
-                    <span class="dot" aria-hidden="true"></span>
-                    HUB DE SOLUÇÕES NA SAÚDE
-                  </div>
-
-                  <h1 class="heroTitle">
-                    Seu <span class="accent">hub de soluções</span> para<br>
-                    ganhar tempo e qualidade
-                  </h1>
-
-                  <p class="heroText">
-                    UsoJaleco reúne serviços essenciais para estudantes e profissionais da saúde: sites e landing pages,
-                    identidade visual, apresentações para congressos e aulas, portfólio profissional, currículo médico,
-                    gestão de Instagram e vídeos curtos — com parceiros em contabilidade e jurídico.
-                  </p>
-
-                  <div class="ctaRow">
-                    <a class="btn btnPrimary" href="#servicos">
-                      Conheça nossos serviços
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="currentColor" d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/>
-                      </svg>
-                    </a>
-
-                    <a class="btn" href="#diferenciais">
-                      Saiba mais
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="currentColor" d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm1-5v-6h-2v6h2Zm0-8V7h-2v2h2Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-
-                <div class="heroArt" aria-hidden="true">
-                  <img class="heroPhoto" alt="" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/b333fc0ab84dc62f4d796598c51f79d150af1cef/57127ea4-5037-43fc-903e-29d179a08f9f.png" />
-                </div>
-
-                <div class="heroFade" aria-hidden="true"></div>
-              </div>
+        <li>
+          <a class="menuItem"
+             onclick="window.open('https://www.notion.so/arthurambrosii/ATENDIMENTO-SIMPLIFICADO-2d75beae6fe1801d9852d83c43b93a25?source=copy_link', '_blank')">
+            <div class="menuIco notion">
+              <img src="https://i.imgur.com/MMHIRSM.png" alt="Manual de Atendimento">
             </div>
-          </div>
-        </section>
-
-        <section class="band band--b features">
-          <div class="container">
-            <div class="grid3">
-              <div class="card">
-                <div class="ic" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M4 4h16v4H4V4zm0 6h16v10H4V10zm3 3v4h4v-4H7zm6 0v1h4v-1h-4zm0 3v1h4v-1h-4z"/></svg>
-                </div>
-                <h4>Tudo em um só lugar</h4>
-                <p>Do site ao currículo e às apresentações: um hub que integra as peças da sua carreira e presença digital.</p>
-              </div>
-
-              <div class="card">
-                <div class="ic" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M12 2l3 6 7 .9-5 4.6 1.3 6.9L12 17l-6.3 3.4L7 13.5 2 8.9 9 8l3-6z"/></svg>
-                </div>
-                <h4>Padrão UJ</h4>
-                <p>Design e escrita com estética consistente, alinhados ao tom da saúde: clareza, elegância e objetividade.</p>
-              </div>
-
-              <div class="card">
-                <div class="ic" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M12 6V3L8 7l4 4V8c2.8 0 5 2.2 5 5 0 1.1-.3 2.1-.9 3l1.5 1.5c1-1.2 1.6-2.8 1.6-4.5 0-3.9-3.1-7-7-7zM7.8 18.2C6.7 17.3 6 16.2 6 15c0-2.8 2.2-5 5-5v3l4-4-4-4v3c-3.9 0-7 3.1-7 7 0 1.7.6 3.3 1.6 4.5l2.2-1.3z"/></svg>
-                </div>
-                <h4>Fluxo por etapas</h4>
-                <p>Você descreve o objetivo, a gente define o escopo e conduz a entrega com revisões combinadas.</p>
-              </div>
+            <div class="menuTxt">
+              <p class="menuT">Manual de Atendimento</p>
+              <p class="menuD">Clique para acessar nossas prescrições!</p>
             </div>
-          </div>
-        </section>
+          </a>
+        </li>
 
-        <section class="band band--a section" id="servicos">
-          <div class="container">
-            <div class="sectionHead">
-              <div>
-                <div class="overline"><span class="bar"></span> SERVIÇOS</div>
-                <h2 class="h2">Escolha o que você precisa, <span class="accent">hoje</span></h2>
-                <p class="muted" style="margin:10px 0 0; max-width:760px; font-size:13.2px; line-height:1.7;">
-                  Cards clicáveis para redirecionar. Você adiciona/edita tudo na planilha (ícone, cor, nome, descrição e link).
-                </p>
-              </div>
+        <li>
+          <a class="menuItem"
+             onclick="window.open('https://www.usojaleco.com.br/powerpoint', '_blank')">
+            <div class="menuIco powerpoint">
+              <img src="https://i.imgur.com/EXKmJM1.png" alt="PowerPoint">
             </div>
-
-            <div class="gridServices" id="servicesGrid" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section class="band band--b section" id="parceiros">
-          <div class="container">
-            <div class="sectionHead">
-              <div>
-                <div class="overline"><span class="bar"></span> PARCEIROS</div>
-                <h2 class="h2">Profissionais prontos para <span class="accent">ajudar</span></h2>
-                <div class="pills" id="pills" aria-label="Filtro por serviço"></div>
-              </div>
+            <div class="menuTxt">
+              <p class="menuT">PowerPoint</p>
+              <p class="menuD">Clique para acessar nossos serviços!</p>
             </div>
+          </a>
+        </li>
 
-            <div class="gridMentors" id="mentorGrid" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section class="band band--a section" id="diferenciais">
-          <div class="container">
-            <div class="diffWrap" id="diffWrap">
-              <button class="diffClose" id="diffClose" type="button" aria-label="Fechar">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3 1.4 1.4z"/></svg>
-              </button>
-
-              <div class="diffInner">
-                <div>
-                  <div class="overline"><span class="bar"></span> DIFERENCIAIS</div>
-                  <h3 class="diffTitle">Um hub com padrão, direção e <span class="accent">execução</span></h3>
-                  <p class="diffLead">
-                    Hoje: entregas com estética consistente e organização real. Amanhã: cada vez mais serviços conectados,
-                    com parceiros e soluções complementares — tudo no mesmo ecossistema.
-                  </p>
-                </div>
-
-                <div class="diffGrid">
-                  <div class="diffItem">
-                    <div class="ic" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><path d="M19 3h-2V1h-2v2H9V1H7v2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V9h14v12zm0-14H5V5h14v2z"/></svg>
-                    </div>
-                    <b>Escopo claro</b>
-                    <span>Você sabe exatamente o que entra, prazos e como funciona a revisão.</span>
-                  </div>
-
-                  <div class="diffItem">
-                    <div class="ic" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><path d="M7 2h10v2H7V2zm-2 4h14v16H5V6zm2 2v12h10V8H7zm2 2h6v2H9v-2zm0 4h6v2H9v-2z"/></svg>
-                    </div>
-                    <b>Padrão visual UJ</b>
-                    <span>Coerência entre site, portfólio, currículo e apresentações.</span>
-                  </div>
-
-                  <div class="diffItem">
-                    <div class="ic" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5V12H8v-2h5V5.5L18.5 11z"/></svg>
-                    </div>
-                    <b>Direção estratégica</b>
-                    <span>Menos aleatoriedade: objetivo, prioridade e mensagem alinhada ao seu perfil.</span>
-                  </div>
-
-                  <div class="diffItem">
-                    <div class="ic" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zM12 2 3 8v2h18V8l-9-6zm0 4.2L18 10H6l6-3.8zM6 12h12v6H6v-6z"/></svg>
-                    </div>
-                    <b>Parceiros complementares</b>
-                    <span>Quando fizer sentido: contabilidade e jurídico conectados ao seu momento.</span>
-                  </div>
-                </div>
-              </div>
+        <li>
+          <a class="menuItem"
+             onclick="window.open('https://www.usojaleco.com.br/templates', '_blank')">
+            <div class="menuIco templates">
+              <img src="https://i.imgur.com/EXKmJM1.png" alt="Templates">
             </div>
-          </div>
-        </section>
-
-        <section class="band band--b section" id="sobre">
-          <div class="container">
-            <div class="sectionHead">
-              <div>
-                <div class="overline"><span class="bar"></span> DEPOIMENTOS</div>
-                <h2 class="h2">O que dizem <span class="accent">sobre nós</span></h2>
-              </div>
-
-              <div class="tNav" aria-label="Navegação de depoimentos">
-                <button class="sqBtn" id="tPrev" type="button" aria-label="Anterior">
-                  <svg viewBox="0 0 24 24"><path d="M14.7 6.3 9 12l5.7 5.7-1.4 1.4L6.2 12l7.1-7.1 1.4 1.4z"/></svg>
-                </button>
-                <button class="sqBtn" id="tNext" type="button" aria-label="Próximo">
-                  <svg viewBox="0 0 24 24"><path d="m9.3 17.7 5.7-5.7-5.7-5.7 1.4-1.4 7.1 7.1-7.1 7.1-1.4-1.4z"/></svg>
-                </button>
-              </div>
+            <div class="menuTxt">
+              <p class="menuT">Templates</p>
+              <p class="menuD">Veja nossos templates disponíveis!</p>
             </div>
+          </a>
+        </li>
 
-            <div class="tGrid" id="tGrid" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section class="band band--a section" id="contato">
-          <div class="container">
-            <div class="card" style="padding:20px 20px 18px; max-width:none;">
-              <div class="overline"><span class="bar"></span> CONTATO</div>
-              <h3 style="margin:0 0 8px; font-family:'DM Serif Display', serif; font-size:30px; line-height:1.08;">
-                Vamos montar seu próximo <span class="accent">padrão</span>
-              </h3>
-              <p class="muted" style="margin:0; font-size:12.8px; line-height:1.7; max-width:760px;">
-                Fale com a gente para definir escopo, prazo e melhor caminho (serviços avulsos, pacote ou parceria).
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <footer>
-          <div class="container">
-            <div class="foot">
-              <div>
-                <a class="brand" href="#topo" aria-label="Voltar ao topo">
-                  <div class="logo" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M12 2c4.8 0 8.8 3.4 9.6 7.9.2 1.2-.7 2.1-1.9 2.1h-2.7l-1.3 2.4c-.4.7-1.3 1-2 .6l-1.2-.7-1.2.7c-.7.4-1.6.1-2-.6L8 12H5.3c-1.2 0-2.1-.9-1.9-2.1C3.2 5.4 7.2 2 12 2zm-1 8V7h2v3h3v2h-3v3h-2v-3H8v-2h3z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <b>UsoJaleco</b>
-                    <small>Hub de soluções na saúde</small>
-                  </div>
-                </a>
-
-                <p>
-                  Soluções para estudantes e profissionais da saúde: sites, identidade visual, apresentações,
-                  currículos, conteúdo e parceiros estratégicos.
-                </p>
-
-                <div class="social" aria-label="Redes sociais">
-                  <a class="sbtn" href="#" aria-label="Instagram">
-                    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.2-2.3a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
-                  </a>
-                  <a class="sbtn" href="#" aria-label="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M14 3v10.2a4.8 4.8 0 1 1-4-4.7V11a2.8 2.8 0 1 0 2 2.7V3h2c.4 2.1 1.9 3.8 4 4.4V9c-1.6-.2-3-1-4-2.1V3h0z"/></svg>
-                  </a>
-                  <a class="sbtn" href="#" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24"><path d="M6 6.5A2.5 2.5 0 1 1 6 1.5a2.5 2.5 0 0 1 0 5zM2 22V8h4v14H2zm7 0V8h4v2c.6-1.2 2-2.4 4.2-2.4C20.5 7.6 22 10 22 13.2V22h-4v-7.6c0-1.8-.7-3-2.2-3-1.2 0-2 .8-2.3 1.6-.1.3-.1.7-.1 1.1V22H9z"/></svg>
-                  </a>
-                  <a class="sbtn" href="#" aria-label="YouTube">
-                    <svg viewBox="0 0 24 24"><path d="M21.6 7.2s-.2-1.6-.8-2.3c-.8-.8-1.7-.8-2.1-.9C15.9 3.8 12 3.8 12 3.8h0s-3.9 0-6.7.2c-.4 0-1.3.1-2.1.9C2.6 5.6 2.4 7.2 2.4 7.2S2.2 9 2.2 10.8v1.7c0 1.8.2 3.6.2 3.6s.2 1.6.8 2.3c.8.8 1.9.8 2.4.9 1.7.2 6.6.2 6.6.2s3.9 0 6.7-.2c.4 0 1.3-.1 2.1-.9.6-.7.8-2.3.8-2.3s.2-1.8.2-3.6v-1.7c0-1.8-.2-3.6-.2-3.6zM10 14.6V8.9l6 2.9-6 2.8z"/></svg>
-                  </a>
-                </div>
-              </div>
-
-              <div class="col">
-                <h5>Soluções</h5>
-                <a href="#servicos">Serviços</a>
-                <a href="#parceiros">Parceiros</a>
-                <a href="#diferenciais">Diferenciais</a>
-              </div>
-
-              <div class="col">
-                <h5>Conteúdo</h5>
-                <a href="#sobre">Depoimentos</a>
-                <a href="#contato">Contato</a>
-                <a href="#topo">Topo</a>
-              </div>
-
-              <div class="col">
-                <h5>Institucional</h5>
-                <a href="#topo">Nossa história</a>
-                <a href="#contato">Fale conosco</a>
-                <a href="#">Política de privacidade</a>
-                <a href="#">Termos</a>
-              </div>
-            </div>
-
-            <div class="endWord"></div>
-          </div>
-        </footer>
-      </main>
-
-      <script>
-        // =========================================================
-        // ✅ GOOGLE SHEETS (SERVIÇOS / PARCEIROS / DEPOIMENTOS)
-        // =========================================================
-
-        const USE_FALLBACK_ON_ERROR = true;
-
-        const SHEETS = {
-          spreadsheetId: "1U8NLqXZ3mpIHWDN9Q9EcbDVE2jTPkkcjcgn0dF7etMs",
-          tabs: {
-            servicos: "servicos",
-            parceiros: "parceiros",
-            depoimentos: "depoimentos"
-          }
-        };
-
-        function safeStr(v){ return (v === null || v === undefined) ? "" : String(v).trim(); }
-
-        function gvizUrl(sheetName){
-          const base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEETS.spreadsheetId) +
-            "/gviz/tq?sheet=" + encodeURIComponent(sheetName) +
-            "&headers=1&tqx=out:json";
-          return base + "&_=" + Date.now();
-        }
-
-        function loadGvizTable(sheetName, timeoutMs = 9000){
-          return new Promise((resolve, reject) => {
-            const url = gvizUrl(sheetName);
-
-            window.google = window.google || {};
-            window.google.visualization = window.google.visualization || {};
-            window.google.visualization.Query = window.google.visualization.Query || {};
-
-            const Query = window.google.visualization.Query;
-            const prevSetResponse = Query.setResponse;
-
-            let done = false;
-
-            const cleanup = (scriptEl) => {
-              if (done) return;
-              done = true;
-              Query.setResponse = prevSetResponse;
-              if (scriptEl && scriptEl.parentNode) scriptEl.parentNode.removeChild(scriptEl);
-            };
-
-            const t = setTimeout(() => {
-              cleanup(script);
-              reject(new Error("Timeout lendo planilha (GVIZ)"));
-            }, timeoutMs);
-
-            Query.setResponse = (resp) => {
-              clearTimeout(t);
-              cleanup(script);
-              try{
-                const table = resp && resp.table ? resp.table : null;
-                if (!table) throw new Error("Resposta sem table");
-                resolve(table);
-              }catch(e){
-                reject(e);
-              }
-            };
-
-            const script = document.createElement("script");
-            script.src = url;
-            script.async = true;
-            script.onerror = () => {
-              clearTimeout(t);
-              cleanup(script);
-              reject(new Error("Erro carregando script GVIZ"));
-            };
-
-            document.head.appendChild(script);
-          });
-        }
-
-        function tableToRows(table){
-          const cols = (table.cols || []).map(c => safeStr(c.label || ""));
-          const rows = (table.rows || []);
-
-          const out = rows.map(r => {
-            const o = {};
-            (r.c || []).forEach((cell, i) => {
-              const key = (cols[i] || ("col" + (i+1))).toLowerCase();
-              o[key] = safeStr(cell ? (cell.f ?? cell.v) : "");
-            });
-            return o;
-          }).filter(o => Object.values(o).some(v => safeStr(v)));
-
-          return out;
-        }
-
-        async function fetchSheetRows(sheetName){
-          const table = await loadGvizTable(sheetName);
-          return tableToRows(table);
-        }
-
-        // =========================================================
-        // ✅ Differentials close (visual only)
-        // =========================================================
-        const diffClose = document.getElementById('diffClose');
-        const diffWrap = document.getElementById('diffWrap');
-        if (diffClose && diffWrap) {
-          diffClose.addEventListener('click', () => { diffWrap.style.display = 'none'; });
-        }
-
-        // =========================================================
-        // ✅ SERVIÇOS (sheet-driven)
-        // =========================================================
-        const servicesGrid = document.getElementById("servicesGrid");
-
-        const fallbackServices = [
-          { nome:"Sites e Landing Pages", descricao:"Página rápida, bonita e objetiva para divulgar seu serviço.", icone:"🧩", cor:"#ff7a18", link:"#parceiros", icon_size:"18" },
-          { nome:"Identidade Visual", descricao:"Paleta, tipografia e padrão visual para sua marca na saúde.", icone:"🎨", cor:"#ffb703", link:"#parceiros", icon_size:"18" },
-          { nome:"Apresentações", descricao:"Slides para aulas e congressos com estética de evento grande.", icone:"📊", cor:"#7a9bff", link:"#parceiros", icon_size:"18" },
-          { nome:"Currículo Médico", descricao:"Organização e padronização para estágio, residência e carreira.", icone:"📄", cor:"#22c55e", link:"#parceiros", icon_size:"18" }
-        ];
-
-        function renderEmpty(containerEl){
-          if (!containerEl) return;
-          containerEl.innerHTML = `<div class="muted" style="text-align:center; width:100%; padding:14px 0; font-weight:800; letter-spacing:.2px;">Em breve.</div>`;
-        }
-
-        function renderServices(list){
-          if (!servicesGrid) return;
-          servicesGrid.innerHTML = "";
-
-          if (!list || !list.length){
-            renderEmpty(servicesGrid);
-            return;
-          }
-
-          list.forEach(s => {
-            const nome = safeStr(s.nome || s.name || s.titulo || s.col1);
-            if (!nome) return;
-
-            const descricao = safeStr(s.descricao || s.desc || s.descrição || s.col2);
-            const iconeRaw = safeStr(s.icone || s.icon || s.col3) || "✦";
-            const cor = safeStr(s.cor || s.color || s.col4) || "rgba(255,122,24,.85)";
-            const link = safeStr(s.link || s.url || s.destino || s.col5) || "#parceiros";
-
-            const iconSize = parseInt(safeStr(s.icon_size || s.tamanho_icone || s.iconsize || s.col6), 10);
-            const sizePx = Number.isFinite(iconSize) ? iconSize : 18;
-
-            const isImgUrl = /^https?:\/\/.+/i.test(iconeRaw);
-            const iconHTML = isImgUrl
-              ? `<img src="${iconeRaw}" alt="" style="width:${sizePx}px;height:${sizePx}px;object-fit:contain;display:block;">`
-              : `<span aria-hidden="true" style="font-size:${sizePx}px;line-height:1">${iconeRaw}</span>`;
-
-            const a = document.createElement("a");
-            a.className = "svc";
-            a.href = link;
-            a.target = (link.startsWith("http") ? "_blank" : "_self");
-            a.rel = (link.startsWith("http") ? "noopener noreferrer" : "");
-            a.innerHTML = `
-              <div class="svcTop">
-                <div class="svcIcon" style="background:${cor}">
-                  ${iconHTML}
-                </div>
-                <div class="svcTitle">${nome}</div>
-              </div>
-              <p class="svcDesc">${descricao}</p>
-              <span class="svcArrow">
-                Acessar
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/></svg>
-              </span>
-            `;
-            servicesGrid.appendChild(a);
-          });
-
-          if (!servicesGrid.children.length) renderEmpty(servicesGrid);
-        }
-
-        // =========================================================
-        // ✅ PARCEIROS (sheet-driven) + filtros por “resumo”
-        // =========================================================
-        let partners = [];
-        let activeFilter = "all";
-
-        const mentorGrid = document.getElementById("mentorGrid");
-        const pills = document.getElementById("pills");
-
-        const fallbackPartners = [
-          { nome:"Arthur Ambrosi", servico:"Sites, landing pages e estrutura", resumo:"Sites", foto:"https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=1000&q=80", posx:"50", posy:"50" }
-        ];
-
-        function buildPills(list){
-          if (!pills) return;
-
-          const set = new Set();
-          list.forEach(p => {
-            const r = safeStr(p.resumo || p.summary || p.col3);
-            if (r) set.add(r);
-          });
-
-          if (!set.size){
-            pills.innerHTML = "";
-            return;
-          }
-
-          const items = ["Todos", ...Array.from(set)];
-          pills.innerHTML = "";
-          items.forEach((label, idx) => {
-            const el = document.createElement("div");
-            el.className = "chip" + (idx === 0 ? " active" : "");
-            el.dataset.filter = (idx === 0 ? "all" : label);
-            el.textContent = label;
-            pills.appendChild(el);
-          });
-        }
-
-        function renderPartners(){
-          if (!mentorGrid) return;
-          mentorGrid.innerHTML = "";
-
-          if (!partners || !partners.length){
-            renderEmpty(mentorGrid);
-            return;
-          }
-
-          const list = (activeFilter === "all")
-            ? partners
-            : partners.filter(p => safeStr(p.resumo) === activeFilter);
-
-          list.forEach(p => {
-            const nome = safeStr(p.nome);
-            if (!nome) return;
-
-            const servico = safeStr(p.servico);
-            const foto = safeStr(p.foto) || "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=1000&q=80";
-
-            const posx = parseFloat(safeStr(p.posx));
-            const posy = parseFloat(safeStr(p.posy));
-            const x = Number.isFinite(posx) ? posx : 50;
-            const y = Number.isFinite(posy) ? posy : 50;
-
-            const el = document.createElement("div");
-            el.className = "mentor";
-            el.innerHTML = `
-              <img src="${foto}" alt="${nome}" style="object-position:${x}% ${y}%;">
-              <div class="mentorMeta">
-                <b>${nome}</b>
-                <span>${servico}</span>
-              </div>
-            `;
-            mentorGrid.appendChild(el);
-          });
-
-          if (!mentorGrid.children.length) renderEmpty(mentorGrid);
-        }
-
-        if (pills) {
-          pills.addEventListener("click", (e) => {
-            const chip = e.target.closest(".chip");
-            if (!chip) return;
-            pills.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-            chip.classList.add("active");
-            activeFilter = chip.dataset.filter || "all";
-            renderPartners();
-          });
-        }
-
-        // =========================================================
-        // ✅ DEPOIMENTOS (sheet-driven)
-        // =========================================================
-        let testimonials = [];
-        let tIndex = 0;
-
-        const tGrid = document.getElementById("tGrid");
-
-        const fallbackTestimonials = [
-          {
-            nome:"Lívia Fonseca",
-            cargo:"Médica | Presença digital",
-            foto:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
-            texto:"Finalmente consegui padronizar tudo: site, bio, estética e mensagens. Ficou profissional sem perder meu estilo."
-          }
-        ];
-
-        function renderTestimonials(){
-          if (!tGrid) return;
-          tGrid.innerHTML = "";
-
-          if (!testimonials || !testimonials.length){
-            renderEmpty(tGrid);
-            return;
-          }
-
-          const visible = [];
-          for (let i=0; i<3; i++){
-            visible.push(testimonials[(tIndex + i) % testimonials.length]);
-          }
-
-          visible.forEach(t => {
-            const nome = safeStr(t.nome);
-            const cargo = safeStr(t.cargo);
-            const foto = safeStr(t.foto) || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
-            const texto = safeStr(t.texto);
-
-            const el = document.createElement("div");
-            el.className = "tCard";
-            el.innerHTML = `
-              <div class="quoteMark" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M7 17h4l2-4V7H7v6h4l-1 2H7v2zm10 0h4l2-4V7h-6v6h4l-1 2h-3v2z"/></svg>
-              </div>
-              <div class="tTop">
-                <img class="avatar" src="${foto}" alt="${nome}">
-                <div>
-                  <b>${nome}</b>
-                  <small>${cargo}</small>
-                </div>
-              </div>
-              <p class="quote">${texto}</p>
-            `;
-            tGrid.appendChild(el);
-          });
-        }
-
-        const tPrev = document.getElementById("tPrev");
-        const tNext = document.getElementById("tNext");
-        if (tPrev) tPrev.addEventListener("click", () => {
-          if (!testimonials.length) return;
-          tIndex = (tIndex - 1 + testimonials.length) % testimonials.length;
-          renderTestimonials();
-        });
-        if (tNext) tNext.addEventListener("click", () => {
-          if (!testimonials.length) return;
-          tIndex = (tIndex + 1) % testimonials.length;
-          renderTestimonials();
-        });
-
-        // =========================================================
-        // ✅ Boot
-        // =========================================================
-        async function boot(){
-          try{
-            const rows = await fetchSheetRows(SHEETS.tabs.servicos);
-            renderServices(rows);
-          }catch(err){
-            if (USE_FALLBACK_ON_ERROR) renderServices(fallbackServices);
-            else renderServices([]);
-          }
-
-          try{
-            const rows = await fetchSheetRows(SHEETS.tabs.parceiros);
-            partners = rows.map(r => ({
-              nome: safeStr(r.nome || r.name || r.col1),
-              servico: safeStr(r.servico || r.serviço || r.col2),
-              resumo: safeStr(r.resumo || r.summary || r.col3),
-              foto: safeStr(r.foto || r.imagem || r.image || r.col4),
-              posx: safeStr(r.pos_x || r.posx || r.x || r.col5),
-              posy: safeStr(r.pos_y || r.posy || r.y || r.col6)
-            })).filter(p => p.nome);
-          }catch(err){
-            partners = USE_FALLBACK_ON_ERROR ? fallbackPartners : [];
-          }
-          buildPills(partners);
-          activeFilter = "all";
-          renderPartners();
-
-          try{
-            const rows = await fetchSheetRows(SHEETS.tabs.depoimentos);
-            testimonials = rows.map(r => ({
-              nome: safeStr(r.nome || r.name || r.col1),
-              cargo: safeStr(r.cargo || r.role || r.col2),
-              foto: safeStr(r.foto || r.imagem || r.image || r.col3),
-              texto: safeStr(r.texto || r.depoimento || r.col4)
-            })).filter(t => t.nome && t.texto);
-          }catch(err){
-            testimonials = USE_FALLBACK_ON_ERROR ? fallbackTestimonials : [];
-          }
-          tIndex = 0;
-          renderTestimonials();
-        }
-
-        boot();
-
-        // =========================================================
-        // ✅ Fit-to-width com "base" menor no mobile (fica maior)
-        // =========================================================
-        (function(){
-          const viewport = document.getElementById('fitViewport');
-          const root = document.getElementById('fitRoot');
-          if(!viewport || !root) return;
-
-          function applyFit(){
-            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-
-            // 👇 Ajuste aqui para ficar maior/menor no celular:
-            // base menor => scale maior => tudo maior.
-            let base = 1200;             // desktop
-            if (vw <= 540) base = 780;   // mobile padrão (maior que antes)
-            if (vw <= 410) base = 720;   // mobile pequeno (ainda maior)
-
-            root.style.width = base + "px";
-            const scale = vw / base;
-            root.style.transform = `scale(${scale})`;
-
-            // ✅ transforma não “conta” no layout: ajusta altura real do wrapper
-            const h = root.scrollHeight * scale;
-            viewport.style.height = h + "px";
-          }
-
-          // roda agora e em resize/orientation change
-          applyFit();
-          window.addEventListener('resize', applyFit, { passive:true });
-          window.addEventListener('orientationchange', applyFit, { passive:true });
-
-          // garante altura correta após imagens carregarem
-          window.addEventListener('load', applyFit, { passive:true });
-        })();
-      </script>
-
+      </ul>
     </div>
+
   </div>
+</div>
+
+<script>
+  (function(){
+    const toggle = document.getElementById('curriculoToggle');
+    const sub = document.getElementById('curriculoSub');
+    const chev = document.getElementById('curriculoChev');
+
+    function setOpen(open){
+      sub.classList.toggle('open', open);
+      chev.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    toggle.addEventListener('click', function(e){
+      e.preventDefault();
+      setOpen(!sub.classList.contains('open'));
+    });
+  })();
+</script>
 </body>
 </html>
-
-
