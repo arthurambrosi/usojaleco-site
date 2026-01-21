@@ -46,6 +46,10 @@
       --bandPadB: 54px;
       --bandPadHeroTop: 56px;
       --bandPadHeroBot: 38px;
+
+      /* ✅ Mobile menu */
+      --menuBg: rgba(7,10,16,.92);
+      --menuBlur: blur(14px);
     }
 
     *{box-sizing:border-box}
@@ -825,8 +829,89 @@
     .hide{display:none !important}
     .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 
+    /* ===========================
+       ✅ MENU MOBILE (CORRIGIDO)
+       - esconde links/actions desktop
+       - mostra hamburger + drawer
+       =========================== */
     .hamb{display:none}
-    .mMenu{display:none}
+    .hambBtn{
+      width:42px;height:42px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      display:grid;place-items:center;
+      cursor:pointer;
+      transition: all .18s ease;
+      box-shadow: 0 10px 26px rgba(0,0,0,.22);
+    }
+    .hambBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,122,24,.28);
+      box-shadow: 0 0 0 1px rgba(255,122,24,.10) inset, 0 10px 26px rgba(0,0,0,.22);
+    }
+    .hambBtn svg{width:18px;height:18px;fill:rgba(231,236,246,.88)}
+
+    .mMenu{
+      display:none;
+      position: fixed;
+      left: 0; right: 0;
+      top: var(--navH);
+      z-index: 60;
+      padding: 12px var(--padX) 14px;
+      background: var(--menuBg);
+      backdrop-filter: var(--menuBlur);
+      border-bottom: 1px solid var(--line2);
+      box-shadow: 0 30px 80px rgba(0,0,0,.55);
+    }
+    .mMenu.open{display:block}
+    .mMenuInner{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+    .mMenuLinks{
+      display:flex;
+      flex-direction:column;
+      padding: 10px;
+      gap: 8px;
+    }
+    .mMenuLinks a{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      font-weight:850;
+      color: rgba(231,236,246,.90);
+      transition: all .18s ease;
+    }
+    .mMenuLinks a:hover{
+      border-color: rgba(255,122,24,.26);
+      box-shadow: 0 0 0 1px rgba(255,122,24,.10) inset;
+      transform: translateY(-1px);
+    }
+    .mMenuLinks a svg{width:16px;height:16px;fill:rgba(231,236,246,.72)}
+    .mMenuActions{
+      display:flex;
+      gap:10px;
+      padding: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.12);
+    }
+    .mMenuActions a{flex:1; justify-content:center}
+    .mOverlay{
+      display:none;
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(2px);
+    }
+    .mOverlay.open{display:block}
 
     /* =========================================================
        ✅ MOBILE/RESPONSIVO (sem scale)
@@ -849,6 +934,11 @@
       .navbar{ padding: 14px 0; }
       .brand{ min-width: auto; }
 
+      /* ✅ esconde nav desktop e ativa hamburger */
+      .navlinks{display:none !important}
+      .navactions{display:none !important}
+      .hamb{display:flex !important; align-items:center; justify-content:flex-end; min-width:auto;}
+
       /* HERO -> 1 coluna */
       .heroInner{
         grid-template-columns: 1fr;
@@ -867,6 +957,16 @@
       }
       .ctaRow{ padding-bottom: 14px; }
 
+      /* =====================================================
+         ✅ FOTO DO HERO DESATIVADA SOMENTE NO MOBILE
+         - NÃO removi do HTML
+         - Para reativar: remova a classe "noHeroPhotoMobile"
+           do <body> OU comente o bloco abaixo.
+         ===================================================== */
+      body.noHeroPhotoMobile .heroArt{ display:none !important; }
+      body.noHeroPhotoMobile .heroFade{ display:none !important; }
+
+      /* caso você reative no futuro, esse layout já está ok */
       .heroArt{
         justify-content: center;
         padding: 6px 0 0;
@@ -937,7 +1037,8 @@
   </style>
 </head>
 
-<body>
+<!-- ✅ classe "noHeroPhotoMobile" desativa a foto SÓ no mobile -->
+<body class="noHeroPhotoMobile">
   <header class="nav">
     <div class="container">
       <div class="navbar">
@@ -967,9 +1068,48 @@
             </svg>
           </a>
         </div>
+
+        <!-- ✅ Hamburguer (mobile) -->
+        <div class="hamb">
+          <button class="hambBtn" id="hambBtn" type="button" aria-label="Abrir menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </header>
+
+  <!-- ✅ overlay + menu mobile -->
+  <div class="mOverlay" id="mOverlay" aria-hidden="true"></div>
+  <div class="mMenu" id="mMenu" aria-hidden="true">
+    <div class="mMenuInner">
+      <div class="mMenuLinks">
+        <a href="#servicos">
+          <span>Serviços</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/></svg>
+        </a>
+        <a href="#parceiros">
+          <span>Parceiros</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/></svg>
+        </a>
+        <a href="#diferenciais">
+          <span>Diferenciais</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/></svg>
+        </a>
+        <a href="#sobre">
+          <span>Depoimentos</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7-1.4-1.4 4.6-4.6H4v-2h12.2l-4.6-4.6L13 5z"/></svg>
+        </a>
+      </div>
+
+      <div class="mMenuActions">
+        <a class="btn" href="#login">Log In</a>
+        <a class="btn btnPrimary" href="#contato">Sign Up</a>
+      </div>
+    </div>
+  </div>
 
   <main id="topo">
     <section class="band band--a hero" id="topoBand">
@@ -1010,6 +1150,7 @@
               </div>
             </div>
 
+            <!-- ✅ FOTO MANTIDA NO CÓDIGO (desativada apenas no mobile via class no body) -->
             <div class="heroArt" aria-hidden="true">
               <img class="heroPhoto" alt="" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/b333fc0ab84dc62f4d796598c51f79d150af1cef/57127ea4-5037-43fc-903e-29d179a08f9f.png" />
             </div>
@@ -1238,9 +1379,69 @@
 
   <script>
     // =========================================================
+    // ✅ MENU MOBILE (toggle robusto)
+    // =========================================================
+    (function(){
+      const btn = document.getElementById("hambBtn");
+      const menu = document.getElementById("mMenu");
+      const overlay = document.getElementById("mOverlay");
+
+      function isOpen(){ return menu && menu.classList.contains("open"); }
+
+      function openMenu(){
+        if (!menu || !overlay || !btn) return;
+        menu.classList.add("open");
+        overlay.classList.add("open");
+        menu.setAttribute("aria-hidden","false");
+        overlay.setAttribute("aria-hidden","false");
+        btn.setAttribute("aria-expanded","true");
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeMenu(){
+        if (!menu || !overlay || !btn) return;
+        menu.classList.remove("open");
+        overlay.classList.remove("open");
+        menu.setAttribute("aria-hidden","true");
+        overlay.setAttribute("aria-hidden","true");
+        btn.setAttribute("aria-expanded","false");
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+      }
+
+      function toggleMenu(){
+        if (isOpen()) closeMenu();
+        else openMenu();
+      }
+
+      if (btn) btn.addEventListener("click", toggleMenu);
+      if (overlay) overlay.addEventListener("click", closeMenu);
+
+      // fecha ao clicar em qualquer link do menu
+      if (menu){
+        menu.addEventListener("click", (e) => {
+          const a = e.target.closest("a");
+          if (!a) return;
+          closeMenu();
+        });
+      }
+
+      // fecha com ESC
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && isOpen()) closeMenu();
+      });
+
+      // se sair do breakpoint, fecha para não “bugar”
+      window.addEventListener("resize", () => {
+        const w = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        if (w > 980 && isOpen()) closeMenu();
+      }, { passive:true });
+    })();
+
+    // =========================================================
     // ✅ GOOGLE SHEETS (SERVIÇOS / PARCEIROS / DEPOIMENTOS)
     // =========================================================
-
     const USE_FALLBACK_ON_ERROR = true;
 
     const SHEETS = {
