@@ -79,22 +79,6 @@
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--container);margin:0 auto;padding:0 var(--padX)}
 
-    /* =========================================================
-       ✅ MOBILE = CÓPIA DO DESKTOP (SEM REFLOW)
-       - Escala o site inteiro para caber na largura
-       - Sem arrastar pro lado
-       ========================================================= */
-    .scaleWrap{
-      width:100%;
-      overflow:hidden;       /* impede rolagem horizontal */
-    }
-    .scaleStage{
-      width: var(--container);
-      margin: 0 auto;        /* centraliza no desktop */
-      transform-origin: top left;
-      will-change: transform;
-    }
-
     .nav{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(12px);
@@ -251,7 +235,7 @@
 
     .heroTitle{
       font-family:"DM Serif Display", serif;
-      font-size: 50px;      /* ✅ trava desktop */
+      font-size: 50px;
       line-height:1.02;
       margin:0 0 22px;
       letter-spacing:.2px;
@@ -261,7 +245,7 @@
     .heroText{
       margin: 18px 0 28px;
       color:rgba(151,165,187,.95);
-      font-size: 15px;      /* ✅ trava desktop */
+      font-size: 15px;
       line-height:1.65;
       max-width: 560px;
     }
@@ -274,7 +258,7 @@
       background: rgba(255,255,255,.03);
       color:var(--text);
       font-weight:800;
-      font-size: 13px;      /* ✅ trava desktop */
+      font-size: 13px;
       display:inline-flex; align-items:center; gap:10px;
       transition: all .18s ease;
       box-shadow: 0 10px 26px rgba(0,0,0,.28);
@@ -415,7 +399,7 @@
     .h2{
       margin:0;
       font-family:"DM Serif Display", serif;
-      font-size: 34px;     /* ✅ trava desktop */
+      font-size: 34px;
       line-height:1.1;
       letter-spacing:.2px;
     }
@@ -638,7 +622,7 @@
     .diffTitle{
       margin:0;
       font-family:"DM Serif Display", serif;
-      font-size: 36px;     /* ✅ trava desktop */
+      font-size: 36px;
       line-height:1.06;
     }
     .diffLead{
@@ -833,7 +817,7 @@
       text-align:center;
       color: rgba(231,236,246,.70);
       font-family:"DM Serif Display", serif;
-      font-size: 38px;     /* ✅ trava desktop */
+      font-size: 38px;
       letter-spacing:.2px;
     }
 
@@ -843,12 +827,16 @@
 
     .hamb{display:none}
     .mMenu{display:none}
+
+    /* ✅ Fit-to-width sem scroll horizontal */
+    #fitViewport{ width:100%; overflow:hidden; }
+    #fitRoot{ transform-origin: top left; will-change: transform; }
   </style>
 </head>
 
 <body>
-  <div class="scaleWrap" id="scaleWrap">
-    <div class="scaleStage" id="scaleStage">
+  <div id="fitViewport">
+    <div id="fitRoot">
 
       <header class="nav">
         <div class="container">
@@ -1150,40 +1138,6 @@
 
       <script>
         // =========================================================
-        // ✅ SCALE DESKTOP -> MOBILE (sem reflow / sem arrastar pro lado)
-        // =========================================================
-        (function(){
-          const stage = document.getElementById("scaleStage");
-          const wrap  = document.getElementById("scaleWrap");
-          if(!stage || !wrap) return;
-
-          const BASE = 1180; // largura desktop
-
-          function applyScale(){
-            const vw = Math.max(320, window.innerWidth || 0);
-            const s = Math.min(1, vw / BASE);
-
-            stage.style.transform = "scale(" + s + ")";
-            // Compensa a altura (transform não altera fluxo do layout)
-            wrap.style.height = (stage.scrollHeight * s) + "px";
-          }
-
-          window.addEventListener("resize", () => requestAnimationFrame(applyScale), {passive:true});
-          window.addEventListener("orientationchange", () => setTimeout(applyScale, 80), {passive:true});
-          window.addEventListener("load", () => setTimeout(applyScale, 60), {passive:true});
-
-          // Reaplica algumas vezes para pegar fontes/imagens carregando
-          let tries = 0;
-          const t = setInterval(() => {
-            applyScale();
-            tries++;
-            if(tries >= 12) clearInterval(t);
-          }, 150);
-
-          applyScale();
-        })();
-
-        // =========================================================
         // ✅ GOOGLE SHEETS (SERVIÇOS / PARCEIROS / DEPOIMENTOS)
         // =========================================================
 
@@ -1421,7 +1375,6 @@
             el.className = "mentor";
             el.innerHTML = `
               <img src="${foto}" alt="${nome}" style="object-position:${x}% ${y}%;">
-
               <div class="mentorMeta">
                 <b>${nome}</b>
                 <span>${servico}</span>
@@ -1558,6 +1511,41 @@
         }
 
         boot();
+
+        // =========================================================
+        // ✅ Fit-to-width com "base" menor no mobile (fica maior)
+        // =========================================================
+        (function(){
+          const viewport = document.getElementById('fitViewport');
+          const root = document.getElementById('fitRoot');
+          if(!viewport || !root) return;
+
+          function applyFit(){
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+
+            // 👇 Ajuste aqui para ficar maior/menor no celular:
+            // base menor => scale maior => tudo maior.
+            let base = 1180;             // desktop
+            if (vw <= 540) base = 980;   // mobile padrão (maior que antes)
+            if (vw <= 410) base = 920;   // mobile pequeno (ainda maior)
+
+            root.style.width = base + "px";
+            const scale = vw / base;
+            root.style.transform = `scale(${scale})`;
+
+            // ✅ transforma não “conta” no layout: ajusta altura real do wrapper
+            const h = root.scrollHeight * scale;
+            viewport.style.height = h + "px";
+          }
+
+          // roda agora e em resize/orientation change
+          applyFit();
+          window.addEventListener('resize', applyFit, { passive:true });
+          window.addEventListener('orientationchange', applyFit, { passive:true });
+
+          // garante altura correta após imagens carregarem
+          window.addEventListener('load', applyFit, { passive:true });
+        })();
       </script>
 
     </div>
