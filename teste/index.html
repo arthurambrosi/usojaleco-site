@@ -439,12 +439,19 @@
       color:var(--text);
     }
 
+    /* =========================================================
+       ✅ ALINHAMENTO À ESQUERDA (desktop/tablet)
+       - serviços, parceiros e depoimentos deixam de centralizar
+       ========================================================= */
+    .gridServices{ justify-content:flex-start; }
+    .gridMentors{ justify-content:flex-start; }
+    .tGrid{ justify-content:flex-start; }
+
     .gridServices{
       display:flex;
       flex-wrap:wrap;
       gap:16px;
       margin-top: 18px;
-      justify-content:center;
     }
     .svc{
       border-radius: 22px;
@@ -524,21 +531,30 @@
       flex-wrap:wrap;
       gap:16px;
       margin-top: 18px;
-      justify-content:center;
     }
+
+    /* =========================================================
+       ✅ PARCEIROS: NOME/DESCRIÇÃO ABAIXO DA FOTO (não tapa rosto)
+       ========================================================= */
     .mentor{
       position:relative;
       border-radius: 22px;
       overflow:hidden;
       border:1px solid var(--line);
       background: rgba(255,255,255,.02);
-      min-height: 168px;
       box-shadow: var(--shadow2);
       transform: translateZ(0);
       flex: 1 1 290px;
       width:auto;
       max-width: 290px;
       min-width: 240px;
+
+      display:flex;
+      flex-direction:column;
+    }
+    .mentorMedia{
+      position:relative;
+      overflow:hidden;
     }
     .mentor img{
       width:100%;
@@ -550,20 +566,21 @@
       display:block;
       object-position: 50% 50%;
     }
-    .mentor::after{
+    .mentorMedia::after{
       content:"";
       position:absolute; inset:0;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.60) 75%),
+        linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18) 75%),
         radial-gradient(240px 180px at 30% 20%, rgba(255,122,24,.10), rgba(0,0,0,0) 60%);
       pointer-events:none;
     }
     .mentorMeta{
-      position:absolute; left:12px; right:12px; bottom:12px;
-      background: rgba(7,10,16,.62);
+      position:static;
+      margin: 12px;
       border:1px solid rgba(255,255,255,.10);
       border-radius: 16px;
       padding:10px 11px;
+      background: rgba(7,10,16,.42);
       backdrop-filter: blur(10px);
       display:flex;
       flex-direction:column;
@@ -699,7 +716,6 @@
       flex-wrap:wrap;
       gap:16px;
       margin-top: 18px;
-      justify-content:center;
     }
     .tCard{
       border-radius: 22px;
@@ -915,9 +931,8 @@
 
     /* =========================================================
        ✅ MOBILE/RESPONSIVO (sem scale)
-       - alinhado esquerda/direita (grid 100%)
+       - alinhado esquerda/direita (grid 100% no mobile)
        - sem ficar justo (padding lateral inteligente)
-       - serviços/parceiros/depoimentos em 1 coluna no mobile
        ========================================================= */
     @media (max-width: 980px){
       :root{
@@ -1675,7 +1690,9 @@
         const el = document.createElement("div");
         el.className = "mentor";
         el.innerHTML = `
-          <img src="${foto}" alt="${nome}" style="object-position:${x}% ${y}%;">
+          <div class="mentorMedia">
+            <img src="${foto}" alt="${nome}" style="object-position:${x}% ${y}%;">
+          </div>
           <div class="mentorMeta">
             <b>${nome}</b>
             <span>${servico}</span>
