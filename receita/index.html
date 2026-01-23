@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+  <!-- Google Identity Services (Login Google) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <style>
     :root{
       --bg:#070a10;
@@ -151,6 +154,26 @@
       border-color: var(--line2);
     }
 
+    .userPill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      max-width: 44vw;
+    }
+    .userPill img{
+      width:24px; height:24px; border-radius:999px; object-fit:cover;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.02);
+    }
+    .userPill b{
+      font-size: 12.6px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 30vw;
+    }
+    .userPill small{ color: var(--muted); font-size: 12px; font-weight: 800; }
+
     /* ===== Main layout ===== */
     .main{
       margin-top: 18px;
@@ -229,13 +252,12 @@
     textarea.field{ min-height: 92px; resize: vertical; }
 
     .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .grid3{ display:grid; grid-template-columns: 1.2fr .8fr .6fr; gap: 12px; align-items:end; }
-
+    .grid3eq{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; align-items:end; }
     .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
     .divider{ height:1px; background: var(--line2); margin: 14px 0; }
     .mini{ font-size: 12.5px; color: var(--muted); line-height:1.2; }
 
-    /* ===== Collapsible sections (retraídas) ===== */
+    /* ===== Collapsible sections ===== */
     details.sec{
       border:1px solid var(--line2);
       background: rgba(255,255,255,.02);
@@ -282,6 +304,7 @@
       font-weight: 900;
       color: var(--text);
       flex: 0 0 auto;
+      transition: transform var(--t);
     }
     details[open] .chev{ transform: rotate(180deg); }
     .secBody{ padding: 0 12px 12px; }
@@ -301,7 +324,6 @@
 
     /* ===== Medicine blocks ===== */
     .rxBlocks{ display:flex; flex-direction:column; gap: 12px; }
-
     .rxBlock{
       border: 1px solid var(--line);
       border-radius: var(--rMid);
@@ -389,7 +411,34 @@
       transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
     }
     .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.12); }
-    .chip small{ color: var(--muted); font-weight: 900; }
+
+    /* Icon selectors (para analfabetos) */
+    .iconPick{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .iconTag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      cursor:pointer;
+      user-select:none;
+      font-weight: 900;
+      font-size: 12.3px;
+      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
+    }
+    .iconTag:hover{ transform: translateY(-1px); background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.12); }
+    .iconTag.on{
+      border-color: rgba(255,255,255,.22);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 60px rgba(255,255,255,.05);
+    }
 
     /* autocomplete */
     .acWrap{ position:relative; }
@@ -421,6 +470,22 @@
     .acItem b{ font-size: 13px; }
     .acItem small{ color: var(--muted); font-size: 12px; }
 
+    /* ===== Institutional patterns ===== */
+    .patRow{
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .patTop{
+      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .patTop .left{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      min-width: 240px;
+    }
+
     /* ===== Institutional images editor rows ===== */
     .imgRows{ display:flex; flex-direction:column; gap: 10px; }
     .imgRow{
@@ -451,9 +516,33 @@
       accent-color: #c8d1e3;
     }
 
+    .thumb{
+      width: 100%;
+      height: 56px;
+      border-radius: 14px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      object-fit: contain;
+      padding: 6px;
+    }
+
+    /* ===== Upload box (click / paste) ===== */
+    .dropBox{
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .dropBox b{ font-size: 13px; }
+    .dropBox small{ color: var(--muted); font-size: 12.2px; font-weight: 800; }
+
     /* ===== Preview / Paper ===== */
     .paperShell{ padding: 16px; }
-
     .paperControls{
       display:flex;
       gap: 10px;
@@ -462,9 +551,7 @@
       flex-wrap:wrap;
       margin-bottom: 12px;
     }
-
     .paperWrap{ display:flex; justify-content:center; }
-
     .paper{
       width: 100%;
       max-width: 520px;
@@ -493,15 +580,15 @@
       --rxFont: 13.2px; /* só prescrição */
     }
 
-    /* Reserved header/footer areas for logos (so they never overlap the important content) */
+    /* Reserved header/footer areas for logos */
     .rxPaper .headerArea{
       position:relative;
-      height: 70px; /* espaço do cabeçalho */
+      height: 70px;
       margin-bottom: 8px;
     }
     .rxPaper .footerArea{
       position:relative;
-      height: 62px; /* espaço do rodapé (logos) */
+      height: 62px;
       margin-top: 12px;
     }
 
@@ -556,14 +643,6 @@
       text-align:right;
     }
 
-    .rxPaper .rxSymbol{
-      font-family: "DM Serif Display", serif;
-      font-size: 26px;
-      line-height:1;
-      margin: 8px 0 10px;
-      letter-spacing:.2px;
-    }
-
     .rxList{
       display:flex;
       flex-direction:column;
@@ -581,6 +660,19 @@
       align-items:flex-end;
       gap: 10px;
     }
+
+    .drugPack{
+      width: 34px;
+      height: 28px;
+      border-radius: 8px;
+      border:1px solid rgba(0,0,0,.16);
+      background: #fff;
+      object-fit: contain;
+      padding: 2px;
+      flex: 0 0 auto;
+      transform: translateY(-1px);
+    }
+
     .drugName{
       font-weight: 800;
       letter-spacing:.15px;
@@ -632,11 +724,36 @@
       padding-bottom: 2px;
       word-break: break-word;
     }
+    .useIcons{
+      display:flex;
+      gap:6px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:#000;
+      font-size: 13px;
+      transform: translateY(-1px);
+    }
+    .useIcons span{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: 999px;
+      padding: 2px 8px;
+      line-height: 1.2;
+      font-weight: 900;
+      background: #fff;
+    }
 
     /* assinatura e rodapé */
     .sigWrap{
       margin-top: 6px;
       padding-top: 6px;
+    }
+
+    /* ✅ traço do mesmo tamanho do nome abaixo */
+    .docSig{
+      display:inline-block;
+      max-width: 100%;
+      text-align:center;
+      margin: 0 auto;
     }
     .sigLine{
       width: 100%;
@@ -695,12 +812,54 @@
     @media (max-width: 520px){
       .brand p{ display:none; }
       .grid2{ grid-template-columns: 1fr; }
-      .grid3{ grid-template-columns: 1fr; }
+      .grid3eq{ grid-template-columns: 1fr; }
       .rxGrid{ grid-template-columns: 1fr; }
       .paperInner{ padding: 18px 16px 16px; }
       .rxPaper .ptName{ min-width: 180px; }
       .sliders{ grid-template-columns: 1fr; }
       .imgRowGrid{ grid-template-columns: 1fr; }
+      .userPill{ max-width: 70vw; }
+      .userPill b{ max-width: 52vw; }
+    }
+
+    /* ===== Modal ===== */
+    .modalMask{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 90;
+    }
+    .modal{
+      width: min(820px, 96vw);
+      border-radius: 22px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(16,18,26,.92), rgba(10,12,18,.92));
+      box-shadow: var(--shadowBig);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line2);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalHead b{ font-size: 14px; letter-spacing:.2px; }
+    .modalBody{ padding: 14px; }
+    .modalFoot{
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line2);
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
     /* ===== PRINT (PDF) ===== */
@@ -730,6 +889,17 @@
       </div>
 
       <div class="actions">
+        <span class="userPill" id="userPill" style="display:none;">
+          <img id="userPic" alt="" />
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+            <b id="userName">—</b>
+            <small id="userEmail">—</small>
+          </div>
+          <button class="iconBtn iconBtnDanger" id="btnLogout" type="button" title="Sair">⎋</button>
+        </span>
+
+        <button class="btn btnGhost" id="btnLogin" type="button">Login</button>
+
         <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
         <button class="btn btnPrimary" id="btnPrint" type="button">Imprimir / PDF</button>
       </div>
@@ -747,7 +917,7 @@
         <div class="cardHeader">
           <div>
             <h2>Editor</h2>
-            <p class="sub">Tudo foi reorganizado em seções retraídas. E foi corrigido o problema do teclado no mobile (não “recria” inputs a cada letra).</p>
+            <p class="sub">Login Google no topo (dados do médico ficam salvos por conta). Seções retraídas e prévia sempre atualizada.</p>
           </div>
         </div>
 
@@ -796,6 +966,11 @@
                   </div>
                 </div>
               </div>
+
+              <div class="divider"></div>
+              <div class="mini" id="persistHint">
+                Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).
+              </div>
             </div>
           </details>
 
@@ -814,16 +989,24 @@
                   <label class="label" for="patientName">Nome do paciente</label>
                   <input class="field" id="patientName" placeholder="Digite o nome do paciente…" autocomplete="name" />
                 </div>
+
                 <div>
-                  <label class="label" for="patientDoc">Documento (opcional)</label>
-                  <input class="field" id="patientDoc" placeholder="CNS / CPF (se quiser)" inputmode="text" />
+                  <label class="label">Documento (opcional)</label>
+                  <div class="grid2" style="gap:10px;">
+                    <select class="select" id="patientDocType">
+                      <option value="CPF" selected>CPF</option>
+                      <option value="RG">RG</option>
+                      <option value="CNS">CNS</option>
+                    </select>
+                    <input class="field" id="patientDocValue" placeholder="Digite o número…" inputmode="text" />
+                  </div>
                 </div>
               </div>
             </div>
           </details>
 
-          <!-- 3) Informações da página -->
-          <details class="sec">
+          <!-- 3) Informações da página (simétrico) + padrões de imagem -->
+          <details class="sec" open>
             <summary>
               <div class="secTitle">
                 <b>3. Informações da página</b>
@@ -832,7 +1015,7 @@
               <div class="chev">˅</div>
             </summary>
             <div class="secBody">
-              <div class="grid3">
+              <div class="grid3eq">
                 <div>
                   <label class="label" for="paperSize">Tamanho da folha</label>
                   <select class="select" id="paperSize">
@@ -845,7 +1028,7 @@
 
                 <div>
                   <label class="label">Data</label>
-                  <div class="toggleRow">
+                  <div class="toggleRow" style="justify-content:flex-start;">
                     <label class="toggle" title="Mostrar/ocultar a data na receita">
                       <input type="checkbox" id="includeDate" checked />
                       <span>Incluir</span>
@@ -873,74 +1056,45 @@
                   <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
                 </div>
                 <div>
-                  <label class="label" for="rxSymbolMode">Símbolo de prescrição</label>
-                  <select class="select" id="rxSymbolMode">
-                    <option value="RSLASH" selected>R//</option>
-                    <option value="RX">Rx</option>
-                    <option value="RXCLASSIC">℞</option>
-                  </select>
+                  <label class="label">Imagens institucionais (padrões)</label>
+                  <div class="mini">Escolha um padrão salvo, crie um novo, ou edite um existente.</div>
+                </div>
+              </div>
+
+              <div class="patRow">
+                <div class="patTop">
+                  <div class="left">
+                    <select class="select" id="patternSelect" style="min-width: 240px;">
+                      <option value="" selected>Nenhum padrão</option>
+                    </select>
+                    <button class="btn btnGhost" id="btnApplyPattern" type="button">Aplicar</button>
+                    <button class="btn btnGhost" id="btnEditPattern" type="button">Editar</button>
+                    <button class="btn btnGhost" id="btnNewPattern" type="button">Criar padrão</button>
+                  </div>
+                  <button class="btn btnGhost" id="btnClearImgs" type="button">Limpar imagens</button>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="mini">
+                  As imagens aplicadas aparecem no <b>cabeçalho</b> e/ou <b>rodapé</b> da receita com controle de <b>tamanho</b> e <b>posição</b>. (Os padrões ficam salvos na sua conta/dispositivo.)
+                </div>
+
+                <div style="height:10px"></div>
+                <div class="imgRows" id="imgRows"></div>
+
+                <div class="row" style="margin-top:12px">
+                  <button class="btn btnGhost" id="btnAddImg" type="button">+ Adicionar imagem</button>
                 </div>
               </div>
             </div>
           </details>
 
-          <!-- 4) Imagens institucionais/profissionais -->
-          <details class="sec">
-            <summary>
-              <div class="secTitle">
-                <b>4. Imagens institucionais/profissionais</b>
-                <small id="sumImgs">Cabeçalho e/ou rodapé (com posição e tamanho)</small>
-              </div>
-              <div class="chev">˅</div>
-            </summary>
-            <div class="secBody">
-              <div class="mini">
-                Adicione quantas imagens quiser. Cada uma pode ir no <b>cabeçalho</b> ou no <b>rodapé</b> e tem controle de <b>tamanho</b> e <b>posição</b> (X/Y) com limite do espaço reservado.
-              </div>
-
-              <div style="height:10px"></div>
-              <div class="imgRows" id="imgRows"></div>
-
-              <div class="row" style="margin-top:12px">
-                <button class="btn btnGhost" id="btnAddImg" type="button">+ Adicionar imagem</button>
-                <button class="btn btnGhost" id="btnClearImgs" type="button">Limpar imagens</button>
-              </div>
-
-              <div class="divider"></div>
-
-              <!-- Marca do topo (UsoJaleco) dentro do código, não no site -->
-              <details class="sec" style="margin:0;">
-                <summary>
-                  <div class="secTitle">
-                    <b>Config do ícone do topo (UsoJaleco)</b>
-                    <small>Fica no cabeçalho do site (topbar), não na receita</small>
-                  </div>
-                  <div class="chev">˅</div>
-                </summary>
-                <div class="secBody">
-                  <div class="grid2">
-                    <div>
-                      <label class="label" for="brandLogoUrl">Link do ícone do topo</label>
-                      <input class="field" id="brandLogoUrl" placeholder="URL do PNG/SVG (topbar)" />
-                      <div class="mini" style="margin-top:8px">Isso é só o ícone do topo do site (onde está “UsoJaleco”).</div>
-                    </div>
-                    <div>
-                      <label class="label" for="brandLogoScale">Tamanho do ícone (px)</label>
-                      <input class="field" id="brandLogoScale" type="number" min="24" max="72" step="1" value="40" />
-                      <div class="mini" style="margin-top:8px">Recomendado: 36–44.</div>
-                    </div>
-                  </div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <!-- 5) Medicamentos -->
+          <!-- 4) Medicamentos -->
           <details class="sec" open>
             <summary>
               <div class="secTitle">
-                <b>5. Medicamentos</b>
+                <b>4. Medicamentos</b>
                 <small id="sumMeds">—</small>
               </div>
               <div class="chev">˅</div>
@@ -1002,31 +1156,110 @@
   <!-- Conteúdo que só aparece na impressão (todas as páginas) -->
   <div class="printAll" id="printAll"></div>
 
+  <!-- ===== Modal Login ===== -->
+  <div class="modalMask" id="loginMask" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Login">
+      <div class="modalHead">
+        <div>
+          <b>Login com Google</b>
+          <div class="mini" style="margin-top:6px;">Ao logar, os dados do médico e os padrões ficam salvos para essa conta neste dispositivo.</div>
+        </div>
+        <button class="iconBtn iconBtnDanger" id="btnCloseLogin" type="button">✕</button>
+      </div>
+      <div class="modalBody">
+        <div id="googleBtnMount"></div>
+        <div class="mini" id="loginWarn" style="margin-top:10px; display:none;"></div>
+      </div>
+      <div class="modalFoot">
+        <button class="btn btnGhost" id="btnCloseLogin2" type="button">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal Padrões ===== -->
+  <div class="modalMask" id="patternMask" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Padrão de imagens">
+      <div class="modalHead">
+        <div>
+          <b id="patternModalTitle">Criar/Editar padrão</b>
+          <div class="mini" style="margin-top:6px;">Você pode colar (Ctrl+V) uma imagem ou clicar para fazer upload.</div>
+        </div>
+        <button class="iconBtn iconBtnDanger" id="btnClosePattern" type="button">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="grid2">
+          <div>
+            <label class="label" for="patternName">Nome do padrão</label>
+            <input class="field" id="patternName" placeholder="Ex: Clínica X (cabeçalho + rodapé)" />
+          </div>
+
+          <div>
+            <label class="label">Upload rápido (Ctrl+V ou clique)</label>
+            <div class="dropBox" id="dropBox">
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <b>Colar / Upload</b>
+                <small>Ctrl+V com imagem copiada, ou clique para selecionar.</small>
+              </div>
+              <button class="btn btnGhost" id="btnPickFile" type="button">Selecionar imagem</button>
+              <input type="file" id="filePicker" accept="image/*" style="display:none;" />
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="mini">As imagens abaixo compõem o padrão (cada uma pode ir no cabeçalho ou rodapé, com tamanho e posição).</div>
+        <div style="height:10px"></div>
+
+        <div class="imgRows" id="patternImgRows"></div>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn btnGhost" id="btnAddPatternImg" type="button">+ Adicionar imagem ao padrão</button>
+          <button class="btn btnGhost" id="btnClearPatternImgs" type="button">Limpar imagens do padrão</button>
+        </div>
+
+        <div class="mini" style="margin-top:10px;">
+          Dica: a última imagem colada/upload vai para a última linha do padrão. Se quiser, você pode remover e colar de novo.
+        </div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn btnGhost" id="btnDeletePattern" type="button">Excluir padrão</button>
+        <button class="btn btnPrimary" id="btnSavePattern" type="button">Salvar padrão</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     /************************************************************
-     * ✅ IMPORTANTÍSSIMO (correção do mobile):
-     * Não recriamos DOM de inputs em cada tecla.
-     * Renderizamos blocos UMA VEZ e só atualizamos a prévia.
+     * CONFIG (dentro do código) — Ícone do topo (UsoJaleco)
+     * ✅ não aparece como configuração no site (você edita aqui)
      ************************************************************/
-
-    /************************************************************
-     * CONFIG — (topbar) ícone do UsoJaleco
-     * Deixe aqui o link do seu ícone/logo do topo do site.
-     ************************************************************/
-    let BRAND_LOGO_URL = ""; // <--- coloque seu link aqui (ou deixe vazio)
+    let BRAND_LOGO_URL = ""; // coloque seu link aqui
     let BRAND_LOGO_SIZE_PX = 40;
 
-    // Placeholder PNG transparente (aleatório) enquanto não troca
+    /************************************************************
+     * LOGIN GOOGLE (GIS)
+     * ✅ você precisa colocar seu CLIENT ID aqui:
+     * https://console.cloud.google.com/ -> APIs & Services -> Credentials
+     ************************************************************/
+    const GOOGLE_CLIENT_ID = ""; // <-- COLE AQUI O CLIENT ID
+
+    // Placeholder PNG transparente
     const PLACEHOLDER_PNG =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABJ0lEQVR4nO3aMQ6CMBQF0U8m0dQmGQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQk0v2k6yqk7+XyQm5mYd8yqf9gQAAAAAAAAAA4Gm9oQm2b3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQAAAAA8D8m8i8b8kq8wQAAAABJRU5ErkJggg==";
 
     /************************************************************
-     * Autocomplete (opcional) via planilha — silencioso
+     * Autocomplete via planilha — silencioso (só nomes)
      ************************************************************/
     const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
     const SHEET_GID = "0";
 
     const state = {
+      // sessão (login)
+      user: null, // {email,name,picture,sub}
+
       // médico
       docTitle: "Dr.",
       docName: "",
@@ -1035,24 +1268,23 @@
 
       // paciente
       patientName: "",
-      patientDoc: "",
+      patientDocType: "CPF",
+      patientDocValue: "",
 
       // página
       paperSize: "A4",
       includeDate: true,
       dateValue: "",
       rxFontStep: 0,
-      rxSymbolMode: "RSLASH",
 
-      // imagens institucionais
-      instImgs: [
-        // { id, url, place: "header"|"footer", scale: 45, x: 0, y: 0 }
-      ],
+      // imagens institucionais (aplicadas)
+      instImgs: [],
 
       // meds
-      blocks: [], // {id, name, qty, use, collapsed}
+      blocks: [], // {id, name, qty, use, collapsed, showPack, packData, showIcons, icons[]}
       selectedPage: 1,
 
+      // db
       db: { loaded:false, list:[] }
     };
 
@@ -1078,7 +1310,6 @@
     }
 
     function rxFontPx(){
-      // 0..6 => 13.2,12.3,11.4,10.8,10.2,9.6,9.0
       const map = [13.2,12.3,11.4,10.8,10.2,9.6,9.0];
       const i = clamp(parseInt(state.rxFontStep,10)||0, 0, map.length-1);
       return map[i];
@@ -1114,6 +1345,196 @@
     }
 
     /************************************************************
+     * LOCAL STORAGE (por conta)
+     ************************************************************/
+    function sessionKey(){ return "uj_rx_session_v1"; }
+    function profileKey(email){ return `uj_rx_profile_v1__${(email||"").toLowerCase()}`; }
+    function patternsKey(email){ return `uj_rx_patterns_v1__${(email||"").toLowerCase()}`; }
+
+    function saveSession(){
+      try{
+        if(!state.user){ localStorage.removeItem(sessionKey()); return; }
+        localStorage.setItem(sessionKey(), JSON.stringify(state.user));
+      }catch(e){}
+    }
+    function loadSession(){
+      try{
+        const raw = localStorage.getItem(sessionKey());
+        if(!raw) return null;
+        const u = JSON.parse(raw);
+        if(u && u.email) return u;
+      }catch(e){}
+      return null;
+    }
+
+    function saveProfileDebouncedFactory(){
+      const fn = debounce(()=> saveProfile(), 180);
+      return fn;
+    }
+    const saveProfileDebounced = saveProfileDebouncedFactory();
+
+    function saveProfile(){
+      if(!state.user || !state.user.email) return;
+      const payload = {
+        docTitle: state.docTitle,
+        docName: state.docName,
+        crms: state.crms,
+        rqes: state.rqes
+      };
+      try{
+        localStorage.setItem(profileKey(state.user.email), JSON.stringify(payload));
+        $("persistHint").textContent = "Salvo automaticamente nesta conta (alterações ficam registradas).";
+      }catch(e){}
+    }
+
+    function loadProfile(){
+      if(!state.user || !state.user.email) return null;
+      try{
+        const raw = localStorage.getItem(profileKey(state.user.email));
+        if(!raw) return null;
+        const p = JSON.parse(raw);
+        return p || null;
+      }catch(e){ return null; }
+    }
+
+    function loadPatterns(){
+      if(!state.user || !state.user.email) return [];
+      try{
+        const raw = localStorage.getItem(patternsKey(state.user.email));
+        if(!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+
+    function savePatterns(arr){
+      if(!state.user || !state.user.email) return;
+      try{
+        localStorage.setItem(patternsKey(state.user.email), JSON.stringify(arr || []));
+      }catch(e){}
+    }
+
+    /************************************************************
+     * GOOGLE LOGIN (GIS) — modal + render button
+     ************************************************************/
+    function b64urlDecode(str){
+      str = (str||"").replace(/-/g, "+").replace(/_/g, "/");
+      const pad = str.length % 4;
+      if(pad) str += "=".repeat(4 - pad);
+      try{ return decodeURIComponent(escape(atob(str))); }catch(e){
+        try{ return atob(str); }catch(e2){ return ""; }
+      }
+    }
+    function parseJwt(token){
+      const parts = (token||"").split(".");
+      if(parts.length < 2) return null;
+      try{
+        const json = b64urlDecode(parts[1]);
+        return JSON.parse(json);
+      }catch(e){ return null; }
+    }
+
+    function openLogin(){
+      $("loginMask").style.display = "flex";
+      $("loginMask").setAttribute("aria-hidden","false");
+
+      const warn = $("loginWarn");
+      warn.style.display = "none";
+      warn.textContent = "";
+
+      if(!GOOGLE_CLIENT_ID){
+        warn.style.display = "block";
+        warn.textContent = "⚠️ Falta configurar o GOOGLE_CLIENT_ID no código (no topo do <script>).";
+        $("googleBtnMount").innerHTML = "";
+        return;
+      }
+
+      // renderiza botão sempre que abrir (garante mount)
+      $("googleBtnMount").innerHTML = "";
+      if(window.google && google.accounts && google.accounts.id){
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (resp)=>{
+            const payload = parseJwt(resp.credential);
+            if(!payload || !payload.email){
+              warn.style.display = "block";
+              warn.textContent = "Não foi possível ler os dados da conta. Tente novamente.";
+              return;
+            }
+            onLogged({
+              email: payload.email,
+              name: payload.name || payload.given_name || payload.email,
+              picture: payload.picture || "",
+              sub: payload.sub || ""
+            });
+            closeLogin();
+          }
+        });
+
+        google.accounts.id.renderButton(
+          $("googleBtnMount"),
+          { theme: "outline", size: "large", shape: "pill", width: 360 }
+        );
+      }else{
+        warn.style.display = "block";
+        warn.textContent = "Carregando Google… se não aparecer, recarregue a página.";
+      }
+    }
+
+    function closeLogin(){
+      $("loginMask").style.display = "none";
+      $("loginMask").setAttribute("aria-hidden","true");
+    }
+
+    function onLogged(user){
+      state.user = user;
+      saveSession();
+      applyUserUI();
+
+      // carrega perfil do médico
+      const p = loadProfile();
+      if(p){
+        state.docTitle = (p.docTitle === "Dra.") ? "Dra." : "Dr.";
+        state.docName = safeText(p.docName);
+        state.crms = Array.isArray(p.crms) && p.crms.length ? p.crms.map(safeText) : [""];
+        state.rqes = Array.isArray(p.rqes) && p.rqes.length ? p.rqes.map(safeText) : [""];
+      }
+
+      // aplica no form
+      $("docTitle").value = state.docTitle;
+      $("docName").value = state.docName;
+
+      renderCrmList();
+      renderRqeList();
+
+      // padrões
+      refreshPatternSelect();
+
+      updateSummaries();
+      renderPaperDebounced();
+      $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
+    }
+
+    function logout(){
+      state.user = null;
+      saveSession();
+      applyUserUI();
+      $("persistHint").textContent = "Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).";
+    }
+
+    function applyUserUI(){
+      const has = !!(state.user && state.user.email);
+      $("btnLogin").style.display = has ? "none" : "inline-flex";
+      $("userPill").style.display = has ? "inline-flex" : "none";
+
+      if(has){
+        $("userName").textContent = state.user.name || "Conta Google";
+        $("userEmail").textContent = state.user.email;
+        $("userPic").src = state.user.picture || PLACEHOLDER_PNG;
+      }
+    }
+
+    /************************************************************
      * Load DB (silencioso) - só para autocomplete
      ************************************************************/
     async function loadSheetDB(){
@@ -1140,7 +1561,7 @@
     }
 
     /************************************************************
-     * CRM / RQE lists (não recriam a cada tecla)
+     * CRM / RQE lists
      ************************************************************/
     function buildLineRow(type, idx){
       const row = document.createElement("div");
@@ -1165,8 +1586,10 @@
         const v = safeText(input.value);
         if(type==="crm") state.crms[idx] = v;
         else state.rqes[idx] = v;
+
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
 
       const del = document.createElement("button");
@@ -1188,6 +1611,7 @@
 
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
 
       row.appendChild(input);
@@ -1207,8 +1631,13 @@
     }
 
     /************************************************************
-     * Institutional images (header/footer) rows
+     * Institutional images (aplicadas) rows
      ************************************************************/
+    function imgSrc(im){
+      const u = safeText(im.data || im.url);
+      return u;
+    }
+
     function renderImgRows(){
       const root = $("imgRows");
       root.innerHTML = "";
@@ -1216,7 +1645,7 @@
       if(!state.instImgs.length){
         const empty = document.createElement("div");
         empty.className = "mini";
-        empty.textContent = "Nenhuma imagem adicionada.";
+        empty.textContent = "Nenhuma imagem aplicada.";
         root.appendChild(empty);
         return;
       }
@@ -1258,21 +1687,33 @@
         grid.className = "imgRowGrid";
 
         const colA = document.createElement("div");
-        const labUrl = document.createElement("label");
-        labUrl.className = "label";
-        labUrl.textContent = "Link da imagem (PNG/SVG/JPG)";
+
+        const labThumb = document.createElement("label");
+        labThumb.className = "label";
+        labThumb.textContent = "Prévia (ou URL)";
+
+        const thumb = document.createElement("img");
+        thumb.className = "thumb";
+        thumb.alt = "";
+        thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
+
         const inpUrl = document.createElement("input");
         inpUrl.className = "field";
-        inpUrl.placeholder = "Cole aqui a URL…";
+        inpUrl.placeholder = "Opcional: cole a URL (PNG/SVG/JPG)…";
         inpUrl.value = img.url || "";
         inpUrl.autocomplete = "off";
         inpUrl.spellcheck = false;
+        inpUrl.style.marginTop = "10px";
         inpUrl.addEventListener("input", ()=>{
           img.url = safeText(inpUrl.value);
+          if(img.url) img.data = ""; // se colocou URL, prioriza URL
+          thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
           updateSummaries();
           renderPaperDebounced();
         });
-        colA.appendChild(labUrl);
+
+        colA.appendChild(labThumb);
+        colA.appendChild(thumb);
         colA.appendChild(inpUrl);
 
         const colB = document.createElement("div");
@@ -1356,15 +1797,349 @@
     }
 
     /************************************************************
-     * Medicine blocks (uma vez) — sem reconstruir a cada tecla
+     * Padrões (criar / editar / aplicar)
      ************************************************************/
+    let patternEditMode = "new"; // "new" | "edit"
+    let editingPatternId = null;
+    let patternDraftImgs = []; // imgs do modal (com data/url)
+
+    function refreshPatternSelect(){
+      const sel = $("patternSelect");
+      sel.innerHTML = `<option value="" selected>Nenhum padrão</option>`;
+
+      const hasUser = !!(state.user && state.user.email);
+      sel.disabled = !hasUser;
+      $("btnApplyPattern").disabled = !hasUser;
+      $("btnEditPattern").disabled = !hasUser;
+      $("btnNewPattern").disabled = !hasUser;
+
+      if(!hasUser) return;
+
+      const arr = loadPatterns();
+      arr.forEach(p=>{
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.name || "Sem nome";
+        sel.appendChild(opt);
+      });
+    }
+
+    function openPatternModal(mode){
+      if(!(state.user && state.user.email)){
+        // força login antes
+        openLogin();
+        return;
+      }
+
+      patternEditMode = mode;
+      editingPatternId = null;
+      patternDraftImgs = [];
+
+      $("patternMask").style.display = "flex";
+      $("patternMask").setAttribute("aria-hidden","false");
+
+      $("patternModalTitle").textContent = (mode === "edit") ? "Editar padrão" : "Criar padrão";
+      $("btnDeletePattern").style.display = (mode === "edit") ? "inline-flex" : "none";
+
+      if(mode === "edit"){
+        const pid = $("patternSelect").value;
+        if(!pid){
+          // sem padrão escolhido
+          $("patternName").value = "";
+          patternDraftImgs = [];
+          renderPatternImgRows();
+          return;
+        }
+        const arr = loadPatterns();
+        const p = arr.find(x=> x.id === pid);
+        if(p){
+          editingPatternId = p.id;
+          $("patternName").value = p.name || "";
+          patternDraftImgs = (p.instImgs||[]).map(im=> ({...im, id: uid()}));
+        }else{
+          $("patternName").value = "";
+          patternDraftImgs = [];
+        }
+      }else{
+        $("patternName").value = "";
+        patternDraftImgs = [];
+      }
+
+      renderPatternImgRows();
+    }
+
+    function closePatternModal(){
+      $("patternMask").style.display = "none";
+      $("patternMask").setAttribute("aria-hidden","true");
+      editingPatternId = null;
+      patternDraftImgs = [];
+    }
+
+    function renderPatternImgRows(){
+      const root = $("patternImgRows");
+      root.innerHTML = "";
+
+      if(!patternDraftImgs.length){
+        const empty = document.createElement("div");
+        empty.className = "mini";
+        empty.textContent = "Nenhuma imagem no padrão ainda.";
+        root.appendChild(empty);
+        return;
+      }
+
+      patternDraftImgs.forEach((img, idx)=>{
+        const wrap = document.createElement("div");
+        wrap.className = "imgRow";
+        wrap.dataset.imgId = img.id;
+
+        const top = document.createElement("div");
+        top.className = "imgRowTop";
+
+        const title = document.createElement("b");
+        title.textContent = `Imagem do padrão ${idx+1}`;
+
+        const tools = document.createElement("div");
+        tools.style.display = "flex";
+        tools.style.gap = "8px";
+        tools.style.alignItems = "center";
+
+        const del = document.createElement("button");
+        del.className = "iconBtn iconBtnDanger";
+        del.type = "button";
+        del.textContent = "✕";
+        del.title = "Remover imagem do padrão";
+        del.addEventListener("click", ()=>{
+          patternDraftImgs = patternDraftImgs.filter(x=> x.id !== img.id);
+          renderPatternImgRows();
+        });
+
+        tools.appendChild(del);
+
+        top.appendChild(title);
+        top.appendChild(tools);
+
+        const grid = document.createElement("div");
+        grid.className = "imgRowGrid";
+
+        const colA = document.createElement("div");
+
+        const labThumb = document.createElement("label");
+        labThumb.className = "label";
+        labThumb.textContent = "Imagem (Ctrl+V / Upload / ou URL)";
+
+        const thumb = document.createElement("img");
+        thumb.className = "thumb";
+        thumb.alt = "";
+        thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
+
+        const rowBtns = document.createElement("div");
+        rowBtns.style.display = "flex";
+        rowBtns.style.gap = "8px";
+        rowBtns.style.marginTop = "10px";
+        rowBtns.style.flexWrap = "wrap";
+
+        const btnPasteHint = document.createElement("div");
+        btnPasteHint.className = "mini";
+        btnPasteHint.textContent = "Cole uma URL abaixo, ou use Ctrl+V (com a imagem copiada).";
+
+        const inpUrl = document.createElement("input");
+        inpUrl.className = "field";
+        inpUrl.placeholder = "Opcional: cole uma URL (PNG/SVG/JPG)…";
+        inpUrl.value = img.url || "";
+        inpUrl.autocomplete = "off";
+        inpUrl.spellcheck = false;
+        inpUrl.style.marginTop = "10px";
+        inpUrl.addEventListener("input", ()=>{
+          img.url = safeText(inpUrl.value);
+          if(img.url) img.data = "";
+          thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
+        });
+
+        colA.appendChild(labThumb);
+        colA.appendChild(thumb);
+        colA.appendChild(btnPasteHint);
+        colA.appendChild(inpUrl);
+
+        const colB = document.createElement("div");
+        const labPlace = document.createElement("label");
+        labPlace.className = "label";
+        labPlace.textContent = "Local";
+        const selPlace = document.createElement("select");
+        selPlace.className = "select";
+        selPlace.innerHTML = `
+          <option value="header">Cabeçalho</option>
+          <option value="footer">Rodapé</option>
+        `;
+        selPlace.value = img.place || "header";
+        selPlace.addEventListener("change", ()=>{
+          img.place = selPlace.value === "footer" ? "footer" : "header";
+        });
+
+        colB.appendChild(labPlace);
+        colB.appendChild(selPlace);
+
+        grid.appendChild(colA);
+        grid.appendChild(colB);
+
+        const sliders = document.createElement("div");
+        sliders.className = "sliders";
+
+        sliders.appendChild(makeSlider("Tamanho (%)", img.scale ?? 45, 10, 100, 1, (v)=> img.scale = v));
+        sliders.appendChild(makeSlider("Posição X (%)", img.x ?? 0, 0, 100, 1, (v)=> img.x = v));
+        sliders.appendChild(makeSlider("Posição Y (%)", img.y ?? 0, 0, 100, 1, (v)=> img.y = v));
+
+        wrap.appendChild(top);
+        wrap.appendChild(grid);
+        wrap.appendChild(sliders);
+
+        root.appendChild(wrap);
+      });
+    }
+
+    function addPatternImgFromData(dataUrl){
+      const img = {
+        id: uid(),
+        url: "",
+        data: dataUrl,
+        place: "header",
+        scale: 45,
+        x: 0,
+        y: 0
+      };
+      patternDraftImgs.push(img);
+      renderPatternImgRows();
+    }
+
+    function handlePasteToPattern(ev){
+      if($("patternMask").style.display !== "flex") return;
+      const items = (ev.clipboardData && ev.clipboardData.items) ? ev.clipboardData.items : [];
+      for(const it of items){
+        if(it.type && it.type.startsWith("image/")){
+          const file = it.getAsFile();
+          if(file){
+            const r = new FileReader();
+            r.onload = ()=> addPatternImgFromData(r.result);
+            r.readAsDataURL(file);
+            ev.preventDefault();
+            return;
+          }
+        }
+      }
+    }
+
+    function pickFileToPattern(){
+      $("filePicker").click();
+    }
+
+    function applyPatternById(pid){
+      if(!pid) return;
+      const arr = loadPatterns();
+      const p = arr.find(x=> x.id === pid);
+      if(!p) return;
+
+      // aplica instImgs
+      state.instImgs = (p.instImgs || []).map(im=> ({
+        id: uid(),
+        url: safeText(im.url),
+        data: safeText(im.data),
+        place: (im.place === "footer") ? "footer" : "header",
+        scale: clamp(parseInt(im.scale||45,10)||45, 10, 100),
+        x: clamp(parseInt(im.x||0,10)||0, 0, 100),
+        y: clamp(parseInt(im.y||0,10)||0, 0, 100),
+      }));
+
+      renderImgRows();
+      updateSummaries();
+      renderPaperDebounced();
+    }
+
+    function savePattern(){
+      const name = safeText($("patternName").value);
+      if(!name){
+        alert("Defina um nome para o padrão.");
+        return;
+      }
+      const cleanImgs = patternDraftImgs.map(im=> ({
+        url: safeText(im.url),
+        data: safeText(im.data),
+        place: (im.place === "footer") ? "footer" : "header",
+        scale: clamp(parseInt(im.scale||45,10)||45, 10, 100),
+        x: clamp(parseInt(im.x||0,10)||0, 0, 100),
+        y: clamp(parseInt(im.y||0,10)||0, 0, 100),
+      })).filter(im=> safeText(im.data || im.url)); // só as válidas
+
+      const arr = loadPatterns();
+
+      if(patternEditMode === "edit" && editingPatternId){
+        const i = arr.findIndex(x=> x.id === editingPatternId);
+        if(i >= 0){
+          arr[i] = { id: editingPatternId, name, instImgs: cleanImgs };
+        }else{
+          arr.push({ id: uid(), name, instImgs: cleanImgs });
+        }
+      }else{
+        const id = uid();
+        arr.push({ id, name, instImgs: cleanImgs });
+      }
+
+      savePatterns(arr);
+      refreshPatternSelect();
+
+      // seleciona o padrão salvo
+      // (se era edit, mantém o mesmo; se era new, seleciona o último)
+      const lastId = (patternEditMode === "edit" && editingPatternId) ? editingPatternId : arr[arr.length-1].id;
+      $("patternSelect").value = lastId;
+
+      closePatternModal();
+    }
+
+    function deletePattern(){
+      if(!(patternEditMode === "edit" && editingPatternId)) return;
+      if(!confirm("Excluir este padrão?")) return;
+
+      const arr = loadPatterns().filter(x=> x.id !== editingPatternId);
+      savePatterns(arr);
+      refreshPatternSelect();
+      $("patternSelect").value = "";
+      closePatternModal();
+    }
+
+    /************************************************************
+     * Medicine blocks (uma vez) — + imagem da caixa + ícones
+     ************************************************************/
+    const ICON_LIBRARY = [
+      { key:"MANHA", label:"Manhã", ico:"☀️" },
+      { key:"TARDE", label:"Tarde", ico:"🌤️" },
+      { key:"NOITE", label:"Noite", ico:"🌙" },
+      { key:"JEJUM", label:"Jejum", ico:"☕" },
+      { key:"ANTES_ALMOCO", label:"Antes almoço", ico:"🍽️" },
+      { key:"ANTES_JANTAR", label:"Antes jantar", ico:"🍲" },
+      { key:"APOS", label:"Após refeição", ico:"✅" },
+      { key:"8H", label:"8/8h", ico:"⏱️" },
+      { key:"12H", label:"12/12h", ico:"⏱️" },
+    ];
+
     function addBlock(){
       state.blocks.forEach(b=> b.collapsed = true);
 
-      const b = { id: uid(), name:"", qty:"", use:"", collapsed:false };
+      const b = {
+        id: uid(),
+        name:"",
+        qty:"",
+        use:"",
+        collapsed:false,
+
+        // ✅ imagem da caixa
+        showPack:false,
+        packData:"", // dataURL (upload/paste)
+        packUrl:"",  // opcional URL
+
+        // ✅ ícones
+        showIcons:true,
+        icons:[]
+      };
       state.blocks.push(b);
 
-      // renderiza só o novo bloco
       appendBlockDOM(b, state.blocks.length-1);
 
       updateSummaries();
@@ -1384,10 +2159,8 @@
       const el = document.querySelector(`[data-block="${id}"]`);
       if(el) el.remove();
 
-      // renumerar
       renumberBlocks();
 
-      // garante algum expandido
       if(state.blocks.length && !state.blocks.some(b=> !b.collapsed)){
         state.blocks[state.blocks.length-1].collapsed = false;
         const lastEl = document.querySelector(`[data-block="${state.blocks[state.blocks.length-1].id}"]`);
@@ -1428,6 +2201,11 @@
       renumberBlocks();
     }
 
+    function packSrc(b){
+      const src = safeText(b.packData || b.packUrl);
+      return src;
+    }
+
     function appendBlockDOM(b, idx){
       const root = $("rxBlocks");
 
@@ -1457,7 +2235,7 @@
       small.className = "mini";
       small.style.marginTop = "0";
       small.style.color = "var(--muted)";
-      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, quantidade e posologia";
+      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, quantidade, imagem e ícones";
 
       tcol.appendChild(strong);
       tcol.appendChild(small);
@@ -1551,7 +2329,6 @@
           item.className = "acItem";
           item.innerHTML = `<b>${it.name}</b><small>selecionar</small>`;
           item.addEventListener("mousedown", (ev)=>{
-            // mousedown pra não perder foco no mobile
             ev.preventDefault();
             b.name = it.name;
             inpName.value = it.name;
@@ -1601,6 +2378,109 @@
 
       body.appendChild(grid);
 
+      // ✅ Imagem da caixa + toggle
+      const packWrap = document.createElement("div");
+      packWrap.className = "rxFull";
+
+      const labPack = document.createElement("label");
+      labPack.className = "label";
+      labPack.textContent = "Imagem da caixa do remédio (opcional)";
+
+      const packRow = document.createElement("div");
+      packRow.className = "row";
+      packRow.style.alignItems = "center";
+      packRow.style.justifyContent = "flex-start";
+      packRow.style.gap = "10px";
+
+      const togPack = document.createElement("label");
+      togPack.className = "toggle";
+      togPack.title = "Mostrar/ocultar a imagem na receita";
+      togPack.innerHTML = `<input type="checkbox"><span>Mostrar</span>`;
+      const packCheck = togPack.querySelector("input");
+      packCheck.checked = !!b.showPack;
+      packCheck.addEventListener("change", ()=>{
+        b.showPack = !!packCheck.checked;
+        renderPaperDebounced();
+      });
+
+      const btnPack = document.createElement("button");
+      btnPack.className = "btn btnGhost";
+      btnPack.type = "button";
+      btnPack.textContent = "Upload / Ctrl+V";
+      btnPack.addEventListener("click", ()=>{
+        // abre file picker só para esse bloco
+        const fp = document.createElement("input");
+        fp.type = "file";
+        fp.accept = "image/*";
+        fp.style.display = "none";
+        fp.addEventListener("change", ()=>{
+          const file = fp.files && fp.files[0];
+          if(!file) return;
+          const r = new FileReader();
+          r.onload = ()=>{
+            b.packData = r.result;
+            b.packUrl = "";
+            imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
+            renderPaperDebounced();
+          };
+          r.readAsDataURL(file);
+        });
+        document.body.appendChild(fp);
+        fp.click();
+        setTimeout(()=> fp.remove(), 0);
+      });
+
+      const imgPrev = document.createElement("img");
+      imgPrev.className = "thumb";
+      imgPrev.style.height = "64px";
+      imgPrev.style.maxWidth = "220px";
+      imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
+
+      const inpPackUrl = document.createElement("input");
+      inpPackUrl.className = "field";
+      inpPackUrl.placeholder = "Opcional: URL da imagem da caixa…";
+      inpPackUrl.value = b.packUrl || "";
+      inpPackUrl.autocomplete = "off";
+      inpPackUrl.spellcheck = false;
+      inpPackUrl.addEventListener("input", ()=>{
+        b.packUrl = safeText(inpPackUrl.value);
+        if(b.packUrl) b.packData = "";
+        imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
+        renderPaperDebounced();
+      });
+
+      // paste handler (quando foco dentro do bloco)
+      wrap.addEventListener("paste", (ev)=>{
+        const items = (ev.clipboardData && ev.clipboardData.items) ? ev.clipboardData.items : [];
+        for(const it of items){
+          if(it.type && it.type.startsWith("image/")){
+            const file = it.getAsFile();
+            if(file){
+              const r = new FileReader();
+              r.onload = ()=>{
+                b.packData = r.result;
+                b.packUrl = "";
+                imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
+                renderPaperDebounced();
+              };
+              r.readAsDataURL(file);
+              ev.preventDefault();
+              return;
+            }
+          }
+        }
+      });
+
+      packRow.appendChild(togPack);
+      packRow.appendChild(btnPack);
+
+      packWrap.appendChild(labPack);
+      packWrap.appendChild(packRow);
+      packWrap.appendChild(imgPrev);
+      packWrap.appendChild(inpPackUrl);
+
+      body.appendChild(packWrap);
+
       // Posologia
       const full = document.createElement("div");
       full.className = "rxFull";
@@ -1619,7 +2499,7 @@
         renderPaperDebounced();
       });
 
-      // Chips (volta no mobile + funciona no desktop)
+      // Chips (texto)
       const chips = document.createElement("div");
       chips.className = "chips";
       const chipData = [
@@ -1648,18 +2528,64 @@
         chips.appendChild(c);
       });
 
+      // ✅ Ícones do horário (para analfabetos)
+      const iconTools = document.createElement("div");
+      iconTools.className = "rxFull";
+
+      const labIcons = document.createElement("label");
+      labIcons.className = "label";
+      labIcons.textContent = "Ícones (horário/rotina) — para facilitar a compreensão";
+
+      const togIcons = document.createElement("label");
+      togIcons.className = "toggle";
+      togIcons.title = "Mostrar/ocultar ícones na receita";
+      togIcons.innerHTML = `<input type="checkbox"><span>Mostrar ícones</span>`;
+      const iconsCheck = togIcons.querySelector("input");
+      iconsCheck.checked = (b.showIcons !== false);
+      iconsCheck.addEventListener("change", ()=>{
+        b.showIcons = !!iconsCheck.checked;
+        renderPaperDebounced();
+      });
+
+      const iconPick = document.createElement("div");
+      iconPick.className = "iconPick";
+
+      function isOn(k){ return Array.isArray(b.icons) && b.icons.includes(k); }
+      function toggleIcon(k){
+        b.icons = Array.isArray(b.icons) ? b.icons : [];
+        if(b.icons.includes(k)) b.icons = b.icons.filter(x=> x !== k);
+        else b.icons.push(k);
+        renderPaperDebounced();
+      }
+
+      ICON_LIBRARY.forEach(it=>{
+        const tag = document.createElement("div");
+        tag.className = "iconTag" + (isOn(it.key) ? " on" : "");
+        tag.innerHTML = `<span>${it.ico}</span><span>${it.label}</span>`;
+        tag.addEventListener("click", ()=>{
+          toggleIcon(it.key);
+          tag.classList.toggle("on", isOn(it.key));
+        });
+        iconPick.appendChild(tag);
+      });
+
+      iconTools.appendChild(labIcons);
+      iconTools.appendChild(togIcons);
+      iconTools.appendChild(iconPick);
+
       full.appendChild(lab3);
       full.appendChild(ta);
       full.appendChild(chips);
 
       body.appendChild(full);
+      body.appendChild(iconTools);
 
       wrap.appendChild(top);
       wrap.appendChild(body);
 
       root.appendChild(wrap);
 
-      // quando adiciona novo, minimiza DOM dos anteriores
+      // minimiza anteriores
       document.querySelectorAll(".rxBlock").forEach(node=>{
         const bid = node.getAttribute("data-block");
         if(bid && bid !== b.id){
@@ -1685,8 +2611,11 @@
         : "Preencha nome/CRM";
 
       const pName = safeText(state.patientName);
-      const pDoc = safeText(state.patientDoc);
-      $("sumPaciente").textContent = pName ? (pDoc ? `${pName} • ${pDoc}` : pName) : "Preencha o paciente";
+      const pType = safeText(state.patientDocType);
+      const pDoc = safeText(state.patientDocValue);
+      $("sumPaciente").textContent = pName
+        ? (pDoc ? `${pName} • ${pType}: ${pDoc}` : pName)
+        : "Preencha o paciente";
 
       const sizeLabel = ({
         A4:"A4",
@@ -1701,21 +2630,11 @@
       $("sumMeds").textContent = state.blocks.length
         ? `${state.blocks.length} item(ns) • ${medsPerPage()} por página`
         : "Adicione remédios";
-
-      $("sumImgs").textContent = state.instImgs.length
-        ? `${state.instImgs.length} imagem(ns) • cabeçalho/rodapé`
-        : "Sem imagens";
     }
 
     /************************************************************
-     * Paper render
+     * Paper render (✅ sem símbolo de prescrição)
      ************************************************************/
-    function rxSymbol(){
-      if(state.rxSymbolMode === "RX") return "Rx";
-      if(state.rxSymbolMode === "RXCLASSIC") return "℞";
-      return "R//";
-    }
-
     function docFooterHTML(){
       const title = safeText(state.docTitle);
       const name = safeText(state.docName);
@@ -1728,19 +2647,26 @@
       if(rqes.length) lines.push(rqes.join(" • "));
 
       const displayName = [title, name].filter(Boolean).join(" ");
+
+      const inner = `
+        <div class="sigLine"></div>
+        <div class="docCenter">
+          <div class="docName">${displayName || "&nbsp;"}</div>
+          ${lines.map(l=> `<div class="docLine">${l}</div>`).join("") || `<div class="docLine">&nbsp;</div>`}
+        </div>
+      `;
+
       return `
         <div class="sigWrap">
-          <div class="sigLine"></div>
-          <div class="docCenter">
-            <div class="docName">${displayName || "&nbsp;"}</div>
-            ${lines.map(l=> `<div class="docLine">${l}</div>`).join("") || `<div class="docLine">&nbsp;</div>`}
+          <div style="text-align:center;">
+            <div class="docSig">${inner}</div>
           </div>
         </div>
       `;
     }
 
     function instImgsHTML(place){
-      const imgs = state.instImgs.filter(x=> (x.place||"header") === place).filter(x=> safeText(x.url));
+      const imgs = state.instImgs.filter(x=> (x.place||"header") === place).filter(x=> safeText(imgSrc(x)));
       if(!imgs.length) return "";
 
       return imgs.map((im)=>{
@@ -1748,11 +2674,11 @@
         const x = clamp(parseInt(im.x||0,10)||0, 0, 100);
         const y = clamp(parseInt(im.y||0,10)||0, 0, 100);
 
-        // posição dentro da área reservada
-        // left/top em %, e translate pra não “sair” demais
+        const src = imgSrc(im);
+
         return `
           <img class="instImg"
-            src="${im.url}"
+            src="${src}"
             style="
               width:${scale}%;
               left:${x}%;
@@ -1766,9 +2692,23 @@
       }).join("");
     }
 
+    function iconsHTML(b){
+      if(!b || b.showIcons === false) return "";
+      const arr = Array.isArray(b.icons) ? b.icons : [];
+      if(!arr.length) return "";
+      const icons = arr.map(k=>{
+        const it = ICON_LIBRARY.find(x=> x.key === k);
+        return it ? `<span>${it.ico} ${it.label}</span>` : "";
+      }).filter(Boolean).join("");
+      if(!icons) return "";
+      return `<div class="useIcons">${icons}</div>`;
+    }
+
     function pageHTML(blocks){
       const patient = safeText(state.patientName);
-      const patientDoc = safeText(state.patientDoc);
+      const docType = safeText(state.patientDocType) || "CPF";
+      const docVal = safeText(state.patientDocValue);
+
       const showDate = !!state.includeDate;
       const date = safeText(state.dateValue);
 
@@ -1780,11 +2720,22 @@
         const use = safeText(b.use) || "";
 
         const qtyPart = qty ? `<div class="qty">${qty}</div>` : `<div class="qty" style="opacity:.6;">&nbsp;</div>`;
-        const useRow = `<div class="useRow"><b>Uso:</b><div class="useText">${use || "&nbsp;"}</div></div>`;
+        const useRow = `
+          <div class="useRow">
+            <b>Uso:</b>
+            <div class="useText">${use || "&nbsp;"}</div>
+            ${iconsHTML(b)}
+          </div>
+        `;
+
+        const pack = (b.showPack && safeText(packSrc(b)))
+          ? `<img class="drugPack" src="${packSrc(b)}" alt="" />`
+          : ``;
 
         return `
           <div class="rxItem">
             <div class="rxLine">
+              ${pack}
               <div class="drugName">${name}</div>
               <div class="leaderText">${leaderHyphens()}</div>
               ${qtyPart}
@@ -1798,7 +2749,10 @@
         ? `<div class="dateBox">${date || "&nbsp;"}</div>`
         : ``;
 
-      const docLine = patientDoc ? `<span style="margin-left:10px; font-weight:800;">Doc:</span> <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block;">${patientDoc}</span>` : "";
+      const docLine = docVal
+        ? `<span style="margin-left:10px; font-weight:800;">${docType}:</span>
+           <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block;">${docVal}</span>`
+        : "";
 
       return `
         <div class="rxPaper" style="--rxFont:${rxFont}">
@@ -1815,7 +2769,7 @@
             ${dateBox}
           </div>
 
-          <div class="rxSymbol">${rxSymbol()}</div>
+          <!-- ✅ removido símbolo da prescrição -->
 
           <div class="rxList">
             ${items || `<div style="font-size:12px;color:#111;">Adicione medicamentos no editor.</div>`}
@@ -1869,7 +2823,7 @@
       }).join("");
     }
 
-    // debounce para não “piscar” no mobile
+    // debounce
     function debounce(fn, ms=120){
       let t;
       return (...args)=>{
@@ -1880,19 +2834,27 @@
     const renderPaperDebounced = debounce(renderPaper, 90);
 
     /************************************************************
-     * Bind inputs (sem re-render geral)
+     * Bind inputs
      ************************************************************/
     function bind(){
+      // login
+      $("btnLogin").addEventListener("click", openLogin);
+      $("btnCloseLogin").addEventListener("click", closeLogin);
+      $("btnCloseLogin2").addEventListener("click", closeLogin);
+      $("btnLogout").addEventListener("click", logout);
+
       // médico
       $("docTitle").addEventListener("change", (e)=>{
         state.docTitle = (e.target.value === "Dra.") ? "Dra." : "Dr.";
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
       $("docName").addEventListener("input", (e)=>{
         state.docName = safeText(e.target.value);
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
 
       // paciente
@@ -1901,8 +2863,13 @@
         updateSummaries();
         renderPaperDebounced();
       });
-      $("patientDoc").addEventListener("input", (e)=>{
-        state.patientDoc = safeText(e.target.value);
+      $("patientDocType").addEventListener("change", (e)=>{
+        state.patientDocType = (e.target.value === "RG" || e.target.value === "CNS") ? e.target.value : "CPF";
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("patientDocValue").addEventListener("input", (e)=>{
+        state.patientDocValue = safeText(e.target.value);
         updateSummaries();
         renderPaperDebounced();
       });
@@ -1933,16 +2900,12 @@
         renderPaperDebounced();
       });
 
-      $("rxSymbolMode").addEventListener("change", (e)=>{
-        state.rxSymbolMode = e.target.value || "RSLASH";
-        renderPaperDebounced();
-      });
-
-      // imagens institucionais
+      // imagens (aplicadas)
       $("btnAddImg").addEventListener("click", ()=>{
         state.instImgs.push({
           id: uid(),
           url: "",
+          data: "",
           place: "header",
           scale: 45,
           x: 0,
@@ -1960,15 +2923,53 @@
         renderPaperDebounced();
       });
 
-      // config topbar ícone (no código)
-      $("brandLogoUrl").addEventListener("input", (e)=>{
-        BRAND_LOGO_URL = safeText(e.target.value);
-        applyBrandLogo();
+      // padrões
+      $("btnNewPattern").addEventListener("click", ()=> openPatternModal("new"));
+      $("btnEditPattern").addEventListener("click", ()=> openPatternModal("edit"));
+      $("btnApplyPattern").addEventListener("click", ()=>{
+        const pid = $("patternSelect").value;
+        if(!pid) return;
+        applyPatternById(pid);
       });
-      $("brandLogoScale").addEventListener("input", (e)=>{
-        BRAND_LOGO_SIZE_PX = clamp(parseInt(e.target.value,10)||40, 24, 72);
-        applyBrandLogo();
+
+      $("btnClosePattern").addEventListener("click", closePatternModal);
+      $("btnSavePattern").addEventListener("click", savePattern);
+      $("btnDeletePattern").addEventListener("click", deletePattern);
+
+      $("btnAddPatternImg").addEventListener("click", ()=>{
+        patternDraftImgs.push({
+          id: uid(),
+          url: "",
+          data: "",
+          place: "header",
+          scale: 45,
+          x: 0,
+          y: 0
+        });
+        renderPatternImgRows();
       });
+      $("btnClearPatternImgs").addEventListener("click", ()=>{
+        patternDraftImgs = [];
+        renderPatternImgRows();
+      });
+
+      $("btnPickFile").addEventListener("click", pickFileToPattern);
+      $("filePicker").addEventListener("change", ()=>{
+        const file = $("filePicker").files && $("filePicker").files[0];
+        $("filePicker").value = "";
+        if(!file) return;
+        const r = new FileReader();
+        r.onload = ()=> addPatternImgFromData(r.result);
+        r.readAsDataURL(file);
+      });
+
+      // dropbox click
+      $("dropBox").addEventListener("click", (e)=>{
+        const isBtn = (e.target && e.target.id === "btnPickFile");
+        if(!isBtn) pickFileToPattern();
+      });
+
+      document.addEventListener("paste", handlePasteToPattern);
 
       // CRM/RQE add
       $("btnAddCRM").addEventListener("click", ()=>{
@@ -1976,12 +2977,14 @@
         renderCrmList();
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
       $("btnAddRQE").addEventListener("click", ()=>{
         state.rqes.push("");
         renderRqeList();
         updateSummaries();
         renderPaperDebounced();
+        saveProfileDebounced();
       });
 
       // meds
@@ -1990,14 +2993,16 @@
 
       $("btnClear").addEventListener("click", ()=>{
         state.patientName = "";
-        state.patientDoc = "";
+        state.patientDocType = "CPF";
+        state.patientDocValue = "";
         state.blocks = [];
         state.selectedPage = 1;
 
         $("patientName").value = "";
-        $("patientDoc").value = "";
+        $("patientDocType").value = "CPF";
+        $("patientDocValue").value = "";
 
-        renderBlocksInitial(); // limpa
+        renderBlocksInitial();
         updateSummaries();
         renderPaperDebounced();
       });
@@ -2020,7 +3025,7 @@
 
       // imprimir
       $("btnPrint").addEventListener("click", ()=>{
-        renderPaper(); // garante tudo pronto
+        renderPaper();
         window.print();
       });
 
@@ -2064,10 +3069,6 @@
       state.dateValue = todayBR();
       $("dateValue").value = state.dateValue;
 
-      // preenche inputs de config do topo (código)
-      $("brandLogoUrl").value = BRAND_LOGO_URL;
-      $("brandLogoScale").value = String(BRAND_LOGO_SIZE_PX);
-
       applyBrandLogo();
 
       // listas
@@ -2083,10 +3084,17 @@
       // bind
       bind();
 
-      // summaries
-      updateSummaries();
+      // session restore
+      const u = loadSession();
+      if(u){
+        onLogged(u);
+      }else{
+        applyUserUI();
+        refreshPatternSelect();
+      }
 
-      // preview
+      // summaries + preview
+      updateSummaries();
       renderPaper();
 
       // load db (silencioso)
