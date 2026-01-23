@@ -40,6 +40,14 @@
       --padX: clamp(16px, 3.4vw, 24px);
       --gap: 18px;
       --gap2: 26px;
+
+      --topH: 44px;
+
+      /* margem segura ~2cm para a área imprimível/preview */
+      --paperPad: 20mm;
+
+      /* laranja default para círculo (coluna C vazia/inválida) */
+      --pillOrange: #ff7a18;
     }
 
     *{box-sizing:border-box}
@@ -64,28 +72,42 @@
     .wrap{
       max-width: var(--container);
       margin:0 auto;
-      padding: 22px var(--padX) 30px;
+      padding: 18px var(--padX) 30px;
     }
 
-    /* ===== Topbar ===== */
+    /* ===== Topbar (full width shell + inner max-width) ===== */
+    .topbarShell{
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      width: 100%;
+      padding: 12px var(--padX) 0;
+      pointer-events:none; /* evita “pegar” clique fora do card */
+    }
+    .topbarInner{
+      max-width: var(--container);
+      margin:0 auto;
+      pointer-events:auto;
+    }
     .topbar{
+      width:100%;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border:1px solid var(--line);
       border-radius: var(--rBig);
       background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
       box-shadow: var(--shadowBig);
-      position: sticky;
-      top: 12px;
-      z-index: 30;
       backdrop-filter: blur(10px);
+      overflow:hidden;
     }
 
     .brand{
-      display:flex; align-items:center; gap:12px; min-width: 220px;
+      display:flex; align-items:center; gap:12px;
+      min-width: 0;
+      flex: 1 1 auto;
     }
     .markImg{
       width:40px; height:40px;
@@ -97,6 +119,12 @@
       padding: 6px;
       flex: 0 0 auto;
     }
+    .brandTxt{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
     .brand h1{
       margin:0;
       font-family: "DM Serif Display", serif;
@@ -104,18 +132,27 @@
       letter-spacing: .2px;
       font-size: 20px;
       line-height: 1.05;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .brand p{
-      margin:2px 0 0;
+      margin:0;
       color: var(--muted);
       font-size: 12.8px;
       line-height: 1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 60ch;
     }
 
     .actions{
       display:flex; align-items:center; gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      flex: 0 0 auto;
+      max-width: 100%;
     }
 
     .btn{
@@ -124,15 +161,18 @@
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.03);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 0 12px;
+      height: var(--topH);
       font-weight: 800;
       font-size: 13.5px;
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:8px;
       transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
       white-space: nowrap;
       user-select:none;
+      max-width: 100%;
     }
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.14); }
     .btn:active{ transform: translateY(0px) scale(.99); }
@@ -154,29 +194,61 @@
       border-color: var(--line2);
     }
 
+    /* User pill “do mesmo tamanho visual” */
     .userPill{
       display:inline-flex; align-items:center; gap:10px;
-      padding: 8px 10px;
-      border-radius: 999px;
+      height: var(--topH);
+      padding: 0 10px;
+      border-radius: var(--rBtn);
       border:1px solid var(--line2);
       background: rgba(255,255,255,.02);
-      max-width: 44vw;
+      max-width: min(520px, 70vw);
+      overflow:hidden;
     }
     .userPill img{
-      width:24px; height:24px; border-radius:999px; object-fit:cover;
+      width:26px; height:26px; border-radius:999px; object-fit:cover;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.02);
+      flex: 0 0 auto;
     }
     .userPill b{
-      font-size: 12.6px;
+      font-size: 12.8px;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width: 30vw;
+      max-width: 26ch;
+      line-height: 1.1;
     }
-    .userPill small{ color: var(--muted); font-size: 12px; font-weight: 800; }
+    .userPill small{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 26ch;
+      line-height: 1.1;
+    }
+
+    .iconBtn{
+      cursor:pointer;
+      border-radius: 12px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      padding: 9px 10px;
+      color: var(--text);
+      font-weight: 900;
+      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
+      user-select:none;
+      height: calc(var(--topH) - 10px);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
+    .iconBtnDanger:hover{ border-color: rgba(255,80,80,.25); }
+    .iconBtnDim{ opacity:.75; }
+    .iconBtnDim:hover{ opacity:1; }
 
     /* ===== Main layout ===== */
     .main{
-      margin-top: 18px;
+      margin-top: 16px;
       display:grid;
       grid-template-columns: 1.05fr .95fr;
       gap: var(--gap2);
@@ -368,22 +440,6 @@
     }
     .rxTools{ display:flex; gap:8px; align-items:center; flex: 0 0 auto; }
 
-    .iconBtn{
-      cursor:pointer;
-      border-radius: 12px;
-      border: 1px solid var(--line2);
-      background: rgba(255,255,255,.02);
-      padding: 9px 10px;
-      color: var(--text);
-      font-weight: 900;
-      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
-      user-select:none;
-    }
-    .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
-    .iconBtnDanger:hover{ border-color: rgba(255,80,80,.25); }
-    .iconBtnDim{ opacity:.75; }
-    .iconBtnDim:hover{ opacity:1; }
-
     .rxGrid{
       display:grid;
       grid-template-columns: 1.15fr .55fr .80fr;
@@ -423,7 +479,7 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 60px rgba(255,255,255,.05);
     }
 
-    /* autocomplete */
+    /* ===== Autocomplete / Results (novo layout) ===== */
     .acWrap{ position:relative; }
     .acList{
       position:absolute;
@@ -437,21 +493,105 @@
       z-index: 50;
       overflow:hidden;
       display:none;
-      max-height: 260px;
+      max-height: 320px;
       overflow:auto;
     }
-    .acItem{
+
+    .medItem{
       padding: 10px 12px;
       cursor:pointer;
       border-bottom: 1px solid rgba(170,195,235,.08);
       display:flex;
-      justify-content:space-between;
-      gap:10px;
+      gap: 12px;
+      align-items:flex-start;
+      transition: background var(--t);
     }
-    .acItem:last-child{ border-bottom:none; }
-    .acItem:hover{ background: rgba(255,255,255,.03); }
-    .acItem b{ font-size: 13px; }
-    .acItem small{ color: var(--muted); font-size: 12px; }
+    .medItem:last-child{ border-bottom:none; }
+    .medItem:hover{ background: rgba(255,255,255,.03); }
+    .medDot{
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      margin-top: 4px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 0 0 2px rgba(0,0,0,.22) inset, 0 0 24px rgba(255,255,255,.06);
+      flex: 0 0 auto;
+      background: var(--pillOrange);
+    }
+    .medMain{
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .medTopRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .medA{
+      font-weight: 900;
+      font-size: 13.2px;
+      color: #fff;
+      letter-spacing: .15px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 64ch;
+    }
+    .medB{
+      margin-top: 2px;
+      font-style: italic;
+      font-size: 12.2px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 64ch;
+    }
+    .medTag{
+      flex: 0 0 auto;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--text);
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      padding: 4px 8px;
+      border-radius: 999px;
+      white-space:nowrap;
+      max-width: 26ch;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .medSubs{
+      display:none;
+      gap: 8px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .medItem.open .medSubs{ display:flex; }
+
+    .subBtn{
+      cursor:pointer;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 7px 10px;
+      font-weight: 900;
+      font-size: 12.1px;
+      transition: transform var(--t), background var(--t), border-color var(--t);
+      user-select:none;
+      line-height: 1.1;
+    }
+    .subBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.18); }
+    .subBtn:active{ transform: translateY(0px) scale(.99); }
+
+    .acEmpty{
+      padding: 12px;
+      color: var(--muted);
+      font-size: 12.6px;
+      line-height: 1.25;
+    }
 
     /* ===== Preview / Paper ===== */
     .paperShell{ padding: 16px; }
@@ -475,7 +615,7 @@
       position:relative;
     }
     .paperInner{
-      padding: 22px 22px 18px;
+      padding: var(--paperPad);
       background:#fff;
     }
 
@@ -492,18 +632,19 @@
       --rxFamily: "Times New Roman", Times, serif;
       font-family: var(--rxFamily);
       font-size: var(--rxFont);
+      background:#fff;
     }
 
     /* Reserved header/footer areas */
     .rxPaper .headerArea{
       position:relative;
       height: 78px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .rxPaper .footerArea{
       position:relative;
       height: 62px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
     .instImgSimple{
       position:absolute;
@@ -517,48 +658,56 @@
     }
     .instImgSimple--footer{ max-height: 58px; }
 
-    .rxPaper .topLine{
+    /* ===== Novo cabeçalho da receita (sem linha Paciente/Data) ===== */
+    .rxMeta{
       display:flex;
-      align-items:flex-end;
+      align-items:flex-start;
       justify-content:space-between;
       gap: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #cfcfcf;
       margin-bottom: 10px;
-    }
-    .rxPaper .ptLine{
-      display:flex;
-      align-items:flex-end;
-      gap: 8px;
-      flex-wrap:wrap;
-      width: 100%;
-    }
-    .rxPaper .ptLabel{
-      color:#111;
-      font-weight: 800;
-      font-size: 12.2px;
-      white-space:nowrap;
       font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#111;
     }
-    .rxPaper .ptName{
-      min-width: 260px;
-      flex: 1;
-      border-bottom: 1px solid #000;
-      padding: 0 0 2px;
-      font-weight: 700;
+    .rxPatientLine{
+      font-weight: 900;
+      font-size: 12.8px;
       letter-spacing:.15px;
-      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .rxPaper .dateBox{
-      color:#111;
-      font-weight: 800;
-      font-size: 12.2px;
       white-space:nowrap;
-      border-bottom: 1px solid #000;
-      padding: 0 0 2px;
-      min-width: 96px;
-      text-align:right;
-      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 68ch;
+    }
+    .rxPatientLine .docInline{
+      font-weight: 800;
+      opacity:.9;
+      margin-left: 10px;
+      white-space:nowrap;
+    }
+
+    .rxDatePill{
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: #f1f1f1;
+      color: #111;
+      padding: 4px 10px;
+      font-weight: 900;
+      font-size: 12.1px;
+      line-height: 1.2;
+      border: 1px solid rgba(0,0,0,.10);
+      white-space:nowrap;
+    }
+
+    .rxDividerLine{
+      height:1px;
+      background: #cfcfcf;
+      margin: 10px 0 14px;
+    }
+
+    /* R// obrigatório */
+    .rxSymbol{
+      font-weight: 900;
+      font-size: 16px;
+      margin: 0 0 10px;
     }
 
     .rxList{
@@ -578,10 +727,17 @@
       gap: 10px;
     }
 
+    .rxNo{
+      font-weight: 900;
+      letter-spacing:.1px;
+      width: 20px;
+      flex: 0 0 auto;
+    }
+
     .drugName{
       font-weight: 800;
       letter-spacing:.15px;
-      max-width: 62%;
+      max-width: 58%;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -606,35 +762,20 @@
       text-overflow:ellipsis;
     }
 
-    .useRow{
+    /* ✅ sem “linha do Uso”: instrução limpa */
+    .rxInstr{
       margin-top: 4px;
-      display:flex;
-      gap: 8px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      font-size: var(--rxFont);
-      line-height: 1.32;
-    }
-    .useRow b{
-      color:#111;
-      font-weight: 900;
-      font-size: 12px;
-      white-space:nowrap;
-      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    .useText{
-      flex:1;
-      min-width: 140px;
+      padding-left: 30px; /* alinhado após "1." */
       color:#000;
-      border-bottom: 1px solid #000;
-      padding-bottom: 2px;
+      font-size: var(--rxFont);
+      line-height: 1.28;
       word-break: break-word;
-      font-family: var(--rxFamily);
     }
 
-    /* ✅ ícones embaixo do "Uso" */
+    /* ícones embaixo da instrução */
     .useIconsBelow{
       margin-top: 6px;
+      padding-left: 30px;
       display:flex;
       gap:6px;
       align-items:center;
@@ -658,7 +799,6 @@
       margin-top: 6px;
       padding-top: 6px;
     }
-
     .docSig{
       display:inline-block;
       max-width: 100%;
@@ -706,6 +846,7 @@
       font-size: 12.8px;
       color: var(--text);
       white-space: nowrap;
+      height: var(--topH);
     }
     .gearBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
     .gearBtn .gico{
@@ -761,10 +902,9 @@
       .grid2{ grid-template-columns: 1fr; }
       .grid3eq{ grid-template-columns: 1fr; }
       .rxGrid{ grid-template-columns: 1fr; }
-      .paperInner{ padding: 18px 16px 16px; }
-      .rxPaper .ptName{ min-width: 180px; }
-      .userPill{ max-width: 70vw; }
-      .userPill b{ max-width: 52vw; }
+      .paperInner{ padding: 16mm; } /* um pouco menor no celular */
+      .userPill{ max-width: 92vw; }
+      .userPill b, .userPill small{ max-width: 22ch; }
       .gearBtn{ width: 100%; justify-content:space-between; }
     }
 
@@ -837,44 +977,52 @@
 
     @media print{
       body{ background:#fff !important; color:#000 !important; }
-      .topbar, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"], #historyPage, .modalMask{ display:none !important; }
+      .topbarShell, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"], #historyPage, .modalMask{ display:none !important; }
       .wrap{ max-width:none; padding:0; }
       .printAll{ display:block !important; }
       .printPage{ width:auto; background:#fff; }
-      @page { margin: 12mm; }
+
+      /* margem segura ~2cm */
+      @page { margin: 20mm; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap" id="appWrap">
 
-    <div class="topbar">
-      <div class="brand">
-        <img id="brandMark" class="markImg" alt="Logo UsoJaleco" />
-        <div>
-          <h1>UsoJaleco</h1>
-          <p>Um jeito mais fácil de prescrever.</p>
+  <!-- ===== TOPBAR full width ===== -->
+  <div class="topbarShell">
+    <div class="topbarInner">
+      <div class="topbar">
+        <div class="brand">
+          <img id="brandMark" class="markImg" alt="Logo UsoJaleco" />
+          <div class="brandTxt">
+            <h1>UsoJaleco</h1>
+            <p>Um jeito mais fácil de prescrever.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <span class="userPill" id="userPill" style="display:none;">
+            <img id="userPic" alt="" />
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+              <b id="userName">—</b>
+              <small id="userEmail">—</small>
+            </div>
+            <button class="iconBtn iconBtnDanger" id="btnLogout" type="button" title="Sair">⎋</button>
+          </span>
+
+          <button class="btn btnGhost" id="btnLogin" type="button">Login</button>
+
+          <button class="btn btnGhost" id="btnHistory" type="button" style="display:none;">Histórico de Prescrições</button>
+
+          <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
         </div>
       </div>
-
-      <div class="actions">
-        <span class="userPill" id="userPill" style="display:none;">
-          <img id="userPic" alt="" />
-          <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
-            <b id="userName">—</b>
-            <small id="userEmail">—</small>
-          </div>
-          <button class="iconBtn iconBtnDanger" id="btnLogout" type="button" title="Sair">⎋</button>
-        </span>
-
-        <button class="btn btnGhost" id="btnLogin" type="button">Login</button>
-
-        <button class="btn btnGhost" id="btnHistory" type="button" style="display:none;">Histórico de Prescrições</button>
-
-        <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
-      </div>
     </div>
+  </div>
+
+  <div class="wrap" id="appWrap">
 
     <!-- Tabs mobile -->
     <div class="mobileTabs" aria-label="Alternar entre editor e prévia">
@@ -1009,7 +1157,7 @@
         <div class="cardHeader">
           <div>
             <h2>Prévia</h2>
-            <p class="sub">Margens, espaço para cabeçalho e rodapé, e tudo sempre alinhado.</p>
+            <p class="sub">Receita branca, margens seguras, R// obrigatório e lista numerada.</p>
           </div>
 
           <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; justify-content:flex-end;">
@@ -1043,7 +1191,6 @@
 
           <div class="divider"></div>
 
-          <!-- ✅ Botões abaixo da prévia -->
           <div class="row" style="justify-content:space-between; gap:10px;">
             <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
             <button class="btn btnGhost" id="btnPrintSave" type="button" style="display:none;">Imprimir + Guardar no Histórico</button>
@@ -1052,7 +1199,6 @@
           <div class="mini" id="histHint" style="margin-top:10px; display:none;">
             Dica: o histórico fica salvo nesta conta neste dispositivo.
           </div>
-
         </div>
       </div>
     </div>
@@ -1116,7 +1262,6 @@
       </div>
 
       <div class="modalBody">
-        <!-- 5.1: selecionar padrão existente -->
         <div class="modalCard">
           <div class="label" style="margin-bottom:8px;">Padrão existente</div>
           <div class="row" style="justify-content:flex-start; gap:10px;">
@@ -1134,7 +1279,6 @@
 
         <div class="divider"></div>
 
-        <!-- 5.2: criar novo padrão -->
         <div class="modalCard">
           <div class="row" style="justify-content:space-between; gap:10px;">
             <div>
@@ -1301,10 +1445,12 @@
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABJ0lEQVR4nO3aMQ6CMBQF0U8m0dQmGQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQk0v2k6yqk7+XyQm5mYd8yqf9gQAAAAAAAAAA4Gm9oQm2b3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQAAAAA8D8m8i8b8kq8wQAAAABJRU5ErkJggg==";
 
     /************************************************************
-     * Autocomplete via planilha — silencioso (só nomes)
+     * GOOGLE SHEETS — múltiplas abas (classes)
+     * - busca em TODAS as abas (publicadas) e unifica resultados
      ************************************************************/
-    const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
-    const SHEET_GID = "0";
+    const SHEET_ID = "1CR3CtU-aA6-JZE37GUElF7CmHKudeiRgOK9WhIvBO8c";
+    const SHEET_PUBHTML = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2px-SWkaAF39UmOm_lPxHheVOKclf-WOz4wW8I27xOcWg3MhJaq9YMR_Jxn5SDKOH9QuNHIl7sdIm/pubhtml";
+    const DEFAULT_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--pillOrange").trim() || "#ff7a18";
 
     const state = {
       // sessão (login)
@@ -1325,8 +1471,8 @@
       paperSize: "A4",
       includeDate: true,
       dateValue: "",
-      rxFontSize: 13.2,          // ✅ tamanho livre
-      rxFontFamily: "TIMES",     // ✅ TIMES/CALIBRI/ARIAL
+      rxFontSize: 13.2,
+      rxFontFamily: "TIMES",
 
       // instituição (rodapé cinza)
       instName: "",
@@ -1347,8 +1493,8 @@
       blocks: [], // {id, name, dose, qty, use, collapsed, showIcons, icons[]}
       selectedPage: 1,
 
-      // db
-      db: { loaded:false, list:[] }
+      // db meds
+      db: { loaded:false, loading:false, list:[], tabs:[] }
     };
 
     const $ = (id)=>document.getElementById(id);
@@ -1577,7 +1723,6 @@
       saveSession();
       applyUserUI();
 
-      // carrega perfil do médico
       const p = loadProfile();
       if(p){
         state.docTitle = (p.docTitle === "Dra.") ? "Dra." : "Dr.";
@@ -1586,7 +1731,6 @@
         state.rqes = Array.isArray(p.rqes) && p.rqes.length ? p.rqes.map(safeText) : [""];
       }
 
-      // aplica no form
       $("docTitle").value = state.docTitle;
       $("docName").value = state.docName;
 
@@ -1626,28 +1770,171 @@
     }
 
     /************************************************************
-     * Load DB (silencioso) - só para autocomplete
+     * GOOGLE SHEETS — carregar abas + meds (A/B/C) via GVIZ
      ************************************************************/
-    async function loadSheetDB(){
-      const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(SHEET_GID)}&tqx=out:json`;
+    function decodeHTMLEntities(str){
       try{
-        const res = await fetch(url, { cache:"no-store" });
-        const txt = await res.text();
-        const jsonStr = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
-        const data = JSON.parse(jsonStr);
-        const rows = (data.table && data.table.rows) ? data.table.rows : [];
-        const list = [];
-        for(const r of rows){
-          const c = r.c || [];
-          const name = safeText(c[0]?.v ?? "");
-          if(name) list.push({ name });
+        const t = document.createElement("textarea");
+        t.innerHTML = str;
+        return t.value;
+      }catch(e){ return str; }
+    }
+
+    function sanitizeColor(c){
+      const v = safeText(c);
+      if(!v) return DEFAULT_COLOR;
+      const s = v.trim();
+
+      // hex
+      if(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s)) return s;
+
+      // rgb/rgba
+      if(/^rgba?\(/i.test(s)) return s;
+
+      // nome CSS simples
+      if(/^[a-z]+$/i.test(s)) return s;
+
+      return DEFAULT_COLOR;
+    }
+
+    async function fetchSheetTabsFromPubhtml(){
+      try{
+        const res = await fetch(SHEET_PUBHTML, { cache:"no-store" });
+        const html = await res.text();
+
+        // tenta achar tabs do pubhtml (#gid=...">Nome</a>)
+        const re = /#gid=(\d+)[^"]*">([\s\S]*?)<\/a>/g;
+        const tabs = [];
+        const seen = new Set();
+
+        let m;
+        while((m = re.exec(html))){
+          const gid = String(m[1] || "").trim();
+          let name = decodeHTMLEntities(String(m[2] || "")).replace(/\s+/g," ").trim();
+          if(!gid) continue;
+          if(!name) name = `Aba ${gid}`;
+          if(seen.has(gid)) continue;
+          seen.add(gid);
+          tabs.push({ gid, name });
         }
-        list.sort((a,b)=> a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
-        state.db.loaded = true;
+
+        // fallback: se não achou nada, usa gid 0
+        if(!tabs.length){
+          return [{ gid:"0", name:"Medicamentos" }];
+        }
+        return tabs;
+      }catch(e){
+        return [{ gid:"0", name:"Medicamentos" }];
+      }
+    }
+
+    async function fetchGvizByGid(gid){
+      const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
+      const res = await fetch(url, { cache:"no-store" });
+      const txt = await res.text();
+      const jsonStr = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
+      const data = JSON.parse(jsonStr);
+      const rows = (data.table && data.table.rows) ? data.table.rows : [];
+      return rows;
+    }
+
+    async function loadSheetDB(){
+      if(state.db.loading) return;
+      state.db.loading = true;
+      state.db.loaded = false;
+      state.db.list = [];
+
+      try{
+        const tabs = await fetchSheetTabsFromPubhtml();
+        state.db.tabs = tabs;
+
+        const temp = [];
+
+        for(const tab of tabs){
+          let rows = [];
+          try{
+            rows = await fetchGvizByGid(tab.gid);
+          }catch(e){
+            continue;
+          }
+
+          rows.forEach((r, idx)=>{
+            const c = r.c || [];
+            const A = safeText(c[0]?.v ?? "");
+            const B = safeText(c[1]?.v ?? "");
+            const C = safeText(c[2]?.v ?? "");
+
+            // pula linhas vazias
+            if(!A && !B) return;
+
+            // heurística simples para ignorar cabeçalho
+            if(idx === 0){
+              const aK = keyify(A);
+              const bK = keyify(B);
+              if(aK.includes("nome") && (aK.includes("gener") || aK.includes("principal"))) return;
+              if(bK.includes("nome") && bK.includes("comerc")) return;
+            }
+
+            temp.push({
+              a: A,
+              b: B,
+              color: C,
+              cat: tab.name || `Aba ${tab.gid}`,
+            });
+          });
+        }
+
+        // unifica por A|B (item único por medicamento)
+        const map = new Map();
+        for(const it of temp){
+          const k = keyify(it.a) + "|" + keyify(it.b);
+          if(!map.has(k)){
+            map.set(k, {
+              a: it.a,
+              b: it.b,
+              color: it.color,
+              cats: [it.cat]
+            });
+          }else{
+            const cur = map.get(k);
+            // agrega categorias
+            if(it.cat && !cur.cats.includes(it.cat)) cur.cats.push(it.cat);
+            // se não tinha cor, pega
+            if(!safeText(cur.color) && safeText(it.color)) cur.color = it.color;
+          }
+        }
+
+        const list = Array.from(map.values()).map(x=>{
+          const a = safeText(x.a);
+          const b = safeText(x.b);
+          const cats = Array.isArray(x.cats) ? x.cats.filter(Boolean) : [];
+          const catLabel = cats.length
+            ? (cats[0] + (cats.length > 1 ? ` +${cats.length-1}` : ""))
+            : "—";
+
+          return {
+            a,
+            b,
+            cats,
+            catLabel,
+            color: sanitizeColor(x.color),
+            search: keyify([a,b,cats.join(" ")].join(" "))
+          };
+        });
+
+        list.sort((p,q)=>{
+          const A = (p.a || p.b || "").localeCompare((q.a || q.b || ""), "pt-BR", { sensitivity:"base" });
+          if(A !== 0) return A;
+          return (p.b||"").localeCompare((q.b||""), "pt-BR", { sensitivity:"base" });
+        });
+
         state.db.list = list;
+        state.db.loaded = true;
       }catch(e){
         state.db.loaded = false;
         state.db.list = [];
+      }finally{
+        state.db.loading = false;
       }
     }
 
@@ -1722,7 +2009,7 @@
     }
 
     /************************************************************
-     * Padrões (completo) — aplicar / editar / excluir
+     * Padrões — aplicar / editar / excluir
      ************************************************************/
     function refreshPatternSelect(){
       const sel = $("patternSelect");
@@ -1758,7 +2045,6 @@
       const p = arr.find(x=> x.id === pid);
       if(!p) return;
 
-      // aplica tudo (com fallback se padrão antigo tiver só imagens)
       state.paperSize = (p.paperSize==="LETTER"||p.paperSize==="A5"||p.paperSize==="LEGAL") ? p.paperSize : "A4";
       state.includeDate = (p.includeDate !== false);
       state.dateValue = safeText(p.dateValue) || state.dateValue;
@@ -1778,7 +2064,6 @@
       state.footerImgData = safeText(p.footerImgData);
       state.footerImgUrl = safeText(p.footerImgUrl);
 
-      // joga nos campos do modal (se estiver aberto)
       syncConfigFieldsFromState();
       setThumbs();
 
@@ -1802,7 +2087,6 @@
         return null;
       }
 
-      // lê campos -> state (para garantir consistência)
       readConfigFieldsToState();
 
       const payload = {
@@ -1847,14 +2131,10 @@
       $("configMask").style.display = "flex";
       $("configMask").setAttribute("aria-hidden","false");
 
-      // se não logado, ainda abre, mas desabilita padrão
       refreshPatternSelect();
-
-      // preenche campos do form com o state atual
       syncConfigFieldsFromState();
       setThumbs();
 
-      // estado do editor de padrão
       $("newPatternArea").style.display = "none";
       $("btnToggleNewPattern").textContent = "+ Criar novo padrão";
       editingPatternId = null;
@@ -1907,7 +2187,6 @@
       state.addrState = safeText($("addrState").value).toUpperCase().slice(0,2);
       state.addrCep = safeText($("addrCep").value);
 
-      // urls
       state.headerImgUrl = safeText($("headerUrl").value);
       if(state.headerImgUrl) state.headerImgData = "";
       state.footerImgUrl = safeText($("footerUrl").value);
@@ -1921,7 +2200,6 @@
       $("btnToggleNewPattern").textContent = on ? "+ Criar novo padrão" : "— Ocultar criação";
 
       if(!on){
-        // reset para criar novo
         editingPatternId = null;
         $("patternName").value = "";
         syncConfigFieldsFromState();
@@ -1938,7 +2216,6 @@
       if(!p) return;
 
       editingPatternId = p.id;
-      // aplica no state e joga nos campos
       applyPatternById(pid);
 
       $("patternName").value = p.name || "";
@@ -1971,7 +2248,7 @@
     }
 
     /************************************************************
-     * Medicine blocks (✅ sem imagem da caixa / ✅ dosagem separada)
+     * Medicine blocks (autocomplete novo — múltiplas abas)
      ************************************************************/
     const ICON_LIBRARY = [
       { key:"MANHA", label:"Manhã", ico:"☀️" },
@@ -1995,8 +2272,6 @@
         qty:"",
         use:"",
         collapsed:false,
-
-        // ícones
         showIcons:true,
         icons:[]
       };
@@ -2010,7 +2285,7 @@
       if(focusName){
         setTimeout(()=>{
           const el = document.querySelector(`[data-block="${b.id}"] input[data-field="name"]`);
-          if(el) el.focus({ preventScroll:true }); // ✅ não “puxa” a página pra baixo
+          if(el) el.focus({ preventScroll:true });
         }, 0);
       }
     }
@@ -2137,7 +2412,7 @@
       const grid = document.createElement("div");
       grid.className = "rxGrid";
 
-      // Nome + autocomplete
+      // Nome + autocomplete (novo)
       const col1 = document.createElement("div");
       const lab1 = document.createElement("label");
       lab1.className = "label";
@@ -2165,6 +2440,145 @@
       }
       function openList(){ acList.style.display = "block"; }
 
+      function applyChoice(it, mode){
+        const A = safeText(it.a);
+        const B = safeText(it.b);
+
+        let txt = "";
+        if(mode === "A") txt = A || B;
+        else if(mode === "B") txt = B || A;
+        else txt = (A && B) ? `${B} (${A})` : (B || A);
+
+        b.name = txt;
+        inpName.value = txt;
+
+        const nm = txt ? txt : `Remédio ${idx+1}`;
+        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
+        strong.textContent = nm + ds;
+
+        closeList();
+        renderPaperDebounced();
+        updateSummaries();
+      }
+
+      function renderHits(hits, q){
+        acList.innerHTML = "";
+
+        if(!hits.length){
+          const d = document.createElement("div");
+          d.className = "acEmpty";
+          d.textContent = q ? "Nenhum resultado. Continue digitando ou insira manualmente." : "Digite para buscar. (A planilha é consultada em todas as abas.)";
+          acList.appendChild(d);
+          openList();
+          return;
+        }
+
+        hits.forEach((it)=>{
+          const item = document.createElement("div");
+          item.className = "medItem";
+
+          const dot = document.createElement("div");
+          dot.className = "medDot";
+          dot.style.background = sanitizeColor(it.color);
+
+          const main = document.createElement("div");
+          main.className = "medMain";
+
+          const topRow = document.createElement("div");
+          topRow.className = "medTopRow";
+
+          const txtBox = document.createElement("div");
+          txtBox.style.minWidth = "0";
+
+          const lineA = document.createElement("div");
+          lineA.className = "medA";
+          lineA.textContent = it.a || it.b || "—";
+
+          const lineB = document.createElement("div");
+          lineB.className = "medB";
+          lineB.textContent = it.b ? it.b : (it.a ? "—" : "");
+
+          txtBox.appendChild(lineA);
+          txtBox.appendChild(lineB);
+
+          const tag = document.createElement("div");
+          tag.className = "medTag";
+          tag.textContent = it.catLabel || "—";
+
+          topRow.appendChild(txtBox);
+          topRow.appendChild(tag);
+
+          const subs = document.createElement("div");
+          subs.className = "medSubs";
+
+          const btnA = document.createElement("button");
+          btnA.className = "subBtn";
+          btnA.type = "button";
+          btnA.textContent = "Inserir Genérico (A)";
+          btnA.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "A"); });
+
+          const btnB = document.createElement("button");
+          btnB.className = "subBtn";
+          btnB.type = "button";
+          btnB.textContent = "Inserir Comercial (B)";
+          btnB.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "B"); });
+
+          const btnAB = document.createElement("button");
+          btnAB.className = "subBtn";
+          btnAB.type = "button";
+          btnAB.textContent = "Inserir B (A)";
+          btnAB.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "AB"); });
+
+          subs.appendChild(btnA);
+          subs.appendChild(btnB);
+          subs.appendChild(btnAB);
+
+          main.appendChild(topRow);
+          main.appendChild(subs);
+
+          item.appendChild(dot);
+          item.appendChild(main);
+
+          // abre/fecha subitens (sem duplicar resultados)
+          item.addEventListener("mousedown", (ev)=>{
+            // se clicou em botão, deixa o handler do botão agir
+            if(ev.target && ev.target.closest && ev.target.closest("button")) return;
+            ev.preventDefault();
+            const open = item.classList.toggle("open");
+            // fecha outros
+            Array.from(acList.querySelectorAll(".medItem.open")).forEach(x=>{
+              if(x !== item) x.classList.remove("open");
+            });
+            // se abriu, não fecha a lista
+            if(open) openList();
+          });
+
+          acList.appendChild(item);
+        });
+
+        openList();
+      }
+
+      function computeHits(q){
+        const hits = [];
+        if(!state.db.loaded) return hits;
+
+        if(!q){
+          // sem query: mostra primeiros
+          for(const it of state.db.list){
+            hits.push(it);
+            if(hits.length >= 10) break;
+          }
+          return hits;
+        }
+
+        for(const it of state.db.list){
+          if(it.search && it.search.includes(q)) hits.push(it);
+          if(hits.length >= 12) break;
+        }
+        return hits;
+      }
+
       inpName.addEventListener("input", ()=>{
         b.name = safeText(inpName.value);
 
@@ -2175,49 +2589,43 @@
         renderPaperDebounced();
         updateSummaries();
 
-        // autocomplete
         const q = keyify(b.name);
-        if(!q || !state.db.loaded){
-          closeList(); return;
-        }
-        const hits = [];
-        for(const it of state.db.list){
-          if(keyify(it.name).includes(q)) hits.push(it);
-          if(hits.length >= 12) break;
-        }
-        if(!hits.length){ closeList(); return; }
 
-        acList.innerHTML = "";
-        hits.forEach(it=>{
-          const item = document.createElement("div");
-          item.className = "acItem";
-          item.innerHTML = `<b>${it.name}</b><small>selecionar</small>`;
-          item.addEventListener("mousedown", (ev)=>{
-            ev.preventDefault();
-            b.name = it.name;
-            inpName.value = it.name;
-            const nm2 = it.name;
-            const ds2 = safeText(b.dose) ? " " + safeText(b.dose) : "";
-            strong.textContent = nm2 + ds2;
-            closeList();
-            renderPaperDebounced();
-            updateSummaries();
-          });
-          acList.appendChild(item);
-        });
-        openList();
+        // se ainda está carregando ou não carregou, não quebra: apenas fecha
+        if(state.db.loading){
+          acList.innerHTML = `<div class="acEmpty">Carregando planilha…</div>`;
+          openList();
+          return;
+        }
+        if(!state.db.loaded){
+          closeList();
+          return;
+        }
+
+        const hits = computeHits(q);
+        renderHits(hits, q);
+      });
+
+      inpName.addEventListener("focus", ()=>{
+        if(state.db.loading){
+          acList.innerHTML = `<div class="acEmpty">Carregando planilha…</div>`;
+          openList();
+          return;
+        }
+        if(state.db.loaded){
+          const q = keyify(safeText(inpName.value));
+          const hits = computeHits(q);
+          renderHits(hits, q);
+        }
       });
 
       inpName.addEventListener("blur", ()=> setTimeout(closeList, 180));
-      inpName.addEventListener("focus", ()=>{
-        if(acList.children.length) openList();
-      });
 
       acWrap.appendChild(inpName);
       acWrap.appendChild(acList);
       col1.appendChild(acWrap);
 
-      // Dosagem (ao lado do nome)
+      // Dosagem
       const colDose = document.createElement("div");
       const labDose = document.createElement("label");
       labDose.className = "label";
@@ -2269,7 +2677,7 @@
 
       body.appendChild(grid);
 
-      // Posologia
+      // Posologia (fica no editor, mas na receita sai “linha do uso”)
       const full = document.createElement("div");
       full.className = "rxFull";
       const lab3 = document.createElement("label");
@@ -2287,7 +2695,6 @@
         renderPaperDebounced();
       });
 
-      // ✅ (4) removidos chips de manhã/tarde/noite etc. (ficam só ícones)
       full.appendChild(lab3);
       full.appendChild(ta);
 
@@ -2383,7 +2790,7 @@
     }
 
     /************************************************************
-     * Paper render (sem símbolo / com cabeçalho+rodapé simples)
+     * Paper render — branco, margens seguras, R// obrigatório, numerado
      ************************************************************/
     function formatInstitutionAddress(){
       const st = safeText(state.addrStreet);
@@ -2446,12 +2853,8 @@
       `;
     }
 
-    function headerImgSrc(){
-      return safeText(state.headerImgData || state.headerImgUrl);
-    }
-    function footerImgSrc(){
-      return safeText(state.footerImgData || state.footerImgUrl);
-    }
+    function headerImgSrc(){ return safeText(state.headerImgData || state.headerImgUrl); }
+    function footerImgSrc(){ return safeText(state.footerImgData || state.footerImgUrl); }
 
     function iconsHTML(b){
       if(!b || b.showIcons === false) return "";
@@ -2465,7 +2868,7 @@
       return `<div class="useIconsBelow">${icons}</div>`;
     }
 
-    function pageHTML(blocks){
+    function pageHTML(blocks, startIndex){
       const patient = safeText(state.patientName);
       const docType = safeText(state.patientDocType) || "CPF";
       const docVal = safeText(state.patientDocValue);
@@ -2476,7 +2879,9 @@
       const rxFont = rxFontPx().toFixed(1) + "px";
       const rxFamily = rxFamilyCSS();
 
-      const items = blocks.map(b=>{
+      const items = blocks.map((b, i)=>{
+        const n = (startIndex || 0) + i + 1;
+
         const name = safeText(b.name) || "—";
         const dose = safeText(b.dose) || "";
         const showName = dose ? `${name} ${dose}` : name;
@@ -2484,35 +2889,32 @@
         const qty = safeText(b.qty) || "";
         const use = safeText(b.use) || "";
 
-        const qtyPart = qty ? `<div class="qty">${qty}</div>` : `<div class="qty" style="opacity:.6;">&nbsp;</div>`;
+        const qtyPart = qty
+          ? `<div class="qty">${qty}</div>`
+          : `<div class="qty" style="opacity:.55;">&nbsp;</div>`;
 
-        const useRow = `
-          <div class="useRow">
-            <b>Uso:</b>
-            <div class="useText">${use || "&nbsp;"}</div>
-          </div>
-          ${iconsHTML(b)}
-        `;
+        const instr = use ? `<div class="rxInstr">${use}</div>` : ``;
 
         return `
           <div class="rxItem">
             <div class="rxLine">
+              <div class="rxNo">${n}.</div>
               <div class="drugName">${showName}</div>
               <div class="leaderText">${leaderHyphens()}</div>
               ${qtyPart}
             </div>
-            ${useRow}
+            ${instr}
+            ${iconsHTML(b)}
           </div>
         `;
       }).join("");
 
-      const dateBox = showDate
-        ? `<div class="dateBox">${date || "&nbsp;"}</div>`
+      const datePill = showDate
+        ? `<div class="rxDatePill">Data: ${date || "&nbsp;"}</div>`
         : ``;
 
-      const docLine = docVal
-        ? `<span style="margin-left:10px; font-weight:800; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">${docType}:</span>
-           <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">${docVal}</span>`
+      const docInline = docVal
+        ? `<span class="docInline">• ${docType}: ${docVal}</span>`
         : "";
 
       const hsrc = headerImgSrc();
@@ -2524,14 +2926,14 @@
             ${hsrc ? `<img class="instImgSimple" src="${hsrc}" alt="" />` : ""}
           </div>
 
-          <div class="topLine">
-            <div class="ptLine">
-              <div class="ptLabel">Paciente:</div>
-              <div class="ptName">${patient || "&nbsp;"}</div>
-              ${docLine}
-            </div>
-            ${dateBox}
+          <div class="rxMeta">
+            <div class="rxPatientLine">${patient || "&nbsp;"}${docInline}</div>
+            ${datePill}
           </div>
+
+          <div class="rxDividerLine"></div>
+
+          <div class="rxSymbol">R//</div>
 
           <div class="rxList">
             ${items || `<div style="font-size:12px;color:#111; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">Adicione medicamentos no editor.</div>`}
@@ -2559,7 +2961,6 @@
       else if(state.paperSize==="LEGAL") paper.classList.add("paperLegal");
       else paper.classList.add("paperA4");
 
-      // page select
       const sel = $("pageSelect");
       sel.innerHTML = "";
       for(let i=1;i<=total;i++){
@@ -2571,21 +2972,23 @@
       }
 
       $("pageInfo").textContent = `Página ${state.selectedPage} de ${total}`;
-      $("rxPaper").innerHTML = pageHTML(pages[state.selectedPage-1]);
 
-      // impressão (todas as páginas)
+      const per = medsPerPage();
+      const startIndex = (state.selectedPage - 1) * per;
+
+      $("rxPaper").innerHTML = pageHTML(pages[state.selectedPage-1], startIndex);
+
       const printAll = $("printAll");
       printAll.innerHTML = pages.map((p, idx)=>{
         return `
           <div class="printPage">
-            ${pageHTML(p)}
+            ${pageHTML(p, idx * per)}
           </div>
           ${idx < pages.length-1 ? `<div style="break-after:page;"></div>` : ``}
         `;
       }).join("");
     }
 
-    // debounce
     function debounce(fn, ms=120){
       let t;
       return (...args)=>{
@@ -2645,7 +3048,7 @@
         openLogin();
         return;
       }
-      renderPaper(); // garante printAll atualizado
+      renderPaper();
 
       const snap = snapshotStateForHistory();
       const entry = {
@@ -2658,7 +3061,7 @@
 
       const arr = loadHistory();
       arr.unshift(entry);
-      saveHistory(arr.slice(0, 200)); // limite
+      saveHistory(arr.slice(0, 200));
       window.print();
     }
 
@@ -2673,7 +3076,6 @@
     }
 
     function goToHistory(){
-      // link pedido
       window.location.href = "https://www.usojaleco.com.br/historico-receita";
     }
 
@@ -2730,7 +3132,6 @@
         btnPrint.type = "button";
         btnPrint.textContent = "Imprimir";
         btnPrint.addEventListener("click", ()=>{
-          // injeta no printAll e imprime
           $("printAll").innerHTML = it.pagesHTML || "";
           window.print();
         });
@@ -2842,15 +3243,11 @@
         renderPaperDebounced();
       });
 
-      // ✅ impressão + histórico
       $("btnPrintOnly").addEventListener("click", printOnly);
       $("btnPrintSave").addEventListener("click", saveToHistoryAndPrint);
 
       // Config (gear)
-      $("btnOpenConfig").addEventListener("click", ()=>{
-        // se não estiver logado, ainda abre (mas padrão fica desabilitado)
-        openConfig();
-      });
+      $("btnOpenConfig").addEventListener("click", openConfig);
       $("btnCloseConfig").addEventListener("click", closeConfig);
       $("btnCloseConfig2").addEventListener("click", closeConfig);
 
@@ -2871,7 +3268,6 @@
         deletePatternById(pid);
       });
 
-      // toggle new pattern
       $("btnToggleNewPattern").addEventListener("click", ()=>{
         if(!(state.user && state.user.email)){ openLogin(); return; }
         toggleNewPatternArea();
@@ -2912,13 +3308,11 @@
         handlePickedFile("footer", f);
       });
 
-      // salvar padrão
       $("btnSavePattern").addEventListener("click", ()=>{
         if(!(state.user && state.user.email)){ openLogin(); return; }
         const id = upsertPatternFromFields(editingPatternId);
         if(id){
           editingPatternId = id;
-          // aplica imediatamente
           applyPatternById(id);
           alert("Padrão salvo.");
         }
@@ -2960,28 +3354,24 @@
      * Init
      ************************************************************/
     (function init(){
-      // ✅ garante abrir sempre pelo topo
+      // sempre abre no topo
       try{ history.scrollRestoration = "manual"; }catch(e){}
       window.scrollTo(0,0);
 
-      // defaults
       state.dateValue = todayBR();
 
       applyBrandLogo();
 
-      // listas
       renderCrmList();
       renderRqeList();
 
-      // meds: começa com 1 bloco, sem focar (pra não “puxar” a tela)
+      // meds: começa com 1 bloco, sem focar
       state.blocks = [];
       renderBlocksInitial();
       addBlock({focusName:false});
 
-      // bind
       bind();
 
-      // session restore
       const u = loadSession();
       if(u){
         onLogged(u);
@@ -2990,31 +3380,23 @@
         refreshPatternSelect();
       }
 
-      // preencher campos do config modal (mesmo fechado) para consistência
       $("dateValue").value = state.dateValue;
       $("rxFontSize").value = String(rxFontPx());
 
-      // ✅ seções sempre retraídas ao abrir
+      // seções retraídas ao abrir
       document.querySelectorAll("details.sec").forEach(d=> d.open = false);
 
-      // render preview
       updateSummaries();
       renderPaper();
 
-      // load db (silencioso)
+      // carrega DB multi-abas (silencioso)
       loadSheetDB();
 
-      // Router simples: se estiver em /historico-receita, mostra histórico
       const isHist = isHistoryRoute();
       $("mainApp").style.display = isHist ? "none" : "grid";
       $("historyPage").style.display = isHist ? "block" : "none";
+      if(isHist) renderHistoryPage();
 
-      if(isHist){
-        // precisa login para ver
-        renderHistoryPage();
-      }
-
-      // ✅ reforço: volta pro topo depois de tudo
       setTimeout(()=> window.scrollTo(0,0), 0);
     })();
   </script>
