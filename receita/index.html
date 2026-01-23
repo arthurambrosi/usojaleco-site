@@ -386,7 +386,7 @@
 
     .rxGrid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.15fr .55fr .80fr;
       gap: 12px;
       align-items:start;
     }
@@ -395,24 +395,7 @@
     .rxBlock.collapsed .rxExpandedBody{ display:none; }
     .rxBlock.collapsed .rxTop{ margin-bottom:0; }
 
-    /* Quick chips */
-    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-    .chip{
-      cursor:pointer;
-      border-radius: 999px;
-      border:1px solid var(--line2);
-      background: rgba(255,255,255,.02);
-      color: var(--text);
-      padding: 8px 10px;
-      font-weight: 900;
-      font-size: 12.3px;
-      display:flex; align-items:center; gap:8px;
-      user-select:none;
-      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
-    }
-    .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.12); }
-
-    /* Icon selectors (para analfabetos) */
+    /* Icon selectors */
     .iconPick{
       display:flex;
       gap:8px;
@@ -470,77 +453,6 @@
     .acItem b{ font-size: 13px; }
     .acItem small{ color: var(--muted); font-size: 12px; }
 
-    /* ===== Institutional patterns ===== */
-    .patRow{
-      border:1px solid var(--line2);
-      background: rgba(255,255,255,.02);
-      border-radius: 18px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    .patTop{
-      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
-    .patTop .left{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      min-width: 240px;
-    }
-
-    /* ===== Institutional images editor rows ===== */
-    .imgRows{ display:flex; flex-direction:column; gap: 10px; }
-    .imgRow{
-      border:1px solid var(--line2);
-      background: rgba(255,255,255,.02);
-      border-radius: 18px;
-      padding: 10px;
-    }
-    .imgRowTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .imgRowTop b{ font-size: 13px; }
-    .imgRowGrid{
-      display:grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 10px;
-      align-items:end;
-    }
-    .sliders{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .range{
-      width:100%;
-      accent-color: #c8d1e3;
-    }
-
-    .thumb{
-      width: 100%;
-      height: 56px;
-      border-radius: 14px;
-      border:1px solid var(--line2);
-      background: rgba(255,255,255,.02);
-      object-fit: contain;
-      padding: 6px;
-    }
-
-    /* ===== Upload box (click / paste) ===== */
-    .dropBox{
-      border:1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.02);
-      border-radius: 18px;
-      padding: 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .dropBox b{ font-size: 13px; }
-    .dropBox small{ color: var(--muted); font-size: 12.2px; font-weight: 800; }
-
     /* ===== Preview / Paper ===== */
     .paperShell{ padding: 16px; }
     .paperControls{
@@ -575,15 +487,17 @@
     /* Paper typography */
     .rxPaper{
       color:#000;
-      font-size: 13.2px;
       line-height: 1.32;
-      --rxFont: 13.2px; /* só prescrição */
+      --rxFont: 13.2px;
+      --rxFamily: "Times New Roman", Times, serif;
+      font-family: var(--rxFamily);
+      font-size: var(--rxFont);
     }
 
-    /* Reserved header/footer areas for logos */
+    /* Reserved header/footer areas */
     .rxPaper .headerArea{
       position:relative;
-      height: 70px;
+      height: 78px;
       margin-bottom: 8px;
     }
     .rxPaper .footerArea{
@@ -591,16 +505,17 @@
       height: 62px;
       margin-top: 12px;
     }
-
-    .instImg{
+    .instImgSimple{
       position:absolute;
-      left: 0%;
-      top: 0%;
-      transform: translate(0,0);
-      max-height: 70px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      max-height: 74px;
+      max-width: 92%;
       object-fit: contain;
       pointer-events:none;
     }
+    .instImgSimple--footer{ max-height: 58px; }
 
     .rxPaper .topLine{
       display:flex;
@@ -623,6 +538,7 @@
       font-weight: 800;
       font-size: 12.2px;
       white-space:nowrap;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     .rxPaper .ptName{
       min-width: 260px;
@@ -631,6 +547,7 @@
       padding: 0 0 2px;
       font-weight: 700;
       letter-spacing:.15px;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     .rxPaper .dateBox{
       color:#111;
@@ -641,6 +558,7 @@
       padding: 0 0 2px;
       min-width: 96px;
       text-align:right;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
     .rxList{
@@ -652,7 +570,6 @@
       line-height: 1.34;
     }
 
-    /* sem caixinhas */
     .rxItem{ padding: 0; border: none; background: transparent; }
 
     .rxLine{
@@ -661,22 +578,10 @@
       gap: 10px;
     }
 
-    .drugPack{
-      width: 34px;
-      height: 28px;
-      border-radius: 8px;
-      border:1px solid rgba(0,0,0,.16);
-      background: #fff;
-      object-fit: contain;
-      padding: 2px;
-      flex: 0 0 auto;
-      transform: translateY(-1px);
-    }
-
     .drugName{
       font-weight: 800;
       letter-spacing:.15px;
-      max-width: 58%;
+      max-width: 62%;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -715,6 +620,7 @@
       font-weight: 900;
       font-size: 12px;
       white-space:nowrap;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     .useText{
       flex:1;
@@ -723,8 +629,12 @@
       border-bottom: 1px solid #000;
       padding-bottom: 2px;
       word-break: break-word;
+      font-family: var(--rxFamily);
     }
-    .useIcons{
+
+    /* ✅ ícones embaixo do "Uso" */
+    .useIconsBelow{
+      margin-top: 6px;
       display:flex;
       gap:6px;
       align-items:center;
@@ -732,8 +642,9 @@
       color:#000;
       font-size: 13px;
       transform: translateY(-1px);
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-    .useIcons span{
+    .useIconsBelow span{
       border:1px solid rgba(0,0,0,.14);
       border-radius: 999px;
       padding: 2px 8px;
@@ -748,7 +659,6 @@
       padding-top: 6px;
     }
 
-    /* ✅ traço do mesmo tamanho do nome abaixo */
     .docSig{
       display:inline-block;
       max-width: 100%;
@@ -766,9 +676,46 @@
       font-size: 12.2px;
       line-height: 1.25;
       color:#000;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     .docCenter .docName{ font-weight: 900; }
     .docCenter .docLine{ margin-top: 2px; }
+
+    .instFooterGray{
+      margin-top: 10px;
+      text-align:center;
+      color:#666;
+      font-size: 11.6px;
+      line-height: 1.25;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* ===== Preview header tools (gear) ===== */
+    .gearBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+      padding: 9px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      transition: transform var(--t), background var(--t), border-color var(--t);
+      font-weight: 900;
+      font-size: 12.8px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .gearBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
+    .gearBtn .gico{
+      width:32px;height:32px;
+      display:inline-flex;align-items:center;justify-content:center;
+      border-radius: 12px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      font-size: 16px;
+    }
 
     /* ===== Mobile: tabs ===== */
     .mobileTabs{
@@ -816,10 +763,9 @@
       .rxGrid{ grid-template-columns: 1fr; }
       .paperInner{ padding: 18px 16px 16px; }
       .rxPaper .ptName{ min-width: 180px; }
-      .sliders{ grid-template-columns: 1fr; }
-      .imgRowGrid{ grid-template-columns: 1fr; }
       .userPill{ max-width: 70vw; }
       .userPill b{ max-width: 52vw; }
+      .gearBtn{ width: 100%; justify-content:space-between; }
     }
 
     /* ===== Modal ===== */
@@ -835,7 +781,7 @@
       z-index: 90;
     }
     .modal{
-      width: min(820px, 96vw);
+      width: min(900px, 96vw);
       border-radius: 22px;
       border:1px solid var(--line);
       background: linear-gradient(180deg, rgba(16,18,26,.92), rgba(10,12,18,.92));
@@ -862,12 +808,36 @@
       flex-wrap:wrap;
     }
 
+    .modalCard{
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    /* ===== History page ===== */
+    .historyWrap{ max-width: 980px; margin: 0 auto; padding: 10px 0; }
+    .histList{ display:flex; flex-direction:column; gap: 12px; margin-top: 14px; }
+    .histItem{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      padding: 14px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .histMeta b{ display:block; font-size: 13.5px; letter-spacing:.2px; }
+    .histMeta small{ display:block; margin-top:6px; color: var(--muted); font-size: 12.4px; line-height:1.25; }
+
     /* ===== PRINT (PDF) ===== */
     .printAll{ display:none; }
 
     @media print{
       body{ background:#fff !important; color:#000 !important; }
-      .topbar, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"]{ display:none !important; }
+      .topbar, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"], #historyPage, .modalMask{ display:none !important; }
       .wrap{ max-width:none; padding:0; }
       .printAll{ display:block !important; }
       .printPage{ width:auto; background:#fff; }
@@ -877,7 +847,7 @@
 </head>
 
 <body>
-  <div class="wrap">
+  <div class="wrap" id="appWrap">
 
     <div class="topbar">
       <div class="brand">
@@ -900,8 +870,9 @@
 
         <button class="btn btnGhost" id="btnLogin" type="button">Login</button>
 
+        <button class="btn btnGhost" id="btnHistory" type="button" style="display:none;">Histórico de Prescrições</button>
+
         <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
-        <button class="btn btnPrimary" id="btnPrint" type="button">Imprimir / PDF</button>
       </div>
     </div>
 
@@ -911,20 +882,21 @@
       <div class="tab" id="tabPreview">Prévia</div>
     </div>
 
-    <div class="main">
+    <!-- ===== MAIN APP ===== -->
+    <div class="main" id="mainApp">
       <!-- ===== Editor ===== -->
       <div class="card panel" data-panel="editor" id="panelEditor">
         <div class="cardHeader">
           <div>
             <h2>Editor</h2>
-            <p class="sub">Login Google no topo (dados do médico ficam salvos por conta). Seções retraídas e prévia sempre atualizada.</p>
+            <p class="sub">Ao abrir, tudo começa retraído. Você expande só o que for usar.</p>
           </div>
         </div>
 
         <div class="cardBody">
 
-          <!-- 1) Informações do médico -->
-          <details class="sec" open>
+          <!-- 1) Informações do médico (começa retraído) -->
+          <details class="sec">
             <summary>
               <div class="secTitle">
                 <b>1. Informações do médico</b>
@@ -974,8 +946,8 @@
             </div>
           </details>
 
-          <!-- 2) Informações do paciente -->
-          <details class="sec" open>
+          <!-- 2) Informações do paciente (começa retraído) -->
+          <details class="sec">
             <summary>
               <div class="secTitle">
                 <b>2. Informações do paciente</b>
@@ -1005,102 +977,17 @@
             </div>
           </details>
 
-          <!-- 3) Informações da página (simétrico) + padrões de imagem -->
-          <details class="sec" open>
+          <!-- 3) Medicamentos (começa retraído) -->
+          <details class="sec">
             <summary>
               <div class="secTitle">
-                <b>3. Informações da página</b>
-                <small id="sumPagina">—</small>
-              </div>
-              <div class="chev">˅</div>
-            </summary>
-            <div class="secBody">
-              <div class="grid3eq">
-                <div>
-                  <label class="label" for="paperSize">Tamanho da folha</label>
-                  <select class="select" id="paperSize">
-                    <option value="A4" selected>A4</option>
-                    <option value="LETTER">Carta (Letter)</option>
-                    <option value="A5">A5</option>
-                    <option value="LEGAL">Legal</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label class="label">Data</label>
-                  <div class="toggleRow" style="justify-content:flex-start;">
-                    <label class="toggle" title="Mostrar/ocultar a data na receita">
-                      <input type="checkbox" id="includeDate" checked />
-                      <span>Incluir</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="label" for="rxFontStep">Fonte da prescrição</label>
-                  <select class="select" id="rxFontStep">
-                    <option value="0" selected>13.2 (padrão)</option>
-                    <option value="1">12.3</option>
-                    <option value="2">11.4</option>
-                    <option value="3">10.8</option>
-                    <option value="4">10.2</option>
-                    <option value="5">9.6</option>
-                    <option value="6">9.0</option>
-                  </select>
-                </div>
-              </div>
-
-              <div style="margin-top:10px" class="grid2">
-                <div>
-                  <label class="label" for="dateValue">Data (se ativada)</label>
-                  <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
-                </div>
-                <div>
-                  <label class="label">Imagens institucionais (padrões)</label>
-                  <div class="mini">Escolha um padrão salvo, crie um novo, ou edite um existente.</div>
-                </div>
-              </div>
-
-              <div class="patRow">
-                <div class="patTop">
-                  <div class="left">
-                    <select class="select" id="patternSelect" style="min-width: 240px;">
-                      <option value="" selected>Nenhum padrão</option>
-                    </select>
-                    <button class="btn btnGhost" id="btnApplyPattern" type="button">Aplicar</button>
-                    <button class="btn btnGhost" id="btnEditPattern" type="button">Editar</button>
-                    <button class="btn btnGhost" id="btnNewPattern" type="button">Criar padrão</button>
-                  </div>
-                  <button class="btn btnGhost" id="btnClearImgs" type="button">Limpar imagens</button>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="mini">
-                  As imagens aplicadas aparecem no <b>cabeçalho</b> e/ou <b>rodapé</b> da receita com controle de <b>tamanho</b> e <b>posição</b>. (Os padrões ficam salvos na sua conta/dispositivo.)
-                </div>
-
-                <div style="height:10px"></div>
-                <div class="imgRows" id="imgRows"></div>
-
-                <div class="row" style="margin-top:12px">
-                  <button class="btn btnGhost" id="btnAddImg" type="button">+ Adicionar imagem</button>
-                </div>
-              </div>
-            </div>
-          </details>
-
-          <!-- 4) Medicamentos -->
-          <details class="sec" open>
-            <summary>
-              <div class="secTitle">
-                <b>4. Medicamentos</b>
+                <b>3. Medicamentos</b>
                 <small id="sumMeds">—</small>
               </div>
               <div class="chev">˅</div>
             </summary>
             <div class="secBody">
-              <div class="mini">Ao adicionar um novo remédio, os anteriores minimizam automaticamente (pra não “descer” demais no mobile).</div>
+              <div class="mini">Ao adicionar um novo remédio, os anteriores minimizam automaticamente.</div>
               <div style="height:10px"></div>
 
               <div class="rxBlocks" id="rxBlocks"></div>
@@ -1122,7 +1009,14 @@
         <div class="cardHeader">
           <div>
             <h2>Prévia</h2>
-            <p class="sub">Mostra sempre uma página por vez. Se houver mais de uma, escolha qual página ver.</p>
+            <p class="sub">Margens, espaço para cabeçalho e rodapé, e tudo sempre alinhado.</p>
+          </div>
+
+          <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; justify-content:flex-end;">
+            <button class="gearBtn" id="btnOpenConfig" type="button" title="Configurar prescrição">
+              <span style="opacity:.95;">Configure sua prescrição</span>
+              <span class="gico">⚙️</span>
+            </button>
           </div>
         </div>
 
@@ -1147,6 +1041,40 @@
             </div>
           </div>
 
+          <div class="divider"></div>
+
+          <!-- ✅ Botões abaixo da prévia -->
+          <div class="row" style="justify-content:space-between; gap:10px;">
+            <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
+            <button class="btn btnGhost" id="btnPrintSave" type="button" style="display:none;">Imprimir + Guardar no Histórico</button>
+          </div>
+
+          <div class="mini" id="histHint" style="margin-top:10px; display:none;">
+            Dica: o histórico fica salvo nesta conta neste dispositivo.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== HISTORY PAGE (render interno quando URL terminar com /historico-receita) ===== -->
+    <div id="historyPage" style="display:none;">
+      <div class="historyWrap">
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h2>Histórico de Prescrições</h2>
+              <p class="sub">Aqui ficam as prescrições que você salvou (nesta conta e neste dispositivo).</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+              <button class="btn btnGhost" id="btnBackToApp" type="button">← Voltar</button>
+              <button class="btn btnGhost" id="btnClearHistory" type="button" style="display:none;">Limpar histórico</button>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="mini" id="histTopInfo">—</div>
+            <div class="histList" id="histList"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1162,7 +1090,7 @@
       <div class="modalHead">
         <div>
           <b>Login com Google</b>
-          <div class="mini" style="margin-top:6px;">Ao logar, os dados do médico e os padrões ficam salvos para essa conta neste dispositivo.</div>
+          <div class="mini" style="margin-top:6px;">Ao logar, os dados do médico, padrões e histórico ficam associados à sua conta neste dispositivo.</div>
         </div>
         <button class="iconBtn iconBtnDanger" id="btnCloseLogin" type="button">✕</button>
       </div>
@@ -1176,57 +1104,182 @@
     </div>
   </div>
 
-  <!-- ===== Modal Padrões ===== -->
-  <div class="modalMask" id="patternMask" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Padrão de imagens">
+  <!-- ===== Modal Config (padrões + configurações) ===== -->
+  <div class="modalMask" id="configMask" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Configurar prescrição">
       <div class="modalHead">
         <div>
-          <b id="patternModalTitle">Criar/Editar padrão</b>
-          <div class="mini" style="margin-top:6px;">Você pode colar (Ctrl+V) uma imagem ou clicar para fazer upload.</div>
+          <b>Configure sua prescrição</b>
+          <div class="mini" style="margin-top:6px;">Selecione um padrão já criado ou crie um novo padrão completo.</div>
         </div>
-        <button class="iconBtn iconBtnDanger" id="btnClosePattern" type="button">✕</button>
+        <button class="iconBtn iconBtnDanger" id="btnCloseConfig" type="button">✕</button>
       </div>
 
       <div class="modalBody">
-        <div class="grid2">
-          <div>
-            <label class="label" for="patternName">Nome do padrão</label>
-            <input class="field" id="patternName" placeholder="Ex: Clínica X (cabeçalho + rodapé)" />
+        <!-- 5.1: selecionar padrão existente -->
+        <div class="modalCard">
+          <div class="label" style="margin-bottom:8px;">Padrão existente</div>
+          <div class="row" style="justify-content:flex-start; gap:10px;">
+            <select class="select" id="patternSelect" style="min-width: 280px; flex: 1;">
+              <option value="" selected>Nenhum padrão</option>
+            </select>
+            <button class="btn btnGhost" id="btnApplyPattern" type="button">Aplicar</button>
+            <button class="btn btnGhost" id="btnEditPattern" type="button">Editar</button>
+            <button class="btn btnGhost" id="btnDeletePattern" type="button">Excluir</button>
           </div>
-
-          <div>
-            <label class="label">Upload rápido (Ctrl+V ou clique)</label>
-            <div class="dropBox" id="dropBox">
-              <div style="display:flex;flex-direction:column;gap:4px;">
-                <b>Colar / Upload</b>
-                <small>Ctrl+V com imagem copiada, ou clique para selecionar.</small>
-              </div>
-              <button class="btn btnGhost" id="btnPickFile" type="button">Selecionar imagem</button>
-              <input type="file" id="filePicker" accept="image/*" style="display:none;" />
-            </div>
+          <div class="mini" style="margin-top:10px;">
+            Ao aplicar, a prévia muda imediatamente para o padrão escolhido.
           </div>
         </div>
 
         <div class="divider"></div>
 
-        <div class="mini">As imagens abaixo compõem o padrão (cada uma pode ir no cabeçalho ou rodapé, com tamanho e posição).</div>
-        <div style="height:10px"></div>
+        <!-- 5.2: criar novo padrão -->
+        <div class="modalCard">
+          <div class="row" style="justify-content:space-between; gap:10px;">
+            <div>
+              <div class="label" style="margin:0;">Novo padrão</div>
+              <div class="mini" style="margin-top:6px;">Clique para criar e preencher tamanho, fonte, cabeçalho/rodapé e dados da instituição.</div>
+            </div>
+            <button class="btn btnPrimary" id="btnToggleNewPattern" type="button">+ Criar novo padrão</button>
+          </div>
 
-        <div class="imgRows" id="patternImgRows"></div>
+          <div id="newPatternArea" style="display:none; margin-top:14px;">
+            <div class="grid2">
+              <div>
+                <label class="label" for="patternName">Nome do padrão</label>
+                <input class="field" id="patternName" placeholder="Ex: Clínica X (A4, Times, 13.2)" />
+              </div>
+              <div>
+                <label class="label" for="paperSize">Tamanho da folha</label>
+                <select class="select" id="paperSize">
+                  <option value="A4" selected>A4</option>
+                  <option value="LETTER">Carta (Letter)</option>
+                  <option value="A5">A5</option>
+                  <option value="LEGAL">Legal</option>
+                </select>
+              </div>
+            </div>
 
-        <div class="row" style="margin-top:12px">
-          <button class="btn btnGhost" id="btnAddPatternImg" type="button">+ Adicionar imagem ao padrão</button>
-          <button class="btn btnGhost" id="btnClearPatternImgs" type="button">Limpar imagens do padrão</button>
+            <div style="height:10px"></div>
+
+            <div class="grid3eq">
+              <div>
+                <label class="label" for="rxFontFamily">Fonte</label>
+                <select class="select" id="rxFontFamily">
+                  <option value="TIMES" selected>Times New Roman</option>
+                  <option value="CALIBRI">Calibri</option>
+                  <option value="ARIAL">Arial</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="label" for="rxFontSize">Tamanho da fonte da prescrição</label>
+                <input class="field" id="rxFontSize" placeholder="Ex: 13.2" inputmode="decimal" />
+              </div>
+
+              <div>
+                <label class="label">Data</label>
+                <div class="toggleRow" style="justify-content:flex-start;">
+                  <label class="toggle" title="Mostrar/ocultar a data na receita">
+                    <input type="checkbox" id="includeDate" checked />
+                    <span>Incluir</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="grid2">
+              <div>
+                <label class="label" for="dateValue">Data (se ativada)</label>
+                <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
+              </div>
+
+              <div>
+                <label class="label" for="instName">Instituição de Saúde</label>
+                <input class="field" id="instName" placeholder="Nome da instituição…" />
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="modalCard" style="padding:12px; border-radius:16px;">
+              <div class="label" style="margin-bottom:8px;">Endereço da Instituição (aparece em cinza no rodapé)</div>
+              <div class="grid3eq">
+                <div>
+                  <label class="label" for="addrStreet">Rua</label>
+                  <input class="field" id="addrStreet" placeholder="Rua…" />
+                </div>
+                <div>
+                  <label class="label" for="addrNumber">Número</label>
+                  <input class="field" id="addrNumber" placeholder="Nº…" />
+                </div>
+                <div>
+                  <label class="label" for="addrDistrict">Bairro</label>
+                  <input class="field" id="addrDistrict" placeholder="Bairro…" />
+                </div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="grid3eq">
+                <div>
+                  <label class="label" for="addrCity">Cidade</label>
+                  <input class="field" id="addrCity" placeholder="Cidade…" />
+                </div>
+                <div>
+                  <label class="label" for="addrState">Estado (sigla)</label>
+                  <input class="field" id="addrState" placeholder="BA" maxlength="2" />
+                </div>
+                <div>
+                  <label class="label" for="addrCep">CEP</label>
+                  <input class="field" id="addrCep" placeholder="00000-000" inputmode="numeric" />
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid2">
+              <div class="modalCard">
+                <div class="label">Imagem de cabeçalho (URL ou Upload)</div>
+                <div class="row" style="justify-content:flex-start; gap:10px;">
+                  <button class="btn btnGhost" id="btnPickHeader" type="button">Upload</button>
+                  <input type="file" id="fileHeader" accept="image/*" style="display:none;" />
+                  <input class="field" id="headerUrl" placeholder="Cole a URL do cabeçalho (opcional)..." />
+                </div>
+                <div style="height:10px"></div>
+                <img id="headerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
+              </div>
+
+              <div class="modalCard">
+                <div class="label">Imagem de rodapé (URL ou Upload)</div>
+                <div class="row" style="justify-content:flex-start; gap:10px;">
+                  <button class="btn btnGhost" id="btnPickFooter" type="button">Upload</button>
+                  <input type="file" id="fileFooter" accept="image/*" style="display:none;" />
+                  <input class="field" id="footerUrl" placeholder="Cole a URL do rodapé (opcional)..." />
+                </div>
+                <div style="height:10px"></div>
+                <img id="footerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="row" style="justify-content:flex-end; gap:10px;">
+              <button class="btn btnGhost" id="btnCancelNewPattern" type="button">Cancelar</button>
+              <button class="btn btnPrimary" id="btnSavePattern" type="button">Salvar padrão</button>
+            </div>
+
+          </div>
         </div>
 
-        <div class="mini" style="margin-top:10px;">
-          Dica: a última imagem colada/upload vai para a última linha do padrão. Se quiser, você pode remover e colar de novo.
-        </div>
       </div>
 
       <div class="modalFoot">
-        <button class="btn btnGhost" id="btnDeletePattern" type="button">Excluir padrão</button>
-        <button class="btn btnPrimary" id="btnSavePattern" type="button">Salvar padrão</button>
+        <button class="btn btnGhost" id="btnCloseConfig2" type="button">Fechar</button>
       </div>
     </div>
   </div>
@@ -1234,17 +1287,14 @@
   <script>
     /************************************************************
      * CONFIG (dentro do código) — Ícone do topo (UsoJaleco)
-     * ✅ não aparece como configuração no site (você edita aqui)
      ************************************************************/
-    let BRAND_LOGO_URL = "https://github.com/arthurambrosi/usojaleco/blob/1a17b841f2297bbb9237f5121ea34b67c1f18c45/Design%20sem%20nomes%20(28).png"; // coloque seu link aqui
+    let BRAND_LOGO_URL = "https://github.com/arthurambrosi/usojaleco/blob/1a17b841f2297bbb9237f5121ea34b67c1f18c45/Design%20sem%20nomes%20(28).png";
     let BRAND_LOGO_SIZE_PX = 40;
 
     /************************************************************
      * LOGIN GOOGLE (GIS)
-     * ✅ você precisa colocar seu CLIENT ID aqui:
-     * https://console.cloud.google.com/ -> APIs & Services -> Credentials
      ************************************************************/
-    const GOOGLE_CLIENT_ID = "703476878000-7h4lq2cbpffp3qp7hdn1hksi9k43qqm1.apps.googleusercontent.com"; // <-- COLE AQUI O CLIENT ID
+    const GOOGLE_CLIENT_ID = "703476878000-7h4lq2cbpffp3qp7hdn1hksi9k43qqm1.apps.googleusercontent.com";
 
     // Placeholder PNG transparente
     const PLACEHOLDER_PNG =
@@ -1271,17 +1321,30 @@
       patientDocType: "CPF",
       patientDocValue: "",
 
-      // página
+      // config/página (agora fica no modal da engrenagem)
       paperSize: "A4",
       includeDate: true,
       dateValue: "",
-      rxFontStep: 0,
+      rxFontSize: 13.2,          // ✅ tamanho livre
+      rxFontFamily: "TIMES",     // ✅ TIMES/CALIBRI/ARIAL
 
-      // imagens institucionais (aplicadas)
-      instImgs: [],
+      // instituição (rodapé cinza)
+      instName: "",
+      addrStreet: "",
+      addrNumber: "",
+      addrDistrict: "",
+      addrCity: "",
+      addrState: "",
+      addrCep: "",
+
+      // imagens institucionais simples (1 cabeçalho + 1 rodapé)
+      headerImgData: "",
+      headerImgUrl: "",
+      footerImgData: "",
+      footerImgUrl: "",
 
       // meds
-      blocks: [], // {id, name, qty, use, collapsed, showPack, packData, showIcons, icons[]}
+      blocks: [], // {id, name, dose, qty, use, collapsed, showIcons, icons[]}
       selectedPage: 1,
 
       // db
@@ -1310,9 +1373,15 @@
     }
 
     function rxFontPx(){
-      const map = [13.2,12.3,11.4,10.8,10.2,9.6,9.0];
-      const i = clamp(parseInt(state.rxFontStep,10)||0, 0, map.length-1);
-      return map[i];
+      const v = parseFloat(String(state.rxFontSize).replace(",", "."));
+      if(!isFinite(v) || v <= 6) return 13.2;
+      return clamp(v, 7.5, 18);
+    }
+
+    function rxFamilyCSS(){
+      if(state.rxFontFamily === "ARIAL") return "Arial, Helvetica, sans-serif";
+      if(state.rxFontFamily === "CALIBRI") return "Calibri, Arial, sans-serif";
+      return "\"Times New Roman\", Times, serif";
     }
 
     function medsPerPage(){
@@ -1347,9 +1416,10 @@
     /************************************************************
      * LOCAL STORAGE (por conta)
      ************************************************************/
-    function sessionKey(){ return "uj_rx_session_v1"; }
-    function profileKey(email){ return `uj_rx_profile_v1__${(email||"").toLowerCase()}`; }
-    function patternsKey(email){ return `uj_rx_patterns_v1__${(email||"").toLowerCase()}`; }
+    function sessionKey(){ return "uj_rx_session_v2"; }
+    function profileKey(email){ return `uj_rx_profile_v2__${(email||"").toLowerCase()}`; }
+    function patternsKey(email){ return `uj_rx_patterns_v2__${(email||"").toLowerCase()}`; }
+    function historyKey(email){ return `uj_rx_history_v1__${(email||"").toLowerCase()}`; }
 
     function saveSession(){
       try{
@@ -1414,6 +1484,23 @@
       }catch(e){}
     }
 
+    function loadHistory(){
+      if(!state.user || !state.user.email) return [];
+      try{
+        const raw = localStorage.getItem(historyKey(state.user.email));
+        if(!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){ return []; }
+    }
+
+    function saveHistory(arr){
+      if(!state.user || !state.user.email) return;
+      try{
+        localStorage.setItem(historyKey(state.user.email), JSON.stringify(arr || []));
+      }catch(e){}
+    }
+
     /************************************************************
      * GOOGLE LOGIN (GIS) — modal + render button
      ************************************************************/
@@ -1449,7 +1536,6 @@
         return;
       }
 
-      // renderiza botão sempre que abrir (garante mount)
       $("googleBtnMount").innerHTML = "";
       if(window.google && google.accounts && google.accounts.id){
         google.accounts.id.initialize({
@@ -1507,12 +1593,13 @@
       renderCrmList();
       renderRqeList();
 
-      // padrões
       refreshPatternSelect();
+
+      $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
+      $("histHint").style.display = "block";
 
       updateSummaries();
       renderPaperDebounced();
-      $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
     }
 
     function logout(){
@@ -1520,12 +1607,16 @@
       saveSession();
       applyUserUI();
       $("persistHint").textContent = "Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).";
+      $("histHint").style.display = "none";
     }
 
     function applyUserUI(){
       const has = !!(state.user && state.user.email);
       $("btnLogin").style.display = has ? "none" : "inline-flex";
       $("userPill").style.display = has ? "inline-flex" : "none";
+
+      $("btnHistory").style.display = has ? "inline-flex" : "none";
+      $("btnPrintSave").style.display = has ? "inline-flex" : "none";
 
       if(has){
         $("userName").textContent = state.user.name || "Conta Google";
@@ -1631,178 +1722,8 @@
     }
 
     /************************************************************
-     * Institutional images (aplicadas) rows
+     * Padrões (completo) — aplicar / editar / excluir
      ************************************************************/
-    function imgSrc(im){
-      const u = safeText(im.data || im.url);
-      return u;
-    }
-
-    function renderImgRows(){
-      const root = $("imgRows");
-      root.innerHTML = "";
-
-      if(!state.instImgs.length){
-        const empty = document.createElement("div");
-        empty.className = "mini";
-        empty.textContent = "Nenhuma imagem aplicada.";
-        root.appendChild(empty);
-        return;
-      }
-
-      state.instImgs.forEach((img, idx)=>{
-        const wrap = document.createElement("div");
-        wrap.className = "imgRow";
-        wrap.dataset.imgId = img.id;
-
-        const top = document.createElement("div");
-        top.className = "imgRowTop";
-
-        const title = document.createElement("b");
-        title.textContent = `Imagem ${idx+1}`;
-
-        const tools = document.createElement("div");
-        tools.style.display = "flex";
-        tools.style.gap = "8px";
-        tools.style.alignItems = "center";
-
-        const del = document.createElement("button");
-        del.className = "iconBtn iconBtnDanger";
-        del.type = "button";
-        del.textContent = "✕";
-        del.title = "Remover imagem";
-        del.addEventListener("click", ()=>{
-          state.instImgs = state.instImgs.filter(x=> x.id !== img.id);
-          renderImgRows();
-          updateSummaries();
-          renderPaperDebounced();
-        });
-
-        tools.appendChild(del);
-
-        top.appendChild(title);
-        top.appendChild(tools);
-
-        const grid = document.createElement("div");
-        grid.className = "imgRowGrid";
-
-        const colA = document.createElement("div");
-
-        const labThumb = document.createElement("label");
-        labThumb.className = "label";
-        labThumb.textContent = "Prévia (ou URL)";
-
-        const thumb = document.createElement("img");
-        thumb.className = "thumb";
-        thumb.alt = "";
-        thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
-
-        const inpUrl = document.createElement("input");
-        inpUrl.className = "field";
-        inpUrl.placeholder = "Opcional: cole a URL (PNG/SVG/JPG)…";
-        inpUrl.value = img.url || "";
-        inpUrl.autocomplete = "off";
-        inpUrl.spellcheck = false;
-        inpUrl.style.marginTop = "10px";
-        inpUrl.addEventListener("input", ()=>{
-          img.url = safeText(inpUrl.value);
-          if(img.url) img.data = ""; // se colocou URL, prioriza URL
-          thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
-          updateSummaries();
-          renderPaperDebounced();
-        });
-
-        colA.appendChild(labThumb);
-        colA.appendChild(thumb);
-        colA.appendChild(inpUrl);
-
-        const colB = document.createElement("div");
-        const labPlace = document.createElement("label");
-        labPlace.className = "label";
-        labPlace.textContent = "Local";
-        const selPlace = document.createElement("select");
-        selPlace.className = "select";
-        selPlace.innerHTML = `
-          <option value="header">Cabeçalho</option>
-          <option value="footer">Rodapé</option>
-        `;
-        selPlace.value = img.place || "header";
-        selPlace.addEventListener("change", ()=>{
-          img.place = selPlace.value === "footer" ? "footer" : "header";
-          renderPaperDebounced();
-        });
-
-        colB.appendChild(labPlace);
-        colB.appendChild(selPlace);
-
-        grid.appendChild(colA);
-        grid.appendChild(colB);
-
-        const sliders = document.createElement("div");
-        sliders.className = "sliders";
-
-        sliders.appendChild(makeSlider("Tamanho (%)", img.scale ?? 45, 10, 100, 1, (v)=>{
-          img.scale = v;
-          renderPaperDebounced();
-        }));
-
-        sliders.appendChild(makeSlider("Posição X (%)", img.x ?? 0, 0, 100, 1, (v)=>{
-          img.x = v;
-          renderPaperDebounced();
-        }));
-
-        sliders.appendChild(makeSlider("Posição Y (%)", img.y ?? 0, 0, 100, 1, (v)=>{
-          img.y = v;
-          renderPaperDebounced();
-        }));
-
-        wrap.appendChild(top);
-        wrap.appendChild(grid);
-        wrap.appendChild(sliders);
-
-        root.appendChild(wrap);
-      });
-    }
-
-    function makeSlider(label, val, min, max, step, onChange){
-      const box = document.createElement("div");
-
-      const lab = document.createElement("label");
-      lab.className = "label";
-      lab.textContent = `${label}: `;
-
-      const strong = document.createElement("span");
-      strong.style.color = "var(--text)";
-      strong.style.fontWeight = "900";
-      strong.textContent = String(val);
-
-      lab.appendChild(strong);
-
-      const range = document.createElement("input");
-      range.type = "range";
-      range.className = "range";
-      range.min = String(min);
-      range.max = String(max);
-      range.step = String(step);
-      range.value = String(val);
-      range.addEventListener("input", ()=>{
-        const v = parseInt(range.value,10);
-        strong.textContent = String(v);
-        onChange(v);
-      });
-
-      box.appendChild(lab);
-      box.appendChild(range);
-      return box;
-    }
-
-    /************************************************************
-     * Padrões (criar / editar / aplicar)
-     ************************************************************/
-    let patternEditMode = "new"; // "new" | "edit"
-    let editingPatternId = null;
-    let patternDraftImgs = []; // imgs do modal (com data/url)
-
     function refreshPatternSelect(){
       const sel = $("patternSelect");
       sel.innerHTML = `<option value="" selected>Nenhum padrão</option>`;
@@ -1811,7 +1732,7 @@
       sel.disabled = !hasUser;
       $("btnApplyPattern").disabled = !hasUser;
       $("btnEditPattern").disabled = !hasUser;
-      $("btnNewPattern").disabled = !hasUser;
+      $("btnDeletePattern").disabled = !hasUser;
 
       if(!hasUser) return;
 
@@ -1824,211 +1745,11 @@
       });
     }
 
-    function openPatternModal(mode){
-      if(!(state.user && state.user.email)){
-        // força login antes
-        openLogin();
-        return;
-      }
-
-      patternEditMode = mode;
-      editingPatternId = null;
-      patternDraftImgs = [];
-
-      $("patternMask").style.display = "flex";
-      $("patternMask").setAttribute("aria-hidden","false");
-
-      $("patternModalTitle").textContent = (mode === "edit") ? "Editar padrão" : "Criar padrão";
-      $("btnDeletePattern").style.display = (mode === "edit") ? "inline-flex" : "none";
-
-      if(mode === "edit"){
-        const pid = $("patternSelect").value;
-        if(!pid){
-          // sem padrão escolhido
-          $("patternName").value = "";
-          patternDraftImgs = [];
-          renderPatternImgRows();
-          return;
-        }
-        const arr = loadPatterns();
-        const p = arr.find(x=> x.id === pid);
-        if(p){
-          editingPatternId = p.id;
-          $("patternName").value = p.name || "";
-          patternDraftImgs = (p.instImgs||[]).map(im=> ({...im, id: uid()}));
-        }else{
-          $("patternName").value = "";
-          patternDraftImgs = [];
-        }
-      }else{
-        $("patternName").value = "";
-        patternDraftImgs = [];
-      }
-
-      renderPatternImgRows();
-    }
-
-    function closePatternModal(){
-      $("patternMask").style.display = "none";
-      $("patternMask").setAttribute("aria-hidden","true");
-      editingPatternId = null;
-      patternDraftImgs = [];
-    }
-
-    function renderPatternImgRows(){
-      const root = $("patternImgRows");
-      root.innerHTML = "";
-
-      if(!patternDraftImgs.length){
-        const empty = document.createElement("div");
-        empty.className = "mini";
-        empty.textContent = "Nenhuma imagem no padrão ainda.";
-        root.appendChild(empty);
-        return;
-      }
-
-      patternDraftImgs.forEach((img, idx)=>{
-        const wrap = document.createElement("div");
-        wrap.className = "imgRow";
-        wrap.dataset.imgId = img.id;
-
-        const top = document.createElement("div");
-        top.className = "imgRowTop";
-
-        const title = document.createElement("b");
-        title.textContent = `Imagem do padrão ${idx+1}`;
-
-        const tools = document.createElement("div");
-        tools.style.display = "flex";
-        tools.style.gap = "8px";
-        tools.style.alignItems = "center";
-
-        const del = document.createElement("button");
-        del.className = "iconBtn iconBtnDanger";
-        del.type = "button";
-        del.textContent = "✕";
-        del.title = "Remover imagem do padrão";
-        del.addEventListener("click", ()=>{
-          patternDraftImgs = patternDraftImgs.filter(x=> x.id !== img.id);
-          renderPatternImgRows();
-        });
-
-        tools.appendChild(del);
-
-        top.appendChild(title);
-        top.appendChild(tools);
-
-        const grid = document.createElement("div");
-        grid.className = "imgRowGrid";
-
-        const colA = document.createElement("div");
-
-        const labThumb = document.createElement("label");
-        labThumb.className = "label";
-        labThumb.textContent = "Imagem (Ctrl+V / Upload / ou URL)";
-
-        const thumb = document.createElement("img");
-        thumb.className = "thumb";
-        thumb.alt = "";
-        thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
-
-        const rowBtns = document.createElement("div");
-        rowBtns.style.display = "flex";
-        rowBtns.style.gap = "8px";
-        rowBtns.style.marginTop = "10px";
-        rowBtns.style.flexWrap = "wrap";
-
-        const btnPasteHint = document.createElement("div");
-        btnPasteHint.className = "mini";
-        btnPasteHint.textContent = "Cole uma URL abaixo, ou use Ctrl+V (com a imagem copiada).";
-
-        const inpUrl = document.createElement("input");
-        inpUrl.className = "field";
-        inpUrl.placeholder = "Opcional: cole uma URL (PNG/SVG/JPG)…";
-        inpUrl.value = img.url || "";
-        inpUrl.autocomplete = "off";
-        inpUrl.spellcheck = false;
-        inpUrl.style.marginTop = "10px";
-        inpUrl.addEventListener("input", ()=>{
-          img.url = safeText(inpUrl.value);
-          if(img.url) img.data = "";
-          thumb.src = imgSrc(img) || PLACEHOLDER_PNG;
-        });
-
-        colA.appendChild(labThumb);
-        colA.appendChild(thumb);
-        colA.appendChild(btnPasteHint);
-        colA.appendChild(inpUrl);
-
-        const colB = document.createElement("div");
-        const labPlace = document.createElement("label");
-        labPlace.className = "label";
-        labPlace.textContent = "Local";
-        const selPlace = document.createElement("select");
-        selPlace.className = "select";
-        selPlace.innerHTML = `
-          <option value="header">Cabeçalho</option>
-          <option value="footer">Rodapé</option>
-        `;
-        selPlace.value = img.place || "header";
-        selPlace.addEventListener("change", ()=>{
-          img.place = selPlace.value === "footer" ? "footer" : "header";
-        });
-
-        colB.appendChild(labPlace);
-        colB.appendChild(selPlace);
-
-        grid.appendChild(colA);
-        grid.appendChild(colB);
-
-        const sliders = document.createElement("div");
-        sliders.className = "sliders";
-
-        sliders.appendChild(makeSlider("Tamanho (%)", img.scale ?? 45, 10, 100, 1, (v)=> img.scale = v));
-        sliders.appendChild(makeSlider("Posição X (%)", img.x ?? 0, 0, 100, 1, (v)=> img.x = v));
-        sliders.appendChild(makeSlider("Posição Y (%)", img.y ?? 0, 0, 100, 1, (v)=> img.y = v));
-
-        wrap.appendChild(top);
-        wrap.appendChild(grid);
-        wrap.appendChild(sliders);
-
-        root.appendChild(wrap);
-      });
-    }
-
-    function addPatternImgFromData(dataUrl){
-      const img = {
-        id: uid(),
-        url: "",
-        data: dataUrl,
-        place: "header",
-        scale: 45,
-        x: 0,
-        y: 0
-      };
-      patternDraftImgs.push(img);
-      renderPatternImgRows();
-    }
-
-    function handlePasteToPattern(ev){
-      if($("patternMask").style.display !== "flex") return;
-      const items = (ev.clipboardData && ev.clipboardData.items) ? ev.clipboardData.items : [];
-      for(const it of items){
-        if(it.type && it.type.startsWith("image/")){
-          const file = it.getAsFile();
-          if(file){
-            const r = new FileReader();
-            r.onload = ()=> addPatternImgFromData(r.result);
-            r.readAsDataURL(file);
-            ev.preventDefault();
-            return;
-          }
-        }
-      }
-    }
-
-    function pickFileToPattern(){
-      $("filePicker").click();
+    function setThumbs(){
+      const h = safeText(state.headerImgData || state.headerImgUrl) || PLACEHOLDER_PNG;
+      const f = safeText(state.footerImgData || state.footerImgUrl) || PLACEHOLDER_PNG;
+      $("headerThumb").src = h;
+      $("footerThumb").src = f;
     }
 
     function applyPatternById(pid){
@@ -2037,75 +1758,220 @@
       const p = arr.find(x=> x.id === pid);
       if(!p) return;
 
-      // aplica instImgs
-      state.instImgs = (p.instImgs || []).map(im=> ({
-        id: uid(),
-        url: safeText(im.url),
-        data: safeText(im.data),
-        place: (im.place === "footer") ? "footer" : "header",
-        scale: clamp(parseInt(im.scale||45,10)||45, 10, 100),
-        x: clamp(parseInt(im.x||0,10)||0, 0, 100),
-        y: clamp(parseInt(im.y||0,10)||0, 0, 100),
-      }));
+      // aplica tudo (com fallback se padrão antigo tiver só imagens)
+      state.paperSize = (p.paperSize==="LETTER"||p.paperSize==="A5"||p.paperSize==="LEGAL") ? p.paperSize : "A4";
+      state.includeDate = (p.includeDate !== false);
+      state.dateValue = safeText(p.dateValue) || state.dateValue;
+      state.rxFontSize = isFinite(parseFloat(p.rxFontSize)) ? parseFloat(p.rxFontSize) : state.rxFontSize;
+      state.rxFontFamily = (p.rxFontFamily==="ARIAL"||p.rxFontFamily==="CALIBRI") ? p.rxFontFamily : "TIMES";
 
-      renderImgRows();
+      state.instName = safeText(p.instName);
+      state.addrStreet = safeText(p.addrStreet);
+      state.addrNumber = safeText(p.addrNumber);
+      state.addrDistrict = safeText(p.addrDistrict);
+      state.addrCity = safeText(p.addrCity);
+      state.addrState = safeText(p.addrState);
+      state.addrCep = safeText(p.addrCep);
+
+      state.headerImgData = safeText(p.headerImgData);
+      state.headerImgUrl = safeText(p.headerImgUrl);
+      state.footerImgData = safeText(p.footerImgData);
+      state.footerImgUrl = safeText(p.footerImgUrl);
+
+      // joga nos campos do modal (se estiver aberto)
+      syncConfigFieldsFromState();
+      setThumbs();
+
       updateSummaries();
       renderPaperDebounced();
     }
 
-    function savePattern(){
-      const name = safeText($("patternName").value);
-      if(!name){
-        alert("Defina um nome para o padrão.");
-        return;
-      }
-      const cleanImgs = patternDraftImgs.map(im=> ({
-        url: safeText(im.url),
-        data: safeText(im.data),
-        place: (im.place === "footer") ? "footer" : "header",
-        scale: clamp(parseInt(im.scale||45,10)||45, 10, 100),
-        x: clamp(parseInt(im.x||0,10)||0, 0, 100),
-        y: clamp(parseInt(im.y||0,10)||0, 0, 100),
-      })).filter(im=> safeText(im.data || im.url)); // só as válidas
-
-      const arr = loadPatterns();
-
-      if(patternEditMode === "edit" && editingPatternId){
-        const i = arr.findIndex(x=> x.id === editingPatternId);
-        if(i >= 0){
-          arr[i] = { id: editingPatternId, name, instImgs: cleanImgs };
-        }else{
-          arr.push({ id: uid(), name, instImgs: cleanImgs });
-        }
-      }else{
-        const id = uid();
-        arr.push({ id, name, instImgs: cleanImgs });
-      }
-
-      savePatterns(arr);
-      refreshPatternSelect();
-
-      // seleciona o padrão salvo
-      // (se era edit, mantém o mesmo; se era new, seleciona o último)
-      const lastId = (patternEditMode === "edit" && editingPatternId) ? editingPatternId : arr[arr.length-1].id;
-      $("patternSelect").value = lastId;
-
-      closePatternModal();
-    }
-
-    function deletePattern(){
-      if(!(patternEditMode === "edit" && editingPatternId)) return;
+    function deletePatternById(pid){
+      if(!pid) return;
       if(!confirm("Excluir este padrão?")) return;
-
-      const arr = loadPatterns().filter(x=> x.id !== editingPatternId);
+      const arr = loadPatterns().filter(x=> x.id !== pid);
       savePatterns(arr);
       refreshPatternSelect();
       $("patternSelect").value = "";
-      closePatternModal();
+    }
+
+    function upsertPatternFromFields(editingId){
+      const name = safeText($("patternName").value);
+      if(!name){
+        alert("Defina um nome para o padrão.");
+        return null;
+      }
+
+      // lê campos -> state (para garantir consistência)
+      readConfigFieldsToState();
+
+      const payload = {
+        id: editingId || uid(),
+        name,
+        paperSize: state.paperSize,
+        includeDate: !!state.includeDate,
+        dateValue: safeText(state.dateValue),
+        rxFontSize: rxFontPx(),
+        rxFontFamily: state.rxFontFamily,
+
+        instName: safeText(state.instName),
+        addrStreet: safeText(state.addrStreet),
+        addrNumber: safeText(state.addrNumber),
+        addrDistrict: safeText(state.addrDistrict),
+        addrCity: safeText(state.addrCity),
+        addrState: safeText(state.addrState),
+        addrCep: safeText(state.addrCep),
+
+        headerImgData: safeText(state.headerImgData),
+        headerImgUrl: safeText(state.headerImgUrl),
+        footerImgData: safeText(state.footerImgData),
+        footerImgUrl: safeText(state.footerImgUrl),
+      };
+
+      const arr = loadPatterns();
+      const i = arr.findIndex(x=> x.id === payload.id);
+      if(i >= 0) arr[i] = payload;
+      else arr.push(payload);
+      savePatterns(arr);
+      refreshPatternSelect();
+      $("patternSelect").value = payload.id;
+      return payload.id;
     }
 
     /************************************************************
-     * Medicine blocks (uma vez) — + imagem da caixa + ícones
+     * Config Modal open/close + fields sync
+     ************************************************************/
+    let editingPatternId = null;
+
+    function openConfig(){
+      $("configMask").style.display = "flex";
+      $("configMask").setAttribute("aria-hidden","false");
+
+      // se não logado, ainda abre, mas desabilita padrão
+      refreshPatternSelect();
+
+      // preenche campos do form com o state atual
+      syncConfigFieldsFromState();
+      setThumbs();
+
+      // estado do editor de padrão
+      $("newPatternArea").style.display = "none";
+      $("btnToggleNewPattern").textContent = "+ Criar novo padrão";
+      editingPatternId = null;
+      $("patternName").value = "";
+    }
+
+    function closeConfig(){
+      $("configMask").style.display = "none";
+      $("configMask").setAttribute("aria-hidden","true");
+      editingPatternId = null;
+    }
+
+    function syncConfigFieldsFromState(){
+      $("paperSize").value = state.paperSize;
+      $("includeDate").checked = !!state.includeDate;
+      $("dateValue").value = safeText(state.dateValue);
+      $("rxFontFamily").value = state.rxFontFamily;
+      $("rxFontSize").value = String(rxFontPx()).replace(".", ".");
+
+      $("instName").value = safeText(state.instName);
+      $("addrStreet").value = safeText(state.addrStreet);
+      $("addrNumber").value = safeText(state.addrNumber);
+      $("addrDistrict").value = safeText(state.addrDistrict);
+      $("addrCity").value = safeText(state.addrCity);
+      $("addrState").value = safeText(state.addrState);
+      $("addrCep").value = safeText(state.addrCep);
+
+      $("headerUrl").value = safeText(state.headerImgUrl);
+      $("footerUrl").value = safeText(state.footerImgUrl);
+    }
+
+    function readConfigFieldsToState(){
+      const ps = $("paperSize").value;
+      state.paperSize = (ps==="LETTER"||ps==="A5"||ps==="LEGAL") ? ps : "A4";
+
+      state.includeDate = !!$("includeDate").checked;
+      state.dateValue = safeText($("dateValue").value);
+
+      const fam = $("rxFontFamily").value;
+      state.rxFontFamily = (fam==="ARIAL"||fam==="CALIBRI") ? fam : "TIMES";
+
+      const fz = safeText($("rxFontSize").value).replace(",", ".");
+      state.rxFontSize = parseFloat(fz) || state.rxFontSize;
+
+      state.instName = safeText($("instName").value);
+      state.addrStreet = safeText($("addrStreet").value);
+      state.addrNumber = safeText($("addrNumber").value);
+      state.addrDistrict = safeText($("addrDistrict").value);
+      state.addrCity = safeText($("addrCity").value);
+      state.addrState = safeText($("addrState").value).toUpperCase().slice(0,2);
+      state.addrCep = safeText($("addrCep").value);
+
+      // urls
+      state.headerImgUrl = safeText($("headerUrl").value);
+      if(state.headerImgUrl) state.headerImgData = "";
+      state.footerImgUrl = safeText($("footerUrl").value);
+      if(state.footerImgUrl) state.footerImgData = "";
+    }
+
+    function toggleNewPatternArea(){
+      const area = $("newPatternArea");
+      const on = area.style.display === "block";
+      area.style.display = on ? "none" : "block";
+      $("btnToggleNewPattern").textContent = on ? "+ Criar novo padrão" : "— Ocultar criação";
+
+      if(!on){
+        // reset para criar novo
+        editingPatternId = null;
+        $("patternName").value = "";
+        syncConfigFieldsFromState();
+        setThumbs();
+      }
+    }
+
+    function editSelectedPattern(){
+      const pid = $("patternSelect").value;
+      if(!pid) return;
+
+      const arr = loadPatterns();
+      const p = arr.find(x=> x.id === pid);
+      if(!p) return;
+
+      editingPatternId = p.id;
+      // aplica no state e joga nos campos
+      applyPatternById(pid);
+
+      $("patternName").value = p.name || "";
+      $("newPatternArea").style.display = "block";
+      $("btnToggleNewPattern").textContent = "— Ocultar criação";
+    }
+
+    function pickImageTo(target){
+      const input = (target === "header") ? $("fileHeader") : $("fileFooter");
+      input.click();
+    }
+
+    function handlePickedFile(target, file){
+      if(!file) return;
+      const r = new FileReader();
+      r.onload = ()=>{
+        if(target === "header"){
+          state.headerImgData = r.result;
+          state.headerImgUrl = "";
+          $("headerUrl").value = "";
+        }else{
+          state.footerImgData = r.result;
+          state.footerImgUrl = "";
+          $("footerUrl").value = "";
+        }
+        setThumbs();
+        renderPaperDebounced();
+      };
+      r.readAsDataURL(file);
+    }
+
+    /************************************************************
+     * Medicine blocks (✅ sem imagem da caixa / ✅ dosagem separada)
      ************************************************************/
     const ICON_LIBRARY = [
       { key:"MANHA", label:"Manhã", ico:"☀️" },
@@ -2119,22 +1985,18 @@
       { key:"12H", label:"12/12h", ico:"⏱️" },
     ];
 
-    function addBlock(){
+    function addBlock({focusName=true} = {}){
       state.blocks.forEach(b=> b.collapsed = true);
 
       const b = {
         id: uid(),
         name:"",
+        dose:"",
         qty:"",
         use:"",
         collapsed:false,
 
-        // ✅ imagem da caixa
-        showPack:false,
-        packData:"", // dataURL (upload/paste)
-        packUrl:"",  // opcional URL
-
-        // ✅ ícones
+        // ícones
         showIcons:true,
         icons:[]
       };
@@ -2145,10 +2007,12 @@
       updateSummaries();
       renderPaperDebounced();
 
-      setTimeout(()=>{
-        const el = document.querySelector(`[data-block="${b.id}"] input[data-field="name"]`);
-        if(el) el.focus({ preventScroll:false });
-      }, 0);
+      if(focusName){
+        setTimeout(()=>{
+          const el = document.querySelector(`[data-block="${b.id}"] input[data-field="name"]`);
+          if(el) el.focus({ preventScroll:true }); // ✅ não “puxa” a página pra baixo
+        }, 0);
+      }
     }
 
     function removeBlock(id){
@@ -2189,7 +2053,9 @@
         const b = state.blocks.find(x=> x.id === bid);
         const title = node.querySelector(".rxTitle strong");
         if(title){
-          title.textContent = (b && safeText(b.name)) ? safeText(b.name) : `Remédio ${i+1}`;
+          const nm = (b && safeText(b.name)) ? safeText(b.name) : `Remédio ${i+1}`;
+          const ds = (b && safeText(b.dose)) ? " " + safeText(b.dose) : "";
+          title.textContent = nm + ds;
         }
       });
     }
@@ -2199,11 +2065,6 @@
       root.innerHTML = "";
       state.blocks.forEach((b, idx)=> appendBlockDOM(b, idx));
       renumberBlocks();
-    }
-
-    function packSrc(b){
-      const src = safeText(b.packData || b.packUrl);
-      return src;
     }
 
     function appendBlockDOM(b, idx){
@@ -2235,7 +2096,7 @@
       small.className = "mini";
       small.style.marginTop = "0";
       small.style.color = "var(--muted)";
-      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, quantidade, imagem e ícones";
+      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, dosagem, quantidade e ícones";
 
       tcol.appendChild(strong);
       tcol.appendChild(small);
@@ -2288,7 +2149,7 @@
 
       const inpName = document.createElement("input");
       inpName.className = "field";
-      inpName.placeholder = "Ex: Losartana potássica 50 mg";
+      inpName.placeholder = "Ex: Losartana potássica";
       inpName.value = b.name || "";
       inpName.setAttribute("data-field","name");
       inpName.autocomplete = "off";
@@ -2306,7 +2167,10 @@
 
       inpName.addEventListener("input", ()=>{
         b.name = safeText(inpName.value);
-        strong.textContent = b.name ? b.name : `Remédio ${idx+1}`;
+
+        const nm = b.name ? b.name : `Remédio ${idx+1}`;
+        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
+        strong.textContent = nm + ds;
 
         renderPaperDebounced();
         updateSummaries();
@@ -2332,7 +2196,9 @@
             ev.preventDefault();
             b.name = it.name;
             inpName.value = it.name;
-            strong.textContent = it.name;
+            const nm2 = it.name;
+            const ds2 = safeText(b.dose) ? " " + safeText(b.dose) : "";
+            strong.textContent = nm2 + ds2;
             closeList();
             renderPaperDebounced();
             updateSummaries();
@@ -2350,6 +2216,30 @@
       acWrap.appendChild(inpName);
       acWrap.appendChild(acList);
       col1.appendChild(acWrap);
+
+      // Dosagem (ao lado do nome)
+      const colDose = document.createElement("div");
+      const labDose = document.createElement("label");
+      labDose.className = "label";
+      labDose.textContent = "Dosagem";
+      colDose.appendChild(labDose);
+
+      const inpDose = document.createElement("input");
+      inpDose.className = "field";
+      inpDose.placeholder = "Ex: 50mg";
+      inpDose.value = b.dose || "";
+      inpDose.setAttribute("data-field","dose");
+      inpDose.autocomplete = "off";
+      inpDose.spellcheck = false;
+      inpDose.inputMode = "text";
+      inpDose.addEventListener("input", ()=>{
+        b.dose = safeText(inpDose.value);
+        const nm = safeText(b.name) ? safeText(b.name) : `Remédio ${idx+1}`;
+        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
+        strong.textContent = nm + ds;
+        renderPaperDebounced();
+      });
+      colDose.appendChild(inpDose);
 
       // Quantidade
       const col2 = document.createElement("div");
@@ -2374,112 +2264,10 @@
       col2.appendChild(inpQty);
 
       grid.appendChild(col1);
+      grid.appendChild(colDose);
       grid.appendChild(col2);
 
       body.appendChild(grid);
-
-      // ✅ Imagem da caixa + toggle
-      const packWrap = document.createElement("div");
-      packWrap.className = "rxFull";
-
-      const labPack = document.createElement("label");
-      labPack.className = "label";
-      labPack.textContent = "Imagem da caixa do remédio (opcional)";
-
-      const packRow = document.createElement("div");
-      packRow.className = "row";
-      packRow.style.alignItems = "center";
-      packRow.style.justifyContent = "flex-start";
-      packRow.style.gap = "10px";
-
-      const togPack = document.createElement("label");
-      togPack.className = "toggle";
-      togPack.title = "Mostrar/ocultar a imagem na receita";
-      togPack.innerHTML = `<input type="checkbox"><span>Mostrar</span>`;
-      const packCheck = togPack.querySelector("input");
-      packCheck.checked = !!b.showPack;
-      packCheck.addEventListener("change", ()=>{
-        b.showPack = !!packCheck.checked;
-        renderPaperDebounced();
-      });
-
-      const btnPack = document.createElement("button");
-      btnPack.className = "btn btnGhost";
-      btnPack.type = "button";
-      btnPack.textContent = "Upload / Ctrl+V";
-      btnPack.addEventListener("click", ()=>{
-        // abre file picker só para esse bloco
-        const fp = document.createElement("input");
-        fp.type = "file";
-        fp.accept = "image/*";
-        fp.style.display = "none";
-        fp.addEventListener("change", ()=>{
-          const file = fp.files && fp.files[0];
-          if(!file) return;
-          const r = new FileReader();
-          r.onload = ()=>{
-            b.packData = r.result;
-            b.packUrl = "";
-            imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
-            renderPaperDebounced();
-          };
-          r.readAsDataURL(file);
-        });
-        document.body.appendChild(fp);
-        fp.click();
-        setTimeout(()=> fp.remove(), 0);
-      });
-
-      const imgPrev = document.createElement("img");
-      imgPrev.className = "thumb";
-      imgPrev.style.height = "64px";
-      imgPrev.style.maxWidth = "220px";
-      imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
-
-      const inpPackUrl = document.createElement("input");
-      inpPackUrl.className = "field";
-      inpPackUrl.placeholder = "Opcional: URL da imagem da caixa…";
-      inpPackUrl.value = b.packUrl || "";
-      inpPackUrl.autocomplete = "off";
-      inpPackUrl.spellcheck = false;
-      inpPackUrl.addEventListener("input", ()=>{
-        b.packUrl = safeText(inpPackUrl.value);
-        if(b.packUrl) b.packData = "";
-        imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
-        renderPaperDebounced();
-      });
-
-      // paste handler (quando foco dentro do bloco)
-      wrap.addEventListener("paste", (ev)=>{
-        const items = (ev.clipboardData && ev.clipboardData.items) ? ev.clipboardData.items : [];
-        for(const it of items){
-          if(it.type && it.type.startsWith("image/")){
-            const file = it.getAsFile();
-            if(file){
-              const r = new FileReader();
-              r.onload = ()=>{
-                b.packData = r.result;
-                b.packUrl = "";
-                imgPrev.src = packSrc(b) || PLACEHOLDER_PNG;
-                renderPaperDebounced();
-              };
-              r.readAsDataURL(file);
-              ev.preventDefault();
-              return;
-            }
-          }
-        }
-      });
-
-      packRow.appendChild(togPack);
-      packRow.appendChild(btnPack);
-
-      packWrap.appendChild(labPack);
-      packWrap.appendChild(packRow);
-      packWrap.appendChild(imgPrev);
-      packWrap.appendChild(inpPackUrl);
-
-      body.appendChild(packWrap);
 
       // Posologia
       const full = document.createElement("div");
@@ -2499,36 +2287,13 @@
         renderPaperDebounced();
       });
 
-      // Chips (texto)
-      const chips = document.createElement("div");
-      chips.className = "chips";
-      const chipData = [
-        { t:"☀️ Manhã", add:"Manhã" },
-        { t:"🌤️ Tarde", add:"Tarde" },
-        { t:"🌙 Noite", add:"Noite" },
-        { t:"☕ Antes do café", add:"Antes do café" },
-        { t:"🍽️ Antes do almoço", add:"Antes do almoço" },
-        { t:"🍲 Antes do jantar", add:"Antes do jantar" },
-        { t:"✅ Após refeição", add:"Após refeição" },
-        { t:"⏱️ 8/8h", add:"a cada 8 horas" },
-        { t:"⏱️ 12/12h", add:"a cada 12 horas" },
-      ];
-      chipData.forEach(cd=>{
-        const c = document.createElement("div");
-        c.className = "chip";
-        c.innerHTML = `<span>${cd.t}</span>`;
-        c.addEventListener("click", ()=>{
-          const cur = safeText(ta.value);
-          const ins = cd.add;
-          ta.value = cur ? (cur + (cur.endsWith(".") ? " " : ". ") + ins) : ins;
-          b.use = safeText(ta.value);
-          ta.focus({ preventScroll:true });
-          renderPaperDebounced();
-        });
-        chips.appendChild(c);
-      });
+      // ✅ (4) removidos chips de manhã/tarde/noite etc. (ficam só ícones)
+      full.appendChild(lab3);
+      full.appendChild(ta);
 
-      // ✅ Ícones do horário (para analfabetos)
+      body.appendChild(full);
+
+      // Ícones
       const iconTools = document.createElement("div");
       iconTools.className = "rxFull";
 
@@ -2573,11 +2338,6 @@
       iconTools.appendChild(togIcons);
       iconTools.appendChild(iconPick);
 
-      full.appendChild(lab3);
-      full.appendChild(ta);
-      full.appendChild(chips);
-
-      body.appendChild(full);
       body.appendChild(iconTools);
 
       wrap.appendChild(top);
@@ -2617,24 +2377,34 @@
         ? (pDoc ? `${pName} • ${pType}: ${pDoc}` : pName)
         : "Preencha o paciente";
 
-      const sizeLabel = ({
-        A4:"A4",
-        LETTER:"Carta",
-        A5:"A5",
-        LEGAL:"Legal"
-      })[state.paperSize] || "A4";
-
-      const dateLabel = state.includeDate ? (safeText(state.dateValue) || "data") : "sem data";
-      $("sumPagina").textContent = `${sizeLabel} • ${dateLabel} • fonte ${rxFontPx().toFixed(1)}`;
-
       $("sumMeds").textContent = state.blocks.length
         ? `${state.blocks.length} item(ns) • ${medsPerPage()} por página`
         : "Adicione remédios";
     }
 
     /************************************************************
-     * Paper render (✅ sem símbolo de prescrição)
+     * Paper render (sem símbolo / com cabeçalho+rodapé simples)
      ************************************************************/
+    function formatInstitutionAddress(){
+      const st = safeText(state.addrStreet);
+      const no = safeText(state.addrNumber);
+      const di = safeText(state.addrDistrict);
+      const ci = safeText(state.addrCity);
+      const uf = safeText(state.addrState).toUpperCase();
+      const cep = safeText(state.addrCep);
+
+      const parts = [];
+      const line1 = [st, no ? "nº " + no : ""].filter(Boolean).join(", ");
+      if(line1) parts.push(line1);
+
+      const line2 = [di, ci && uf ? `${ci}-${uf}` : (ci || uf)].filter(Boolean).join(". ");
+      if(line2) parts.push(line2);
+
+      if(cep) parts.push(`CEP. ${cep}`);
+
+      return parts.join(". ");
+    }
+
     function docFooterHTML(){
       const title = safeText(state.docTitle);
       const name = safeText(state.docName);
@@ -2648,12 +2418,23 @@
 
       const displayName = [title, name].filter(Boolean).join(" ");
 
+      const instN = safeText(state.instName);
+      const instA = formatInstitutionAddress();
+
+      const instBlock = (instN || instA) ? `
+        <div class="instFooterGray">
+          ${instN ? `<div style="font-weight:900;">${instN}</div>` : ""}
+          ${instA ? `<div>${instA}</div>` : ""}
+        </div>
+      ` : "";
+
       const inner = `
         <div class="sigLine"></div>
         <div class="docCenter">
           <div class="docName">${displayName || "&nbsp;"}</div>
           ${lines.map(l=> `<div class="docLine">${l}</div>`).join("") || `<div class="docLine">&nbsp;</div>`}
         </div>
+        ${instBlock}
       `;
 
       return `
@@ -2665,31 +2446,11 @@
       `;
     }
 
-    function instImgsHTML(place){
-      const imgs = state.instImgs.filter(x=> (x.place||"header") === place).filter(x=> safeText(imgSrc(x)));
-      if(!imgs.length) return "";
-
-      return imgs.map((im)=>{
-        const scale = clamp(parseInt(im.scale||45,10)||45, 10, 100);
-        const x = clamp(parseInt(im.x||0,10)||0, 0, 100);
-        const y = clamp(parseInt(im.y||0,10)||0, 0, 100);
-
-        const src = imgSrc(im);
-
-        return `
-          <img class="instImg"
-            src="${src}"
-            style="
-              width:${scale}%;
-              left:${x}%;
-              top:${y}%;
-              transform: translate(-${x}%, -${y}%);
-              max-height:${place==='header' ? 70 : 62}px;
-            "
-            alt=""
-          />
-        `;
-      }).join("");
+    function headerImgSrc(){
+      return safeText(state.headerImgData || state.headerImgUrl);
+    }
+    function footerImgSrc(){
+      return safeText(state.footerImgData || state.footerImgUrl);
     }
 
     function iconsHTML(b){
@@ -2701,7 +2462,7 @@
         return it ? `<span>${it.ico} ${it.label}</span>` : "";
       }).filter(Boolean).join("");
       if(!icons) return "";
-      return `<div class="useIcons">${icons}</div>`;
+      return `<div class="useIconsBelow">${icons}</div>`;
     }
 
     function pageHTML(blocks){
@@ -2713,30 +2474,30 @@
       const date = safeText(state.dateValue);
 
       const rxFont = rxFontPx().toFixed(1) + "px";
+      const rxFamily = rxFamilyCSS();
 
       const items = blocks.map(b=>{
         const name = safeText(b.name) || "—";
+        const dose = safeText(b.dose) || "";
+        const showName = dose ? `${name} ${dose}` : name;
+
         const qty = safeText(b.qty) || "";
         const use = safeText(b.use) || "";
 
         const qtyPart = qty ? `<div class="qty">${qty}</div>` : `<div class="qty" style="opacity:.6;">&nbsp;</div>`;
+
         const useRow = `
           <div class="useRow">
             <b>Uso:</b>
             <div class="useText">${use || "&nbsp;"}</div>
-            ${iconsHTML(b)}
           </div>
+          ${iconsHTML(b)}
         `;
-
-        const pack = (b.showPack && safeText(packSrc(b)))
-          ? `<img class="drugPack" src="${packSrc(b)}" alt="" />`
-          : ``;
 
         return `
           <div class="rxItem">
             <div class="rxLine">
-              ${pack}
-              <div class="drugName">${name}</div>
+              <div class="drugName">${showName}</div>
               <div class="leaderText">${leaderHyphens()}</div>
               ${qtyPart}
             </div>
@@ -2750,14 +2511,17 @@
         : ``;
 
       const docLine = docVal
-        ? `<span style="margin-left:10px; font-weight:800;">${docType}:</span>
-           <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block;">${docVal}</span>`
+        ? `<span style="margin-left:10px; font-weight:800; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">${docType}:</span>
+           <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">${docVal}</span>`
         : "";
 
+      const hsrc = headerImgSrc();
+      const fsrc = footerImgSrc();
+
       return `
-        <div class="rxPaper" style="--rxFont:${rxFont}">
+        <div class="rxPaper" style="--rxFont:${rxFont}; --rxFamily:${rxFamily};">
           <div class="headerArea">
-            ${instImgsHTML("header")}
+            ${hsrc ? `<img class="instImgSimple" src="${hsrc}" alt="" />` : ""}
           </div>
 
           <div class="topLine">
@@ -2769,14 +2533,12 @@
             ${dateBox}
           </div>
 
-          <!-- ✅ removido símbolo da prescrição -->
-
           <div class="rxList">
-            ${items || `<div style="font-size:12px;color:#111;">Adicione medicamentos no editor.</div>`}
+            ${items || `<div style="font-size:12px;color:#111; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">Adicione medicamentos no editor.</div>`}
           </div>
 
           <div class="footerArea">
-            ${instImgsHTML("footer")}
+            ${fsrc ? `<img class="instImgSimple instImgSimple--footer" src="${fsrc}" alt="" />` : ""}
           </div>
 
           ${docFooterHTML()}
@@ -2834,6 +2596,166 @@
     const renderPaperDebounced = debounce(renderPaper, 90);
 
     /************************************************************
+     * Histórico
+     ************************************************************/
+    function snapshotStateForHistory(){
+      return {
+        ts: Date.now(),
+        patientName: safeText(state.patientName),
+        patientDocType: safeText(state.patientDocType),
+        patientDocValue: safeText(state.patientDocValue),
+
+        docTitle: safeText(state.docTitle),
+        docName: safeText(state.docName),
+        crms: (state.crms||[]).map(safeText),
+        rqes: (state.rqes||[]).map(safeText),
+
+        paperSize: state.paperSize,
+        includeDate: !!state.includeDate,
+        dateValue: safeText(state.dateValue),
+        rxFontSize: rxFontPx(),
+        rxFontFamily: state.rxFontFamily,
+
+        instName: safeText(state.instName),
+        addrStreet: safeText(state.addrStreet),
+        addrNumber: safeText(state.addrNumber),
+        addrDistrict: safeText(state.addrDistrict),
+        addrCity: safeText(state.addrCity),
+        addrState: safeText(state.addrState),
+        addrCep: safeText(state.addrCep),
+
+        headerImgData: safeText(state.headerImgData),
+        headerImgUrl: safeText(state.headerImgUrl),
+        footerImgData: safeText(state.footerImgData),
+        footerImgUrl: safeText(state.footerImgUrl),
+
+        blocks: (state.blocks||[]).map(b=>({
+          name: safeText(b.name),
+          dose: safeText(b.dose),
+          qty: safeText(b.qty),
+          use: safeText(b.use),
+          showIcons: b.showIcons !== false,
+          icons: Array.isArray(b.icons) ? b.icons.slice(0) : []
+        }))
+      };
+    }
+
+    function saveToHistoryAndPrint(){
+      if(!(state.user && state.user.email)){
+        openLogin();
+        return;
+      }
+      renderPaper(); // garante printAll atualizado
+
+      const snap = snapshotStateForHistory();
+      const entry = {
+        id: uid(),
+        ts: snap.ts,
+        patient: snap.patientName || "Paciente",
+        pagesHTML: $("printAll").innerHTML,
+        snapshot: snap
+      };
+
+      const arr = loadHistory();
+      arr.unshift(entry);
+      saveHistory(arr.slice(0, 200)); // limite
+      window.print();
+    }
+
+    function printOnly(){
+      renderPaper();
+      window.print();
+    }
+
+    function isHistoryRoute(){
+      const p = (location.pathname || "").toLowerCase();
+      return p.includes("historico-receita");
+    }
+
+    function goToHistory(){
+      // link pedido
+      window.location.href = "https://www.usojaleco.com.br/historico-receita";
+    }
+
+    function goToApp(){
+      window.location.href = "https://www.usojaleco.com.br/";
+    }
+
+    function renderHistoryPage(){
+      const has = !!(state.user && state.user.email);
+      $("btnClearHistory").style.display = has ? "inline-flex" : "none";
+      const top = $("histTopInfo");
+      const list = $("histList");
+      list.innerHTML = "";
+
+      if(!has){
+        top.textContent = "Faça login para ver seu histórico.";
+        const msg = document.createElement("div");
+        msg.className = "mini";
+        msg.textContent = "Você precisa estar logado na mesma conta usada ao salvar prescrições neste dispositivo.";
+        list.appendChild(msg);
+        return;
+      }
+
+      const arr = loadHistory();
+      top.textContent = arr.length ? `${arr.length} prescrição(ões) salva(s).` : "Nenhuma prescrição salva ainda.";
+
+      if(!arr.length){
+        const msg = document.createElement("div");
+        msg.className = "mini";
+        msg.textContent = "Volte para a prescrição e use “Imprimir + Guardar no Histórico”.";
+        list.appendChild(msg);
+        return;
+      }
+
+      arr.forEach((it)=>{
+        const d = new Date(it.ts);
+        const when = `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()} • ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+
+        const card = document.createElement("div");
+        card.className = "histItem";
+
+        const meta = document.createElement("div");
+        meta.className = "histMeta";
+        meta.innerHTML = `<b>${safeText(it.patient) || "Paciente"}</b><small>${when}</small>`;
+
+        const tools = document.createElement("div");
+        tools.style.display = "flex";
+        tools.style.gap = "10px";
+        tools.style.alignItems = "center";
+        tools.style.flexWrap = "wrap";
+
+        const btnPrint = document.createElement("button");
+        btnPrint.className = "btn btnPrimary";
+        btnPrint.type = "button";
+        btnPrint.textContent = "Imprimir";
+        btnPrint.addEventListener("click", ()=>{
+          // injeta no printAll e imprime
+          $("printAll").innerHTML = it.pagesHTML || "";
+          window.print();
+        });
+
+        const btnDel = document.createElement("button");
+        btnDel.className = "btn btnGhost";
+        btnDel.type = "button";
+        btnDel.textContent = "Excluir";
+        btnDel.addEventListener("click", ()=>{
+          if(!confirm("Excluir esta prescrição do histórico?")) return;
+          const next = loadHistory().filter(x=> x.id !== it.id);
+          saveHistory(next);
+          renderHistoryPage();
+        });
+
+        tools.appendChild(btnPrint);
+        tools.appendChild(btnDel);
+
+        card.appendChild(meta);
+        card.appendChild(tools);
+        list.appendChild(card);
+      });
+    }
+
+    /************************************************************
      * Bind inputs
      ************************************************************/
     function bind(){
@@ -2842,6 +2764,16 @@
       $("btnCloseLogin").addEventListener("click", closeLogin);
       $("btnCloseLogin2").addEventListener("click", closeLogin);
       $("btnLogout").addEventListener("click", logout);
+
+      // histórico
+      $("btnHistory").addEventListener("click", goToHistory);
+      $("btnBackToApp").addEventListener("click", goToApp);
+      $("btnClearHistory").addEventListener("click", ()=>{
+        if(!(state.user && state.user.email)) return;
+        if(!confirm("Limpar TODO o histórico desta conta neste dispositivo?")) return;
+        saveHistory([]);
+        renderHistoryPage();
+      });
 
       // médico
       $("docTitle").addEventListener("change", (e)=>{
@@ -2874,122 +2806,9 @@
         renderPaperDebounced();
       });
 
-      // página
-      $("paperSize").addEventListener("change", (e)=>{
-        const v = e.target.value;
-        state.paperSize = (v==="LETTER"||v==="A5"||v==="LEGAL") ? v : "A4";
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      $("includeDate").addEventListener("change", (e)=>{
-        state.includeDate = !!e.target.checked;
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      $("dateValue").addEventListener("input", (e)=>{
-        state.dateValue = safeText(e.target.value);
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      $("rxFontStep").addEventListener("change", (e)=>{
-        state.rxFontStep = clamp(parseInt(e.target.value,10)||0, 0, 6);
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      // imagens (aplicadas)
-      $("btnAddImg").addEventListener("click", ()=>{
-        state.instImgs.push({
-          id: uid(),
-          url: "",
-          data: "",
-          place: "header",
-          scale: 45,
-          x: 0,
-          y: 0
-        });
-        renderImgRows();
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      $("btnClearImgs").addEventListener("click", ()=>{
-        state.instImgs = [];
-        renderImgRows();
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      // padrões
-      $("btnNewPattern").addEventListener("click", ()=> openPatternModal("new"));
-      $("btnEditPattern").addEventListener("click", ()=> openPatternModal("edit"));
-      $("btnApplyPattern").addEventListener("click", ()=>{
-        const pid = $("patternSelect").value;
-        if(!pid) return;
-        applyPatternById(pid);
-      });
-
-      $("btnClosePattern").addEventListener("click", closePatternModal);
-      $("btnSavePattern").addEventListener("click", savePattern);
-      $("btnDeletePattern").addEventListener("click", deletePattern);
-
-      $("btnAddPatternImg").addEventListener("click", ()=>{
-        patternDraftImgs.push({
-          id: uid(),
-          url: "",
-          data: "",
-          place: "header",
-          scale: 45,
-          x: 0,
-          y: 0
-        });
-        renderPatternImgRows();
-      });
-      $("btnClearPatternImgs").addEventListener("click", ()=>{
-        patternDraftImgs = [];
-        renderPatternImgRows();
-      });
-
-      $("btnPickFile").addEventListener("click", pickFileToPattern);
-      $("filePicker").addEventListener("change", ()=>{
-        const file = $("filePicker").files && $("filePicker").files[0];
-        $("filePicker").value = "";
-        if(!file) return;
-        const r = new FileReader();
-        r.onload = ()=> addPatternImgFromData(r.result);
-        r.readAsDataURL(file);
-      });
-
-      // dropbox click
-      $("dropBox").addEventListener("click", (e)=>{
-        const isBtn = (e.target && e.target.id === "btnPickFile");
-        if(!isBtn) pickFileToPattern();
-      });
-
-      document.addEventListener("paste", handlePasteToPattern);
-
-      // CRM/RQE add
-      $("btnAddCRM").addEventListener("click", ()=>{
-        state.crms.push("");
-        renderCrmList();
-        updateSummaries();
-        renderPaperDebounced();
-        saveProfileDebounced();
-      });
-      $("btnAddRQE").addEventListener("click", ()=>{
-        state.rqes.push("");
-        renderRqeList();
-        updateSummaries();
-        renderPaperDebounced();
-        saveProfileDebounced();
-      });
-
       // meds
-      $("btnAddMed").addEventListener("click", addBlock);
-      $("btnAddMed2").addEventListener("click", addBlock);
+      $("btnAddMed").addEventListener("click", ()=> addBlock({focusName:true}));
+      $("btnAddMed2").addEventListener("click", ()=> addBlock({focusName:true}));
 
       $("btnClear").addEventListener("click", ()=>{
         state.patientName = "";
@@ -3023,10 +2842,86 @@
         renderPaperDebounced();
       });
 
-      // imprimir
-      $("btnPrint").addEventListener("click", ()=>{
-        renderPaper();
-        window.print();
+      // ✅ impressão + histórico
+      $("btnPrintOnly").addEventListener("click", printOnly);
+      $("btnPrintSave").addEventListener("click", saveToHistoryAndPrint);
+
+      // Config (gear)
+      $("btnOpenConfig").addEventListener("click", ()=>{
+        // se não estiver logado, ainda abre (mas padrão fica desabilitado)
+        openConfig();
+      });
+      $("btnCloseConfig").addEventListener("click", closeConfig);
+      $("btnCloseConfig2").addEventListener("click", closeConfig);
+
+      // patterns actions
+      $("btnApplyPattern").addEventListener("click", ()=>{
+        const pid = $("patternSelect").value;
+        if(!pid) return;
+        applyPatternById(pid);
+      });
+      $("btnEditPattern").addEventListener("click", ()=>{
+        if(!(state.user && state.user.email)){ openLogin(); return; }
+        editSelectedPattern();
+      });
+      $("btnDeletePattern").addEventListener("click", ()=>{
+        if(!(state.user && state.user.email)){ openLogin(); return; }
+        const pid = $("patternSelect").value;
+        if(!pid) return;
+        deletePatternById(pid);
+      });
+
+      // toggle new pattern
+      $("btnToggleNewPattern").addEventListener("click", ()=>{
+        if(!(state.user && state.user.email)){ openLogin(); return; }
+        toggleNewPatternArea();
+      });
+      $("btnCancelNewPattern").addEventListener("click", ()=>{
+        $("newPatternArea").style.display = "none";
+        $("btnToggleNewPattern").textContent = "+ Criar novo padrão";
+        editingPatternId = null;
+        $("patternName").value = "";
+        syncConfigFieldsFromState();
+        setThumbs();
+      });
+
+      // live config changes -> preview
+      const live = ["paperSize","includeDate","dateValue","rxFontFamily","rxFontSize","instName","addrStreet","addrNumber","addrDistrict","addrCity","addrState","addrCep","headerUrl","footerUrl"];
+      live.forEach(id=>{
+        const el = $(id);
+        const ev = (el && el.tagName === "SELECT") ? "change" : "input";
+        el.addEventListener(ev, ()=>{
+          readConfigFieldsToState();
+          setThumbs();
+          renderPaperDebounced();
+        });
+      });
+
+      // upload header/footer
+      $("btnPickHeader").addEventListener("click", ()=> pickImageTo("header"));
+      $("btnPickFooter").addEventListener("click", ()=> pickImageTo("footer"));
+
+      $("fileHeader").addEventListener("change", ()=>{
+        const f = $("fileHeader").files && $("fileHeader").files[0];
+        $("fileHeader").value = "";
+        handlePickedFile("header", f);
+      });
+      $("fileFooter").addEventListener("change", ()=>{
+        const f = $("fileFooter").files && $("fileFooter").files[0];
+        $("fileFooter").value = "";
+        handlePickedFile("footer", f);
+      });
+
+      // salvar padrão
+      $("btnSavePattern").addEventListener("click", ()=>{
+        if(!(state.user && state.user.email)){ openLogin(); return; }
+        const id = upsertPatternFromFields(editingPatternId);
+        if(id){
+          editingPatternId = id;
+          // aplica imediatamente
+          applyPatternById(id);
+          alert("Padrão salvo.");
+        }
       });
 
       // Tabs mobile
@@ -3065,21 +2960,23 @@
      * Init
      ************************************************************/
     (function init(){
+      // ✅ garante abrir sempre pelo topo
+      try{ history.scrollRestoration = "manual"; }catch(e){}
+      window.scrollTo(0,0);
+
       // defaults
       state.dateValue = todayBR();
-      $("dateValue").value = state.dateValue;
 
       applyBrandLogo();
 
       // listas
       renderCrmList();
       renderRqeList();
-      renderImgRows();
 
-      // meds: começa com 1
+      // meds: começa com 1 bloco, sem focar (pra não “puxar” a tela)
       state.blocks = [];
       renderBlocksInitial();
-      addBlock();
+      addBlock({focusName:false});
 
       // bind
       bind();
@@ -3093,12 +2990,32 @@
         refreshPatternSelect();
       }
 
-      // summaries + preview
+      // preencher campos do config modal (mesmo fechado) para consistência
+      $("dateValue").value = state.dateValue;
+      $("rxFontSize").value = String(rxFontPx());
+
+      // ✅ seções sempre retraídas ao abrir
+      document.querySelectorAll("details.sec").forEach(d=> d.open = false);
+
+      // render preview
       updateSummaries();
       renderPaper();
 
       // load db (silencioso)
       loadSheetDB();
+
+      // Router simples: se estiver em /historico-receita, mostra histórico
+      const isHist = isHistoryRoute();
+      $("mainApp").style.display = isHist ? "none" : "grid";
+      $("historyPage").style.display = isHist ? "block" : "none";
+
+      if(isHist){
+        // precisa login para ver
+        renderHistoryPage();
+      }
+
+      // ✅ reforço: volta pro topo depois de tudo
+      setTimeout(()=> window.scrollTo(0,0), 0);
     })();
   </script>
 </body>
