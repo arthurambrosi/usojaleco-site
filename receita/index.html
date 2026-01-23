@@ -1,600 +1,674 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Printer, Image, Clock, Sun, Moon, Utensils, X } from 'lucide-react';
-
-const PrescriptionSystem = () => {
-  const [medications, setMedications] = useState([{ 
-    id: 1, 
-    name: '', 
-    quantity: '', 
-    usage: '', 
-    showIcons: false,
-    showImages: false,
-    selectedTimes: [],
-    selectedImage: null
-  }]);
-  const [patientName, setPatientName] = useState('');
-  const [medicationDatabase, setMedicationDatabase] = useState([]);
-  const [paperSize, setPaperSize] = useState('A4');
-  const [showSuggestions, setShowSuggestions] = useState({});
-  const [newMedications, setNewMedications] = useState([]);
-
-  // Carregar dados da planilha
-  useEffect(() => {
-    const loadSpreadsheet = async () => {
-      try {
-        const SHEET_ID = '1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ';
-        const response = await fetch(
-          `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`
-        );
-        const text = await response.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-        
-        const rows = json.table.rows;
-        const meds = rows.slice(1).map(row => ({
-          name: row.c[0]?.v || '',
-          image1: row.c[1]?.v || '',
-          image2: row.c[2]?.v || '',
-          image3: row.c[3]?.v || '',
-          image4: row.c[4]?.v || ''
-        })).filter(med => med.name);
-        
-        setMedicationDatabase(meds.sort((a, b) => a.name.localeCompare(b.name)));
-      } catch (error) {
-        console.error('Erro ao carregar planilha:', error);
-      }
-    };
-    loadSpreadsheet();
-  }, []);
-
-  const addMedication = () => {
-    setMedications([...medications, { 
-      id: Date.now(), 
-      name: '', 
-      quantity: '', 
-      usage: '', 
-      showIcons: false,
-      showImages: false,
-      selectedTimes: [],
-      selectedImage: null
-    }]);
-  };
-
-  const updateMedication = (id, field, value) => {
-    setMedications(medications.map(med => 
-      med.id === id ? { ...med, [field]: value } : med
-    ));
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescrição Médica - Premium</title>
     
-    if (field === 'name') {
-      setShowSuggestions({ ...showSuggestions, [id]: value.length > 0 });
-    }
-  };
-
-  const getSuggestions = (id, searchTerm) => {
-    if (!searchTerm) return [];
-    return medicationDatabase.filter(med => 
-      med.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ).slice(0, 5);
-  };
-
-  const selectMedication = (id, medName) => {
-    updateMedication(id, 'name', medName);
-    setShowSuggestions({ ...showSuggestions, [id]: false });
-  };
-
-  const getMedicationImages = (medName) => {
-    const med = medicationDatabase.find(m => m.name === medName);
-    if (!med) return [];
-    return [med.image1, med.image2, med.image3, med.image4].filter(img => img);
-  };
-
-  const toggleTime = (id, time) => {
-    const med = medications.find(m => m.id === id);
-    const times = med.selectedTimes.includes(time)
-      ? med.selectedTimes.filter(t => t !== time)
-      : [...med.selectedTimes, time];
-    updateMedication(id, 'selectedTimes', times);
-  };
-
-  const timeIcons = {
-    'manha': { icon: Sun, label: 'Manhã' },
-    'tarde': { icon: Sun, label: 'Tarde' },
-    'noite': { icon: Moon, label: 'Noite' },
-    'cafe': { icon: Utensils, label: 'Café (antes)' },
-    'cafe-depois': { icon: Utensils, label: 'Café (depois)' },
-    'almoco': { icon: Utensils, label: 'Almoço (antes)' },
-    'almoco-depois': { icon: Utensils, label: 'Almoço (depois)' },
-    'jantar': { icon: Utensils, label: 'Jantar (antes)' },
-    'jantar-depois': { icon: Utensils, label: 'Jantar (depois)' }
-  };
-
-  const generatePDF = () => {
-    // Registrar novos medicamentos
-    const newMeds = medications
-      .filter(med => med.name && !medicationDatabase.find(m => m.name === med.name))
-      .map(med => med.name);
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    if (newMeds.length > 0) {
-      setNewMedications([...newMedications, ...newMeds]);
-      console.log('Novos medicamentos para adicionar:', newMeds);
-    }
-    
-    window.print();
-  };
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-  return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(180deg, #070a10 0%, #06070c 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Overlay effects */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: `
-          radial-gradient(circle at 20% 20%, rgba(255,122,24,0.03) 0%, transparent 50%),
-          radial-gradient(circle at 80% 60%, rgba(255,183,3,0.02) 0%, transparent 50%),
-          radial-gradient(circle at 40% 80%, rgba(100,150,255,0.015) 0%, transparent 50%)
-        `,
-        pointerEvents: 'none'
-      }} />
+    <style>
+        :root {
+            /* Cores */
+            --bg-top: #070a10;
+            --bg-bottom: #06070c;
+            --text-primary: #e7ecf6;
+            --text-muted: #97a5bb;
+            --border-primary: rgba(170,195,235,0.12);
+            --border-secondary: rgba(170,195,235,0.08);
+            --accent-primary: #ff7a18;
+            --accent-glow: rgba(255,122,24,0.12);
+            --accent-secondary: #ffb703;
+            
+            /* Fontes */
+            --font-display: 'DM Serif Display', serif;
+            --font-body: 'Manrope', sans-serif;
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap');
-        
+            /* Sombras e Raios */
+            --radius-lg: 26px;
+            --radius-md: 22px;
+            --radius-sm: 14px;
+            --shadow-card: 0 28px 90px rgba(0,0,0,0.65);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-          font-family: 'Manrope', sans-serif;
-          color: #e7ecf6;
-          overflow-x: hidden;
+
+        body {
+            background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
         }
-        
-        @media print {
-          body * { visibility: hidden; }
-          #prescription-preview, #prescription-preview * { visibility: visible; }
-          #prescription-preview {
-            position: absolute;
-            left: 0;
-            top: 0;
+
+        /* Atmosfera de Fundo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(255,122,24,0.03), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(4, 56, 115, 0.04), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1400px;
             width: 100%;
-            background: white !important;
-            padding: 40px !important;
-          }
         }
 
-        .glass-card {
-          background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
-          border: 1px solid rgba(170,195,235,0.12);
-          border-radius: 22px;
-          position: relative;
-          overflow: hidden;
+        /* Coluna Esquerda: Editor */
+        .editor-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
 
-        .glass-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 200px;
-          height: 200px;
-          background: radial-gradient(circle, rgba(255,122,24,0.08) 0%, transparent 70%);
-          border-radius: 50%;
-          pointer-events: none;
+        header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        header p { color: var(--text-muted); }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            backdrop-filter: blur(10px);
         }
 
-        .btn-primary {
-          background: linear-gradient(135deg, rgba(255,122,24,0.15) 0%, rgba(255,122,24,0.08) 100%);
-          border: 1px solid rgba(255,122,24,0.3);
-          color: #ff7a18;
-          font-weight: 700;
-          padding: 12px 24px;
-          border-radius: 14px;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          box-shadow: 
-            0 0 0 1px rgba(255,122,24,0.12),
-            0 0 60px rgba(255,122,24,0.1);
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
         }
 
-        .btn-primary:hover {
-          transform: translateY(-1px);
-          background: linear-gradient(135deg, rgba(255,122,24,0.2) 0%, rgba(255,122,24,0.12) 100%);
-          box-shadow: 
-            0 0 0 1px rgba(255,122,24,0.2),
-            0 0 80px rgba(255,122,24,0.15);
+        label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
-        .btn-secondary {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.1);
-          color: #e7ecf6;
-          font-weight: 600;
-          padding: 10px 20px;
-          border-radius: 14px;
-          cursor: pointer;
-          transition: all 0.18s ease;
-        }
-
-        .btn-secondary:hover {
-          transform: translateY(-1px);
-          background: rgba(255,255,255,0.05);
-        }
-
-        input, textarea {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(170,195,235,0.12);
-          color: #e7ecf6;
-          padding: 12px 16px;
-          border-radius: 14px;
-          font-family: 'Manrope', sans-serif;
-          transition: all 0.18s ease;
-          width: 100%;
+        input[type="text"], textarea, select {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.18s ease;
         }
 
         input:focus, textarea:focus {
-          outline: none;
-          border-color: rgba(255,122,24,0.3);
-          background: rgba(255,255,255,0.05);
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 1px var(--accent-glow);
         }
 
-        .suggestion-item {
-          padding: 10px 14px;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          border-radius: 10px;
+        /* Autocomplete List */
+        .suggestions-list {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            background: #0f131a;
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-sm);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .suggestions-list div {
+            padding: 12px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.1s;
+        }
+        .suggestions-list div:hover {
+            background: rgba(255,122,24,0.1);
+            color: var(--text-primary);
         }
 
-        .suggestion-item:hover {
-          background: rgba(255,122,24,0.1);
-          color: #ff7a18;
+        /* Container de Medicamentos */
+        .medication-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-secondary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
         }
-      `}</style>
 
-      <div style={{
-        maxWidth: '1180px',
-        margin: '0 auto',
-        padding: 'clamp(16px, 3vw, 24px)',
-        position: 'relative',
-        zIndex: 1
-      }}>
-        {/* Header */}
-        <div style={{ marginBottom: '48px', textAlign: 'center' }}>
-          <h1 style={{
-            fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(32px, 5vw, 48px)',
-            fontWeight: 700,
-            lineHeight: 1.2,
-            marginBottom: '12px',
-            background: 'linear-gradient(135deg, #e7ecf6 0%, #97a5bb 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            Sistema de Prescrições
-          </h1>
-          <p style={{ color: '#97a5bb', fontSize: '16px' }}>
-            Prescrições médicas profissionais e organizadas
-          </p>
-        </div>
+        .med-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            align-items: center;
+        }
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '26px' }}>
-          {/* Editor */}
-          <div className="glass-card" style={{ padding: '32px', boxShadow: '0 28px 90px rgba(0,0,0,0.65)' }}>
-            <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{
-                fontFamily: "'DM Serif Display', serif",
-                fontSize: '24px',
-                fontWeight: 700
-              }}>
-                Editor
-              </h2>
-              <select 
-                value={paperSize}
-                onChange={(e) => setPaperSize(e.target.value)}
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(170,195,235,0.12)',
-                  color: '#e7ecf6',
-                  padding: '8px 12px',
-                  borderRadius: '14px',
-                  fontSize: '14px'
-                }}
-              >
-                <option value="A4">A4</option>
-                <option value="Letter">Letter</option>
-                <option value="Legal">Legal</option>
-              </select>
-            </div>
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .image-preview-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .img-thumb {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-secondary);
+            object-fit: cover;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+        .img-thumb.selected {
+            border-color: var(--accent-primary);
+            opacity: 1;
+        }
 
-            {/* Nome do Paciente */}
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: '#97a5bb', fontWeight: 600 }}>
-                Nome do Paciente
-              </label>
-              <input
-                type="text"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
-                placeholder="Digite o nome do paciente"
-              />
-            </div>
+        /* Botões */
+        .btn {
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-body);
+        }
 
-            {/* Medicamentos */}
-            {medications.map((med, index) => (
-              <div key={med.id} style={{ marginBottom: '32px' }}>
-                <div style={{ 
-                  background: 'rgba(255,255,255,0.02)', 
-                  border: '1px solid rgba(170,195,235,0.08)',
-                  borderRadius: '18px',
-                  padding: '24px'
-                }}>
-                  <div style={{ marginBottom: '16px', position: 'relative' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: '#97a5bb', fontWeight: 600 }}>
-                      Medicamento {index + 1}
-                    </label>
-                    <input
-                      type="text"
-                      value={med.name}
-                      onChange={(e) => updateMedication(med.id, 'name', e.target.value)}
-                      placeholder="Digite o nome do medicamento"
-                    />
-                    {showSuggestions[med.id] && getSuggestions(med.id, med.name).length > 0 && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '100%',
-                        left: 0,
-                        right: 0,
-                        background: 'rgba(20,25,35,0.98)',
-                        border: '1px solid rgba(170,195,235,0.12)',
-                        borderRadius: '14px',
-                        marginTop: '4px',
-                        padding: '8px',
-                        zIndex: 10,
-                        boxShadow: '0 16px 50px rgba(0,0,0,0.55)'
-                      }}>
-                        {getSuggestions(med.id, med.name).map((suggestion, i) => (
-                          <div
-                            key={i}
-                            className="suggestion-item"
-                            onClick={() => selectMedication(med.id, suggestion.name)}
-                          >
-                            {suggestion.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+        .btn-secondary {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+        }
 
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: '#97a5bb', fontWeight: 600 }}>
-                      Quantidade (caixas, ampolas, etc.)
-                    </label>
-                    <input
-                      type="text"
-                      value={med.quantity}
-                      onChange={(e) => updateMedication(med.id, 'quantity', e.target.value)}
-                      placeholder="Ex: 1 caixa, 2 ampolas"
-                    />
-                  </div>
+        .btn-primary {
+            background: linear-gradient(45deg, rgba(255,122,24,0.15), rgba(255,122,24,0.05));
+            border: 1px solid rgba(255,122,24,0.3);
+            color: var(--accent-primary);
+            width: 100%;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255,122,24,0.05);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(255,122,24,0.15);
+            border-color: var(--accent-primary);
+        }
 
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', color: '#97a5bb', fontWeight: 600 }}>
-                      Uso
-                    </label>
-                    <textarea
-                      value={med.usage}
-                      onChange={(e) => updateMedication(med.id, 'usage', e.target.value)}
-                      placeholder="Instruções de uso"
-                      rows={3}
-                    />
-                  </div>
+        /* Coluna Direita: Preview (Papel) */
+        .preview-panel {
+            position: relative;
+        }
+        .paper-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        /* A FOLHA A4 */
+        .a4-paper {
+            background: white;
+            width: 100%;
+            aspect-ratio: 1 / 1.414; /* Proporção A4 */
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            padding: 40px;
+            color: #222;
+            font-family: 'Times New Roman', serif; /* Clássico para receita */
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
 
-                  {/* Ícones de horário */}
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '8px',
-                      cursor: 'pointer',
-                      fontSize: '14px',
-                      fontWeight: 600
-                    }}>
-                      <input
-                        type="checkbox"
-                        checked={med.showIcons}
-                        onChange={(e) => updateMedication(med.id, 'showIcons', e.target.checked)}
-                      />
-                      Adicionar ícones de horário
-                    </label>
-                    {med.showIcons && (
-                      <div style={{ 
-                        marginTop: '12px',
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gap: '8px'
-                      }}>
-                        {Object.entries(timeIcons).map(([key, { icon: Icon, label }]) => (
-                          <button
-                            key={key}
-                            onClick={() => toggleTime(med.id, key)}
-                            style={{
-                              background: med.selectedTimes.includes(key) 
-                                ? 'rgba(255,122,24,0.15)' 
-                                : 'rgba(255,255,255,0.03)',
-                              border: med.selectedTimes.includes(key)
-                                ? '1px solid rgba(255,122,24,0.3)'
-                                : '1px solid rgba(170,195,235,0.08)',
-                              color: med.selectedTimes.includes(key) ? '#ff7a18' : '#97a5bb',
-                              padding: '8px',
-                              borderRadius: '10px',
-                              cursor: 'pointer',
-                              fontSize: '11px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              justifyContent: 'center',
-                              transition: 'all 0.18s ease'
-                            }}
-                          >
-                            <Icon size={14} />
-                            <span>{label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+        /* Elementos da Receita */
+        .rx-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .patient-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+        }
+        
+        .rx-symbol {
+            font-size: 3rem;
+            font-weight: bold;
+            font-family: serif;
+            margin: 20px 0;
+            display: block;
+        }
 
-                  {/* Imagens do medicamento */}
-                  {med.name && medicationDatabase.find(m => m.name === med.name) && (
-                    <div>
-                      <label style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '8px',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        marginBottom: '12px'
-                      }}>
-                        <input
-                          type="checkbox"
-                          checked={med.showImages}
-                          onChange={(e) => updateMedication(med.id, 'showImages', e.target.checked)}
-                        />
-                        Adicionar imagem do medicamento
-                      </label>
-                      {med.showImages && getMedicationImages(med.name).length > 0 && (
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                          {getMedicationImages(med.name).map((img, i) => (
-                            <img
-                              key={i}
-                              src={img}
-                              alt={`${med.name} ${i + 1}`}
-                              onClick={() => updateMedication(med.id, 'selectedImage', img)}
-                              style={{
-                                width: '80px',
-                                height: '80px',
-                                objectFit: 'cover',
-                                borderRadius: '10px',
-                                cursor: 'pointer',
-                                border: med.selectedImage === img 
-                                  ? '2px solid #ff7a18' 
-                                  : '1px solid rgba(170,195,235,0.12)',
-                                transition: 'all 0.18s ease'
-                              }}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
+        .med-display-group {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        
+        .med-name-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .med-name-line .dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted #999;
+            margin: 0 10px;
+        }
+        
+        .med-use {
+            font-size: 0.95rem;
+            margin-top: 5px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-visuals {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+            color: #444;
+        }
+        
+        .med-image-print {
+            max-width: 80px;
+            max-height: 80px;
+            margin-top: 5px;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body { 
+                background: white; 
+                display: block; 
+                padding: 0; 
+                margin: 0;
+            }
+            .editor-panel, .paper-controls, h1, p { display: none !important; }
+            .preview-panel { width: 100%; margin: 0; }
+            .app-container { display: block; width: 100%; max-width: none; }
+            .card { border: none; box-shadow: none; padding: 0; background: none; }
+            .a4-paper { 
+                box-shadow: none; 
+                width: 100%; 
+                height: 100%; 
+                aspect-ratio: auto;
+                padding: 1cm;
+                border-radius: 0;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
+            .preview-panel { order: -1; } /* Preview em cima no mobile? ou embaixo.. */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="editor-panel">
+            <header>
+                <h1>Nova Prescrição</h1>
+                <p>Preencha os dados abaixo. O sistema aprende novos medicamentos automaticamente.</p>
+            </header>
+
+            <div class="card">
+                <div class="input-group">
+                    <label>Paciente</label>
+                    <input type="text" id="patientInput" placeholder="Nome completo do paciente" oninput="updatePreview()">
                 </div>
-              </div>
-            ))}
+            </div>
 
-            <button onClick={addMedication} className="btn-secondary" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <Plus size={18} />
-              Adicionar Medicamento
+            <div id="medicationsContainer">
+                </div>
+
+            <button class="btn btn-secondary" onclick="addMedicationRow()">
+                <i class="fas fa-plus"></i> Adicionar Medicamento
             </button>
 
-            <button onClick={generatePDF} className="btn-primary" style={{ width: '100%', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <Printer size={18} />
-              Gerar Receita
+            <button class="btn btn-primary" onclick="handlePrintAndSave()" style="margin-top: 20px;">
+                <i class="fas fa-print"></i> Imprimir e Salvar Novos
             </button>
-          </div>
-
-          {/* Preview */}
-          <div className="glass-card" style={{ padding: '32px', boxShadow: '0 28px 90px rgba(0,0,0,0.65)', maxHeight: '90vh', overflow: 'auto' }}>
-            <h2 style={{
-              fontFamily: "'DM Serif Display', serif",
-              fontSize: '24px',
-              fontWeight: 700,
-              marginBottom: '24px'
-            }}>
-              Pré-visualização
-            </h2>
-            
-            <div id="prescription-preview" style={{
-              background: 'white',
-              color: '#000',
-              padding: '40px',
-              borderRadius: '8px',
-              minHeight: paperSize === 'A4' ? '297mm' : paperSize === 'Letter' ? '279mm' : '356mm',
-              fontFamily: 'Arial, sans-serif'
-            }}>
-              <div style={{ marginBottom: '30px', textAlign: 'left' }}>
-                <div style={{ fontSize: '14px', marginBottom: '20px' }}>
-                  Para: <strong>{patientName || '___________________________'}</strong>
-                </div>
-                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
-                  ℞
-                </div>
-              </div>
-
-              {medications.map((med, index) => (
-                <div key={med.id} style={{ marginBottom: '30px', pageBreakInside: 'avoid' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 'bold' }}>
-                      {med.name || '________________________________'}
-                    </span>
-                    {med.quantity && (
-                      <>
-                        <span>{'─'.repeat(5)}</span>
-                        <span>{med.quantity}</span>
-                      </>
-                    )}
-                  </div>
-                  
-                  {med.usage && (
-                    <div style={{ marginLeft: '20px', marginTop: '8px' }}>
-                      <div><strong>Uso:</strong> {med.usage}</div>
-                    </div>
-                  )}
-
-                  {med.showIcons && med.selectedTimes.length > 0 && (
-                    <div style={{ marginLeft: '20px', marginTop: '8px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                      {med.selectedTimes.map(time => {
-                        const { label } = timeIcons[time];
-                        return (
-                          <span key={time} style={{ 
-                            fontSize: '12px',
-                            padding: '4px 8px',
-                            background: '#f0f0f0',
-                            borderRadius: '4px'
-                          }}>
-                            {label}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {med.showImages && med.selectedImage && (
-                    <div style={{ marginLeft: '20px', marginTop: '12px' }}>
-                      <img 
-                        src={med.selectedImage} 
-                        alt={med.name}
-                        style={{ 
-                          maxWidth: '150px',
-                          maxHeight: '150px',
-                          border: '1px solid #ddd',
-                          borderRadius: '4px'
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
+
+        <div class="preview-panel">
+            <div class="paper-controls">
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Visualização A4</span>
+                <select id="paperSize" style="width: auto; padding: 8px 12px;">
+                    <option value="A4">A4</option>
+                    <option value="A5">A5</option>
+                </select>
+            </div>
+
+            <div class="a4-paper" id="paperPreview">
+                <div class="rx-header">
+                    <div style="font-size: 0.9rem;">Dr. Exemplo Médico <br> CRM 12345</div>
+                    <div class="patient-display" id="previewPatientName">PACIENTE: __________________</div>
+                </div>
+
+                <div class="rx-symbol">℞</div>
+
+                <div id="previewMedsList">
+                    </div>
+
+                <div style="margin-top: 50px; text-align: center; border-top: 1px solid #000; width: 60%; margin-left: auto; margin-right: auto; padding-top: 10px;">
+                    Assinatura
+                </div>
+            </div>
+        </div>
+
     </div>
-  );
-};
 
-export default PrescriptionSystem;
+<script>
+    // --- CONFIGURAÇÃO ---
+    // Substitua esta URL pelo SEU script publicado (Instruções abaixo)
+    // Se não configurar, o salvamento não funcionará, mas a impressão sim.
+    const APPS_SCRIPT_URL = "INSIRA_SUA_URL_DO_APPS_SCRIPT_AQUI"; 
+    const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
+    
+    // Dados em memória
+    let allMedications = [];
+    let medRows = []; // Rastreia IDs dos inputs
+
+    // 1. CARREGAR DADOS DO GOOGLE SHEETS (CSV)
+    async function loadSheetData() {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+            parseCSV(text);
+        } catch (e) {
+            console.error("Erro ao carregar planilha:", e);
+        }
+    }
+
+    function parseCSV(csvText) {
+        const lines = csvText.split('\n');
+        // Ignora cabeçalho (linha 0)
+        for (let i = 1; i < lines.length; i++) {
+            // Separação simples por vírgula (pode precisar de regex se houver vírgulas dentro das células)
+            // Assumindo estrutura: Col A (Nome), B, C, D, E (Imagens)
+            const cols = lines[i].split(','); 
+            if (cols[0]) {
+                allMedications.push({
+                    name: cols[0].trim(),
+                    images: cols.slice(1, 5).map(url => url.trim()).filter(url => url.startsWith('http'))
+                });
+            }
+        }
+        // Inicializa com um campo vazio
+        addMedicationRow();
+    }
+
+    // 2. GERENCIAMENTO DE LINHAS DE REMÉDIO
+    function addMedicationRow() {
+        const id = Date.now();
+        const container = document.getElementById('medicationsContainer');
+        
+        const div = document.createElement('div');
+        div.className = 'card medication-item';
+        div.id = `med-row-${id}`;
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between;">
+                <label>Medicamento</label>
+                ${medRows.length > 0 ? `<i class="fas fa-trash" style="cursor:pointer; color:#ff5555" onclick="removeRow(${id})"></i>` : ''}
+            </div>
+            <div class="input-group">
+                <input type="text" class="med-name-input" id="med-name-${id}" placeholder="Digite para buscar..." autocomplete="off">
+                <div class="suggestions-list" id="suggestions-${id}"></div>
+            </div>
+            
+            <div class="input-group">
+                <label>Posologia / Quantidade</label>
+                <div style="display:flex; gap: 10px;">
+                     <input type="text" id="med-qtd-${id}" placeholder="Ex: 1 Caixa" style="width: 30%">
+                     <input type="text" id="med-use-${id}" placeholder="Ex: Tomar 1 comprimido a cada 8 horas..." style="flex:1">
+                </div>
+            </div>
+
+            <div class="med-controls">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check-icons-${id}" onchange="updatePreview()">
+                    Adicionar ícones de horário
+                </label>
+                
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="check-img-${id}" onchange="toggleImageSelector(${id})">
+                    Inserir foto da caixa
+                </label>
+            </div>
+
+            <div id="img-selector-${id}" class="image-preview-selector" style="display:none;"></div>
+        `;
+        
+        container.appendChild(div);
+        medRows.push(id);
+
+        // Setup Autocomplete
+        const input = div.querySelector(`#med-name-${id}`);
+        const list = div.querySelector(`#suggestions-${id}`);
+        
+        input.addEventListener('input', (e) => {
+            handleAutocomplete(e.target.value, list, input, id);
+            updatePreview();
+        });
+        
+        // Listeners para update
+        div.querySelectorAll('input').forEach(el => el.addEventListener('input', updatePreview));
+    }
+
+    function removeRow(id) {
+        document.getElementById(`med-row-${id}`).remove();
+        medRows = medRows.filter(r => r !== id);
+        updatePreview();
+    }
+
+    // 3. AUTOCOMPLETE LOGIC
+    function handleAutocomplete(val, listEl, inputEl, rowId) {
+        listEl.innerHTML = '';
+        if (!val) {
+            listEl.style.display = 'none';
+            return;
+        }
+
+        const matches = allMedications.filter(m => m.name.toLowerCase().includes(val.toLowerCase()));
+        
+        if (matches.length > 0) {
+            listEl.style.display = 'block';
+            matches.forEach(match => {
+                const item = document.createElement('div');
+                item.textContent = match.name;
+                item.onclick = () => {
+                    inputEl.value = match.name;
+                    listEl.style.display = 'none';
+                    // Popula imagens se existirem
+                    setupImages(rowId, match.images);
+                    updatePreview();
+                };
+                listEl.appendChild(item);
+            });
+        } else {
+            listEl.style.display = 'none';
+        }
+    }
+
+    function setupImages(rowId, images) {
+        const selector = document.getElementById(`img-selector-${rowId}`);
+        selector.innerHTML = '';
+        if (images && images.length > 0) {
+            images.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'img-thumb';
+                img.onclick = () => {
+                    // Desmarcar outros
+                    selector.querySelectorAll('.img-thumb').forEach(i => i.classList.remove('selected'));
+                    img.classList.add('selected');
+                    selector.dataset.selected = url;
+                    updatePreview();
+                };
+                selector.appendChild(img);
+            });
+            // Seleciona o primeiro por padrão
+            selector.firstChild.click();
+        }
+    }
+
+    function toggleImageSelector(id) {
+        const check = document.getElementById(`check-img-${id}`);
+        const selector = document.getElementById(`img-selector-${id}`);
+        selector.style.display = check.checked ? 'flex' : 'none';
+        updatePreview();
+    }
+
+    // 4. RENDER PREVIEW (CORE LOGIC)
+    function updatePreview() {
+        const patientName = document.getElementById('patientInput').value;
+        document.getElementById('previewPatientName').textContent = patientName ? `PACIENTE: ${patientName}` : 'PACIENTE: __________________';
+
+        const listContainer = document.getElementById('previewMedsList');
+        listContainer.innerHTML = '';
+
+        medRows.forEach(id => {
+            const name = document.getElementById(`med-name-${id}`).value;
+            const qtd = document.getElementById(`med-qtd-${id}`).value;
+            const use = document.getElementById(`med-use-${id}`).value;
+            const hasIcons = document.getElementById(`check-icons-${id}`).checked;
+            const hasImg = document.getElementById(`check-img-${id}`).checked;
+            const selectedImgSrc = document.getElementById(`img-selector-${id}`).dataset.selected;
+
+            if (name) {
+                const row = document.createElement('div');
+                row.className = 'med-display-group';
+
+                // Ícones HTML
+                let iconsHtml = '';
+                if (hasIcons) {
+                    iconsHtml = `
+                        <span title="Manhã"><i class="fas fa-sun"></i></span>
+                        <span title="Tarde"><i class="fas fa-cloud-sun"></i></span>
+                        <span title="Noite"><i class="fas fa-moon"></i></span>
+                    `;
+                }
+
+                // Imagem HTML
+                let imgHtml = '';
+                if (hasImg && selectedImgSrc) {
+                    imgHtml = `<img src="${selectedImgSrc}" class="med-image-print">`;
+                }
+
+                row.innerHTML = `
+                    <div class="med-name-line">
+                        <span>${name}</span>
+                        <div class="dots"></div>
+                        <span>${qtd}</span>
+                    </div>
+                    <div class="med-use">
+                        <b>Uso:</b> ${use}
+                        <div class="icon-visuals">${iconsHtml}</div>
+                    </div>
+                    ${imgHtml}
+                `;
+                listContainer.appendChild(row);
+            }
+        });
+    }
+
+    // 5. PRINT & SAVE LOGIC
+    async function handlePrintAndSave() {
+        // 1. Identificar novos remédios
+        const newMeds = [];
+        medRows.forEach(id => {
+            const name = document.getElementById(`med-name-${id}`).value.trim();
+            if (name && !allMedications.some(m => m.name.toLowerCase() === name.toLowerCase())) {
+                newMeds.push(name);
+            }
+        });
+
+        // 2. Chamar a impressão
+        window.print();
+
+        // 3. Enviar para a planilha (Background)
+        if (newMeds.length > 0 && APPS_SCRIPT_URL !== "INSIRA_SUA_URL_DO_APPS_SCRIPT_AQUI") {
+            try {
+                // Usando 'no-cors' pois Google Scripts tem restrições de CORS simples, 
+                // o script receberá, mas não conseguimos ler a resposta JSON aqui.
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ medications: newMeds })
+                });
+                console.log("Novos remédios enviados para cadastro.");
+                // Adiciona localmente para não enviar de novo na mesma sessão
+                newMeds.forEach(n => allMedications.push({ name: n, images: [] }));
+            } catch (e) {
+                console.error("Erro ao salvar novos remédios:", e);
+            }
+        }
+    }
+
+    // Init
+    window.onload = loadSheetData;
+
+</script>
+</body>
+</html>
