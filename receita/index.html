@@ -1,674 +1,2097 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescrição Médica - Premium</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | Prescrições</title>
 
-    <style>
-        :root {
-            /* Cores */
-            --bg-top: #070a10;
-            --bg-bottom: #06070c;
-            --text-primary: #e7ecf6;
-            --text-muted: #97a5bb;
-            --border-primary: rgba(170,195,235,0.12);
-            --border-secondary: rgba(170,195,235,0.08);
-            --accent-primary: #ff7a18;
-            --accent-glow: rgba(255,122,24,0.12);
-            --accent-secondary: #ffb703;
-            
-            /* Fontes */
-            --font-display: 'DM Serif Display', serif;
-            --font-body: 'Manrope', sans-serif;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-            /* Sombras e Raios */
-            --radius-lg: 26px;
-            --radius-md: 22px;
-            --radius-sm: 14px;
-            --shadow-card: 0 28px 90px rgba(0,0,0,0.65);
-        }
+  <style>
+    :root{
+      --bg:#070a10;
+      --bg2:#06070c;
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+      --text:#e7ecf6;
+      --muted:#97a5bb;
 
-        body {
-            background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
-            color: var(--text-primary);
-            font-family: var(--font-body);
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-        }
+      --line: rgba(170,195,235,.12);
+      --line2: rgba(170,195,235,.08);
 
-        /* Atmosfera de Fundo */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -20%; left: -10%;
-            width: 50vw; height: 50vw;
-            background: radial-gradient(circle, rgba(255,122,24,0.03), transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -20%; right: -10%;
-            width: 60vw; height: 60vw;
-            background: radial-gradient(circle, rgba(4, 56, 115, 0.04), transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-        }
+      --accent1:#b9c3d6;
+      --accent2:#8e9ab2;
 
-        .app-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            max-width: 1400px;
-            width: 100%;
-        }
+      --shadowBig: 0 28px 90px rgba(0,0,0,.65);
+      --shadowMid: 0 16px 50px rgba(0,0,0,.55);
 
-        /* Coluna Esquerda: Editor */
-        .editor-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
 
-        header h1 {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-        header p { color: var(--text-muted); }
+      --t: .18s ease;
 
-        .card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: var(--shadow-card);
-            position: relative;
-            backdrop-filter: blur(10px);
-        }
+      --container: 1180px;
+      --padX: clamp(16px, 3.4vw, 24px);
+      --gap: 18px;
+      --gap2: 26px;
+    }
 
-        .input-group {
-            margin-bottom: 24px;
-            position: relative;
-        }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 18% 18%, rgba(185,195,214,.10), transparent 60%),
+        radial-gradient(980px 560px at 86% 22%, rgba(142,154,178,.08), transparent 62%),
+        radial-gradient(980px 680px at 52% 92%, rgba(120,180,255,.06), transparent 65%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      background-attachment: fixed, fixed, fixed, fixed;
+      overflow-x:hidden;
+    }
 
-        label {
-            display: block;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
+    a{color:inherit; text-decoration:none}
+    button, input, textarea, select{font:inherit}
+    ::selection{background:rgba(185,195,214,.25)}
 
-        input[type="text"], textarea, select {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-secondary);
-            color: var(--text-primary);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: all 0.18s ease;
-        }
+    .wrap{
+      max-width: var(--container);
+      margin:0 auto;
+      padding: 22px var(--padX) 30px;
+    }
 
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 1px var(--accent-glow);
-        }
+    /* ===== Topbar ===== */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px 16px;
+      border:1px solid var(--line);
+      border-radius: var(--rBig);
+      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+      box-shadow: var(--shadowBig);
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+      backdrop-filter: blur(10px);
+    }
 
-        /* Autocomplete List */
-        .suggestions-list {
-            position: absolute;
-            top: 100%; left: 0; right: 0;
-            background: #0f131a;
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-sm);
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 100;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .suggestions-list div {
-            padding: 12px 16px;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: 0.1s;
-        }
-        .suggestions-list div:hover {
-            background: rgba(255,122,24,0.1);
-            color: var(--text-primary);
-        }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width: 220px;
+    }
+    .markImg{
+      width:40px; height:40px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.02);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 0 50px rgba(255,255,255,.06);
+      object-fit: contain;
+      padding: 6px;
+      flex: 0 0 auto;
+    }
+    .brand h1{
+      margin:0;
+      font-family: "DM Serif Display", serif;
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-size: 20px;
+      line-height: 1.05;
+    }
+    .brand p{
+      margin:2px 0 0;
+      color: var(--muted);
+      font-size: 12.8px;
+      line-height: 1.2;
+    }
 
-        /* Container de Medicamentos */
-        .medication-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border-secondary);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-        }
+    .actions{
+      display:flex; align-items:center; gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
 
-        .med-controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            align-items: center;
-        }
+    .btn{
+      cursor:pointer;
+      border-radius: var(--rBtn);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 10px 12px;
+      font-weight: 800;
+      font-size: 13.5px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      white-space: nowrap;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.14); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
 
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        
-        .image-preview-selector {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .img-thumb {
-            width: 40px; height: 40px;
-            border-radius: 8px;
-            border: 1px solid var(--border-secondary);
-            object-fit: cover;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: 0.2s;
-        }
-        .img-thumb.selected {
-            border-color: var(--accent-primary);
-            opacity: 1;
-        }
+    .btnPrimary{
+      border-color: rgba(185,195,214,.35);
+      background:
+        radial-gradient(180px 40px at 30% 50%, rgba(185,195,214,.12), transparent 70%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 60px rgba(255,255,255,.06);
+    }
+    .btnPrimary:hover{
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 0 72px rgba(255,255,255,.08);
+    }
 
-        /* Botões */
-        .btn {
-            padding: 14px 24px;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.18s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-body);
-        }
+    .btnGhost{
+      background: transparent;
+      border-color: var(--line2);
+    }
 
-        .btn-secondary {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-primary);
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.06);
-            transform: translateY(-1px);
-        }
+    /* ===== Main layout ===== */
+    .main{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: var(--gap2);
+      align-items:start;
+    }
 
-        .btn-primary {
-            background: linear-gradient(45deg, rgba(255,122,24,0.15), rgba(255,122,24,0.05));
-            border: 1px solid rgba(255,122,24,0.3);
-            color: var(--accent-primary);
-            width: 100%;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(255,122,24,0.05);
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(255,122,24,0.15);
-            border-color: var(--accent-primary);
-        }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--rBig);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadowMid);
+      position: relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-40% -30% auto auto;
+      width:420px; height:420px;
+      background: radial-gradient(circle at 30% 30%, rgba(185,195,214,.14), transparent 60%);
+      pointer-events:none;
+      opacity:.55;
+      filter: blur(2px);
+    }
+    .cardHeader{
+      position:relative;
+      padding: 16px 16px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom: 1px solid var(--line2);
+    }
+    .cardHeader h2{
+      margin:0;
+      font-family: "DM Serif Display", serif;
+      font-size: 18px;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
+    .cardHeader .sub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 12.8px;
+      line-height:1.25;
+      max-width: 62ch;
+    }
+    .cardBody{ position:relative; padding: 16px; }
 
-        /* Coluna Direita: Preview (Papel) */
-        .preview-panel {
-            position: relative;
-        }
-        .paper-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-        
-        /* A FOLHA A4 */
-        .a4-paper {
-            background: white;
-            width: 100%;
-            aspect-ratio: 1 / 1.414; /* Proporção A4 */
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            padding: 40px;
-            color: #222;
-            font-family: 'Times New Roman', serif; /* Clássico para receita */
-            position: relative;
-            overflow: hidden;
-            border-radius: 4px;
-        }
+    .label{
+      display:block;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 750;
+      margin: 0 0 6px;
+      letter-spacing: .2px;
+    }
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 11px 12px;
+      outline:none;
+      transition: border-color var(--t), background var(--t), box-shadow var(--t);
+    }
+    .field:focus, .select:focus{
+      border-color: rgba(255,255,255,.22);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 0 50px rgba(255,255,255,.06);
+      background: rgba(255,255,255,.04);
+    }
+    textarea.field{ min-height: 92px; resize: vertical; }
 
-        /* Elementos da Receita */
-        .rx-header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .patient-display {
-            font-size: 1.2rem;
-            font-weight: bold;
-            font-family: 'Arial', sans-serif;
-            text-transform: uppercase;
-        }
-        
-        .rx-symbol {
-            font-size: 3rem;
-            font-weight: bold;
-            font-family: serif;
-            margin: 20px 0;
-            display: block;
-        }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3{ display:grid; grid-template-columns: 1.2fr .8fr .6fr; gap: 12px; align-items:end; }
 
-        .med-display-group {
-            margin-bottom: 25px;
-            page-break-inside: avoid;
-        }
-        
-        .med-name-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        .med-name-line .dots {
-            flex-grow: 1;
-            border-bottom: 1px dotted #999;
-            margin: 0 10px;
-        }
-        
-        .med-use {
-            font-size: 0.95rem;
-            margin-top: 5px;
-            padding-left: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .divider{ height:1px; background: var(--line2); margin: 14px 0; }
+    .mini{ font-size: 12.5px; color: var(--muted); line-height:1.2; }
 
-        .icon-visuals {
-            display: flex;
-            gap: 8px;
-            margin-left: 10px;
-            color: #444;
-        }
-        
-        .med-image-print {
-            max-width: 80px;
-            max-height: 80px;
-            margin-top: 5px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-        }
+    /* ===== Collapsible sections (retraídas) ===== */
+    details.sec{
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      overflow:hidden;
+      margin-bottom: 12px;
+    }
+    details.sec > summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 12px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      user-select:none;
+    }
+    details.sec > summary::-webkit-details-marker{ display:none; }
+    .secTitle{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width: 0;
+    }
+    .secTitle b{
+      font-size: 13px;
+      letter-spacing:.2px;
+    }
+    .secTitle small{
+      color: var(--muted);
+      font-size: 12.3px;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 72vw;
+    }
+    .chev{
+      width:34px; height:34px;
+      border-radius: 12px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+    details[open] .chev{ transform: rotate(180deg); }
+    .secBody{ padding: 0 12px 12px; }
 
-        /* PRINT STYLES */
-        @media print {
-            body { 
-                background: white; 
-                display: block; 
-                padding: 0; 
-                margin: 0;
-            }
-            .editor-panel, .paper-controls, h1, p { display: none !important; }
-            .preview-panel { width: 100%; margin: 0; }
-            .app-container { display: block; width: 100%; max-width: none; }
-            .card { border: none; box-shadow: none; padding: 0; background: none; }
-            .a4-paper { 
-                box-shadow: none; 
-                width: 100%; 
-                height: 100%; 
-                aspect-ratio: auto;
-                padding: 1cm;
-                border-radius: 0;
-            }
-        }
+    /* ===== Toggle ===== */
+    .toggleRow{ display:flex; align-items:center; gap:10px; justify-content:flex-end; }
+    .toggle{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 9px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      user-select:none;
+    }
+    .toggle input{ width:18px; height:18px; }
+    .toggle span{ font-size: 12.8px; font-weight: 800; color: var(--text); }
 
-        /* Mobile */
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; }
-            .preview-panel { order: -1; } /* Preview em cima no mobile? ou embaixo.. */
-        }
-    </style>
+    /* ===== Medicine blocks ===== */
+    .rxBlocks{ display:flex; flex-direction:column; gap: 12px; }
+
+    .rxBlock{
+      border: 1px solid var(--line);
+      border-radius: var(--rMid);
+      background: linear-gradient(180deg, rgba(255,255,255,.032), rgba(255,255,255,.02));
+      padding: 12px;
+      position:relative;
+      transition: transform var(--t), border-color var(--t), background var(--t);
+    }
+    .rxBlock:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); }
+
+    .rxTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .rxTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
+      flex: 1;
+    }
+    .rxNum{
+      width:28px; height:28px;
+      display:flex; align-items:center; justify-content:center;
+      border-radius: 10px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      font-weight: 900;
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+    .rxTitle strong{
+      font-size: 13px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 58vw;
+    }
+    .rxTools{ display:flex; gap:8px; align-items:center; flex: 0 0 auto; }
+
+    .iconBtn{
+      cursor:pointer;
+      border-radius: 12px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      padding: 9px 10px;
+      color: var(--text);
+      font-weight: 900;
+      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
+      user-select:none;
+    }
+    .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.12); }
+    .iconBtnDanger:hover{ border-color: rgba(255,80,80,.25); }
+    .iconBtnDim{ opacity:.75; }
+    .iconBtnDim:hover{ opacity:1; }
+
+    .rxGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+      align-items:start;
+    }
+    .rxFull{ margin-top:12px; }
+
+    .rxBlock.collapsed .rxExpandedBody{ display:none; }
+    .rxBlock.collapsed .rxTop{ margin-bottom:0; }
+
+    /* Quick chips */
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .chip{
+      cursor:pointer;
+      border-radius: 999px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      padding: 8px 10px;
+      font-weight: 900;
+      font-size: 12.3px;
+      display:flex; align-items:center; gap:8px;
+      user-select:none;
+      transition: transform var(--t), background var(--t), border-color var(--t), opacity var(--t);
+    }
+    .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.12); }
+    .chip small{ color: var(--muted); font-weight: 900; }
+
+    /* autocomplete */
+    .acWrap{ position:relative; }
+    .acList{
+      position:absolute;
+      top: calc(100% + 8px);
+      left:0; right:0;
+      background: rgba(12,14,20,.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadowMid);
+      backdrop-filter: blur(10px);
+      z-index: 50;
+      overflow:hidden;
+      display:none;
+      max-height: 260px;
+      overflow:auto;
+    }
+    .acItem{
+      padding: 10px 12px;
+      cursor:pointer;
+      border-bottom: 1px solid rgba(170,195,235,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .acItem:last-child{ border-bottom:none; }
+    .acItem:hover{ background: rgba(255,255,255,.03); }
+    .acItem b{ font-size: 13px; }
+    .acItem small{ color: var(--muted); font-size: 12px; }
+
+    /* ===== Institutional images editor rows ===== */
+    .imgRows{ display:flex; flex-direction:column; gap: 10px; }
+    .imgRow{
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      padding: 10px;
+    }
+    .imgRowTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .imgRowTop b{ font-size: 13px; }
+    .imgRowGrid{
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 10px;
+      align-items:end;
+    }
+    .sliders{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .range{
+      width:100%;
+      accent-color: #c8d1e3;
+    }
+
+    /* ===== Preview / Paper ===== */
+    .paperShell{ padding: 16px; }
+
+    .paperControls{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+
+    .paperWrap{ display:flex; justify-content:center; }
+
+    .paper{
+      width: 100%;
+      max-width: 520px;
+      border-radius: 18px;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+      position:relative;
+    }
+    .paperInner{
+      padding: 22px 22px 18px;
+      background:#fff;
+    }
+
+    .paperA4{ aspect-ratio: 210 / 297; }
+    .paperLetter{ aspect-ratio: 8.5 / 11; }
+    .paperA5{ aspect-ratio: 148 / 210; }
+    .paperLegal{ aspect-ratio: 8.5 / 14; }
+
+    /* Paper typography */
+    .rxPaper{
+      color:#000;
+      font-size: 13.2px;
+      line-height: 1.32;
+      --rxFont: 13.2px; /* só prescrição */
+    }
+
+    /* Reserved header/footer areas for logos (so they never overlap the important content) */
+    .rxPaper .headerArea{
+      position:relative;
+      height: 70px; /* espaço do cabeçalho */
+      margin-bottom: 8px;
+    }
+    .rxPaper .footerArea{
+      position:relative;
+      height: 62px; /* espaço do rodapé (logos) */
+      margin-top: 12px;
+    }
+
+    .instImg{
+      position:absolute;
+      left: 0%;
+      top: 0%;
+      transform: translate(0,0);
+      max-height: 70px;
+      object-fit: contain;
+      pointer-events:none;
+    }
+
+    .rxPaper .topLine{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #cfcfcf;
+      margin-bottom: 10px;
+    }
+    .rxPaper .ptLine{
+      display:flex;
+      align-items:flex-end;
+      gap: 8px;
+      flex-wrap:wrap;
+      width: 100%;
+    }
+    .rxPaper .ptLabel{
+      color:#111;
+      font-weight: 800;
+      font-size: 12.2px;
+      white-space:nowrap;
+    }
+    .rxPaper .ptName{
+      min-width: 260px;
+      flex: 1;
+      border-bottom: 1px solid #000;
+      padding: 0 0 2px;
+      font-weight: 700;
+      letter-spacing:.15px;
+    }
+    .rxPaper .dateBox{
+      color:#111;
+      font-weight: 800;
+      font-size: 12.2px;
+      white-space:nowrap;
+      border-bottom: 1px solid #000;
+      padding: 0 0 2px;
+      min-width: 96px;
+      text-align:right;
+    }
+
+    .rxPaper .rxSymbol{
+      font-family: "DM Serif Display", serif;
+      font-size: 26px;
+      line-height:1;
+      margin: 8px 0 10px;
+      letter-spacing:.2px;
+    }
+
+    .rxList{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: var(--rxFont);
+      line-height: 1.34;
+    }
+
+    /* sem caixinhas */
+    .rxItem{ padding: 0; border: none; background: transparent; }
+
+    .rxLine{
+      display:flex;
+      align-items:flex-end;
+      gap: 10px;
+    }
+    .drugName{
+      font-weight: 800;
+      letter-spacing:.15px;
+      max-width: 58%;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .leaderText{
+      flex: 1;
+      overflow:hidden;
+      white-space:nowrap;
+      color:#000;
+      transform: translateY(-1px);
+      opacity: 1;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      letter-spacing: .2px;
+    }
+    .qty{
+      font-weight: 800;
+      white-space:nowrap;
+      color:#000;
+      max-width: 40%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .useRow{
+      margin-top: 4px;
+      display:flex;
+      gap: 8px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      font-size: var(--rxFont);
+      line-height: 1.32;
+    }
+    .useRow b{
+      color:#111;
+      font-weight: 900;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .useText{
+      flex:1;
+      min-width: 140px;
+      color:#000;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2px;
+      word-break: break-word;
+    }
+
+    /* assinatura e rodapé */
+    .sigWrap{
+      margin-top: 6px;
+      padding-top: 6px;
+    }
+    .sigLine{
+      width: 100%;
+      border-bottom: 1px solid #000;
+      height: 24px;
+      margin: 0 auto 8px;
+    }
+    .docCenter{
+      text-align:center;
+      font-size: 12.2px;
+      line-height: 1.25;
+      color:#000;
+    }
+    .docCenter .docName{ font-weight: 900; }
+    .docCenter .docLine{ margin-top: 2px; }
+
+    /* ===== Mobile: tabs ===== */
+    .mobileTabs{
+      display:none;
+      margin-top: 14px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 999px;
+      padding: 6px;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .tab{
+      flex:1;
+      text-align:center;
+      padding: 10px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: background var(--t), color var(--t), box-shadow var(--t), border-color var(--t);
+      border:1px solid transparent;
+    }
+    .tab.on{
+      color: var(--text);
+      border-color: rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 60px rgba(255,255,255,.06);
+    }
+
+    @media (max-width: 980px){
+      .main{ grid-template-columns: 1fr; }
+      .paper{ max-width: 620px; }
+      .mobileTabs{ display:flex; }
+      .panel[data-panel="preview"]{ display:none; }
+      .panel[data-panel="preview"].show{ display:block; }
+      .panel[data-panel="editor"].hide{ display:none; }
+    }
+
+    @media (max-width: 520px){
+      .brand p{ display:none; }
+      .grid2{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+      .rxGrid{ grid-template-columns: 1fr; }
+      .paperInner{ padding: 18px 16px 16px; }
+      .rxPaper .ptName{ min-width: 180px; }
+      .sliders{ grid-template-columns: 1fr; }
+      .imgRowGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== PRINT (PDF) ===== */
+    .printAll{ display:none; }
+
+    @media print{
+      body{ background:#fff !important; color:#000 !important; }
+      .topbar, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"]{ display:none !important; }
+      .wrap{ max-width:none; padding:0; }
+      .printAll{ display:block !important; }
+      .printPage{ width:auto; background:#fff; }
+      @page { margin: 12mm; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="wrap">
 
-    <div class="app-container">
-        
-        <div class="editor-panel">
-            <header>
-                <h1>Nova Prescrição</h1>
-                <p>Preencha os dados abaixo. O sistema aprende novos medicamentos automaticamente.</p>
-            </header>
-
-            <div class="card">
-                <div class="input-group">
-                    <label>Paciente</label>
-                    <input type="text" id="patientInput" placeholder="Nome completo do paciente" oninput="updatePreview()">
-                </div>
-            </div>
-
-            <div id="medicationsContainer">
-                </div>
-
-            <button class="btn btn-secondary" onclick="addMedicationRow()">
-                <i class="fas fa-plus"></i> Adicionar Medicamento
-            </button>
-
-            <button class="btn btn-primary" onclick="handlePrintAndSave()" style="margin-top: 20px;">
-                <i class="fas fa-print"></i> Imprimir e Salvar Novos
-            </button>
+    <div class="topbar">
+      <div class="brand">
+        <img id="brandMark" class="markImg" alt="Logo UsoJaleco" />
+        <div>
+          <h1>UsoJaleco</h1>
+          <p>Um jeito mais fácil de prescrever.</p>
         </div>
+      </div>
 
-        <div class="preview-panel">
-            <div class="paper-controls">
-                <span style="color: var(--text-muted); font-size: 0.9rem;">Visualização A4</span>
-                <select id="paperSize" style="width: auto; padding: 8px 12px;">
-                    <option value="A4">A4</option>
-                    <option value="A5">A5</option>
-                </select>
-            </div>
-
-            <div class="a4-paper" id="paperPreview">
-                <div class="rx-header">
-                    <div style="font-size: 0.9rem;">Dr. Exemplo Médico <br> CRM 12345</div>
-                    <div class="patient-display" id="previewPatientName">PACIENTE: __________________</div>
-                </div>
-
-                <div class="rx-symbol">℞</div>
-
-                <div id="previewMedsList">
-                    </div>
-
-                <div style="margin-top: 50px; text-align: center; border-top: 1px solid #000; width: 60%; margin-left: auto; margin-right: auto; padding-top: 10px;">
-                    Assinatura
-                </div>
-            </div>
-        </div>
-
+      <div class="actions">
+        <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
+        <button class="btn btnPrimary" id="btnPrint" type="button">Imprimir / PDF</button>
+      </div>
     </div>
 
-<script>
-    // --- CONFIGURAÇÃO ---
-    // Substitua esta URL pelo SEU script publicado (Instruções abaixo)
-    // Se não configurar, o salvamento não funcionará, mas a impressão sim.
-    const APPS_SCRIPT_URL = "INSIRA_SUA_URL_DO_APPS_SCRIPT_AQUI"; 
-    const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
-    
-    // Dados em memória
-    let allMedications = [];
-    let medRows = []; // Rastreia IDs dos inputs
+    <!-- Tabs mobile -->
+    <div class="mobileTabs" aria-label="Alternar entre editor e prévia">
+      <div class="tab on" id="tabEditor">Editar</div>
+      <div class="tab" id="tabPreview">Prévia</div>
+    </div>
 
-    // 1. CARREGAR DADOS DO GOOGLE SHEETS (CSV)
-    async function loadSheetData() {
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
-        try {
-            const response = await fetch(url);
-            const text = await response.text();
-            parseCSV(text);
-        } catch (e) {
-            console.error("Erro ao carregar planilha:", e);
-        }
-    }
+    <div class="main">
+      <!-- ===== Editor ===== -->
+      <div class="card panel" data-panel="editor" id="panelEditor">
+        <div class="cardHeader">
+          <div>
+            <h2>Editor</h2>
+            <p class="sub">Tudo foi reorganizado em seções retraídas. E foi corrigido o problema do teclado no mobile (não “recria” inputs a cada letra).</p>
+          </div>
+        </div>
 
-    function parseCSV(csvText) {
-        const lines = csvText.split('\n');
-        // Ignora cabeçalho (linha 0)
-        for (let i = 1; i < lines.length; i++) {
-            // Separação simples por vírgula (pode precisar de regex se houver vírgulas dentro das células)
-            // Assumindo estrutura: Col A (Nome), B, C, D, E (Imagens)
-            const cols = lines[i].split(','); 
-            if (cols[0]) {
-                allMedications.push({
-                    name: cols[0].trim(),
-                    images: cols.slice(1, 5).map(url => url.trim()).filter(url => url.startsWith('http'))
-                });
-            }
-        }
-        // Inicializa com um campo vazio
-        addMedicationRow();
-    }
+        <div class="cardBody">
 
-    // 2. GERENCIAMENTO DE LINHAS DE REMÉDIO
-    function addMedicationRow() {
-        const id = Date.now();
-        const container = document.getElementById('medicationsContainer');
-        
-        const div = document.createElement('div');
-        div.className = 'card medication-item';
-        div.id = `med-row-${id}`;
-        div.innerHTML = `
-            <div style="display:flex; justify-content:space-between;">
-                <label>Medicamento</label>
-                ${medRows.length > 0 ? `<i class="fas fa-trash" style="cursor:pointer; color:#ff5555" onclick="removeRow(${id})"></i>` : ''}
-            </div>
-            <div class="input-group">
-                <input type="text" class="med-name-input" id="med-name-${id}" placeholder="Digite para buscar..." autocomplete="off">
-                <div class="suggestions-list" id="suggestions-${id}"></div>
-            </div>
-            
-            <div class="input-group">
-                <label>Posologia / Quantidade</label>
-                <div style="display:flex; gap: 10px;">
-                     <input type="text" id="med-qtd-${id}" placeholder="Ex: 1 Caixa" style="width: 30%">
-                     <input type="text" id="med-use-${id}" placeholder="Ex: Tomar 1 comprimido a cada 8 horas..." style="flex:1">
+          <!-- 1) Informações do médico -->
+          <details class="sec" open>
+            <summary>
+              <div class="secTitle">
+                <b>1. Informações do médico</b>
+                <small id="sumMedico">—</small>
+              </div>
+              <div class="chev">˅</div>
+            </summary>
+            <div class="secBody">
+              <div class="grid2">
+                <div>
+                  <label class="label" for="docTitle">Título</label>
+                  <select class="select" id="docTitle">
+                    <option value="Dr." selected>Doutor (Dr.)</option>
+                    <option value="Dra.">Doutora (Dra.)</option>
+                  </select>
                 </div>
-            </div>
+                <div>
+                  <label class="label" for="docName">Nome do médico</label>
+                  <input class="field" id="docName" placeholder="Nome completo…" autocomplete="name" />
+                </div>
+              </div>
 
-            <div class="med-controls">
-                <label class="checkbox-wrapper">
-                    <input type="checkbox" id="check-icons-${id}" onchange="updatePreview()">
-                    Adicionar ícones de horário
-                </label>
-                
-                <label class="checkbox-wrapper">
-                    <input type="checkbox" id="check-img-${id}" onchange="toggleImageSelector(${id})">
-                    Inserir foto da caixa
-                </label>
-            </div>
+              <div class="divider"></div>
 
-            <div id="img-selector-${id}" class="image-preview-selector" style="display:none;"></div>
+              <div class="grid2">
+                <div>
+                  <label class="label">CRM(s)</label>
+                  <div id="crmList"></div>
+                  <div style="margin-top:10px">
+                    <button class="btn btnGhost" id="btnAddCRM" type="button">+ Adicionar outro CRM</button>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="label">RQE(s) (opcional)</label>
+                  <div id="rqeList"></div>
+                  <div style="margin-top:10px">
+                    <button class="btn btnGhost" id="btnAddRQE" type="button">+ Adicionar outro RQE</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- 2) Informações do paciente -->
+          <details class="sec" open>
+            <summary>
+              <div class="secTitle">
+                <b>2. Informações do paciente</b>
+                <small id="sumPaciente">—</small>
+              </div>
+              <div class="chev">˅</div>
+            </summary>
+            <div class="secBody">
+              <div class="grid2">
+                <div>
+                  <label class="label" for="patientName">Nome do paciente</label>
+                  <input class="field" id="patientName" placeholder="Digite o nome do paciente…" autocomplete="name" />
+                </div>
+                <div>
+                  <label class="label" for="patientDoc">Documento (opcional)</label>
+                  <input class="field" id="patientDoc" placeholder="CNS / CPF (se quiser)" inputmode="text" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- 3) Informações da página -->
+          <details class="sec">
+            <summary>
+              <div class="secTitle">
+                <b>3. Informações da página</b>
+                <small id="sumPagina">—</small>
+              </div>
+              <div class="chev">˅</div>
+            </summary>
+            <div class="secBody">
+              <div class="grid3">
+                <div>
+                  <label class="label" for="paperSize">Tamanho da folha</label>
+                  <select class="select" id="paperSize">
+                    <option value="A4" selected>A4</option>
+                    <option value="LETTER">Carta (Letter)</option>
+                    <option value="A5">A5</option>
+                    <option value="LEGAL">Legal</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="label">Data</label>
+                  <div class="toggleRow">
+                    <label class="toggle" title="Mostrar/ocultar a data na receita">
+                      <input type="checkbox" id="includeDate" checked />
+                      <span>Incluir</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="label" for="rxFontStep">Fonte da prescrição</label>
+                  <select class="select" id="rxFontStep">
+                    <option value="0" selected>13.2 (padrão)</option>
+                    <option value="1">12.3</option>
+                    <option value="2">11.4</option>
+                    <option value="3">10.8</option>
+                    <option value="4">10.2</option>
+                    <option value="5">9.6</option>
+                    <option value="6">9.0</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top:10px" class="grid2">
+                <div>
+                  <label class="label" for="dateValue">Data (se ativada)</label>
+                  <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
+                </div>
+                <div>
+                  <label class="label" for="rxSymbolMode">Símbolo de prescrição</label>
+                  <select class="select" id="rxSymbolMode">
+                    <option value="RSLASH" selected>R//</option>
+                    <option value="RX">Rx</option>
+                    <option value="RXCLASSIC">℞</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- 4) Imagens institucionais/profissionais -->
+          <details class="sec">
+            <summary>
+              <div class="secTitle">
+                <b>4. Imagens institucionais/profissionais</b>
+                <small id="sumImgs">Cabeçalho e/ou rodapé (com posição e tamanho)</small>
+              </div>
+              <div class="chev">˅</div>
+            </summary>
+            <div class="secBody">
+              <div class="mini">
+                Adicione quantas imagens quiser. Cada uma pode ir no <b>cabeçalho</b> ou no <b>rodapé</b> e tem controle de <b>tamanho</b> e <b>posição</b> (X/Y) com limite do espaço reservado.
+              </div>
+
+              <div style="height:10px"></div>
+              <div class="imgRows" id="imgRows"></div>
+
+              <div class="row" style="margin-top:12px">
+                <button class="btn btnGhost" id="btnAddImg" type="button">+ Adicionar imagem</button>
+                <button class="btn btnGhost" id="btnClearImgs" type="button">Limpar imagens</button>
+              </div>
+
+              <div class="divider"></div>
+
+              <!-- Marca do topo (UsoJaleco) dentro do código, não no site -->
+              <details class="sec" style="margin:0;">
+                <summary>
+                  <div class="secTitle">
+                    <b>Config do ícone do topo (UsoJaleco)</b>
+                    <small>Fica no cabeçalho do site (topbar), não na receita</small>
+                  </div>
+                  <div class="chev">˅</div>
+                </summary>
+                <div class="secBody">
+                  <div class="grid2">
+                    <div>
+                      <label class="label" for="brandLogoUrl">Link do ícone do topo</label>
+                      <input class="field" id="brandLogoUrl" placeholder="URL do PNG/SVG (topbar)" />
+                      <div class="mini" style="margin-top:8px">Isso é só o ícone do topo do site (onde está “UsoJaleco”).</div>
+                    </div>
+                    <div>
+                      <label class="label" for="brandLogoScale">Tamanho do ícone (px)</label>
+                      <input class="field" id="brandLogoScale" type="number" min="24" max="72" step="1" value="40" />
+                      <div class="mini" style="margin-top:8px">Recomendado: 36–44.</div>
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+            </div>
+          </details>
+
+          <!-- 5) Medicamentos -->
+          <details class="sec" open>
+            <summary>
+              <div class="secTitle">
+                <b>5. Medicamentos</b>
+                <small id="sumMeds">—</small>
+              </div>
+              <div class="chev">˅</div>
+            </summary>
+            <div class="secBody">
+              <div class="mini">Ao adicionar um novo remédio, os anteriores minimizam automaticamente (pra não “descer” demais no mobile).</div>
+              <div style="height:10px"></div>
+
+              <div class="rxBlocks" id="rxBlocks"></div>
+
+              <div class="divider"></div>
+
+              <div class="row">
+                <button class="btn btnGhost" id="btnAddMed2" type="button">+ Adicionar remédio</button>
+                <button class="btn btnGhost" id="btnClear" type="button">Limpar tudo</button>
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- ===== Preview ===== -->
+      <div class="card panel" data-panel="preview" id="panelPreview">
+        <div class="cardHeader">
+          <div>
+            <h2>Prévia</h2>
+            <p class="sub">Mostra sempre uma página por vez. Se houver mais de uma, escolha qual página ver.</p>
+          </div>
+        </div>
+
+        <div class="cardBody paperShell">
+          <div class="paperControls">
+            <div class="mini" id="pageInfo">Página 1 de 1</div>
+
+            <div class="row" style="gap:8px; justify-content:flex-end;">
+              <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
+              <select class="select" id="pageSelect" style="width: 160px;">
+                <option value="1" selected>Página 1</option>
+              </select>
+              <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
+            </div>
+          </div>
+
+          <div class="paperWrap">
+            <div class="paper paperA4" id="paper">
+              <div class="paperInner">
+                <div class="rxPaper" id="rxPaper"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Conteúdo que só aparece na impressão (todas as páginas) -->
+  <div class="printAll" id="printAll"></div>
+
+  <script>
+    /************************************************************
+     * ✅ IMPORTANTÍSSIMO (correção do mobile):
+     * Não recriamos DOM de inputs em cada tecla.
+     * Renderizamos blocos UMA VEZ e só atualizamos a prévia.
+     ************************************************************/
+
+    /************************************************************
+     * CONFIG — (topbar) ícone do UsoJaleco
+     * Deixe aqui o link do seu ícone/logo do topo do site.
+     ************************************************************/
+    let BRAND_LOGO_URL = ""; // <--- coloque seu link aqui (ou deixe vazio)
+    let BRAND_LOGO_SIZE_PX = 40;
+
+    // Placeholder PNG transparente (aleatório) enquanto não troca
+    const PLACEHOLDER_PNG =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABJ0lEQVR4nO3aMQ6CMBQF0U8m0dQmGQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQk0v2k6yqk7+XyQm5mYd8yqf9gQAAAAAAAAAA4Gm9oQm2b3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQAAAAA8D8m8i8b8kq8wQAAAABJRU5ErkJggg==";
+
+    /************************************************************
+     * Autocomplete (opcional) via planilha — silencioso
+     ************************************************************/
+    const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
+    const SHEET_GID = "0";
+
+    const state = {
+      // médico
+      docTitle: "Dr.",
+      docName: "",
+      crms: [""],
+      rqes: [""],
+
+      // paciente
+      patientName: "",
+      patientDoc: "",
+
+      // página
+      paperSize: "A4",
+      includeDate: true,
+      dateValue: "",
+      rxFontStep: 0,
+      rxSymbolMode: "RSLASH",
+
+      // imagens institucionais
+      instImgs: [
+        // { id, url, place: "header"|"footer", scale: 45, x: 0, y: 0 }
+      ],
+
+      // meds
+      blocks: [], // {id, name, qty, use, collapsed}
+      selectedPage: 1,
+
+      db: { loaded:false, list:[] }
+    };
+
+    const $ = (id)=>document.getElementById(id);
+
+    function safeText(s){ return (s||"").toString().replace(/\s+/g," ").trim(); }
+    function norm(s){
+      return (s||"")
+        .toString()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .trim();
+    }
+    function keyify(s){ return norm(s).toLowerCase(); }
+    function uid(){ return Math.random().toString(16).slice(2) + "-" + Date.now().toString(16); }
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function todayBR(){
+      const d = new Date();
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yy = d.getFullYear();
+      return `${dd}/${mm}/${yy}`;
+    }
+
+    function rxFontPx(){
+      // 0..6 => 13.2,12.3,11.4,10.8,10.2,9.6,9.0
+      const map = [13.2,12.3,11.4,10.8,10.2,9.6,9.0];
+      const i = clamp(parseInt(state.rxFontStep,10)||0, 0, map.length-1);
+      return map[i];
+    }
+
+    function medsPerPage(){
+      const px = rxFontPx();
+      if(px <= 9.1) return 12;
+      if(px <= 9.7) return 11;
+      if(px <= 10.3) return 10;
+      if(px <= 10.9) return 9;
+      if(px <= 11.5) return 9;
+      if(px <= 12.4) return 8;
+      if(px <= 13.0) return 7;
+      return 6;
+    }
+
+    function leaderHyphens(){ return "-".repeat(220); }
+
+    function paginateBlocks(){
+      const per = medsPerPage();
+      const pages = [];
+      let cur = [];
+      state.blocks.forEach(b=>{
+        cur.push(b);
+        if(cur.length >= per){
+          pages.push(cur);
+          cur = [];
+        }
+      });
+      if(cur.length || pages.length===0) pages.push(cur);
+      return pages;
+    }
+
+    /************************************************************
+     * Load DB (silencioso) - só para autocomplete
+     ************************************************************/
+    async function loadSheetDB(){
+      const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(SHEET_GID)}&tqx=out:json`;
+      try{
+        const res = await fetch(url, { cache:"no-store" });
+        const txt = await res.text();
+        const jsonStr = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
+        const data = JSON.parse(jsonStr);
+        const rows = (data.table && data.table.rows) ? data.table.rows : [];
+        const list = [];
+        for(const r of rows){
+          const c = r.c || [];
+          const name = safeText(c[0]?.v ?? "");
+          if(name) list.push({ name });
+        }
+        list.sort((a,b)=> a.name.localeCompare(b.name, "pt-BR", { sensitivity:"base" }));
+        state.db.loaded = true;
+        state.db.list = list;
+      }catch(e){
+        state.db.loaded = false;
+        state.db.list = [];
+      }
+    }
+
+    /************************************************************
+     * CRM / RQE lists (não recriam a cada tecla)
+     ************************************************************/
+    function buildLineRow(type, idx){
+      const row = document.createElement("div");
+      row.className = "row";
+      row.style.alignItems = "center";
+      row.style.justifyContent = "stretch";
+      row.style.gap = "8px";
+      row.style.marginBottom = "8px";
+
+      const input = document.createElement("input");
+      input.className = "field";
+      input.placeholder = type === "crm"
+        ? (idx===0 ? "CRM (ex: CRM-BA 12345)" : `CRM ${idx+1}`)
+        : (idx===0 ? "RQE (ex: RQE 9876)" : `RQE ${idx+1}`);
+      input.inputMode = "text";
+      input.autocomplete = "off";
+      input.spellcheck = false;
+
+      input.value = (type==="crm" ? state.crms[idx] : state.rqes[idx]) || "";
+
+      input.addEventListener("input", ()=>{
+        const v = safeText(input.value);
+        if(type==="crm") state.crms[idx] = v;
+        else state.rqes[idx] = v;
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      const del = document.createElement("button");
+      del.className = "iconBtn iconBtnDanger";
+      del.type = "button";
+      del.textContent = "✕";
+      del.title = "Remover";
+      const arr = (type==="crm") ? state.crms : state.rqes;
+      del.disabled = arr.length === 1;
+      del.style.opacity = (arr.length === 1) ? .45 : 1;
+
+      del.addEventListener("click", ()=>{
+        const arr2 = (type==="crm") ? state.crms : state.rqes;
+        if(arr2.length === 1) return;
+
+        arr2.splice(idx, 1);
+        if(type==="crm") renderCrmList();
+        else renderRqeList();
+
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      row.appendChild(input);
+      row.appendChild(del);
+      return row;
+    }
+
+    function renderCrmList(){
+      const box = $("crmList");
+      box.innerHTML = "";
+      state.crms.forEach((_, idx)=> box.appendChild(buildLineRow("crm", idx)));
+    }
+    function renderRqeList(){
+      const box = $("rqeList");
+      box.innerHTML = "";
+      state.rqes.forEach((_, idx)=> box.appendChild(buildLineRow("rqe", idx)));
+    }
+
+    /************************************************************
+     * Institutional images (header/footer) rows
+     ************************************************************/
+    function renderImgRows(){
+      const root = $("imgRows");
+      root.innerHTML = "";
+
+      if(!state.instImgs.length){
+        const empty = document.createElement("div");
+        empty.className = "mini";
+        empty.textContent = "Nenhuma imagem adicionada.";
+        root.appendChild(empty);
+        return;
+      }
+
+      state.instImgs.forEach((img, idx)=>{
+        const wrap = document.createElement("div");
+        wrap.className = "imgRow";
+        wrap.dataset.imgId = img.id;
+
+        const top = document.createElement("div");
+        top.className = "imgRowTop";
+
+        const title = document.createElement("b");
+        title.textContent = `Imagem ${idx+1}`;
+
+        const tools = document.createElement("div");
+        tools.style.display = "flex";
+        tools.style.gap = "8px";
+        tools.style.alignItems = "center";
+
+        const del = document.createElement("button");
+        del.className = "iconBtn iconBtnDanger";
+        del.type = "button";
+        del.textContent = "✕";
+        del.title = "Remover imagem";
+        del.addEventListener("click", ()=>{
+          state.instImgs = state.instImgs.filter(x=> x.id !== img.id);
+          renderImgRows();
+          updateSummaries();
+          renderPaperDebounced();
+        });
+
+        tools.appendChild(del);
+
+        top.appendChild(title);
+        top.appendChild(tools);
+
+        const grid = document.createElement("div");
+        grid.className = "imgRowGrid";
+
+        const colA = document.createElement("div");
+        const labUrl = document.createElement("label");
+        labUrl.className = "label";
+        labUrl.textContent = "Link da imagem (PNG/SVG/JPG)";
+        const inpUrl = document.createElement("input");
+        inpUrl.className = "field";
+        inpUrl.placeholder = "Cole aqui a URL…";
+        inpUrl.value = img.url || "";
+        inpUrl.autocomplete = "off";
+        inpUrl.spellcheck = false;
+        inpUrl.addEventListener("input", ()=>{
+          img.url = safeText(inpUrl.value);
+          updateSummaries();
+          renderPaperDebounced();
+        });
+        colA.appendChild(labUrl);
+        colA.appendChild(inpUrl);
+
+        const colB = document.createElement("div");
+        const labPlace = document.createElement("label");
+        labPlace.className = "label";
+        labPlace.textContent = "Local";
+        const selPlace = document.createElement("select");
+        selPlace.className = "select";
+        selPlace.innerHTML = `
+          <option value="header">Cabeçalho</option>
+          <option value="footer">Rodapé</option>
         `;
-        
-        container.appendChild(div);
-        medRows.push(id);
-
-        // Setup Autocomplete
-        const input = div.querySelector(`#med-name-${id}`);
-        const list = div.querySelector(`#suggestions-${id}`);
-        
-        input.addEventListener('input', (e) => {
-            handleAutocomplete(e.target.value, list, input, id);
-            updatePreview();
-        });
-        
-        // Listeners para update
-        div.querySelectorAll('input').forEach(el => el.addEventListener('input', updatePreview));
-    }
-
-    function removeRow(id) {
-        document.getElementById(`med-row-${id}`).remove();
-        medRows = medRows.filter(r => r !== id);
-        updatePreview();
-    }
-
-    // 3. AUTOCOMPLETE LOGIC
-    function handleAutocomplete(val, listEl, inputEl, rowId) {
-        listEl.innerHTML = '';
-        if (!val) {
-            listEl.style.display = 'none';
-            return;
-        }
-
-        const matches = allMedications.filter(m => m.name.toLowerCase().includes(val.toLowerCase()));
-        
-        if (matches.length > 0) {
-            listEl.style.display = 'block';
-            matches.forEach(match => {
-                const item = document.createElement('div');
-                item.textContent = match.name;
-                item.onclick = () => {
-                    inputEl.value = match.name;
-                    listEl.style.display = 'none';
-                    // Popula imagens se existirem
-                    setupImages(rowId, match.images);
-                    updatePreview();
-                };
-                listEl.appendChild(item);
-            });
-        } else {
-            listEl.style.display = 'none';
-        }
-    }
-
-    function setupImages(rowId, images) {
-        const selector = document.getElementById(`img-selector-${rowId}`);
-        selector.innerHTML = '';
-        if (images && images.length > 0) {
-            images.forEach(url => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.className = 'img-thumb';
-                img.onclick = () => {
-                    // Desmarcar outros
-                    selector.querySelectorAll('.img-thumb').forEach(i => i.classList.remove('selected'));
-                    img.classList.add('selected');
-                    selector.dataset.selected = url;
-                    updatePreview();
-                };
-                selector.appendChild(img);
-            });
-            // Seleciona o primeiro por padrão
-            selector.firstChild.click();
-        }
-    }
-
-    function toggleImageSelector(id) {
-        const check = document.getElementById(`check-img-${id}`);
-        const selector = document.getElementById(`img-selector-${id}`);
-        selector.style.display = check.checked ? 'flex' : 'none';
-        updatePreview();
-    }
-
-    // 4. RENDER PREVIEW (CORE LOGIC)
-    function updatePreview() {
-        const patientName = document.getElementById('patientInput').value;
-        document.getElementById('previewPatientName').textContent = patientName ? `PACIENTE: ${patientName}` : 'PACIENTE: __________________';
-
-        const listContainer = document.getElementById('previewMedsList');
-        listContainer.innerHTML = '';
-
-        medRows.forEach(id => {
-            const name = document.getElementById(`med-name-${id}`).value;
-            const qtd = document.getElementById(`med-qtd-${id}`).value;
-            const use = document.getElementById(`med-use-${id}`).value;
-            const hasIcons = document.getElementById(`check-icons-${id}`).checked;
-            const hasImg = document.getElementById(`check-img-${id}`).checked;
-            const selectedImgSrc = document.getElementById(`img-selector-${id}`).dataset.selected;
-
-            if (name) {
-                const row = document.createElement('div');
-                row.className = 'med-display-group';
-
-                // Ícones HTML
-                let iconsHtml = '';
-                if (hasIcons) {
-                    iconsHtml = `
-                        <span title="Manhã"><i class="fas fa-sun"></i></span>
-                        <span title="Tarde"><i class="fas fa-cloud-sun"></i></span>
-                        <span title="Noite"><i class="fas fa-moon"></i></span>
-                    `;
-                }
-
-                // Imagem HTML
-                let imgHtml = '';
-                if (hasImg && selectedImgSrc) {
-                    imgHtml = `<img src="${selectedImgSrc}" class="med-image-print">`;
-                }
-
-                row.innerHTML = `
-                    <div class="med-name-line">
-                        <span>${name}</span>
-                        <div class="dots"></div>
-                        <span>${qtd}</span>
-                    </div>
-                    <div class="med-use">
-                        <b>Uso:</b> ${use}
-                        <div class="icon-visuals">${iconsHtml}</div>
-                    </div>
-                    ${imgHtml}
-                `;
-                listContainer.appendChild(row);
-            }
-        });
-    }
-
-    // 5. PRINT & SAVE LOGIC
-    async function handlePrintAndSave() {
-        // 1. Identificar novos remédios
-        const newMeds = [];
-        medRows.forEach(id => {
-            const name = document.getElementById(`med-name-${id}`).value.trim();
-            if (name && !allMedications.some(m => m.name.toLowerCase() === name.toLowerCase())) {
-                newMeds.push(name);
-            }
+        selPlace.value = img.place || "header";
+        selPlace.addEventListener("change", ()=>{
+          img.place = selPlace.value === "footer" ? "footer" : "header";
+          renderPaperDebounced();
         });
 
-        // 2. Chamar a impressão
+        colB.appendChild(labPlace);
+        colB.appendChild(selPlace);
+
+        grid.appendChild(colA);
+        grid.appendChild(colB);
+
+        const sliders = document.createElement("div");
+        sliders.className = "sliders";
+
+        sliders.appendChild(makeSlider("Tamanho (%)", img.scale ?? 45, 10, 100, 1, (v)=>{
+          img.scale = v;
+          renderPaperDebounced();
+        }));
+
+        sliders.appendChild(makeSlider("Posição X (%)", img.x ?? 0, 0, 100, 1, (v)=>{
+          img.x = v;
+          renderPaperDebounced();
+        }));
+
+        sliders.appendChild(makeSlider("Posição Y (%)", img.y ?? 0, 0, 100, 1, (v)=>{
+          img.y = v;
+          renderPaperDebounced();
+        }));
+
+        wrap.appendChild(top);
+        wrap.appendChild(grid);
+        wrap.appendChild(sliders);
+
+        root.appendChild(wrap);
+      });
+    }
+
+    function makeSlider(label, val, min, max, step, onChange){
+      const box = document.createElement("div");
+
+      const lab = document.createElement("label");
+      lab.className = "label";
+      lab.textContent = `${label}: `;
+
+      const strong = document.createElement("span");
+      strong.style.color = "var(--text)";
+      strong.style.fontWeight = "900";
+      strong.textContent = String(val);
+
+      lab.appendChild(strong);
+
+      const range = document.createElement("input");
+      range.type = "range";
+      range.className = "range";
+      range.min = String(min);
+      range.max = String(max);
+      range.step = String(step);
+      range.value = String(val);
+      range.addEventListener("input", ()=>{
+        const v = parseInt(range.value,10);
+        strong.textContent = String(v);
+        onChange(v);
+      });
+
+      box.appendChild(lab);
+      box.appendChild(range);
+      return box;
+    }
+
+    /************************************************************
+     * Medicine blocks (uma vez) — sem reconstruir a cada tecla
+     ************************************************************/
+    function addBlock(){
+      state.blocks.forEach(b=> b.collapsed = true);
+
+      const b = { id: uid(), name:"", qty:"", use:"", collapsed:false };
+      state.blocks.push(b);
+
+      // renderiza só o novo bloco
+      appendBlockDOM(b, state.blocks.length-1);
+
+      updateSummaries();
+      renderPaperDebounced();
+
+      setTimeout(()=>{
+        const el = document.querySelector(`[data-block="${b.id}"] input[data-field="name"]`);
+        if(el) el.focus({ preventScroll:false });
+      }, 0);
+    }
+
+    function removeBlock(id){
+      const idx = state.blocks.findIndex(x=> x.id === id);
+      if(idx < 0) return;
+
+      state.blocks.splice(idx,1);
+      const el = document.querySelector(`[data-block="${id}"]`);
+      if(el) el.remove();
+
+      // renumerar
+      renumberBlocks();
+
+      // garante algum expandido
+      if(state.blocks.length && !state.blocks.some(b=> !b.collapsed)){
+        state.blocks[state.blocks.length-1].collapsed = false;
+        const lastEl = document.querySelector(`[data-block="${state.blocks[state.blocks.length-1].id}"]`);
+        if(lastEl) lastEl.classList.remove("collapsed");
+      }
+
+      updateSummaries();
+      renderPaperDebounced();
+    }
+
+    function toggleBlock(id){
+      const b = state.blocks.find(x=> x.id === id);
+      const el = document.querySelector(`[data-block="${id}"]`);
+      if(!b || !el) return;
+      b.collapsed = !b.collapsed;
+      el.classList.toggle("collapsed", !!b.collapsed);
+    }
+
+    function renumberBlocks(){
+      const nodes = document.querySelectorAll(".rxBlock");
+      nodes.forEach((node, i)=>{
+        const num = node.querySelector(".rxNum");
+        if(num) num.textContent = String(i+1);
+
+        const bid = node.getAttribute("data-block");
+        const b = state.blocks.find(x=> x.id === bid);
+        const title = node.querySelector(".rxTitle strong");
+        if(title){
+          title.textContent = (b && safeText(b.name)) ? safeText(b.name) : `Remédio ${i+1}`;
+        }
+      });
+    }
+
+    function renderBlocksInitial(){
+      const root = $("rxBlocks");
+      root.innerHTML = "";
+      state.blocks.forEach((b, idx)=> appendBlockDOM(b, idx));
+      renumberBlocks();
+    }
+
+    function appendBlockDOM(b, idx){
+      const root = $("rxBlocks");
+
+      const wrap = document.createElement("div");
+      wrap.className = "rxBlock" + (b.collapsed ? " collapsed" : "");
+      wrap.setAttribute("data-block", b.id);
+
+      const top = document.createElement("div");
+      top.className = "rxTop";
+
+      const title = document.createElement("div");
+      title.className = "rxTitle";
+
+      const num = document.createElement("div");
+      num.className = "rxNum";
+      num.textContent = String(idx+1);
+
+      const tcol = document.createElement("div");
+      tcol.style.display = "flex";
+      tcol.style.flexDirection = "column";
+      tcol.style.gap = "2px";
+
+      const strong = document.createElement("strong");
+      strong.textContent = b.name ? b.name : `Remédio ${idx+1}`;
+
+      const small = document.createElement("div");
+      small.className = "mini";
+      small.style.marginTop = "0";
+      small.style.color = "var(--muted)";
+      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, quantidade e posologia";
+
+      tcol.appendChild(strong);
+      tcol.appendChild(small);
+
+      title.appendChild(num);
+      title.appendChild(tcol);
+
+      const tools = document.createElement("div");
+      tools.className = "rxTools";
+
+      const btnMin = document.createElement("button");
+      btnMin.className = "iconBtn iconBtnDim";
+      btnMin.type = "button";
+      btnMin.title = b.collapsed ? "Expandir" : "Minimizar";
+      btnMin.textContent = b.collapsed ? "▾" : "▴";
+      btnMin.addEventListener("click", ()=>{
+        toggleBlock(b.id);
+        btnMin.textContent = (b.collapsed ? "▾" : "▴");
+        btnMin.title = (b.collapsed ? "Expandir" : "Minimizar");
+      });
+
+      const btnDel = document.createElement("button");
+      btnDel.className = "iconBtn iconBtnDanger";
+      btnDel.type = "button";
+      btnDel.title = "Remover";
+      btnDel.textContent = "✕";
+      btnDel.addEventListener("click", ()=> removeBlock(b.id));
+
+      tools.appendChild(btnMin);
+      tools.appendChild(btnDel);
+
+      top.appendChild(title);
+      top.appendChild(tools);
+
+      const body = document.createElement("div");
+      body.className = "rxExpandedBody";
+
+      const grid = document.createElement("div");
+      grid.className = "rxGrid";
+
+      // Nome + autocomplete
+      const col1 = document.createElement("div");
+      const lab1 = document.createElement("label");
+      lab1.className = "label";
+      lab1.textContent = "Nome do medicamento";
+      col1.appendChild(lab1);
+
+      const acWrap = document.createElement("div");
+      acWrap.className = "acWrap";
+
+      const inpName = document.createElement("input");
+      inpName.className = "field";
+      inpName.placeholder = "Ex: Losartana potássica 50 mg";
+      inpName.value = b.name || "";
+      inpName.setAttribute("data-field","name");
+      inpName.autocomplete = "off";
+      inpName.spellcheck = false;
+      inpName.inputMode = "text";
+
+      const acList = document.createElement("div");
+      acList.className = "acList";
+
+      function closeList(){
+        acList.style.display = "none";
+        acList.innerHTML = "";
+      }
+      function openList(){ acList.style.display = "block"; }
+
+      inpName.addEventListener("input", ()=>{
+        b.name = safeText(inpName.value);
+        strong.textContent = b.name ? b.name : `Remédio ${idx+1}`;
+
+        renderPaperDebounced();
+        updateSummaries();
+
+        // autocomplete
+        const q = keyify(b.name);
+        if(!q || !state.db.loaded){
+          closeList(); return;
+        }
+        const hits = [];
+        for(const it of state.db.list){
+          if(keyify(it.name).includes(q)) hits.push(it);
+          if(hits.length >= 12) break;
+        }
+        if(!hits.length){ closeList(); return; }
+
+        acList.innerHTML = "";
+        hits.forEach(it=>{
+          const item = document.createElement("div");
+          item.className = "acItem";
+          item.innerHTML = `<b>${it.name}</b><small>selecionar</small>`;
+          item.addEventListener("mousedown", (ev)=>{
+            // mousedown pra não perder foco no mobile
+            ev.preventDefault();
+            b.name = it.name;
+            inpName.value = it.name;
+            strong.textContent = it.name;
+            closeList();
+            renderPaperDebounced();
+            updateSummaries();
+          });
+          acList.appendChild(item);
+        });
+        openList();
+      });
+
+      inpName.addEventListener("blur", ()=> setTimeout(closeList, 180));
+      inpName.addEventListener("focus", ()=>{
+        if(acList.children.length) openList();
+      });
+
+      acWrap.appendChild(inpName);
+      acWrap.appendChild(acList);
+      col1.appendChild(acWrap);
+
+      // Quantidade
+      const col2 = document.createElement("div");
+      const lab2 = document.createElement("label");
+      lab2.className = "label";
+      lab2.textContent = "Quantidade / Apresentação";
+      col2.appendChild(lab2);
+
+      const inpQty = document.createElement("input");
+      inpQty.className = "field";
+      inpQty.placeholder = "Ex: 30 comprimidos";
+      inpQty.value = b.qty || "";
+      inpQty.setAttribute("data-field","qty");
+      inpQty.autocomplete = "off";
+      inpQty.spellcheck = false;
+      inpQty.inputMode = "text";
+      inpQty.addEventListener("input", ()=>{
+        b.qty = safeText(inpQty.value);
+        renderPaperDebounced();
+      });
+
+      col2.appendChild(inpQty);
+
+      grid.appendChild(col1);
+      grid.appendChild(col2);
+
+      body.appendChild(grid);
+
+      // Posologia
+      const full = document.createElement("div");
+      full.className = "rxFull";
+      const lab3 = document.createElement("label");
+      lab3.className = "label";
+      lab3.textContent = "Posologia / Orientações";
+
+      const ta = document.createElement("textarea");
+      ta.className = "field";
+      ta.placeholder = "Ex: Tomar 1 comprimido pela manhã por 30 dias.";
+      ta.value = b.use || "";
+      ta.autocomplete = "off";
+      ta.spellcheck = true;
+      ta.addEventListener("input", ()=>{
+        b.use = safeText(ta.value);
+        renderPaperDebounced();
+      });
+
+      // Chips (volta no mobile + funciona no desktop)
+      const chips = document.createElement("div");
+      chips.className = "chips";
+      const chipData = [
+        { t:"☀️ Manhã", add:"Manhã" },
+        { t:"🌤️ Tarde", add:"Tarde" },
+        { t:"🌙 Noite", add:"Noite" },
+        { t:"☕ Antes do café", add:"Antes do café" },
+        { t:"🍽️ Antes do almoço", add:"Antes do almoço" },
+        { t:"🍲 Antes do jantar", add:"Antes do jantar" },
+        { t:"✅ Após refeição", add:"Após refeição" },
+        { t:"⏱️ 8/8h", add:"a cada 8 horas" },
+        { t:"⏱️ 12/12h", add:"a cada 12 horas" },
+      ];
+      chipData.forEach(cd=>{
+        const c = document.createElement("div");
+        c.className = "chip";
+        c.innerHTML = `<span>${cd.t}</span>`;
+        c.addEventListener("click", ()=>{
+          const cur = safeText(ta.value);
+          const ins = cd.add;
+          ta.value = cur ? (cur + (cur.endsWith(".") ? " " : ". ") + ins) : ins;
+          b.use = safeText(ta.value);
+          ta.focus({ preventScroll:true });
+          renderPaperDebounced();
+        });
+        chips.appendChild(c);
+      });
+
+      full.appendChild(lab3);
+      full.appendChild(ta);
+      full.appendChild(chips);
+
+      body.appendChild(full);
+
+      wrap.appendChild(top);
+      wrap.appendChild(body);
+
+      root.appendChild(wrap);
+
+      // quando adiciona novo, minimiza DOM dos anteriores
+      document.querySelectorAll(".rxBlock").forEach(node=>{
+        const bid = node.getAttribute("data-block");
+        if(bid && bid !== b.id){
+          node.classList.add("collapsed");
+          const bb = state.blocks.find(x=> x.id === bid);
+          if(bb) bb.collapsed = true;
+          const btn = node.querySelector(".rxTools .iconBtnDim");
+          if(btn){ btn.textContent = "▾"; btn.title = "Expandir"; }
+        }
+      });
+
+      renumberBlocks();
+    }
+
+    /************************************************************
+     * Summaries
+     ************************************************************/
+    function updateSummaries(){
+      const medName = safeText(state.docName);
+      const crms = state.crms.map(safeText).filter(Boolean);
+      $("sumMedico").textContent = medName
+        ? `${state.docTitle} ${medName}${crms.length ? " • " + crms[0] : ""}`
+        : "Preencha nome/CRM";
+
+      const pName = safeText(state.patientName);
+      const pDoc = safeText(state.patientDoc);
+      $("sumPaciente").textContent = pName ? (pDoc ? `${pName} • ${pDoc}` : pName) : "Preencha o paciente";
+
+      const sizeLabel = ({
+        A4:"A4",
+        LETTER:"Carta",
+        A5:"A5",
+        LEGAL:"Legal"
+      })[state.paperSize] || "A4";
+
+      const dateLabel = state.includeDate ? (safeText(state.dateValue) || "data") : "sem data";
+      $("sumPagina").textContent = `${sizeLabel} • ${dateLabel} • fonte ${rxFontPx().toFixed(1)}`;
+
+      $("sumMeds").textContent = state.blocks.length
+        ? `${state.blocks.length} item(ns) • ${medsPerPage()} por página`
+        : "Adicione remédios";
+
+      $("sumImgs").textContent = state.instImgs.length
+        ? `${state.instImgs.length} imagem(ns) • cabeçalho/rodapé`
+        : "Sem imagens";
+    }
+
+    /************************************************************
+     * Paper render
+     ************************************************************/
+    function rxSymbol(){
+      if(state.rxSymbolMode === "RX") return "Rx";
+      if(state.rxSymbolMode === "RXCLASSIC") return "℞";
+      return "R//";
+    }
+
+    function docFooterHTML(){
+      const title = safeText(state.docTitle);
+      const name = safeText(state.docName);
+
+      const crms = (state.crms || []).map(safeText).filter(Boolean);
+      const rqes = (state.rqes || []).map(safeText).filter(Boolean);
+
+      const lines = [];
+      if(crms.length) lines.push(crms.join(" • "));
+      if(rqes.length) lines.push(rqes.join(" • "));
+
+      const displayName = [title, name].filter(Boolean).join(" ");
+      return `
+        <div class="sigWrap">
+          <div class="sigLine"></div>
+          <div class="docCenter">
+            <div class="docName">${displayName || "&nbsp;"}</div>
+            ${lines.map(l=> `<div class="docLine">${l}</div>`).join("") || `<div class="docLine">&nbsp;</div>`}
+          </div>
+        </div>
+      `;
+    }
+
+    function instImgsHTML(place){
+      const imgs = state.instImgs.filter(x=> (x.place||"header") === place).filter(x=> safeText(x.url));
+      if(!imgs.length) return "";
+
+      return imgs.map((im)=>{
+        const scale = clamp(parseInt(im.scale||45,10)||45, 10, 100);
+        const x = clamp(parseInt(im.x||0,10)||0, 0, 100);
+        const y = clamp(parseInt(im.y||0,10)||0, 0, 100);
+
+        // posição dentro da área reservada
+        // left/top em %, e translate pra não “sair” demais
+        return `
+          <img class="instImg"
+            src="${im.url}"
+            style="
+              width:${scale}%;
+              left:${x}%;
+              top:${y}%;
+              transform: translate(-${x}%, -${y}%);
+              max-height:${place==='header' ? 70 : 62}px;
+            "
+            alt=""
+          />
+        `;
+      }).join("");
+    }
+
+    function pageHTML(blocks){
+      const patient = safeText(state.patientName);
+      const patientDoc = safeText(state.patientDoc);
+      const showDate = !!state.includeDate;
+      const date = safeText(state.dateValue);
+
+      const rxFont = rxFontPx().toFixed(1) + "px";
+
+      const items = blocks.map(b=>{
+        const name = safeText(b.name) || "—";
+        const qty = safeText(b.qty) || "";
+        const use = safeText(b.use) || "";
+
+        const qtyPart = qty ? `<div class="qty">${qty}</div>` : `<div class="qty" style="opacity:.6;">&nbsp;</div>`;
+        const useRow = `<div class="useRow"><b>Uso:</b><div class="useText">${use || "&nbsp;"}</div></div>`;
+
+        return `
+          <div class="rxItem">
+            <div class="rxLine">
+              <div class="drugName">${name}</div>
+              <div class="leaderText">${leaderHyphens()}</div>
+              ${qtyPart}
+            </div>
+            ${useRow}
+          </div>
+        `;
+      }).join("");
+
+      const dateBox = showDate
+        ? `<div class="dateBox">${date || "&nbsp;"}</div>`
+        : ``;
+
+      const docLine = patientDoc ? `<span style="margin-left:10px; font-weight:800;">Doc:</span> <span style="border-bottom:1px solid #000; padding:0 0 2px; min-width:120px; display:inline-block;">${patientDoc}</span>` : "";
+
+      return `
+        <div class="rxPaper" style="--rxFont:${rxFont}">
+          <div class="headerArea">
+            ${instImgsHTML("header")}
+          </div>
+
+          <div class="topLine">
+            <div class="ptLine">
+              <div class="ptLabel">Paciente:</div>
+              <div class="ptName">${patient || "&nbsp;"}</div>
+              ${docLine}
+            </div>
+            ${dateBox}
+          </div>
+
+          <div class="rxSymbol">${rxSymbol()}</div>
+
+          <div class="rxList">
+            ${items || `<div style="font-size:12px;color:#111;">Adicione medicamentos no editor.</div>`}
+          </div>
+
+          <div class="footerArea">
+            ${instImgsHTML("footer")}
+          </div>
+
+          ${docFooterHTML()}
+        </div>
+      `;
+    }
+
+    function renderPaper(){
+      const pages = paginateBlocks();
+      const total = pages.length;
+
+      state.selectedPage = clamp(parseInt(state.selectedPage,10) || 1, 1, total);
+
+      const paper = $("paper");
+      paper.classList.remove("paperA4","paperLetter","paperA5","paperLegal");
+      if(state.paperSize==="LETTER") paper.classList.add("paperLetter");
+      else if(state.paperSize==="A5") paper.classList.add("paperA5");
+      else if(state.paperSize==="LEGAL") paper.classList.add("paperLegal");
+      else paper.classList.add("paperA4");
+
+      // page select
+      const sel = $("pageSelect");
+      sel.innerHTML = "";
+      for(let i=1;i<=total;i++){
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = `Página ${i}`;
+        if(i === state.selectedPage) opt.selected = true;
+        sel.appendChild(opt);
+      }
+
+      $("pageInfo").textContent = `Página ${state.selectedPage} de ${total}`;
+      $("rxPaper").innerHTML = pageHTML(pages[state.selectedPage-1]);
+
+      // impressão (todas as páginas)
+      const printAll = $("printAll");
+      printAll.innerHTML = pages.map((p, idx)=>{
+        return `
+          <div class="printPage">
+            ${pageHTML(p)}
+          </div>
+          ${idx < pages.length-1 ? `<div style="break-after:page;"></div>` : ``}
+        `;
+      }).join("");
+    }
+
+    // debounce para não “piscar” no mobile
+    function debounce(fn, ms=120){
+      let t;
+      return (...args)=>{
+        clearTimeout(t);
+        t = setTimeout(()=>fn(...args), ms);
+      };
+    }
+    const renderPaperDebounced = debounce(renderPaper, 90);
+
+    /************************************************************
+     * Bind inputs (sem re-render geral)
+     ************************************************************/
+    function bind(){
+      // médico
+      $("docTitle").addEventListener("change", (e)=>{
+        state.docTitle = (e.target.value === "Dra.") ? "Dra." : "Dr.";
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("docName").addEventListener("input", (e)=>{
+        state.docName = safeText(e.target.value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // paciente
+      $("patientName").addEventListener("input", (e)=>{
+        state.patientName = safeText(e.target.value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("patientDoc").addEventListener("input", (e)=>{
+        state.patientDoc = safeText(e.target.value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // página
+      $("paperSize").addEventListener("change", (e)=>{
+        const v = e.target.value;
+        state.paperSize = (v==="LETTER"||v==="A5"||v==="LEGAL") ? v : "A4";
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("includeDate").addEventListener("change", (e)=>{
+        state.includeDate = !!e.target.checked;
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("dateValue").addEventListener("input", (e)=>{
+        state.dateValue = safeText(e.target.value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("rxFontStep").addEventListener("change", (e)=>{
+        state.rxFontStep = clamp(parseInt(e.target.value,10)||0, 0, 6);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("rxSymbolMode").addEventListener("change", (e)=>{
+        state.rxSymbolMode = e.target.value || "RSLASH";
+        renderPaperDebounced();
+      });
+
+      // imagens institucionais
+      $("btnAddImg").addEventListener("click", ()=>{
+        state.instImgs.push({
+          id: uid(),
+          url: "",
+          place: "header",
+          scale: 45,
+          x: 0,
+          y: 0
+        });
+        renderImgRows();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("btnClearImgs").addEventListener("click", ()=>{
+        state.instImgs = [];
+        renderImgRows();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // config topbar ícone (no código)
+      $("brandLogoUrl").addEventListener("input", (e)=>{
+        BRAND_LOGO_URL = safeText(e.target.value);
+        applyBrandLogo();
+      });
+      $("brandLogoScale").addEventListener("input", (e)=>{
+        BRAND_LOGO_SIZE_PX = clamp(parseInt(e.target.value,10)||40, 24, 72);
+        applyBrandLogo();
+      });
+
+      // CRM/RQE add
+      $("btnAddCRM").addEventListener("click", ()=>{
+        state.crms.push("");
+        renderCrmList();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("btnAddRQE").addEventListener("click", ()=>{
+        state.rqes.push("");
+        renderRqeList();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // meds
+      $("btnAddMed").addEventListener("click", addBlock);
+      $("btnAddMed2").addEventListener("click", addBlock);
+
+      $("btnClear").addEventListener("click", ()=>{
+        state.patientName = "";
+        state.patientDoc = "";
+        state.blocks = [];
+        state.selectedPage = 1;
+
+        $("patientName").value = "";
+        $("patientDoc").value = "";
+
+        renderBlocksInitial(); // limpa
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // navegação páginas
+      $("pageSelect").addEventListener("change", (e)=>{
+        state.selectedPage = parseInt(e.target.value,10) || 1;
+        renderPaperDebounced();
+      });
+      $("btnPrevPage").addEventListener("click", ()=>{
+        const pages = paginateBlocks();
+        state.selectedPage = clamp(state.selectedPage - 1, 1, pages.length);
+        renderPaperDebounced();
+      });
+      $("btnNextPage").addEventListener("click", ()=>{
+        const pages = paginateBlocks();
+        state.selectedPage = clamp(state.selectedPage + 1, 1, pages.length);
+        renderPaperDebounced();
+      });
+
+      // imprimir
+      $("btnPrint").addEventListener("click", ()=>{
+        renderPaper(); // garante tudo pronto
         window.print();
+      });
 
-        // 3. Enviar para a planilha (Background)
-        if (newMeds.length > 0 && APPS_SCRIPT_URL !== "INSIRA_SUA_URL_DO_APPS_SCRIPT_AQUI") {
-            try {
-                // Usando 'no-cors' pois Google Scripts tem restrições de CORS simples, 
-                // o script receberá, mas não conseguimos ler a resposta JSON aqui.
-                await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ medications: newMeds })
-                });
-                console.log("Novos remédios enviados para cadastro.");
-                // Adiciona localmente para não enviar de novo na mesma sessão
-                newMeds.forEach(n => allMedications.push({ name: n, images: [] }));
-            } catch (e) {
-                console.error("Erro ao salvar novos remédios:", e);
-            }
-        }
+      // Tabs mobile
+      const tabEditor = $("tabEditor");
+      const tabPreview = $("tabPreview");
+      const panelEditor = $("panelEditor");
+      const panelPreview = $("panelPreview");
+
+      function showEditor(){
+        tabEditor.classList.add("on");
+        tabPreview.classList.remove("on");
+        panelEditor.classList.remove("hide");
+        panelPreview.classList.remove("show");
+      }
+      function showPreview(){
+        tabPreview.classList.add("on");
+        tabEditor.classList.remove("on");
+        panelEditor.classList.add("hide");
+        panelPreview.classList.add("show");
+      }
+
+      tabEditor.addEventListener("click", showEditor);
+      tabPreview.addEventListener("click", showPreview);
     }
 
-    // Init
-    window.onload = loadSheetData;
+    function applyBrandLogo(){
+      const img = $("brandMark");
+      const url = BRAND_LOGO_URL || PLACEHOLDER_PNG;
 
-</script>
+      img.src = url;
+      img.style.width = BRAND_LOGO_SIZE_PX + "px";
+      img.style.height = BRAND_LOGO_SIZE_PX + "px";
+    }
+
+    /************************************************************
+     * Init
+     ************************************************************/
+    (function init(){
+      // defaults
+      state.dateValue = todayBR();
+      $("dateValue").value = state.dateValue;
+
+      // preenche inputs de config do topo (código)
+      $("brandLogoUrl").value = BRAND_LOGO_URL;
+      $("brandLogoScale").value = String(BRAND_LOGO_SIZE_PX);
+
+      applyBrandLogo();
+
+      // listas
+      renderCrmList();
+      renderRqeList();
+      renderImgRows();
+
+      // meds: começa com 1
+      state.blocks = [];
+      renderBlocksInitial();
+      addBlock();
+
+      // bind
+      bind();
+
+      // summaries
+      updateSummaries();
+
+      // preview
+      renderPaper();
+
+      // load db (silencioso)
+      loadSheetDB();
+    })();
+  </script>
 </body>
 </html>
