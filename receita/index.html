@@ -568,28 +568,6 @@
       overflow:hidden;
       text-overflow:ellipsis;
     }
-    .medSubs{
-  display:flex;
-  gap: 8px;
-  flex-wrap:wrap;
-  margin-top: 10px;
-}
-
-    .subBtn{
-      cursor:pointer;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      padding: 7px 10px;
-      font-weight: 900;
-      font-size: 12.1px;
-      transition: transform var(--t), background var(--t), border-color var(--t);
-      user-select:none;
-      line-height: 1.1;
-    }
-    .subBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.18); }
-    .subBtn:active{ transform: translateY(0px) scale(.99); }
 
     .acEmpty{
       padding: 12px;
@@ -1507,7 +1485,6 @@ function applyBrandLogo(){
      * - busca em TODAS as abas (publicadas) e unifica resultados
      ************************************************************/
     const SHEET_ID = "1CR3CtU-aA6-JZE37GUElF7CmHKudeiRgOK9WhIvBO8c";
-    const SHEET_PUBHTML = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2px-SWkaAF39UmOm_lPxHheVOKclf-WOz4wW8I27xOcWg3MhJaq9YMR_Jxn5SDKOH9QuNHIl7sdIm/pubhtml";
     const DEFAULT_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--pillOrange").trim() || "#ff7a18";
 
     const state = {
@@ -1831,14 +1808,6 @@ function applyBrandLogo(){
     /************************************************************
      * GOOGLE SHEETS — carregar abas + meds (A/B/C) via GVIZ
      ************************************************************/
-    function decodeHTMLEntities(str){
-      try{
-        const t = document.createElement("textarea");
-        t.innerHTML = str;
-        return t.value;
-      }catch(e){ return str; }
-    }
-
     function sanitizeColor(c){
       const v = safeText(c);
       if(!v) return DEFAULT_COLOR;
@@ -1855,7 +1824,9 @@ function applyBrandLogo(){
 
       return DEFAULT_COLOR;
     }
-
+function splitSemicolon(v){
+  return safeText(v).split(";").map(s => safeText(s)).filter(Boolean);
+}
     async function fetchSheetTabsFromPubhtml(){
   return [
     { "gid": "915261507",  "name": "Agentes antirreumáticos específicos" },
@@ -1952,104 +1923,178 @@ function applyBrandLogo(){
     }
 
     async function loadSheetDB(){
-      if(state.db.loading) return;
-      state.db.loading = true;
-      state.db.loaded = false;
-      state.db.list = [];
+  if(state.db.loading) return;
+  state.db.loading = true;
+  state.db.loaded = false;
+  state.db.list = [];
 
+  try{
+    const tabs = await fetchSheetTabsFromPubhtml();
+    state.db.tabs = tabs;
+
+    const temp = [];
+
+    for(const tab of tabs){
+      let rows = [];
       try{
-        const tabs = await fetchSheetTabsFromPubhtml();
-        state.db.tabs = tabs;
-
-        const temp = [];
-
-        for(const tab of tabs){
-          let rows = [];
-          try{
-            rows = await fetchGvizByGid(tab.gid);
-          }catch(e){
-            continue;
-          }
-
-          rows.forEach((r, idx)=>{
-            const c = r.c || [];
-            const A = safeText(c[0]?.v ?? "");
-            const B = safeText(c[1]?.v ?? "");
-            const C = safeText(c[2]?.v ?? "");
-
-            // pula linhas vazias
-            if(!A && !B) return;
-
-            // heurística simples para ignorar cabeçalho
-            if(idx === 0){
-              const aK = keyify(A);
-              const bK = keyify(B);
-              if(aK.includes("nome") && (aK.includes("gener") || aK.includes("principal"))) return;
-              if(bK.includes("nome") && bK.includes("comerc")) return;
-            }
-
-            temp.push({
-              a: A,
-              b: B,
-              color: C,
-              cat: tab.name || `Aba ${tab.gid}`,
-            });
-          });
-        }
-
-        // unifica por A|B (item único por medicamento)
-        const map = new Map();
-        for(const it of temp){
-          const k = keyify(it.a) + "|" + keyify(it.b);
-          if(!map.has(k)){
-            map.set(k, {
-              a: it.a,
-              b: it.b,
-              color: it.color,
-              cats: [it.cat]
-            });
-          }else{
-            const cur = map.get(k);
-            // agrega categorias
-            if(it.cat && !cur.cats.includes(it.cat)) cur.cats.push(it.cat);
-            // se não tinha cor, pega
-            if(!safeText(cur.color) && safeText(it.color)) cur.color = it.color;
-          }
-        }
-
-        const list = Array.from(map.values()).map(x=>{
-          const a = safeText(x.a);
-          const b = safeText(x.b);
-          const cats = Array.isArray(x.cats) ? x.cats.filter(Boolean) : [];
-          const catLabel = cats.length
-            ? (cats[0] + (cats.length > 1 ? ` +${cats.length-1}` : ""))
-            : "—";
-
-          return {
-            a,
-            b,
-            cats,
-            catLabel,
-            color: sanitizeColor(x.color),
-            search: keyify([a,b,cats.join(" ")].join(" "))
-          };
-        });
-
-        list.sort((p,q)=>{
-          const A = (p.a || p.b || "").localeCompare((q.a || q.b || ""), "pt-BR", { sensitivity:"base" });
-          if(A !== 0) return A;
-          return (p.b||"").localeCompare((q.b||""), "pt-BR", { sensitivity:"base" });
-        });
-
-        state.db.list = list;
-        state.db.loaded = true;
+        rows = await fetchGvizByGid(tab.gid);
       }catch(e){
-        state.db.loaded = false;
-        state.db.list = [];
-      }finally{
-        state.db.loading = false;
+        continue;
+      }
+
+      rows.forEach((r, idx)=>{
+        const c = r.c || [];
+
+        // ===== NOVO MAPEAMENTO (como você pediu) =====
+        // A = Nome comercial (principal)
+        const colA = safeText(c[0]?.v ?? "");
+
+        // D = Nome genérico/substância (preferência)
+        const colD = safeText(c[3]?.v ?? "");
+
+        // (fallback caso sua planilha ainda use B como genérico)
+        const colB = safeText(c[1]?.v ?? "");
+
+        // C = opções de DOSAGEM (separadas por ;)
+        const colC = safeText(c[2]?.v ?? "");
+
+        // E = opções de QUANTIDADE/APRESENTAÇÃO/FORMA (separadas por ;)
+        const colE = safeText(c[4]?.v ?? "");
+
+        // cor (opcional) — se não existir, fica laranja default
+        const colF = safeText(c[5]?.v ?? "");
+
+        const A = colA;                 // comercial
+        const B = colD || colB;         // genérico (D > B)
+
+        if(!A && !B) return;
+
+        // Heurística pra pular cabeçalho
+        if(idx === 0){
+          const head = keyify([A,B,colC,colD,colE].join(" "));
+          if(head.includes("nome") && (head.includes("comercial") || head.includes("gen") || head.includes("subst"))) return;
+        }
+
+        temp.push({
+          a: A,
+          b: B,
+          doseOpts: splitSemicolon(colC), // C
+          qtyOpts:  splitSemicolon(colE), // E
+          color: colF,
+          cat: tab.name || `Aba ${tab.gid}`
+        });
+      });
+    }
+
+    // Unifica por A|B
+    const map = new Map();
+    const mergeUnique = (base, add)=>{
+      const s = new Set((base||[]).map(safeText).filter(Boolean));
+      (add||[]).map(safeText).filter(Boolean).forEach(v=> s.add(v));
+      return Array.from(s);
+    };
+
+    for(const it of temp){
+      const k = keyify(it.a) + "|" + keyify(it.b);
+      if(!map.has(k)){
+        map.set(k, {
+          a: it.a,
+          b: it.b,
+          doseOpts: it.doseOpts || [],
+          qtyOpts: it.qtyOpts || [],
+          color: it.color,
+          cats: [it.cat]
+        });
+      }else{
+        const cur = map.get(k);
+
+        if(it.cat && !cur.cats.includes(it.cat)) cur.cats.push(it.cat);
+        cur.doseOpts = mergeUnique(cur.doseOpts, it.doseOpts);
+        cur.qtyOpts  = mergeUnique(cur.qtyOpts,  it.qtyOpts);
+
+        if(!safeText(cur.color) && safeText(it.color)) cur.color = it.color;
       }
     }
+
+   const baseList = Array.from(map.values()).map(x=>{
+  const a = safeText(x.a); // comercial
+  const b = safeText(x.b); // genérico
+  const doseOpts = Array.isArray(x.doseOpts) ? x.doseOpts.map(safeText).filter(Boolean) : [];
+  const qtyOpts  = Array.isArray(x.qtyOpts)  ? x.qtyOpts.map(safeText).filter(Boolean)  : [];
+
+  const cats = Array.isArray(x.cats) ? x.cats.filter(Boolean) : [];
+  const catLabel = cats.length
+    ? (cats[0] + (cats.length > 1 ? ` +${cats.length-1}` : ""))
+    : "—";
+
+  return {
+    a,
+    b,
+    doseOpts,
+    qtyOpts,
+    cats,
+    catLabel,
+    color: sanitizeColor(x.color)
+  };
+});
+
+// ✅ explode: 1 ou 2 entradas por medicamento (comercial e genérico)
+const list = [];
+for(const it of baseList){
+  const brand = safeText(it.a);     // comercial
+  const generic = safeText(it.b);   // genérico
+
+  const cats = Array.isArray(it.cats) ? it.cats : [];
+  const doseOpts = Array.isArray(it.doseOpts) ? it.doseOpts : [];
+  const qtyOpts  = Array.isArray(it.qtyOpts)  ? it.qtyOpts  : [];
+  const common = {
+    doseOpts,
+    qtyOpts,
+    cats,
+    catLabel: it.catLabel || "—",
+    color: sanitizeColor(it.color)
+  };
+
+  // 1) Entrada comercial (mostra genérico embaixo, mas insere só o comercial)
+  if(brand){
+    list.push({
+      ...common,
+      kind: "brand",
+      title: brand,
+      subtitle: generic,
+      insertText: brand,
+      search: keyify([brand, generic, cats.join(" "), doseOpts.join(" "), qtyOpts.join(" ")].join(" "))
+    });
+  }
+
+  // 2) Entrada genérico (sem subtítulo, insere só o genérico)
+  if(generic && keyify(generic) !== keyify(brand)){
+    list.push({
+      ...common,
+      kind: "generic",
+      title: generic,
+      subtitle: "",
+      insertText: generic,
+      search: keyify([generic, brand, cats.join(" "), doseOpts.join(" "), qtyOpts.join(" ")].join(" "))
+    });
+  }
+}
+
+list.sort((p,q)=>{
+  const A = (p.title || "").localeCompare((q.title || ""), "pt-BR", { sensitivity:"base" });
+  if(A !== 0) return A;
+  return (p.subtitle||"").localeCompare((q.subtitle||""), "pt-BR", { sensitivity:"base" });
+});
+
+state.db.list = list;
+state.db.loaded = true;
+  }catch(e){
+    state.db.loaded = false;
+    state.db.list = [];
+  }finally{
+    state.db.loading = false;
+  }
+}
 
     /************************************************************
      * CRM / RQE lists
@@ -2551,137 +2596,204 @@ function applyBrandLogo(){
         acList.style.display = "none";
         acList.innerHTML = "";
       }
+      // === Sugestões por linha (C e E) ===
+let dlDose = null;
+let dlQty = null;
+
+function fillDatalist(dl, arr){
+  if(!dl) return;
+  dl.innerHTML = "";
+  (arr||[]).forEach(v=>{
+    const opt = document.createElement("option");
+    opt.value = v;
+    dl.appendChild(opt);
+  });
+}
+
+function applyMedOptions(it){
+  // guarda no bloco (opcional)
+  b._medOpts = {
+    doseOpts: Array.isArray(it.doseOpts) ? it.doseOpts.slice(0) : [],
+    qtyOpts:  Array.isArray(it.qtyOpts)  ? it.qtyOpts.slice(0)  : []
+  };
+
+  fillDatalist(dlDose, b._medOpts.doseOpts);
+  fillDatalist(dlQty,  b._medOpts.qtyOpts);
+}
       function openList(){ acList.style.display = "block"; }
 
-      function applyChoice(it, mode){
-        const A = safeText(it.a);
-        const B = safeText(it.b);
+      function applyEntry(it){
+  const txt = safeText(it.insertText || it.title || "");
+  if(!txt) return;
 
-        let txt = "";
-        if(mode === "A") txt = A || B;
-        else if(mode === "B") txt = B || A;
-        else txt = (A && B) ? `${B} (${A})` : (B || A);
+  b.name = txt;
+  inpName.value = txt;
 
-        b.name = txt;
-        inpName.value = txt;
+  // carrega sugestões C/E dessa linha no bloco
+  applyMedOptions(it);
 
-        const nm = txt ? txt : `Remédio ${idx+1}`;
-        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
-        strong.textContent = nm + ds;
+  const nm = txt ? txt : `Remédio ${idx+1}`;
+  const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
+  strong.textContent = nm + ds;
 
-        closeList();
-        renderPaperDebounced();
-        updateSummaries();
-      }
+  closeList();
+  renderPaperDebounced();
+  updateSummaries();
+}
 
       function renderHits(hits, q){
-        acList.innerHTML = "";
+  acList.innerHTML = "";
 
-        if(!hits.length){
-          const d = document.createElement("div");
-          d.className = "acEmpty";
-          d.textContent = q ? "Nenhum resultado. Continue digitando ou insira manualmente." : "Digite para buscar. (A planilha é consultada em todas as abas.)";
-          acList.appendChild(d);
-          openList();
-          return;
-        }
+  if(!hits.length){
+    const d = document.createElement("div");
+    d.className = "acEmpty";
+    d.textContent = q ? "Nenhum resultado. Continue digitando ou insira manualmente." : "Digite para buscar. (A planilha é consultada em todas as abas.)";
+    acList.appendChild(d);
+    openList();
+    return;
+  }
 
-        hits.forEach((it)=>{
-          const item = document.createElement("div");
-          item.className = "medItem";
+  hits.forEach((it)=>{
+    const item = document.createElement("div");
+    item.className = "medItem";
 
-          const dot = document.createElement("div");
-          dot.className = "medDot";
-          dot.style.background = sanitizeColor(it.color);
+    const dot = document.createElement("div");
+    dot.className = "medDot";
+    dot.style.background = sanitizeColor(it.color);
 
-          const main = document.createElement("div");
-          main.className = "medMain";
+    const main = document.createElement("div");
+    main.className = "medMain";
 
-          const topRow = document.createElement("div");
-          topRow.className = "medTopRow";
+    const topRow = document.createElement("div");
+    topRow.className = "medTopRow";
 
-          const txtBox = document.createElement("div");
-          txtBox.style.minWidth = "0";
+    const txtBox = document.createElement("div");
+    txtBox.style.minWidth = "0";
 
-          const lineA = document.createElement("div");
-          lineA.className = "medA";
-          lineA.textContent = it.a || it.b || "—";
+    const lineA = document.createElement("div");
+    lineA.className = "medA";
+    lineA.textContent = it.title || "—";
 
-          const lineB = document.createElement("div");
-          lineB.className = "medB";
-          lineB.textContent = it.b ? it.b : (it.a ? "—" : "");
+    const lineB = document.createElement("div");
+    lineB.className = "medB";
+    lineB.textContent = it.subtitle || "";
+    lineB.style.display = it.subtitle ? "block" : "none";
 
-          txtBox.appendChild(lineA);
-          txtBox.appendChild(lineB);
+    txtBox.appendChild(lineA);
+    txtBox.appendChild(lineB);
 
-          const tag = document.createElement("div");
-          tag.className = "medTag";
-          tag.textContent = it.catLabel || "—";
+    const tag = document.createElement("div");
+    tag.className = "medTag";
+    tag.textContent = it.catLabel || "—";
 
-          topRow.appendChild(txtBox);
-          topRow.appendChild(tag);
+    topRow.appendChild(txtBox);
+    topRow.appendChild(tag);
 
-          const subs = document.createElement("div");
-          subs.className = "medSubs";
+    main.appendChild(topRow);
 
-          const btnA = document.createElement("button");
-          btnA.className = "subBtn";
-          btnA.type = "button";
-          btnA.textContent = "Inserir Genérico (A)";
-          btnA.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "A"); });
+    item.appendChild(dot);
+    item.appendChild(main);
 
-          const btnB = document.createElement("button");
-          btnB.className = "subBtn";
-          btnB.type = "button";
-          btnB.textContent = "Inserir Comercial (B)";
-          btnB.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "B"); });
+    // ✅ clicar no item seleciona direto (sem subitens)
+    item.addEventListener("mousedown", (ev)=>{
+      ev.preventDefault(); // mantém foco no input
+      applyEntry(it);
+    });
 
-          const btnAB = document.createElement("button");
-          btnAB.className = "subBtn";
-          btnAB.type = "button";
-          btnAB.textContent = "Inserir B (A)";
-          btnAB.addEventListener("mousedown", (ev)=>{ ev.preventDefault(); applyChoice(it, "AB"); });
+    acList.appendChild(item);
+  });
 
-          subs.appendChild(btnA);
-          subs.appendChild(btnB);
-          subs.appendChild(btnAB);
-
-          main.appendChild(topRow);
-          main.appendChild(subs);
-
-          item.appendChild(dot);
-          item.appendChild(main);
-
-          // clicar no corpo do item NÃO abre nada — só mantém o foco no input
-item.addEventListener("mousedown", (ev)=>{
-  if(ev.target && ev.target.closest && ev.target.closest("button")) return;
-  ev.preventDefault(); // evita blur/fechamento da lista
-});
-          acList.appendChild(item);
-        });
-
-        openList();
-      }
+  openList();
+}
 
       function computeHits(q){
-        const hits = [];
-        if(!state.db.loaded) return hits;
+  const hits = [];
+  if(!state.db.loaded) return hits;
 
-        if(!q){
-          // sem query: mostra primeiros
-          for(const it of state.db.list){
-            hits.push(it);
-            if(hits.length >= 10) break;
-          }
-          return hits;
-        }
+  const list = state.db.list;
 
-        for(const it of state.db.list){
-          if(it.search && it.search.includes(q)) hits.push(it);
-          if(hits.length >= 12) break;
-        }
-        return hits;
-      }
+  if(!q){
+    for(const it of list){
+      hits.push(it);
+      if(hits.length >= 10) break;
+    }
+    return hits;
+  }
+
+  const scoreText = (qq, text)=>{
+    const t = keyify(text);
+    if(!t) return 999;
+    if(t === qq) return 0;
+    if(t.startsWith(qq)) return 1;
+    if(t.split(/\s+/).some(w => w.startsWith(qq))) return 1.5;
+    if(t.includes(qq)) return 2;
+    return 999;
+  };
+
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const scored = [];
+
+  for(const it of list){
+    const hay = it.search || "";
+    if(!tokens.every(tk => hay.includes(tk))) continue;
+
+    const s = Math.min(scoreText(q, it.title), scoreText(q, it.subtitle));
+    scored.push({ it, s });
+  }
+
+  scored.sort((x,y)=>{
+    if(x.s !== y.s) return x.s - y.s;
+    const lx = (x.it.title || "").length;
+    const ly = (y.it.title || "").length;
+    if(lx !== ly) return lx - ly;
+    return (x.it.title || "").localeCompare((y.it.title || ""), "pt-BR", { sensitivity:"base" });
+  });
+
+  for(const x of scored){
+    hits.push(x.it);
+    if(hits.length >= 12) break;
+  }
+
+  return hits;
+}
+
+  const scoreText = (qq, text)=>{
+    const t = keyify(text);
+    if(!t) return 999;
+    if(t === qq) return 0;
+    if(t.startsWith(qq)) return 1;
+    // match no começo de palavra
+    if(t.split(/\s+/).some(w => w.startsWith(qq))) return 1.5;
+    if(t.includes(qq)) return 2;
+    return 999;
+  };
+
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const scored = [];
+
+  for(const it of list){
+    const hay = it.search || "";
+    if(!tokens.every(tk => hay.includes(tk))) continue;
+
+    const s = Math.min(scoreText(q, it.a), scoreText(q, it.b));
+    scored.push({ it, s });
+  }
+
+  scored.sort((x,y)=>{
+    if(x.s !== y.s) return x.s - y.s;
+    const lx = (x.it.a || x.it.b || "").length;
+    const ly = (y.it.a || y.it.b || "").length;
+    if(lx !== ly) return lx - ly;
+    return (x.it.a || x.it.b || "").localeCompare((y.it.a || y.it.b || ""), "pt-BR", { sensitivity:"base" });
+  });
+
+  for(const x of scored){
+    hits.push(x.it);
+    if(hits.length >= 12) break;
+  }
+
+  return hits;
+}
 
       inpName.addEventListener("input", ()=>{
         b.name = safeText(inpName.value);
@@ -2744,6 +2856,10 @@ item.addEventListener("mousedown", (ev)=>{
       inpDose.autocomplete = "off";
       inpDose.spellcheck = false;
       inpDose.inputMode = "text";
+     dlDose = document.createElement("datalist");
+      dlDose.id = `dlDose_${b.id}`;
+inpDose.setAttribute("list", dlDose.id);
+
       inpDose.addEventListener("input", ()=>{
         b.dose = safeText(inpDose.value);
         const nm = safeText(b.name) ? safeText(b.name) : `Remédio ${idx+1}`;
@@ -2752,6 +2868,7 @@ item.addEventListener("mousedown", (ev)=>{
         renderPaperDebounced();
       });
       colDose.appendChild(inpDose);
+    colDose.appendChild(dlDose);
 
       // Quantidade
       const col2 = document.createElement("div");
@@ -2768,12 +2885,16 @@ item.addEventListener("mousedown", (ev)=>{
       inpQty.autocomplete = "off";
       inpQty.spellcheck = false;
       inpQty.inputMode = "text";
+    dlQty = document.createElement("datalist");
+dlQty.id = `dlQty_${b.id}`;
+inpQty.setAttribute("list", dlQty.id);
       inpQty.addEventListener("input", ()=>{
         b.qty = safeText(inpQty.value);
         renderPaperDebounced();
       });
 
       col2.appendChild(inpQty);
+    col2.appendChild(dlQty);
 
       grid.appendChild(col1);
       grid.appendChild(colDose);
