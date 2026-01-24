@@ -23,9 +23,6 @@
       --line: rgba(170,195,235,.12);
       --line2: rgba(170,195,235,.08);
 
-      --accent1:#b9c3d6;
-      --accent2:#8e9ab2;
-
       --shadowBig: 0 28px 90px rgba(0,0,0,.65);
       --shadowMid: 0 16px 50px rgba(0,0,0,.55);
 
@@ -36,22 +33,21 @@
 
       --t: .18s ease;
 
-      --container: 1180px;
       --padX: clamp(16px, 3.4vw, 24px);
       --gap: 18px;
       --gap2: 26px;
 
       --topH: 44px;
 
-      /* margem segura ~2cm para a área imprimível/preview */
       --paperPad: 20mm;
 
-      /* laranja default para círculo (coluna C vazia/inválida) */
       --pillOrange: #ff7a18;
+
+      --brandLogoSize: 44px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
     body{
       margin:0;
       font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -65,32 +61,32 @@
       overflow-x:hidden;
     }
 
-    a{color:inherit; text-decoration:none}
-    button, input, textarea, select{font:inherit}
-    ::selection{background:rgba(185,195,214,.25)}
+    a{ color:inherit; text-decoration:none }
+    button, input, textarea, select{ font:inherit }
+    ::selection{ background:rgba(185,195,214,.25) }
 
     .wrap{
-  width: 100%;
-  max-width: none;     /* remove o “miolo estreito” no desktop */
-  margin: 0;           /* não centraliza em container fixo */
-  padding: 18px var(--padX) 30px;
-}
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding: 18px var(--padX) 30px;
+    }
 
-    /* ===== Topbar (full width shell + inner max-width) ===== */
+    /* ===== Topbar ===== */
     .topbarShell{
       position: sticky;
       top: 0;
       z-index: 40;
       width: 100%;
       padding: 12px var(--padX) 0;
-      pointer-events:none; /* evita “pegar” clique fora do card */
+      pointer-events:none;
     }
     .topbarInner{
-  width: 100%;
-  max-width: none;   /* remove a limitação de largura */
-  margin: 0;
-  pointer-events:auto;
-}
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      pointer-events:auto;
+    }
     .topbar{
       width:100%;
       display:flex;
@@ -111,21 +107,63 @@
       min-width: 0;
       flex: 1 1 auto;
     }
+
+    /* ===== Badge/Medalha da Logo ===== */
+    .logoBadge{
+      flex: 0 0 auto;
+      padding: 7px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.38),
+        0 0 0 1px rgba(255,255,255,.06) inset;
+      position: relative;
+    }
+    .logoBadge::before{
+      content:"";
+      position:absolute;
+      inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 55%);
+      filter: blur(10px);
+      opacity:.45;
+      pointer-events:none;
+    }
+    .logoBadgeInner{
+      width: var(--brandLogoSize);
+      height: var(--brandLogoSize);
+      border-radius: 14px;
+      background:
+        radial-gradient(120px 80px at 35% 30%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(180deg, rgba(8,10,16,.85), rgba(6,7,12,.92));
+      border: 1px solid rgba(170,195,235,.14);
+      box-shadow:
+        0 10px 22px rgba(0,0,0,.55),
+        0 0 0 1px rgba(255,255,255,.04) inset;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position: relative;
+    }
+    .logoBadgeInner::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), transparent 55%);
+      opacity:.6;
+      pointer-events:none;
+    }
     .markImg{
-  width: var(--brandLogoSize, 44px);
-  height: var(--brandLogoSize, 44px);
-  object-fit: contain;
-  display:block;
+      width: calc(var(--brandLogoSize) - 10px);
+      height: calc(var(--brandLogoSize) - 10px);
+      object-fit: contain;
+      display:block;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.45));
+      position: relative;
+      z-index: 1;
+    }
 
-  /* sem “retângulo/badge” */
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-  border-radius: 0;
-
-  flex: 0 0 auto;
-}
     .brandTxt{
       min-width:0;
       display:flex;
@@ -196,12 +234,8 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 0 72px rgba(255,255,255,.08);
     }
 
-    .btnGhost{
-      background: transparent;
-      border-color: var(--line2);
-    }
+    .btnGhost{ background: transparent; border-color: var(--line2); }
 
-    /* User pill “do mesmo tamanho visual” */
     .userPill{
       display:inline-flex; align-items:center; gap:10px;
       height: var(--topH);
@@ -255,12 +289,12 @@
 
     /* ===== Main layout ===== */
     .main{
-  margin-top: 16px;
-  display:grid;
-  grid-template-columns: 1fr; /* coluna única: Editor em cima, Prévia embaixo */
-  gap: var(--gap2);
-  align-items:start;
-}
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap2);
+      align-items:start;
+    }
 
     .card{
       border:1px solid var(--line);
@@ -301,7 +335,7 @@
       color: var(--muted);
       font-size: 12.8px;
       line-height:1.25;
-      max-width: 62ch;
+      max-width: 70ch;
     }
     .cardBody{ position:relative; padding: 16px; }
 
@@ -350,7 +384,8 @@
       padding: 12px 12px;
       display:flex;
       align-items:center;
-      justify-content:space-between;      gap: 10px;
+      justify-content:space-between;
+      gap: 10px;
       user-select:none;
     }
     details.sec > summary::-webkit-details-marker{ display:none; }
@@ -448,7 +483,7 @@
 
     .rxGrid{
       display:grid;
-      grid-template-columns: 1.15fr .55fr .80fr;
+      grid-template-columns: 1.15fr .55fr .90fr;
       gap: 12px;
       align-items:start;
     }
@@ -485,7 +520,7 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 60px rgba(255,255,255,.05);
     }
 
-    /* ===== Autocomplete / Results (novo layout) ===== */
+    /* ===== Autocomplete / Results ===== */
     .acWrap{ position:relative; }
     .acList{
       position:absolute;
@@ -499,10 +534,9 @@
       z-index: 50;
       overflow:hidden;
       display:none;
-      max-height: 320px;
+      max-height: 340px;
       overflow:auto;
     }
-
     .medItem{
       padding: 10px 12px;
       cursor:pointer;
@@ -524,10 +558,7 @@
       flex: 0 0 auto;
       background: var(--pillOrange);
     }
-    .medMain{
-      flex: 1 1 auto;
-      min-width: 0;
-    }
+    .medMain{ flex: 1 1 auto; min-width: 0; }
     .medTopRow{
       display:flex;
       align-items:flex-start;
@@ -564,11 +595,10 @@
       padding: 4px 8px;
       border-radius: 999px;
       white-space:nowrap;
-      max-width: 26ch;
+      max-width: 30ch;
       overflow:hidden;
       text-overflow:ellipsis;
     }
-
     .acEmpty{
       padding: 12px;
       color: var(--muted);
@@ -578,70 +608,53 @@
 
     /* ===== Preview / Paper ===== */
     .paperShell{ padding: 16px; }
-    .paperControls{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
+    .paperHead{
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.02);
+      border-radius: 18px;
+      padding: 12px;
       margin-bottom: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    /* Barra acima da prévia (botões + navegação) */
-.paperHead{
-  border:1px solid var(--line2);
-  background: rgba(255,255,255,.02);
-  border-radius: 18px;
-  padding: 12px;
-  margin-bottom: 12px; /* “colado” na folha */
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-}
-
-.paperHeadRow{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 12px;
-  flex-wrap:wrap;
-}
-
-.paperHeadLeft{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.paperHeadRight{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-  margin-left:auto;
-}
+    .paperHeadRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .paperHeadLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .paperHeadRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      margin-left:auto;
+    }
 
     .paperWrap{ display:flex; justify-content:center; }
     .paper{
-  width: 100%;
-  max-width: 760px; /* aumenta a visualização no desktop */
-  border-radius: 18px;
-  border:1px solid rgba(0,0,0,.12);
-  background:#fff;
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
-  overflow:hidden;
-  position:relative;
-}
-    .paperInner{
-      padding: var(--paperPad);
+      width: 100%;
+      max-width: 760px;
+      border-radius: 18px;
+      border:1px solid rgba(0,0,0,.12);
       background:#fff;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+      position:relative;
     }
-
+    .paperInner{ padding: var(--paperPad); background:#fff; }
     .paperA4{ aspect-ratio: 210 / 297; }
     .paperLetter{ aspect-ratio: 8.5 / 11; }
     .paperA5{ aspect-ratio: 148 / 210; }
     .paperLegal{ aspect-ratio: 8.5 / 14; }
 
-    /* Paper typography */
     .rxPaper{
       color:#000;
       line-height: 1.32;
@@ -652,7 +665,6 @@
       background:#fff;
     }
 
-    /* Reserved header/footer areas */
     .rxPaper .headerArea{
       position:relative;
       height: 78px;
@@ -675,7 +687,18 @@
     }
     .instImgSimple--footer{ max-height: 58px; }
 
-    /* ===== Novo cabeçalho da receita (sem linha Paciente/Data) ===== */
+    /* ===== Título central "RECEITA MÉDICA" ===== */
+    .rxTitleCenter{
+      margin: 2px 0 10px;
+      text-align:center;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      font-size: 17px;
+      color:#111;
+    }
+
     .rxMeta{
       display:flex;
       align-items:flex-start;
@@ -700,7 +723,6 @@
       margin-left: 10px;
       white-space:nowrap;
     }
-
     .rxDatePill{
       flex: 0 0 auto;
       border-radius: 999px;
@@ -713,18 +735,17 @@
       border: 1px solid rgba(0,0,0,.10);
       white-space:nowrap;
     }
-
     .rxDividerLine{
       height:1px;
       background: #cfcfcf;
       margin: 10px 0 14px;
     }
 
-    /* R// obrigatório */
     .rxSymbol{
       font-weight: 900;
       font-size: 16px;
       margin: 0 0 10px;
+      font-family: var(--rxFamily);
     }
 
     .rxList{
@@ -735,22 +756,17 @@
       font-size: var(--rxFont);
       line-height: 1.34;
     }
-
-    .rxItem{ padding: 0; border: none; background: transparent; }
-
     .rxLine{
       display:flex;
       align-items:flex-end;
       gap: 10px;
     }
-
     .rxNo{
       font-weight: 900;
       letter-spacing:.1px;
       width: 20px;
       flex: 0 0 auto;
     }
-
     .drugName{
       font-weight: 800;
       letter-spacing:.15px;
@@ -779,17 +795,15 @@
       text-overflow:ellipsis;
     }
 
-    /* ✅ sem “linha do Uso”: instrução limpa */
     .rxInstr{
       margin-top: 4px;
-      padding-left: 30px; /* alinhado após "1." */
+      padding-left: 30px;
       color:#000;
       font-size: var(--rxFont);
       line-height: 1.28;
       word-break: break-word;
     }
 
-    /* ícones embaixo da instrução */
     .useIconsBelow{
       margin-top: 6px;
       padding-left: 30px;
@@ -811,7 +825,6 @@
       background: #fff;
     }
 
-    /* assinatura e rodapé */
     .sigWrap{
       margin-top: 6px;
       padding-top: 6px;
@@ -847,7 +860,6 @@
       font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    /* ===== Preview header tools (gear) ===== */
     .gearBtn{
       display:inline-flex;
       align-items:center;
@@ -875,7 +887,7 @@
       font-size: 16px;
     }
 
-    /* ===== Mobile: tabs ===== */
+    /* ===== Mobile ===== */
     .mobileTabs{
       display:none;
       margin-top: 14px;
@@ -906,27 +918,21 @@
     }
 
     @media (max-width: 980px){
-  .main{ grid-template-columns: 1fr; }
-
-  /* mantém a navegação mobile (se você quiser), mas sem esconder painéis */
-  .mobileTabs{ display:flex; }
-
-  /* prévia SEMPRE visível embaixo no mobile também */
-  .panel[data-panel="preview"]{ display:block; }
-  .panel[data-panel="editor"]{ display:block; }
-
-  .paper{ max-width: 620px; }
-}
+      .main{ grid-template-columns: 1fr; }
+      .mobileTabs{ display:flex; }
+      .paper{ max-width: 620px; }
+    }
 
     @media (max-width: 520px){
       .brand p{ display:none; }
       .grid2{ grid-template-columns: 1fr; }
       .grid3eq{ grid-template-columns: 1fr; }
       .rxGrid{ grid-template-columns: 1fr; }
-      .paperInner{ padding: 16mm; } /* um pouco menor no celular */
+      .paperInner{ padding: 16mm; }
       .userPill{ max-width: 92vw; }
       .userPill b, .userPill small{ max-width: 22ch; }
       .gearBtn{ width: 100%; justify-content:space-between; }
+      .rxTitleCenter{ font-size: 16px; }
     }
 
     /* ===== Modal ===== */
@@ -968,7 +974,6 @@
       gap:10px;
       flex-wrap:wrap;
     }
-
     .modalCard{
       border:1px solid var(--line2);
       background: rgba(255,255,255,.02);
@@ -976,47 +981,29 @@
       padding: 12px;
     }
 
-    /* ===== History page ===== */
-    .historyWrap{ max-width: 980px; margin: 0 auto; padding: 10px 0; }
-    .histList{ display:flex; flex-direction:column; gap: 12px; margin-top: 14px; }
-    .histItem{
-      border:1px solid var(--line);
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      box-shadow: 0 16px 50px rgba(0,0,0,.35);
-      padding: 14px;
-      display:flex;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-    }
-    .histMeta b{ display:block; font-size: 13.5px; letter-spacing:.2px; }
-    .histMeta small{ display:block; margin-top:6px; color: var(--muted); font-size: 12.4px; line-height:1.25; }
-
-    /* ===== PRINT (PDF) ===== */
+    /* ===== PRINT ===== */
     .printAll{ display:none; }
-
     @media print{
       body{ background:#fff !important; color:#000 !important; }
-      .topbarShell, .mobileTabs, .panel[data-panel="editor"], .panel[data-panel="preview"], #historyPage, .modalMask{ display:none !important; }
+      .topbarShell, .mobileTabs, #panelEditor, #panelPreview, .modalMask{ display:none !important; }
       .wrap{ max-width:none; padding:0; }
       .printAll{ display:block !important; }
-      .printPage{ width:auto; background:#fff; }
-
-      /* margem segura ~2cm */
       @page { margin: 20mm; }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- ===== TOPBAR full width ===== -->
   <div class="topbarShell">
     <div class="topbarInner">
       <div class="topbar">
         <div class="brand">
-          <img id="brandMark" class="markImg" alt="Logo UsoJaleco" />
+          <div class="logoBadge" aria-label="Logo">
+            <div class="logoBadgeInner">
+              <img id="brandMark" class="markImg" alt="Logo UsoJaleco" />
+            </div>
+          </div>
+
           <div class="brandTxt">
             <h1>UsoJaleco</h1>
             <p>Um jeito mais fácil de prescrever.</p>
@@ -1034,9 +1021,6 @@
           </span>
 
           <button class="btn btnGhost" id="btnLogin" type="button">Login</button>
-
-          <button class="btn btnGhost" id="btnHistory" type="button" style="display:none;">Histórico de Prescrições</button>
-
           <button class="btn btnGhost" id="btnAddMed" type="button">+ Adicionar remédio</button>
         </div>
       </div>
@@ -1044,17 +1028,14 @@
   </div>
 
   <div class="wrap" id="appWrap">
-
-    <!-- Tabs mobile -->
     <div class="mobileTabs" aria-label="Alternar entre editor e prévia">
       <div class="tab on" id="tabEditor">Editar</div>
       <div class="tab" id="tabPreview">Prévia</div>
     </div>
 
-    <!-- ===== MAIN APP ===== -->
     <div class="main" id="mainApp">
       <!-- ===== Editor ===== -->
-      <div class="card panel" data-panel="editor" id="panelEditor">
+      <div class="card panel" id="panelEditor">
         <div class="cardHeader">
           <div>
             <h2>Editor</h2>
@@ -1063,9 +1044,8 @@
         </div>
 
         <div class="cardBody">
-
-          <!-- 1) Informações do médico (começa retraído) -->
-          <details class="sec">
+          <!-- 1) Médico -->
+          <details class="sec" id="secMedico">
             <summary>
               <div class="secTitle">
                 <b>1. Informações do médico</b>
@@ -1109,14 +1089,12 @@
               </div>
 
               <div class="divider"></div>
-              <div class="mini" id="persistHint">
-                Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).
-              </div>
+              <div class="mini" id="persistHint">Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).</div>
             </div>
           </details>
 
-          <!-- 2) Informações do paciente (começa retraído) -->
-          <details class="sec">
+          <!-- 2) Paciente -->
+          <details class="sec" id="secPaciente">
             <summary>
               <div class="secTitle">
                 <b>2. Informações do paciente</b>
@@ -1146,8 +1124,8 @@
             </div>
           </details>
 
-          <!-- 3) Medicamentos (começa retraído) -->
-          <details class="sec">
+          <!-- 3) Medicamentos -->
+          <details class="sec" id="secMeds">
             <summary>
               <div class="secTitle">
                 <b>3. Medicamentos</b>
@@ -1156,7 +1134,7 @@
               <div class="chev">˅</div>
             </summary>
             <div class="secBody">
-              <div class="mini">Ao adicionar um novo remédio, os anteriores minimizam automaticamente.</div>
+              <div class="mini" id="dbStatus">Carregando base de medicamentos…</div>
               <div style="height:10px"></div>
 
               <div class="rxBlocks" id="rxBlocks"></div>
@@ -1169,12 +1147,11 @@
               </div>
             </div>
           </details>
-
         </div>
       </div>
 
       <!-- ===== Preview ===== -->
-      <div class="card panel" data-panel="preview" id="panelPreview">
+      <div class="card panel" id="panelPreview">
         <div class="cardHeader">
           <div>
             <h2>Prévia</h2>
@@ -1190,71 +1167,39 @@
         </div>
 
         <div class="cardBody paperShell">
+          <div class="paperHead">
+            <div class="paperHeadRow">
+              <div class="paperHeadLeft">
+                <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
+              </div>
 
-  <!-- Barra “colada” no topo da prévia (botões + navegação de páginas) -->
-  <div class="paperHead">
-    <div class="paperHeadRow">
-      <div class="paperHeadLeft">
-        <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
-        <button class="btn btnGhost" id="btnPrintSave" type="button" style="display:none;">Imprimir + Guardar no Histórico</button>
-      </div>
+              <div class="paperHeadRight">
+                <div class="mini" id="pageInfo">Página 1 de 1</div>
 
-      <div class="paperHeadRight">
-        <div class="mini" id="pageInfo">Página 1 de 1</div>
-
-        <div class="row" style="gap:8px; justify-content:flex-end;">
-          <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
-          <select class="select" id="pageSelect" style="width: 160px;">
-            <option value="1" selected>Página 1</option>
-          </select>
-          <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mini" id="histHint" style="margin-top:10px; display:none;">
-      Dica: o histórico fica salvo nesta conta neste dispositivo.
-    </div>
-  </div>
-
-  <!-- Folha -->
-  <div class="paperWrap">
-    <div class="paper paperA4" id="paper">
-      <div class="paperInner">
-        <div class="rxPaper" id="rxPaper"></div>
-      </div>
-    </div>
-  </div>
-</div>
-      </div>
-    </div>
-
-    <!-- ===== HISTORY PAGE (render interno quando URL terminar com /historico-receita) ===== -->
-    <div id="historyPage" style="display:none;">
-      <div class="historyWrap">
-        <div class="card">
-          <div class="cardHeader">
-            <div>
-              <h2>Histórico de Prescrições</h2>
-              <p class="sub">Aqui ficam as prescrições que você salvou (nesta conta e neste dispositivo).</p>
-            </div>
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-              <button class="btn btnGhost" id="btnBackToApp" type="button">← Voltar</button>
-              <button class="btn btnGhost" id="btnClearHistory" type="button" style="display:none;">Limpar histórico</button>
+                <div class="row" style="gap:8px; justify-content:flex-end;">
+                  <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
+                  <select class="select" id="pageSelect" style="width: 160px;">
+                    <option value="1" selected>Página 1</option>
+                  </select>
+                  <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="cardBody">
-            <div class="mini" id="histTopInfo">—</div>
-            <div class="histList" id="histList"></div>
+
+          <div class="paperWrap">
+            <div class="paper paperA4" id="paper">
+              <div class="paperInner">
+                <div class="rxPaper" id="rxPaper"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="printAll" id="printAll"></div>
   </div>
-
-  <!-- Conteúdo que só aparece na impressão (todas as páginas) -->
-  <div class="printAll" id="printAll"></div>
 
   <!-- ===== Modal Login ===== -->
   <div class="modalMask" id="loginMask" aria-hidden="true">
@@ -1262,7 +1207,7 @@
       <div class="modalHead">
         <div>
           <b>Login com Google</b>
-          <div class="mini" style="margin-top:6px;">Ao logar, os dados do médico, padrões e histórico ficam associados à sua conta neste dispositivo.</div>
+          <div class="mini" style="margin-top:6px;">Ao logar, os dados do médico ficam associados à sua conta neste dispositivo.</div>
         </div>
         <button class="iconBtn iconBtnDanger" id="btnCloseLogin" type="button">✕</button>
       </div>
@@ -1276,176 +1221,101 @@
     </div>
   </div>
 
-  <!-- ===== Modal Config (padrões + configurações) ===== -->
+  <!-- ===== Modal Config ===== -->
   <div class="modalMask" id="configMask" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Configurar prescrição">
       <div class="modalHead">
         <div>
           <b>Configure sua prescrição</b>
-          <div class="mini" style="margin-top:6px;">Selecione um padrão já criado ou crie um novo padrão completo.</div>
+          <div class="mini" style="margin-top:6px;">Tamanho, fonte, data, cabeçalho e rodapé.</div>
         </div>
         <button class="iconBtn iconBtnDanger" id="btnCloseConfig" type="button">✕</button>
       </div>
 
       <div class="modalBody">
         <div class="modalCard">
-          <div class="label" style="margin-bottom:8px;">Padrão existente</div>
-          <div class="row" style="justify-content:flex-start; gap:10px;">
-            <select class="select" id="patternSelect" style="min-width: 280px; flex: 1;">
-              <option value="" selected>Nenhum padrão</option>
-            </select>
-            <button class="btn btnGhost" id="btnApplyPattern" type="button">Aplicar</button>
-            <button class="btn btnGhost" id="btnEditPattern" type="button">Editar</button>
-            <button class="btn btnGhost" id="btnDeletePattern" type="button">Excluir</button>
-          </div>
-          <div class="mini" style="margin-top:10px;">
-            Ao aplicar, a prévia muda imediatamente para o padrão escolhido.
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="modalCard">
-          <div class="row" style="justify-content:space-between; gap:10px;">
+          <div class="grid2">
             <div>
-              <div class="label" style="margin:0;">Novo padrão</div>
-              <div class="mini" style="margin-top:6px;">Clique para criar e preencher tamanho, fonte, cabeçalho/rodapé e dados da instituição.</div>
+              <label class="label" for="paperSize">Tamanho da folha</label>
+              <select class="select" id="paperSize">
+                <option value="A4" selected>A4</option>
+                <option value="LETTER">Carta (Letter)</option>
+                <option value="A5">A5</option>
+                <option value="LEGAL">Legal</option>
+              </select>
             </div>
-            <button class="btn btnPrimary" id="btnToggleNewPattern" type="button">+ Criar novo padrão</button>
+
+            <div>
+              <label class="label" for="rxFontFamily">Fonte</label>
+              <select class="select" id="rxFontFamily">
+                <option value="TIMES" selected>Times New Roman</option>
+                <option value="CALIBRI">Calibri</option>
+                <option value="ARIAL">Arial</option>
+              </select>
+            </div>
           </div>
 
-          <div id="newPatternArea" style="display:none; margin-top:14px;">
-            <div class="grid2">
-              <div>
-                <label class="label" for="patternName">Nome do padrão</label>
-                <input class="field" id="patternName" placeholder="Ex: Clínica X (A4, Times, 13.2)" />
-              </div>
-              <div>
-                <label class="label" for="paperSize">Tamanho da folha</label>
-                <select class="select" id="paperSize">
-                  <option value="A4" selected>A4</option>
-                  <option value="LETTER">Carta (Letter)</option>
-                  <option value="A5">A5</option>
-                  <option value="LEGAL">Legal</option>
-                </select>
+          <div style="height:10px"></div>
+
+          <div class="grid3eq">
+            <div>
+              <label class="label" for="rxFontSize">Tamanho da fonte da prescrição</label>
+              <input class="field" id="rxFontSize" placeholder="Ex: 13.2" inputmode="decimal" />
+            </div>
+
+            <div>
+              <label class="label">Data</label>
+              <div class="toggleRow" style="justify-content:flex-start;">
+                <label class="toggle" title="Mostrar/ocultar a data na receita">
+                  <input type="checkbox" id="includeDate" checked />
+                  <span>Incluir</span>
+                </label>
               </div>
             </div>
 
-            <div style="height:10px"></div>
-
-            <div class="grid3eq">
-              <div>
-                <label class="label" for="rxFontFamily">Fonte</label>
-                <select class="select" id="rxFontFamily">
-                  <option value="TIMES" selected>Times New Roman</option>
-                  <option value="CALIBRI">Calibri</option>
-                  <option value="ARIAL">Arial</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="label" for="rxFontSize">Tamanho da fonte da prescrição</label>
-                <input class="field" id="rxFontSize" placeholder="Ex: 13.2" inputmode="decimal" />
-              </div>
-
-              <div>
-                <label class="label">Data</label>
-                <div class="toggleRow" style="justify-content:flex-start;">
-                  <label class="toggle" title="Mostrar/ocultar a data na receita">
-                    <input type="checkbox" id="includeDate" checked />
-                    <span>Incluir</span>
-                  </label>
-                </div>
-              </div>
+            <div>
+              <label class="label" for="dateValue">Data (se ativada)</label>
+              <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
             </div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div class="divider"></div>
 
-            <div class="grid2">
-              <div>
-                <label class="label" for="dateValue">Data (se ativada)</label>
-                <input class="field" id="dateValue" placeholder="dd/mm/aaaa" inputmode="numeric" />
-              </div>
-
-              <div>
-                <label class="label" for="instName">Instituição de Saúde</label>
-                <input class="field" id="instName" placeholder="Nome da instituição…" />
-              </div>
+          <div class="grid2">
+            <div>
+              <label class="label" for="headerUrl">Imagem de cabeçalho (URL)</label>
+              <input class="field" id="headerUrl" placeholder="Cole a URL do cabeçalho (opcional)..." />
             </div>
-
-            <div style="height:10px"></div>
-
-            <div class="modalCard" style="padding:12px; border-radius:16px;">
-              <div class="label" style="margin-bottom:8px;">Endereço da Instituição (aparece em cinza no rodapé)</div>
-              <div class="grid3eq">
-                <div>
-                  <label class="label" for="addrStreet">Rua</label>
-                  <input class="field" id="addrStreet" placeholder="Rua…" />
-                </div>
-                <div>
-                  <label class="label" for="addrNumber">Número</label>
-                  <input class="field" id="addrNumber" placeholder="Nº…" />
-                </div>
-                <div>
-                  <label class="label" for="addrDistrict">Bairro</label>
-                  <input class="field" id="addrDistrict" placeholder="Bairro…" />
-                </div>
-              </div>
-
-              <div style="height:10px"></div>
-
-              <div class="grid3eq">
-                <div>
-                  <label class="label" for="addrCity">Cidade</label>
-                  <input class="field" id="addrCity" placeholder="Cidade…" />
-                </div>
-                <div>
-                  <label class="label" for="addrState">Estado (sigla)</label>
-                  <input class="field" id="addrState" placeholder="BA" maxlength="2" />
-                </div>
-                <div>
-                  <label class="label" for="addrCep">CEP</label>
-                  <input class="field" id="addrCep" placeholder="00000-000" inputmode="numeric" />
-                </div>
-              </div>
+            <div>
+              <label class="label" for="footerUrl">Imagem de rodapé (URL)</label>
+              <input class="field" id="footerUrl" placeholder="Cole a URL do rodapé (opcional)..." />
             </div>
+          </div>
 
-            <div class="divider"></div>
+          <div style="height:10px"></div>
 
-            <div class="grid2">
-              <div class="modalCard">
-                <div class="label">Imagem de cabeçalho (URL ou Upload)</div>
-                <div class="row" style="justify-content:flex-start; gap:10px;">
-                  <button class="btn btnGhost" id="btnPickHeader" type="button">Upload</button>
-                  <input type="file" id="fileHeader" accept="image/*" style="display:none;" />
-                  <input class="field" id="headerUrl" placeholder="Cole a URL do cabeçalho (opcional)..." />
-                </div>
-                <div style="height:10px"></div>
-                <img id="headerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
-              </div>
-
-              <div class="modalCard">
-                <div class="label">Imagem de rodapé (URL ou Upload)</div>
-                <div class="row" style="justify-content:flex-start; gap:10px;">
-                  <button class="btn btnGhost" id="btnPickFooter" type="button">Upload</button>
-                  <input type="file" id="fileFooter" accept="image/*" style="display:none;" />
-                  <input class="field" id="footerUrl" placeholder="Cole a URL do rodapé (opcional)..." />
-                </div>
-                <div style="height:10px"></div>
-                <img id="footerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
-              </div>
+          <div class="grid2">
+            <div>
+              <img id="headerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
             </div>
-
-            <div class="divider"></div>
-
-            <div class="row" style="justify-content:flex-end; gap:10px;">
-              <button class="btn btnGhost" id="btnCancelNewPattern" type="button">Cancelar</button>
-              <button class="btn btnPrimary" id="btnSavePattern" type="button">Salvar padrão</button>
+            <div>
+              <img id="footerThumb" alt="" style="width:100%;height:56px;border-radius:14px;border:1px solid var(--line2);background:rgba(255,255,255,.02);object-fit:contain;padding:6px;" />
             </div>
+          </div>
 
+          <div class="divider"></div>
+
+          <div class="grid2">
+            <div>
+              <label class="label" for="instName">Instituição de Saúde</label>
+              <input class="field" id="instName" placeholder="Nome da instituição…" />
+            </div>
+            <div>
+              <label class="label" for="instAddress">Endereço da Instituição (rodapé)</label>
+              <input class="field" id="instAddress" placeholder="Rua, nº, bairro, cidade/UF, CEP" />
+            </div>
           </div>
         </div>
-
       </div>
 
       <div class="modalFoot">
@@ -1456,96 +1326,152 @@
 
   <script>
     /************************************************************
-     * CONFIG (dentro do código) — Ícone do topo (UsoJaleco)
+     * CONFIG (TOPO) — Logo Badge
      ************************************************************/
-    let BRAND_LOGO_URL = "https://i.imgur.com/7LJtEBk.jpeg";
-    let BRAND_LOGO_SIZE_PX = 50;
-function applyBrandLogo(){
-  const img = document.getElementById("brandMark");
-  if(!img) return;
-
-  img.src = BRAND_LOGO_URL || PLACEHOLDER_PNG;
-
-  const size = parseInt(BRAND_LOGO_SIZE_PX, 10);
-  const px = (isFinite(size) && size >= 16 && size <= 96) ? size : 44;
-
-  document.documentElement.style.setProperty("--brandLogoSize", px + "px");
-}
-    /************************************************************
-     * LOGIN GOOGLE (GIS)
-     ************************************************************/
+    const LOGO_URL = "https://i.imgur.com/7LJtEBk.jpeg"; // <-- troque aqui
     const GOOGLE_CLIENT_ID = "703476878000-7h4lq2cbpffp3qp7hdn1hksi9k43qqm1.apps.googleusercontent.com";
 
-    // Placeholder PNG transparente
-    const PLACEHOLDER_PNG =
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABJ0lEQVR4nO3aMQ6CMBQF0U8m0dQmGQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQk0v2k6yqk7+XyQm5mYd8yqf9gQAAAAAAAAAA4Gm9oQm2b3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQAAAAA8D8m8i8b8kq8wQAAAABJRU5ErkJggg==";
-
     /************************************************************
-     * GOOGLE SHEETS — múltiplas abas (classes)
-     * - busca em TODAS as abas (publicadas) e unifica resultados
+     * GOOGLE SHEETS — CSV multi-abas
      ************************************************************/
     const SHEET_ID = "1CR3CtU-aA6-JZE37GUElF7CmHKudeiRgOK9WhIvBO8c";
-    const DEFAULT_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--pillOrange").trim() || "#ff7a18";
 
+    // Array de abas/categorias (GIDs)
+    const SHEET_TABS = [
+      { gid:"915261507",  categoria:"Agentes antirreumáticos específicos" },
+      { gid:"478511829",  categoria:"Agentes imunizantes" },
+      { gid:"1411845420", categoria:"Alcalinizantes" },
+      { gid:"395560222",  categoria:"Analgésicos-Antipiréticos" },
+      { gid:"862085121",  categoria:"Anestésicos locais" },
+      { gid:"20003638",   categoria:"Anti-Histamínicos H1" },
+      { gid:"1822197995", categoria:"Anti-hemorroidários" },
+      { gid:"1061659817", categoria:"Anti-infecciosos do trato gastrintestinal" },
+      { gid:"1661597209", categoria:"Anti-infecciosos tópicos e relacionados" },
+      { gid:"1954155192", categoria:"Antialcoólicos" },
+      { gid:"1265384594", categoria:"Antialérgicos" },
+      { gid:"563048962",  categoria:"Antiastênicos-Energéticos" },
+      { gid:"827175960",  categoria:"Antibióticos" },
+      { gid:"1098787868", categoria:"Agentes anti-inflamatórios não esteróides" },
+      { gid:"1418395467", categoria:"Anticoncepcionais" },
+      { gid:"2118860551", categoria:"Antidiabéticos" },
+      { gid:"1848961101", categoria:"Antidiarreicos" },
+      { gid:"388566765",  categoria:"Antieméticos" },
+      { gid:"803029356",  categoria:"Antifiséticos (Antiflatulentos)" },
+      { gid:"839735687",  categoria:"Antifúngicos" },
+      { gid:"1604110756", categoria:"Antifúngicos tópicos" },
+      { gid:"138405399",  categoria:"Antilipêmicos" },
+      { gid:"1785559041", categoria:"Antineuríticos" },
+      { gid:"1333824946", categoria:"Antissépticos" },
+      { gid:"551218037",  categoria:"Antitussígenos" },
+      { gid:"132076127",  categoria:"Antivaricosos" },
+      { gid:"368598785",  categoria:"Antiácidos" },
+      { gid:"1057228386", categoria:"Antídotos, agentes quelantes e outros" },
+      { gid:"1424426563", categoria:"Broncodilatadores" },
+      { gid:"258241824",  categoria:"Corticosteróides" },
+      { gid:"1184992018", categoria:"Dissuasores de álcool" },
+      { gid:"142814384",  categoria:"Diuréticos" },
+      { gid:"1554213437", categoria:"Emolientes, demulcentes e protetores" },
+      { gid:"2005343620", categoria:"Espasmolíticos" },
+      { gid:"1203728329", categoria:"Expectorantes" },
+      { gid:"542940365",  categoria:"Fornecedores de água e sais minerais" },
+      { gid:"1781539542", categoria:"Anti-hipertensivos" },
+      { gid:"1393215463", categoria:"Anti-inflamatórios locais" },
+      { gid:"1927396219", categoria:"Antianêmicos" },
+      { gid:"1077847451", categoria:"Fármacos antiarrítmicos" },
+      { gid:"834788399",  categoria:"Antiobesidade" },
+      { gid:"579731426",  categoria:"Antiprotozoários para distúrbios gastrintestinais" },
+      { gid:"46875283",   categoria:"Antivertiginosos" },
+      { gid:"37066094",   categoria:"Fármacos com outros usos terapêuticos" },
+      { gid:"17226000",   categoria:"Coagulação sanguínea e hemostípticos" },
+      { gid:"1946266019", categoria:"Fármacos para hiperparatireoidismo" },
+      { gid:"1138414149", categoria:"Fármacos para hipotireoidismo" },
+      { gid:"293362851",  categoria:"Fármacos para insuficiência cardíaca congestiva" },
+      { gid:"264388654",  categoria:"Fármacos para o resfriado/gripe" },
+      { gid:"1275257911", categoria:"Ansiolíticos" },
+      { gid:"1253291853", categoria:"Antidepressivos" },
+      { gid:"1803919161", categoria:"Antiepilépticos" },
+      { gid:"920573383",  categoria:"Antipsicóticos" },
+      { gid:"725911",     categoria:"Antidemência" },
+      { gid:"329680812",  categoria:"Psicoestimulantes" },
+      { gid:"2138352132", categoria:"Sedativos ansiolíticos" },
+      { gid:"1736193150", categoria:"Sedativos hipnóticos" },
+      { gid:"983295901",  categoria:"Fármacos que atuam no metabolismo do ácido úrico" },
+      { gid:"382171978",  categoria:"Fármacos usados no tratamento da gota" },
+      { gid:"400958663",  categoria:"Hipnoanalgésicos" },
+      { gid:"1238735812", categoria:"Inibidores específicos da reabsorção óssea" },
+      { gid:"1840608601", categoria:"Laxantes de contato" },
+      { gid:"175034763",  categoria:"Medicamento Antroposófico" },
+      { gid:"981256256",  categoria:"Medicamentos nasofaríngeos" },
+      { gid:"675507405",  categoria:"Medicamentos otológicos" },
+      { gid:"1413136239", categoria:"Medicamentos para distúrbios gastrointestinais funcionais" },
+      { gid:"310730728",  categoria:"Miorrelaxantes" },
+      { gid:"588781851",  categoria:"Outros analgésicos" },
+      { gid:"235558101",  categoria:"Outros fármacos para constipação" },
+      { gid:"1270044698", categoria:"Probiótico" },
+      { gid:"655464895",  categoria:"Quimioterápicos/Antissépticos para o trato urinário" },
+      { gid:"2102197488", categoria:"Sangue e frações do sangue" },
+      { gid:"1176403748", categoria:"Tranquilizantes" },
+      { gid:"897302584",  categoria:"Tratamento de doenças degenerativas e traumáticas das articulações" },
+      { gid:"1272484250", categoria:"Tratamento de perda de massa óssea" },
+      { gid:"326771482",  categoria:"lostáticos e Hansenostáticos" },
+      { gid:"1783656678", categoria:"Uso Sistêmico" },
+      { gid:"552279527",  categoria:"Vasoconstritores" },
+      { gid:"225561128",  categoria:"Vitaminas" },
+      { gid:"1285273334", categoria:"Agentes antibacterianos" }
+    ];
+
+    // Base consolidada global (requisito)
+    let db_medicamentos = [];
+    let db_loaded = false;
+    let db_loading = false;
+    const DEFAULT_DOT_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--pillOrange").trim() || "#ff7a18";
+
+    /************************************************************
+     * STATE
+     ************************************************************/
     const state = {
-      // sessão (login)
       user: null, // {email,name,picture,sub}
 
-      // médico
       docTitle: "Dr.",
       docName: "",
       crms: [""],
       rqes: [""],
 
-      // paciente
       patientName: "",
       patientDocType: "CPF",
       patientDocValue: "",
 
-      // config/página (agora fica no modal da engrenagem)
       paperSize: "A4",
       includeDate: true,
       dateValue: "",
       rxFontSize: 13.2,
       rxFontFamily: "TIMES",
 
-      // instituição (rodapé cinza)
-      instName: "",
-      addrStreet: "",
-      addrNumber: "",
-      addrDistrict: "",
-      addrCity: "",
-      addrState: "",
-      addrCep: "",
-
-      // imagens institucionais simples (1 cabeçalho + 1 rodapé)
-      headerImgData: "",
       headerImgUrl: "",
-      footerImgData: "",
       footerImgUrl: "",
+      instName: "",
+      instAddress: "",
 
-      // meds
-      blocks: [], // {id, name, dose, qty, use, collapsed, showIcons, icons[]}
-      selectedPage: 1,
+      blocks: [], // {id,name,dose,qty,qtyMode,qtyCustom,use,showIcons,icons,collapsed}
 
-      // db meds
-      db: { loaded:false, loading:false, list:[], tabs:[] }
+      selectedPage: 1
     };
 
+    /************************************************************
+     * Utils
+     ************************************************************/
     const $ = (id)=>document.getElementById(id);
-    applyBrandLogo();
+
+    const PLACEHOLDER_PNG =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABJ0lEQVR4nO3aMQ6CMBQF0U8m0dQmGQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQm0mQkYQk0v2k6yqk7+XyQm5mYd8yqf9gQAAAAAAAAAA4Gm9oQm2b3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQm3cQAAAAA8D8m8i8b8kq8wQAAAABJRU5ErkJggg==";
 
     function safeText(s){ return (s||"").toString().replace(/\s+/g," ").trim(); }
     function norm(s){
-      return (s||"")
-        .toString()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-        .trim();
+      return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
     }
     function keyify(s){ return norm(s).toLowerCase(); }
     function uid(){ return Math.random().toString(16).slice(2) + "-" + Date.now().toString(16); }
     function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
     function todayBR(){
       const d = new Date();
       const dd = String(d.getDate()).padStart(2,"0");
@@ -1553,55 +1479,42 @@ function applyBrandLogo(){
       const yy = d.getFullYear();
       return `${dd}/${mm}/${yy}`;
     }
-
     function rxFontPx(){
       const v = parseFloat(String(state.rxFontSize).replace(",", "."));
       if(!isFinite(v) || v <= 6) return 13.2;
       return clamp(v, 7.5, 18);
     }
-
     function rxFamilyCSS(){
       if(state.rxFontFamily === "ARIAL") return "Arial, Helvetica, sans-serif";
       if(state.rxFontFamily === "CALIBRI") return "Calibri, Arial, sans-serif";
       return "\"Times New Roman\", Times, serif";
     }
 
-    function medsPerPage(){
-      const px = rxFontPx();
-      if(px <= 9.1) return 12;
-      if(px <= 9.7) return 11;
-      if(px <= 10.3) return 10;
-      if(px <= 10.9) return 9;
-      if(px <= 11.5) return 9;
-      if(px <= 12.4) return 8;
-      if(px <= 13.0) return 7;
-      return 6;
+    function debounce(fn, ms){
+      let t = null;
+      return (...args)=>{
+        clearTimeout(t);
+        t = setTimeout(()=> fn(...args), ms);
+      };
     }
 
     function leaderHyphens(){ return "-".repeat(220); }
 
-    function paginateBlocks(){
-      const per = medsPerPage();
-      const pages = [];
-      let cur = [];
-      state.blocks.forEach(b=>{
-        cur.push(b);
-        if(cur.length >= per){
-          pages.push(cur);
-          cur = [];
-        }
-      });
-      if(cur.length || pages.length===0) pages.push(cur);
-      return pages;
+    /************************************************************
+     * Logo apply
+     ************************************************************/
+    function applyLogo(){
+      const img = $("brandMark");
+      img.src = LOGO_URL || PLACEHOLDER_PNG;
+      const size = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--brandLogoSize")) || 44;
+      document.documentElement.style.setProperty("--brandLogoSize", `${clamp(size, 32, 72)}px`);
     }
 
     /************************************************************
-     * LOCAL STORAGE (por conta)
+     * Local Storage (por conta)
      ************************************************************/
-    function sessionKey(){ return "uj_rx_session_v2"; }
-    function profileKey(email){ return `uj_rx_profile_v2__${(email||"").toLowerCase()}`; }
-    function patternsKey(email){ return `uj_rx_patterns_v2__${(email||"").toLowerCase()}`; }
-    function historyKey(email){ return `uj_rx_history_v1__${(email||"").toLowerCase()}`; }
+    function sessionKey(){ return "uj_rx_session_v3"; }
+    function profileKey(email){ return `uj_rx_profile_v3__${(email||"").toLowerCase()}`; }
 
     function saveSession(){
       try{
@@ -1618,13 +1531,6 @@ function applyBrandLogo(){
       }catch(e){}
       return null;
     }
-
-    function saveProfileDebouncedFactory(){
-      const fn = debounce(()=> saveProfile(), 180);
-      return fn;
-    }
-    const saveProfileDebounced = saveProfileDebouncedFactory();
-
     function saveProfile(){
       if(!state.user || !state.user.email) return;
       const payload = {
@@ -1638,53 +1544,19 @@ function applyBrandLogo(){
         $("persistHint").textContent = "Salvo automaticamente nesta conta (alterações ficam registradas).";
       }catch(e){}
     }
+    const saveProfileDebounced = debounce(saveProfile, 180);
 
     function loadProfile(){
       if(!state.user || !state.user.email) return null;
       try{
         const raw = localStorage.getItem(profileKey(state.user.email));
         if(!raw) return null;
-        const p = JSON.parse(raw);
-        return p || null;
+        return JSON.parse(raw) || null;
       }catch(e){ return null; }
     }
 
-    function loadPatterns(){
-      if(!state.user || !state.user.email) return [];
-      try{
-        const raw = localStorage.getItem(patternsKey(state.user.email));
-        if(!raw) return [];
-        const arr = JSON.parse(raw);
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){ return []; }
-    }
-
-    function savePatterns(arr){
-      if(!state.user || !state.user.email) return;
-      try{
-        localStorage.setItem(patternsKey(state.user.email), JSON.stringify(arr || []));
-      }catch(e){}
-    }
-
-    function loadHistory(){
-      if(!state.user || !state.user.email) return [];
-      try{
-        const raw = localStorage.getItem(historyKey(state.user.email));
-        if(!raw) return [];
-        const arr = JSON.parse(raw);
-        return Array.isArray(arr) ? arr : [];
-      }catch(e){ return []; }
-    }
-
-    function saveHistory(arr){
-      if(!state.user || !state.user.email) return;
-      try{
-        localStorage.setItem(historyKey(state.user.email), JSON.stringify(arr || []));
-      }catch(e){}
-    }
-
     /************************************************************
-     * GOOGLE LOGIN (GIS) — modal + render button
+     * Google Login (GIS)
      ************************************************************/
     function b64urlDecode(str){
       str = (str||"").replace(/-/g, "+").replace(/_/g, "/");
@@ -1769,15 +1641,10 @@ function applyBrandLogo(){
 
       $("docTitle").value = state.docTitle;
       $("docName").value = state.docName;
-
       renderCrmList();
       renderRqeList();
 
-      refreshPatternSelect();
-
       $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
-      $("histHint").style.display = "block";
-
       updateSummaries();
       renderPaperDebounced();
     }
@@ -1787,16 +1654,12 @@ function applyBrandLogo(){
       saveSession();
       applyUserUI();
       $("persistHint").textContent = "Faça login para salvar os dados do médico “para sempre” nessa conta (e recarregar automaticamente no futuro).";
-      $("histHint").style.display = "none";
     }
 
     function applyUserUI(){
       const has = !!(state.user && state.user.email);
       $("btnLogin").style.display = has ? "none" : "inline-flex";
       $("userPill").style.display = has ? "inline-flex" : "none";
-
-      $("btnHistory").style.display = has ? "inline-flex" : "none";
-      $("btnPrintSave").style.display = has ? "inline-flex" : "none";
 
       if(has){
         $("userName").textContent = state.user.name || "Conta Google";
@@ -1806,298 +1669,203 @@ function applyBrandLogo(){
     }
 
     /************************************************************
-     * GOOGLE SHEETS — carregar abas + meds (A/B/C) via GVIZ
+     * CSV Parser (robusto p/ Google CSV)
      ************************************************************/
-    function sanitizeColor(c){
-      const v = safeText(c);
-      if(!v) return DEFAULT_COLOR;
-      const s = v.trim();
+    function parseCSV(text){
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
 
-      // hex
-      if(/^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s)) return s;
+      const s = (text || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      for(let i=0;i<s.length;i++){
+        const ch = s[i];
 
-      // rgb/rgba
-      if(/^rgba?\(/i.test(s)) return s;
-
-      // nome CSS simples
-      if(/^[a-z]+$/i.test(s)) return s;
-
-      return DEFAULT_COLOR;
-    }
-function splitSemicolon(v){
-  return safeText(v).split(";").map(s => safeText(s)).filter(Boolean);
-}
-    async function fetchSheetTabsFromPubhtml(){
-  return [
-    { "gid": "915261507",  "name": "Agentes antirreumáticos específicos" },
-    { "gid": "478511829",  "name": "Agentes imunizantes" },
-    { "gid": "1411845420", "name": "Alcalinizantes" },
-    { "gid": "395560222",  "name": "Analgésicos-Antipiréticos" },
-    { "gid": "862085121",  "name": "Anestésicos locais" },
-    { "gid": "20003638",   "name": "Anti-Histamínicos H1" },
-    { "gid": "1822197995", "name": "Anti-hemorroidários" },
-    { "gid": "1061659817", "name": "Anti-infecciosos do trato gastrintestinal" },
-    { "gid": "1661597209", "name": "Anti-infecciosos tópicos e relacionados" },
-    { "gid": "1954155192", "name": "Antialcoólicos" },
-    { "gid": "1265384594", "name": "Antialérgicos" },
-    { "gid": "563048962",  "name": "Antiastênicos-Energéticos" },
-    { "gid": "827175960",  "name": "Antibióticos" },
-    { "gid": "1098787868", "name": "Agentes anti-inflamatórios não esteróides" },
-    { "gid": "1418395467", "name": "Anticoncepcionais" },
-    { "gid": "2118860551", "name": "Antidiabéticos" },
-    { "gid": "1848961101", "name": "Antidiarreicos" },
-    { "gid": "388566765",  "name": "Antieméticos" },
-    { "gid": "803029356",  "name": "Antifiséticos (Antiflatulentos)" },
-    { "gid": "839735687",  "name": "Antifúngicos" },
-    { "gid": "1604110756", "name": "Antifúngicos tópicos" },
-    { "gid": "138405399",  "name": "Antilipêmicos" },
-    { "gid": "1785559041", "name": "Antineuríticos" },
-    { "gid": "1333824946", "name": "Antissépticos" },
-    { "gid": "551218037",  "name": "Antitussígenos" },
-    { "gid": "132076127",  "name": "Antivaricosos" },
-    { "gid": "368598785",  "name": "Antiácidos" },
-    { "gid": "1057228386", "name": "Antídotos, agentes quelantes e outros" },
-    { "gid": "1424426563", "name": "Broncodilatadores" },
-    { "gid": "258241824",  "name": "Corticosteróides" },
-    { "gid": "1184992018", "name": "Dissuasores de álcool" },
-    { "gid": "142814384",  "name": "Diuréticos" },
-    { "gid": "1554213437", "name": "Emolientes, demulcentes e protetores" },
-    { "gid": "2005343620", "name": "Espasmolíticos" },
-    { "gid": "1203728329", "name": "Expectorantes" },
-    { "gid": "542940365",  "name": "Fornecedores de água e sais minerais" },
-    { "gid": "1781539542", "name": "Anti-hipertensivos" },
-    { "gid": "1393215463", "name": "Anti-inflamatórios locais" },
-    { "gid": "1927396219", "name": "Antianêmicos" },
-    { "gid": "1077847451", "name": "Fármacos antiarrítmicos" },
-    { "gid": "834788399",  "name": "Antiobesidade" },
-    { "gid": "579731426",  "name": "Antiprotozoários para distúrbios gastrintestinais" },
-    { "gid": "46875283",   "name": "Antivertiginosos" },
-    { "gid": "37066094",   "name": "Fármacos com outros usos terapêuticos" },
-    { "gid": "17226000",   "name": "Coagulação sanguínea e hemostípticos" },
-    { "gid": "1946266019", "name": "Fármacos para hiperparatireoidismo" },
-    { "gid": "1138414149", "name": "Fármacos para hipotireoidismo" },
-    { "gid": "293362851",  "name": "Fármacos para insuficiência cardíaca congestiva" },
-    { "gid": "264388654",  "name": "Fármacos para o resfriado/gripe" },
-    { "gid": "1275257911", "name": "Ansiolíticos" },
-    { "gid": "1253291853", "name": "Antidepressivos" },
-    { "gid": "1803919161", "name": "Antiepilépticos" },
-    { "gid": "920573383",  "name": "Antipsicóticos" },
-    { "gid": "725911",     "name": "Antidemência" },
-    { "gid": "329680812",  "name": "Psicoestimulantes" },
-    { "gid": "2138352132", "name": "Sedativos ansiolíticos" },
-    { "gid": "1736193150", "name": "Sedativos hipnóticos" },
-    { "gid": "983295901",  "name": "Fármacos que atuam no metabolismo do ácido úrico" },
-    { "gid": "382171978",  "name": "Fármacos usados no tratamento da gota" },
-    { "gid": "400958663",  "name": "Hipnoanalgésicos" },
-    { "gid": "1238735812", "name": "Inibidores específicos da reabsorção óssea" },
-    { "gid": "1840608601", "name": "Laxantes de contato" },
-    { "gid": "175034763",  "name": "Medicamento Antroposófico" },
-    { "gid": "981256256",  "name": "Medicamentos nasofaríngeos" },
-    { "gid": "675507405",  "name": "Medicamentos otológicos" },
-    { "gid": "1413136239", "name": "Medicamentos para distúrbios gastrointestinais funcionais" },
-    { "gid": "310730728",  "name": "Miorrelaxantes" },
-    { "gid": "588781851",  "name": "Outros analgésicos" },
-    { "gid": "235558101",  "name": "Outros fármacos para constipação" },
-    { "gid": "1270044698", "name": "Probiótico" },
-    { "gid": "655464895",  "name": "Quimioterápicos/Antissépticos para o trato urinário" },
-    { "gid": "2102197488", "name": "Sangue e frações do sangue" },
-    { "gid": "1176403748", "name": "Tranquilizantes" },
-    { "gid": "897302584",  "name": "Tratamento de doenças degenerativas e traumáticas das articulações" },
-    { "gid": "1272484250", "name": "Tratamento de perda de massa óssea" },
-    { "gid": "326771482",  "name": "lostáticos e Hansenostáticos" },
-    { "gid": "1783656678", "name": "Uso Sistêmico" },
-    { "gid": "552279527",  "name": "Vasoconstritores" },
-    { "gid": "225561128",  "name": "Vitaminas" },
-    { "gid": "1285273334", "name": "Agentes antibacterianos" }
-  ];
-}
-
-    async function fetchGvizByGid(gid){
-      const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
-      const res = await fetch(url, { cache:"no-store" });
-      const txt = await res.text();
-      const jsonStr = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
-      const data = JSON.parse(jsonStr);
-      const rows = (data.table && data.table.rows) ? data.table.rows : [];
-      return rows;
-    }
-
-    async function loadSheetDB(){
-  if(state.db.loading) return;
-  state.db.loading = true;
-  state.db.loaded = false;
-  state.db.list = [];
-
-  try{
-    const tabs = await fetchSheetTabsFromPubhtml();
-    state.db.tabs = tabs;
-
-    const temp = [];
-
-    for(const tab of tabs){
-      let rows = [];
-      try{
-        rows = await fetchGvizByGid(tab.gid);
-      }catch(e){
-        continue;
+        if(inQuotes){
+          if(ch === '"'){
+            const next = s[i+1];
+            if(next === '"'){ cur += '"'; i++; }
+            else{ inQuotes = false; }
+          }else{
+            cur += ch;
+          }
+        }else{
+          if(ch === '"'){ inQuotes = true; }
+          else if(ch === ","){
+            row.push(cur);
+            cur = "";
+          }else if(ch === "\n"){
+            row.push(cur);
+            rows.push(row);
+            row = [];
+            cur = "";
+          }else{
+            cur += ch;
+          }
+        }
       }
+      row.push(cur);
+      rows.push(row);
 
-      rows.forEach((r, idx)=>{
-        const c = r.c || [];
+      // remove linhas totalmente vazias
+      return rows.filter(r => r.some(c => safeText(c)));
+    }
 
-        // ===== NOVO MAPEAMENTO (como você pediu) =====
-        // A = Nome comercial (principal)
-        const colA = safeText(c[0]?.v ?? "");
+    function splitQty(s){
+      const raw = safeText(s);
+      if(!raw) return [];
+      const arr = raw.split(";").map(x=> safeText(x)).filter(Boolean);
+      // dedupe preservando ordem
+      const seen = new Set();
+      const out = [];
+      for(const it of arr){
+        const k = keyify(it);
+        if(!k || seen.has(k)) continue;
+        seen.add(k);
+        out.push(it);
+      }
+      return out;
+    }
 
-        // D = Nome genérico/substância (preferência)
-        const colD = safeText(c[3]?.v ?? "");
+    async function fetchCsvByGid(gid){
+      const urls = [
+        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`,
+        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/export?format=csv&gid=${encodeURIComponent(gid)}`
+      ];
+      let lastErr = null;
+      for(const url of urls){
+        try{
+          const res = await fetch(url, { cache:"no-store" });
+          if(!res.ok) throw new Error(`HTTP ${res.status}`);
+          const txt = await res.text();
+          if(!txt || txt.length < 3) throw new Error("CSV vazio");
+          return txt;
+        }catch(e){
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error("Falha ao buscar CSV");
+    }
 
-        // (fallback caso sua planilha ainda use B como genérico)
-        const colB = safeText(c[1]?.v ?? "");
+    async function loadMedicamentosDB(){
+      if(db_loading) return;
+      db_loading = true;
+      db_loaded = false;
+      db_medicamentos = [];
+      $("dbStatus").textContent = "Carregando base de medicamentos…";
 
-        // C = opções de DOSAGEM (separadas por ;)
-        const colC = safeText(c[2]?.v ?? "");
+      try{
+        const allItems = [];
+        for(const tab of SHEET_TABS){
+          let csvText = "";
+          try{
+            csvText = await fetchCsvByGid(tab.gid);
+          }catch(e){
+            continue;
+          }
+          const rows = parseCSV(csvText);
 
-        // E = opções de QUANTIDADE/APRESENTAÇÃO/FORMA (separadas por ;)
-        const colE = safeText(c[4]?.v ?? "");
+          // heurística: pula cabeçalho se detectar
+          let start = 0;
+          if(rows.length){
+            const h0 = keyify(rows[0]?.[0] || "");
+            const h3 = keyify(rows[0]?.[3] || "");
+            if(h0.includes("nome") || h0.includes("comercial") || h3.includes("generico")) start = 1;
+          }
 
-        // cor (opcional) — se não existir, fica laranja default
-        const colF = safeText(c[5]?.v ?? "");
+          for(let i=start;i<rows.length;i++){
+            const r = rows[i] || [];
+            const A = safeText(r[0] || "");
+            const B = safeText(r[1] || "");
+            const C = safeText(r[2] || "");
+            const D = safeText(r[3] || "");
+            const E = safeText(r[4] || "");
 
-        const A = colA;                 // comercial
-        const B = colD || colB;         // genérico (D > B)
+            // Sanitização: ignorar linhas onde A e D estão vazias
+            if(!A && !D) continue;
 
-        if(!A && !B) return;
-
-        // Heurística pra pular cabeçalho
-        if(idx === 0){
-          const head = keyify([A,B,colC,colD,colE].join(" "));
-          if(head.includes("nome") && (head.includes("comercial") || head.includes("gen") || head.includes("subst"))) return;
+            if(A){
+              allItems.push({
+                type: "A",
+                main: A,            // Nome Comercial 1
+                sub: B,             // Nome Genérico 1
+                qty: splitQty(C),   // Quantidade 1
+                categoria: tab.categoria || `Aba ${tab.gid}`
+              });
+            }
+            if(D){
+              allItems.push({
+                type: "B",
+                main: D,            // Nome Genérico 2
+                sub: "",
+                qty: splitQty(E),   // Quantidade 2
+                categoria: tab.categoria || `Aba ${tab.gid}`
+              });
+            }
+          }
         }
 
-        temp.push({
-          a: A,
-          b: B,
-          doseOpts: splitSemicolon(colC), // C
-          qtyOpts:  splitSemicolon(colE), // E
-          color: colF,
-          cat: tab.name || `Aba ${tab.gid}`
+        // Deduplicação + normalização + índices de busca
+        const map = new Map();
+        for(const it of allItems){
+          const k = `${it.type}|${keyify(it.main)}|${keyify(it.sub || "")}`;
+          if(!map.has(k)){
+            map.set(k, {
+              type: it.type,
+              main: it.main,
+              sub: it.sub || "",
+              qty: Array.isArray(it.qty) ? it.qty.slice() : [],
+              categorias: it.categoria ? [it.categoria] : [],
+              color: DEFAULT_DOT_COLOR
+            });
+          }else{
+            const cur = map.get(k);
+            if(it.categoria && !cur.categorias.includes(it.categoria)) cur.categorias.push(it.categoria);
+            if(Array.isArray(it.qty)){
+              const seen = new Set(cur.qty.map(x=> keyify(x)));
+              for(const q of it.qty){
+                const kk = keyify(q);
+                if(!kk || seen.has(kk)) continue;
+                seen.add(kk);
+                cur.qty.push(q);
+              }
+            }
+          }
+        }
+
+        db_medicamentos = Array.from(map.values()).map(x=>{
+          const catLabel = x.categorias?.length ? x.categorias[0] : "—";
+          return {
+            type: x.type,
+            main: x.main,
+            sub: x.sub,
+            qty: x.qty || [],
+            categorias: x.categorias || [],
+            catLabel,
+            color: x.color || DEFAULT_DOT_COLOR,
+            // busca universal contra (Col A, Col B, Col D) => aqui já normalizado por item
+            search: keyify([x.main, x.sub, (x.categorias||[]).join(" ")].join(" ")),
+            mainKey: keyify(x.main),
+            subKey: keyify(x.sub || "")
+          };
         });
-      });
-    }
 
-    // Unifica por A|B
-    const map = new Map();
-    const mergeUnique = (base, add)=>{
-      const s = new Set((base||[]).map(safeText).filter(Boolean));
-      (add||[]).map(safeText).filter(Boolean).forEach(v=> s.add(v));
-      return Array.from(s);
-    };
+        // Ordenação base (alfabética)
+        db_medicamentos.sort((p,q)=> (p.main||"").localeCompare((q.main||""), "pt-BR", { sensitivity:"base" }));
 
-    for(const it of temp){
-      const k = keyify(it.a) + "|" + keyify(it.b);
-      if(!map.has(k)){
-        map.set(k, {
-          a: it.a,
-          b: it.b,
-          doseOpts: it.doseOpts || [],
-          qtyOpts: it.qtyOpts || [],
-          color: it.color,
-          cats: [it.cat]
-        });
-      }else{
-        const cur = map.get(k);
-
-        if(it.cat && !cur.cats.includes(it.cat)) cur.cats.push(it.cat);
-        cur.doseOpts = mergeUnique(cur.doseOpts, it.doseOpts);
-        cur.qtyOpts  = mergeUnique(cur.qtyOpts,  it.qtyOpts);
-
-        if(!safeText(cur.color) && safeText(it.color)) cur.color = it.color;
+        db_loaded = true;
+        $("dbStatus").textContent = `Base carregada: ${db_medicamentos.length} itens.`;
+      }catch(e){
+        db_loaded = false;
+        db_medicamentos = [];
+        $("dbStatus").textContent = "Falha ao carregar base. Você ainda pode digitar manualmente.";
+      }finally{
+        db_loading = false;
       }
     }
 
-   const baseList = Array.from(map.values()).map(x=>{
-  const a = safeText(x.a); // comercial
-  const b = safeText(x.b); // genérico
-  const doseOpts = Array.isArray(x.doseOpts) ? x.doseOpts.map(safeText).filter(Boolean) : [];
-  const qtyOpts  = Array.isArray(x.qtyOpts)  ? x.qtyOpts.map(safeText).filter(Boolean)  : [];
-
-  const cats = Array.isArray(x.cats) ? x.cats.filter(Boolean) : [];
-  const catLabel = cats.length
-    ? (cats[0] + (cats.length > 1 ? ` +${cats.length-1}` : ""))
-    : "—";
-
-  return {
-    a,
-    b,
-    doseOpts,
-    qtyOpts,
-    cats,
-    catLabel,
-    color: sanitizeColor(x.color)
-  };
-});
-
-// ✅ explode: 1 ou 2 entradas por medicamento (comercial e genérico)
-const list = [];
-for(const it of baseList){
-  const brand = safeText(it.a);     // comercial
-  const generic = safeText(it.b);   // genérico
-
-  const cats = Array.isArray(it.cats) ? it.cats : [];
-  const doseOpts = Array.isArray(it.doseOpts) ? it.doseOpts : [];
-  const qtyOpts  = Array.isArray(it.qtyOpts)  ? it.qtyOpts  : [];
-  const common = {
-    doseOpts,
-    qtyOpts,
-    cats,
-    catLabel: it.catLabel || "—",
-    color: sanitizeColor(it.color)
-  };
-
-  // 1) Entrada comercial (mostra genérico embaixo, mas insere só o comercial)
-  if(brand){
-    list.push({
-      ...common,
-      kind: "brand",
-      title: brand,
-      subtitle: generic,
-      insertText: brand,
-      search: keyify([brand, generic, cats.join(" "), doseOpts.join(" "), qtyOpts.join(" ")].join(" "))
-    });
-  }
-
-  // 2) Entrada genérico (sem subtítulo, insere só o genérico)
-  if(generic && keyify(generic) !== keyify(brand)){
-    list.push({
-      ...common,
-      kind: "generic",
-      title: generic,
-      subtitle: "",
-      insertText: generic,
-      search: keyify([generic, brand, cats.join(" "), doseOpts.join(" "), qtyOpts.join(" ")].join(" "))
-    });
-  }
-}
-
-list.sort((p,q)=>{
-  const A = (p.title || "").localeCompare((q.title || ""), "pt-BR", { sensitivity:"base" });
-  if(A !== 0) return A;
-  return (p.subtitle||"").localeCompare((q.subtitle||""), "pt-BR", { sensitivity:"base" });
-});
-
-state.db.list = list;
-state.db.loaded = true;
-  }catch(e){
-    state.db.loaded = false;
-    state.db.list = [];
-  }finally{
-    state.db.loading = false;
-  }
-}
-
     /************************************************************
-     * CRM / RQE lists
+     * CRM/RQE lists
      ************************************************************/
     function buildLineRow(type, idx){
       const row = document.createElement("div");
@@ -2140,11 +1908,8 @@ state.db.loaded = true;
       del.addEventListener("click", ()=>{
         const arr2 = (type==="crm") ? state.crms : state.rqes;
         if(arr2.length === 1) return;
-
         arr2.splice(idx, 1);
-        if(type==="crm") renderCrmList();
-        else renderRqeList();
-
+        if(type==="crm") renderCrmList(); else renderRqeList();
         updateSummaries();
         renderPaperDebounced();
         saveProfileDebounced();
@@ -2167,257 +1932,17 @@ state.db.loaded = true;
     }
 
     /************************************************************
-     * Padrões — aplicar / editar / excluir
-     ************************************************************/
-    function refreshPatternSelect(){
-      const sel = $("patternSelect");
-      sel.innerHTML = `<option value="" selected>Nenhum padrão</option>`;
-
-      const hasUser = !!(state.user && state.user.email);
-      sel.disabled = !hasUser;
-      $("btnApplyPattern").disabled = !hasUser;
-      $("btnEditPattern").disabled = !hasUser;
-      $("btnDeletePattern").disabled = !hasUser;
-
-      if(!hasUser) return;
-
-      const arr = loadPatterns();
-      arr.forEach(p=>{
-        const opt = document.createElement("option");
-        opt.value = p.id;
-        opt.textContent = p.name || "Sem nome";
-        sel.appendChild(opt);
-      });
-    }
-
-    function setThumbs(){
-      const h = safeText(state.headerImgData || state.headerImgUrl) || PLACEHOLDER_PNG;
-      const f = safeText(state.footerImgData || state.footerImgUrl) || PLACEHOLDER_PNG;
-      $("headerThumb").src = h;
-      $("footerThumb").src = f;
-    }
-
-    function applyPatternById(pid){
-      if(!pid) return;
-      const arr = loadPatterns();
-      const p = arr.find(x=> x.id === pid);
-      if(!p) return;
-
-      state.paperSize = (p.paperSize==="LETTER"||p.paperSize==="A5"||p.paperSize==="LEGAL") ? p.paperSize : "A4";
-      state.includeDate = (p.includeDate !== false);
-      state.dateValue = safeText(p.dateValue) || state.dateValue;
-      state.rxFontSize = isFinite(parseFloat(p.rxFontSize)) ? parseFloat(p.rxFontSize) : state.rxFontSize;
-      state.rxFontFamily = (p.rxFontFamily==="ARIAL"||p.rxFontFamily==="CALIBRI") ? p.rxFontFamily : "TIMES";
-
-      state.instName = safeText(p.instName);
-      state.addrStreet = safeText(p.addrStreet);
-      state.addrNumber = safeText(p.addrNumber);
-      state.addrDistrict = safeText(p.addrDistrict);
-      state.addrCity = safeText(p.addrCity);
-      state.addrState = safeText(p.addrState);
-      state.addrCep = safeText(p.addrCep);
-
-      state.headerImgData = safeText(p.headerImgData);
-      state.headerImgUrl = safeText(p.headerImgUrl);
-      state.footerImgData = safeText(p.footerImgData);
-      state.footerImgUrl = safeText(p.footerImgUrl);
-
-      syncConfigFieldsFromState();
-      setThumbs();
-
-      updateSummaries();
-      renderPaperDebounced();
-    }
-
-    function deletePatternById(pid){
-      if(!pid) return;
-      if(!confirm("Excluir este padrão?")) return;
-      const arr = loadPatterns().filter(x=> x.id !== pid);
-      savePatterns(arr);
-      refreshPatternSelect();
-      $("patternSelect").value = "";
-    }
-
-    function upsertPatternFromFields(editingId){
-      const name = safeText($("patternName").value);
-      if(!name){
-        alert("Defina um nome para o padrão.");
-        return null;
-      }
-
-      readConfigFieldsToState();
-
-      const payload = {
-        id: editingId || uid(),
-        name,
-        paperSize: state.paperSize,
-        includeDate: !!state.includeDate,
-        dateValue: safeText(state.dateValue),
-        rxFontSize: rxFontPx(),
-        rxFontFamily: state.rxFontFamily,
-
-        instName: safeText(state.instName),
-        addrStreet: safeText(state.addrStreet),
-        addrNumber: safeText(state.addrNumber),
-        addrDistrict: safeText(state.addrDistrict),
-        addrCity: safeText(state.addrCity),
-        addrState: safeText(state.addrState),
-        addrCep: safeText(state.addrCep),
-
-        headerImgData: safeText(state.headerImgData),
-        headerImgUrl: safeText(state.headerImgUrl),
-        footerImgData: safeText(state.footerImgData),
-        footerImgUrl: safeText(state.footerImgUrl),
-      };
-
-      const arr = loadPatterns();
-      const i = arr.findIndex(x=> x.id === payload.id);
-      if(i >= 0) arr[i] = payload;
-      else arr.push(payload);
-      savePatterns(arr);
-      refreshPatternSelect();
-      $("patternSelect").value = payload.id;
-      return payload.id;
-    }
-
-    /************************************************************
-     * Config Modal open/close + fields sync
-     ************************************************************/
-    let editingPatternId = null;
-
-    function openConfig(){
-      $("configMask").style.display = "flex";
-      $("configMask").setAttribute("aria-hidden","false");
-
-      refreshPatternSelect();
-      syncConfigFieldsFromState();
-      setThumbs();
-
-      $("newPatternArea").style.display = "none";
-      $("btnToggleNewPattern").textContent = "+ Criar novo padrão";
-      editingPatternId = null;
-      $("patternName").value = "";
-    }
-
-    function closeConfig(){
-      $("configMask").style.display = "none";
-      $("configMask").setAttribute("aria-hidden","true");
-      editingPatternId = null;
-    }
-
-    function syncConfigFieldsFromState(){
-      $("paperSize").value = state.paperSize;
-      $("includeDate").checked = !!state.includeDate;
-      $("dateValue").value = safeText(state.dateValue);
-      $("rxFontFamily").value = state.rxFontFamily;
-      $("rxFontSize").value = String(rxFontPx()).replace(".", ".");
-
-      $("instName").value = safeText(state.instName);
-      $("addrStreet").value = safeText(state.addrStreet);
-      $("addrNumber").value = safeText(state.addrNumber);
-      $("addrDistrict").value = safeText(state.addrDistrict);
-      $("addrCity").value = safeText(state.addrCity);
-      $("addrState").value = safeText(state.addrState);
-      $("addrCep").value = safeText(state.addrCep);
-
-      $("headerUrl").value = safeText(state.headerImgUrl);
-      $("footerUrl").value = safeText(state.footerImgUrl);
-    }
-
-    function readConfigFieldsToState(){
-      const ps = $("paperSize").value;
-      state.paperSize = (ps==="LETTER"||ps==="A5"||ps==="LEGAL") ? ps : "A4";
-
-      state.includeDate = !!$("includeDate").checked;
-      state.dateValue = safeText($("dateValue").value);
-
-      const fam = $("rxFontFamily").value;
-      state.rxFontFamily = (fam==="ARIAL"||fam==="CALIBRI") ? fam : "TIMES";
-
-      const fz = safeText($("rxFontSize").value).replace(",", ".");
-      state.rxFontSize = parseFloat(fz) || state.rxFontSize;
-
-      state.instName = safeText($("instName").value);
-      state.addrStreet = safeText($("addrStreet").value);
-      state.addrNumber = safeText($("addrNumber").value);
-      state.addrDistrict = safeText($("addrDistrict").value);
-      state.addrCity = safeText($("addrCity").value);
-      state.addrState = safeText($("addrState").value).toUpperCase().slice(0,2);
-      state.addrCep = safeText($("addrCep").value);
-
-      state.headerImgUrl = safeText($("headerUrl").value);
-      if(state.headerImgUrl) state.headerImgData = "";
-      state.footerImgUrl = safeText($("footerUrl").value);
-      if(state.footerImgUrl) state.footerImgData = "";
-    }
-
-    function toggleNewPatternArea(){
-      const area = $("newPatternArea");
-      const on = area.style.display === "block";
-      area.style.display = on ? "none" : "block";
-      $("btnToggleNewPattern").textContent = on ? "+ Criar novo padrão" : "— Ocultar criação";
-
-      if(!on){
-        editingPatternId = null;
-        $("patternName").value = "";
-        syncConfigFieldsFromState();
-        setThumbs();
-      }
-    }
-
-    function editSelectedPattern(){
-      const pid = $("patternSelect").value;
-      if(!pid) return;
-
-      const arr = loadPatterns();
-      const p = arr.find(x=> x.id === pid);
-      if(!p) return;
-
-      editingPatternId = p.id;
-      applyPatternById(pid);
-
-      $("patternName").value = p.name || "";
-      $("newPatternArea").style.display = "block";
-      $("btnToggleNewPattern").textContent = "— Ocultar criação";
-    }
-
-    function pickImageTo(target){
-      const input = (target === "header") ? $("fileHeader") : $("fileFooter");
-      input.click();
-    }
-
-    function handlePickedFile(target, file){
-      if(!file) return;
-      const r = new FileReader();
-      r.onload = ()=>{
-        if(target === "header"){
-          state.headerImgData = r.result;
-          state.headerImgUrl = "";
-          $("headerUrl").value = "";
-        }else{
-          state.footerImgData = r.result;
-          state.footerImgUrl = "";
-          $("footerUrl").value = "";
-        }
-        setThumbs();
-        renderPaperDebounced();
-      };
-      r.readAsDataURL(file);
-    }
-
-    /************************************************************
-     * Medicine blocks (autocomplete novo — múltiplas abas)
+     * Med blocks + Autocomplete (nova lógica)
      ************************************************************/
     const ICON_LIBRARY = [
       { key:"MANHA", label:"Manhã", ico:"☀️" },
       { key:"TARDE", label:"Tarde", ico:"🌤️" },
       { key:"NOITE", label:"Noite", ico:"🌙" },
       { key:"JEJUM", label:"Jejum", ico:"☕" },
-      { key:"ANTES_ALMOCO", label:"Antes almoço", ico:"🍽️" },
-      { key:"ANTES_JANTAR", label:"Antes jantar", ico:"🍲" },
+      { key:"ANTES", label:"Antes refeição", ico:"🍽️" },
       { key:"APOS", label:"Após refeição", ico:"✅" },
       { key:"8H", label:"8/8h", ico:"⏱️" },
-      { key:"12H", label:"12/12h", ico:"⏱️" },
+      { key:"12H", label:"12/12h", ico:"⏱️" }
     ];
 
     function addBlock({focusName=true} = {}){
@@ -2428,6 +1953,9 @@ state.db.loaded = true;
         name:"",
         dose:"",
         qty:"",
+        qtyMode:"SELECT",     // SELECT | CUSTOM
+        qtyCustom:"",
+        qtyOptions: [],
         use:"",
         collapsed:false,
         showIcons:true,
@@ -2436,7 +1964,6 @@ state.db.loaded = true;
       state.blocks.push(b);
 
       appendBlockDOM(b, state.blocks.length-1);
-
       updateSummaries();
       renderPaperDebounced();
 
@@ -2451,8 +1978,8 @@ state.db.loaded = true;
     function removeBlock(id){
       const idx = state.blocks.findIndex(x=> x.id === id);
       if(idx < 0) return;
-
       state.blocks.splice(idx,1);
+
       const el = document.querySelector(`[data-block="${id}"]`);
       if(el) el.remove();
 
@@ -2498,6 +2025,133 @@ state.db.loaded = true;
       root.innerHTML = "";
       state.blocks.forEach((b, idx)=> appendBlockDOM(b, idx));
       renumberBlocks();
+    }
+
+    function computeHits(q){
+      const hits = [];
+      if(!db_loaded) return hits;
+
+      const query = keyify(q);
+      const max = query ? 18 : 12;
+
+      // filtrar contra (A,B,D) => (main/sub) por item
+      const candidates = [];
+      for(const it of db_medicamentos){
+        if(!query){
+          candidates.push({ it, score: 999 });
+          continue;
+        }
+        if(it.search && it.search.includes(query)){
+          // priorizar que começam com o termo digitado
+          const s = scoreItem(it, query);
+          candidates.push({ it, score: s });
+        }
+      }
+
+      if(!query){
+        // sem termo: primeiros por ordem
+        for(let i=0;i<db_medicamentos.length && hits.length<max;i++){
+          hits.push(db_medicamentos[i]);
+        }
+        return hits;
+      }
+
+      candidates.sort((a,b)=>{
+        if(a.score !== b.score) return a.score - b.score;
+        return (a.it.main||"").localeCompare((b.it.main||""), "pt-BR", { sensitivity:"base" });
+      });
+
+      for(const c of candidates){
+        hits.push(c.it);
+        if(hits.length >= max) break;
+      }
+      return hits;
+    }
+
+    function scoreItem(it, q){
+      const main = it.mainKey || "";
+      const sub = it.subKey || "";
+      if(main.startsWith(q)) return 0;
+      if(it.type === "A" && sub && sub.startsWith(q)) return 1;
+
+      const im = main.indexOf(q);
+      let best = im >= 0 ? 2 + (im/100) : 999;
+
+      if(it.type === "A"){
+        const is = sub.indexOf(q);
+        if(is >= 0) best = Math.min(best, 3 + (is/100));
+      }
+      return best;
+    }
+
+    function renderHits(acList, hits, q){
+      acList.innerHTML = "";
+
+      if(!hits.length){
+        const d = document.createElement("div");
+        d.className = "acEmpty";
+        d.textContent = q
+          ? "Nenhum resultado. Continue digitando ou insira manualmente."
+          : (db_loading ? "Carregando planilha…" : "Digite para buscar em toda a base (todas as abas).");
+        acList.appendChild(d);
+        acList.style.display = "block";
+        return;
+      }
+
+      for(const it of hits){
+        const item = document.createElement("div");
+        item.className = "medItem";
+
+        const dot = document.createElement("div");
+        dot.className = "medDot";
+        dot.style.background = it.color || DEFAULT_DOT_COLOR;
+
+        const main = document.createElement("div");
+        main.className = "medMain";
+
+        const topRow = document.createElement("div");
+        topRow.className = "medTopRow";
+
+        const txtBox = document.createElement("div");
+        txtBox.style.minWidth = "0";
+
+        const lineA = document.createElement("div");
+        lineA.className = "medA";
+
+        const lineB = document.createElement("div");
+        lineB.className = "medB";
+
+        // TIPO A: Comercial + Genérico (subtítulo)
+        // TIPO B: Genérico2 apenas (sem subtítulo)
+        if(it.type === "A"){
+          lineA.textContent = it.main || "—";
+          lineB.textContent = it.sub ? it.sub : "—";
+          lineB.style.display = "block";
+        }else{
+          lineA.textContent = it.main || "—";
+          lineB.textContent = "";
+          lineB.style.display = "none";
+        }
+
+        txtBox.appendChild(lineA);
+        txtBox.appendChild(lineB);
+
+        const tag = document.createElement("div");
+        tag.className = "medTag";
+        tag.textContent = it.catLabel || "—";
+
+        topRow.appendChild(txtBox);
+        topRow.appendChild(tag);
+
+        main.appendChild(topRow);
+
+        item.appendChild(dot);
+        item.appendChild(main);
+
+        acList.appendChild(item);
+      }
+
+      acList.style.display = "block";
     }
 
     function appendBlockDOM(b, idx){
@@ -2570,11 +2224,11 @@ state.db.loaded = true;
       const grid = document.createElement("div");
       grid.className = "rxGrid";
 
-      // Nome + autocomplete (novo)
+      // ===== Nome + autocomplete universal
       const col1 = document.createElement("div");
       const lab1 = document.createElement("label");
       lab1.className = "label";
-      lab1.textContent = "Nome do medicamento";
+      lab1.textContent = "Nome do medicamento (busca universal)";
       col1.appendChild(lab1);
 
       const acWrap = document.createElement("div");
@@ -2582,7 +2236,7 @@ state.db.loaded = true;
 
       const inpName = document.createElement("input");
       inpName.className = "field";
-      inpName.placeholder = "Ex: Losartana potássica";
+      inpName.placeholder = "Digite para buscar (Comercial/Genérico)…";
       inpName.value = b.name || "";
       inpName.setAttribute("data-field","name");
       inpName.autocomplete = "off";
@@ -2592,208 +2246,111 @@ state.db.loaded = true;
       const acList = document.createElement("div");
       acList.className = "acList";
 
+      let lastHits = [];
+
       function closeList(){
         acList.style.display = "none";
         acList.innerHTML = "";
       }
-      // === Sugestões por linha (C e E) ===
-let dlDose = null;
-let dlQty = null;
-
-function fillDatalist(dl, arr){
-  if(!dl) return;
-  dl.innerHTML = "";
-  (arr||[]).forEach(v=>{
-    const opt = document.createElement("option");
-    opt.value = v;
-    dl.appendChild(opt);
-  });
-}
-
-function applyMedOptions(it){
-  // guarda no bloco (opcional)
-  b._medOpts = {
-    doseOpts: Array.isArray(it.doseOpts) ? it.doseOpts.slice(0) : [],
-    qtyOpts:  Array.isArray(it.qtyOpts)  ? it.qtyOpts.slice(0)  : []
-  };
-
-  fillDatalist(dlDose, b._medOpts.doseOpts);
-  fillDatalist(dlQty,  b._medOpts.qtyOpts);
-}
       function openList(){ acList.style.display = "block"; }
 
-      function applyEntry(it){
-  const txt = safeText(it.insertText || it.title || "");
-  if(!txt) return;
+      function applyChoice(it){
+        // TIPO A: preencher com Nome Comercial 1
+        // TIPO B: preencher com Nome Genérico 2
+        const txt = safeText(it.main);
+        b.name = txt;
+        inpName.value = txt;
 
-  b.name = txt;
-  inpName.value = txt;
+        // qty select options
+        b.qtyOptions = Array.isArray(it.qty) ? it.qty.slice() : [];
+        syncQtyUI();
 
-  // carrega sugestões C/E dessa linha no bloco
-  applyMedOptions(it);
+        const nm = txt ? txt : `Remédio ${idx+1}`;
+        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
+        strong.textContent = nm + ds;
 
-  const nm = txt ? txt : `Remédio ${idx+1}`;
-  const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
-  strong.textContent = nm + ds;
+        closeList();
+        renderPaperDebounced();
+        updateSummaries();
+      }
 
-  closeList();
-  renderPaperDebounced();
-  updateSummaries();
-}
+      function syncQtyUI(){
+        // UI é criada abaixo; aqui apenas dispara atualização se existir
+        const select = wrap.querySelector(`select[data-field="qtySelect"]`);
+        const custom = wrap.querySelector(`input[data-field="qtyCustom"]`);
+        if(!select || !custom) return;
 
-      function renderHits(hits, q){
-  acList.innerHTML = "";
+        const hasOpts = Array.isArray(b.qtyOptions) && b.qtyOptions.length > 0;
 
-  if(!hits.length){
-    const d = document.createElement("div");
-    d.className = "acEmpty";
-    d.textContent = q ? "Nenhum resultado. Continue digitando ou insira manualmente." : "Digite para buscar. (A planilha é consultada em todas as abas.)";
-    acList.appendChild(d);
-    openList();
-    return;
-  }
+        if(!hasOpts){
+          // sem opções da planilha: modo custom
+          b.qtyMode = "CUSTOM";
+          select.innerHTML = `<option value="__CUSTOM__" selected>Digitar manualmente</option>`;
+          select.value = "__CUSTOM__";
+          select.style.display = "none";
+          custom.style.display = "block";
+          custom.value = safeText(b.qty || b.qtyCustom || "");
+          b.qty = safeText(custom.value);
+          return;
+        }
 
-  hits.forEach((it)=>{
-    const item = document.createElement("div");
-    item.className = "medItem";
+        // com opções: select visível + opção custom
+        select.style.display = "block";
+        custom.style.display = (b.qtyMode === "CUSTOM") ? "block" : "none";
 
-    const dot = document.createElement("div");
-    dot.className = "medDot";
-    dot.style.background = sanitizeColor(it.color);
+        const prev = safeText(b.qty);
+        const opts = b.qtyOptions.slice();
 
-    const main = document.createElement("div");
-    main.className = "medMain";
+        select.innerHTML = "";
+        const ph = document.createElement("option");
+        ph.value = "";
+        ph.textContent = "Selecionar…";
+        select.appendChild(ph);
 
-    const topRow = document.createElement("div");
-    topRow.className = "medTopRow";
+        for(const q of opts){
+          const o = document.createElement("option");
+          o.value = q;
+          o.textContent = q;
+          select.appendChild(o);
+        }
+        const oc = document.createElement("option");
+        oc.value = "__CUSTOM__";
+        oc.textContent = "Outro… (digitar)";
+        select.appendChild(oc);
 
-    const txtBox = document.createElement("div");
-    txtBox.style.minWidth = "0";
+        // selecionar melhor opção
+        if(prev){
+          const found = opts.find(x => keyify(x) === keyify(prev));
+          if(found){
+            select.value = found;
+            b.qtyMode = "SELECT";
+            custom.style.display = "none";
+            b.qty = found;
+          }else{
+            // se prev não está nas opções, joga para custom
+            b.qtyMode = "CUSTOM";
+            select.value = "__CUSTOM__";
+            custom.style.display = "block";
+            custom.value = prev;
+            b.qtyCustom = prev;
+            b.qty = prev;
+          }
+        }else{
+          // se não tem qty ainda, deixa placeholder
+          select.value = "";
+          b.qty = "";
+        }
+      }
 
-    const lineA = document.createElement("div");
-    lineA.className = "medA";
-    lineA.textContent = it.title || "—";
-
-    const lineB = document.createElement("div");
-    lineB.className = "medB";
-    lineB.textContent = it.subtitle || "";
-    lineB.style.display = it.subtitle ? "block" : "none";
-
-    txtBox.appendChild(lineA);
-    txtBox.appendChild(lineB);
-
-    const tag = document.createElement("div");
-    tag.className = "medTag";
-    tag.textContent = it.catLabel || "—";
-
-    topRow.appendChild(txtBox);
-    topRow.appendChild(tag);
-
-    main.appendChild(topRow);
-
-    item.appendChild(dot);
-    item.appendChild(main);
-
-    // ✅ clicar no item seleciona direto (sem subitens)
-    item.addEventListener("mousedown", (ev)=>{
-      ev.preventDefault(); // mantém foco no input
-      applyEntry(it);
-    });
-
-    acList.appendChild(item);
-  });
-
-  openList();
-}
-
-      function computeHits(q){
-  const hits = [];
-  if(!state.db.loaded) return hits;
-
-  const list = state.db.list;
-
-  if(!q){
-    for(const it of list){
-      hits.push(it);
-      if(hits.length >= 10) break;
-    }
-    return hits;
-  }
-
-  const scoreText = (qq, text)=>{
-    const t = keyify(text);
-    if(!t) return 999;
-    if(t === qq) return 0;
-    if(t.startsWith(qq)) return 1;
-    if(t.split(/\s+/).some(w => w.startsWith(qq))) return 1.5;
-    if(t.includes(qq)) return 2;
-    return 999;
-  };
-
-  const tokens = q.split(/\s+/).filter(Boolean);
-  const scored = [];
-
-  for(const it of list){
-    const hay = it.search || "";
-    if(!tokens.every(tk => hay.includes(tk))) continue;
-
-    const s = Math.min(scoreText(q, it.title), scoreText(q, it.subtitle));
-    scored.push({ it, s });
-  }
-
-  scored.sort((x,y)=>{
-    if(x.s !== y.s) return x.s - y.s;
-    const lx = (x.it.title || "").length;
-    const ly = (y.it.title || "").length;
-    if(lx !== ly) return lx - ly;
-    return (x.it.title || "").localeCompare((y.it.title || ""), "pt-BR", { sensitivity:"base" });
-  });
-
-  for(const x of scored){
-    hits.push(x.it);
-    if(hits.length >= 12) break;
-  }
-
-  return hits;
-}
-
-  const scoreText = (qq, text)=>{
-    const t = keyify(text);
-    if(!t) return 999;
-    if(t === qq) return 0;
-    if(t.startsWith(qq)) return 1;
-    // match no começo de palavra
-    if(t.split(/\s+/).some(w => w.startsWith(qq))) return 1.5;
-    if(t.includes(qq)) return 2;
-    return 999;
-  };
-
-  const tokens = q.split(/\s+/).filter(Boolean);
-  const scored = [];
-
-  for(const it of list){
-    const hay = it.search || "";
-    if(!tokens.every(tk => hay.includes(tk))) continue;
-
-    const s = Math.min(scoreText(q, it.a), scoreText(q, it.b));
-    scored.push({ it, s });
-  }
-
-  scored.sort((x,y)=>{
-    if(x.s !== y.s) return x.s - y.s;
-    const lx = (x.it.a || x.it.b || "").length;
-    const ly = (y.it.a || y.it.b || "").length;
-    if(lx !== ly) return lx - ly;
-    return (x.it.a || x.it.b || "").localeCompare((y.it.a || y.it.b || ""), "pt-BR", { sensitivity:"base" });
-  });
-
-  for(const x of scored){
-    hits.push(x.it);
-    if(hits.length >= 12) break;
-  }
-
-  return hits;
-}
+      // clique por item (sem radios / sem subitens)
+      acList.addEventListener("mousedown", (ev)=>{
+        const itemEl = ev.target.closest(".medItem");
+        if(!itemEl) return;
+        ev.preventDefault();
+        const idxHit = Array.prototype.indexOf.call(acList.children, itemEl);
+        const it = lastHits[idxHit];
+        if(it) applyChoice(it);
+      });
 
       inpName.addEventListener("input", ()=>{
         b.name = safeText(inpName.value);
@@ -2805,43 +2362,44 @@ function applyMedOptions(it){
         renderPaperDebounced();
         updateSummaries();
 
-        const q = keyify(b.name);
+        const q = safeText(inpName.value);
 
-        // se ainda está carregando ou não carregou, não quebra: apenas fecha
-        if(state.db.loading){
+        if(db_loading){
           acList.innerHTML = `<div class="acEmpty">Carregando planilha…</div>`;
           openList();
           return;
         }
-        if(!state.db.loaded){
+        if(!db_loaded){
           closeList();
           return;
         }
 
         const hits = computeHits(q);
-        renderHits(hits, q);
+        lastHits = hits;
+        renderHits(acList, hits, q);
       });
 
       inpName.addEventListener("focus", ()=>{
-        if(state.db.loading){
+        if(db_loading){
           acList.innerHTML = `<div class="acEmpty">Carregando planilha…</div>`;
           openList();
           return;
         }
-        if(state.db.loaded){
-          const q = keyify(safeText(inpName.value));
+        if(db_loaded){
+          const q = safeText(inpName.value);
           const hits = computeHits(q);
-          renderHits(hits, q);
+          lastHits = hits;
+          renderHits(acList, hits, q);
         }
       });
 
-      inpName.addEventListener("blur", ()=> setTimeout(closeList, 180));
+      inpName.addEventListener("blur", ()=> setTimeout(closeList, 160));
 
       acWrap.appendChild(inpName);
       acWrap.appendChild(acList);
       col1.appendChild(acWrap);
 
-      // Dosagem
+      // ===== Dosagem
       const colDose = document.createElement("div");
       const labDose = document.createElement("label");
       labDose.className = "label";
@@ -2856,10 +2414,6 @@ function applyMedOptions(it){
       inpDose.autocomplete = "off";
       inpDose.spellcheck = false;
       inpDose.inputMode = "text";
-     dlDose = document.createElement("datalist");
-      dlDose.id = `dlDose_${b.id}`;
-inpDose.setAttribute("list", dlDose.id);
-
       inpDose.addEventListener("input", ()=>{
         b.dose = safeText(inpDose.value);
         const nm = safeText(b.name) ? safeText(b.name) : `Remédio ${idx+1}`;
@@ -2868,41 +2422,60 @@ inpDose.setAttribute("list", dlDose.id);
         renderPaperDebounced();
       });
       colDose.appendChild(inpDose);
-    colDose.appendChild(dlDose);
 
-      // Quantidade
-      const col2 = document.createElement("div");
-      const lab2 = document.createElement("label");
-      lab2.className = "label";
-      lab2.textContent = "Quantidade / Apresentação";
-      col2.appendChild(lab2);
+      // ===== Quantidade (select + custom)
+      const colQty = document.createElement("div");
+      const labQty = document.createElement("label");
+      labQty.className = "label";
+      labQty.textContent = "Quantidade / Apresentação";
+      colQty.appendChild(labQty);
 
-      const inpQty = document.createElement("input");
-      inpQty.className = "field";
-      inpQty.placeholder = "Ex: 30 comprimidos";
-      inpQty.value = b.qty || "";
-      inpQty.setAttribute("data-field","qty");
-      inpQty.autocomplete = "off";
-      inpQty.spellcheck = false;
-      inpQty.inputMode = "text";
-    dlQty = document.createElement("datalist");
-dlQty.id = `dlQty_${b.id}`;
-inpQty.setAttribute("list", dlQty.id);
-      inpQty.addEventListener("input", ()=>{
-        b.qty = safeText(inpQty.value);
+      const selQty = document.createElement("select");
+      selQty.className = "select";
+      selQty.setAttribute("data-field","qtySelect");
+      selQty.innerHTML = `<option value="">Selecionar…</option><option value="__CUSTOM__">Outro… (digitar)</option>`;
+      selQty.addEventListener("change", ()=>{
+        const v = selQty.value;
+        if(v === "__CUSTOM__"){
+          b.qtyMode = "CUSTOM";
+          b.qty = safeText(b.qtyCustom || b.qty || "");
+          inpQtyCustom.style.display = "block";
+          inpQtyCustom.value = b.qty;
+          renderPaperDebounced();
+          return;
+        }
+        b.qtyMode = "SELECT";
+        b.qty = safeText(v);
+        b.qtyCustom = "";
+        inpQtyCustom.style.display = "none";
         renderPaperDebounced();
       });
 
-      col2.appendChild(inpQty);
-    col2.appendChild(dlQty);
+      const inpQtyCustom = document.createElement("input");
+      inpQtyCustom.className = "field";
+      inpQtyCustom.setAttribute("data-field","qtyCustom");
+      inpQtyCustom.placeholder = "Digite a quantidade…";
+      inpQtyCustom.style.display = "none";
+      inpQtyCustom.autocomplete = "off";
+      inpQtyCustom.spellcheck = false;
+      inpQtyCustom.inputMode = "text";
+      inpQtyCustom.addEventListener("input", ()=>{
+        b.qtyMode = "CUSTOM";
+        b.qtyCustom = safeText(inpQtyCustom.value);
+        b.qty = b.qtyCustom;
+        renderPaperDebounced();
+      });
+
+      colQty.appendChild(selQty);
+      colQty.appendChild(inpQtyCustom);
 
       grid.appendChild(col1);
       grid.appendChild(colDose);
-      grid.appendChild(col2);
+      grid.appendChild(colQty);
 
       body.appendChild(grid);
 
-      // Posologia (fica no editor, mas na receita sai “linha do uso”)
+      // Posologia
       const full = document.createElement("div");
       full.className = "rxFull";
       const lab3 = document.createElement("label");
@@ -2922,16 +2495,21 @@ inpQty.setAttribute("list", dlQty.id);
 
       full.appendChild(lab3);
       full.appendChild(ta);
-
       body.appendChild(full);
 
       // Ícones
       const iconTools = document.createElement("div");
       iconTools.className = "rxFull";
 
+      const iconRow = document.createElement("div");
+      iconRow.className = "row";
+      iconRow.style.justifyContent = "space-between";
+      iconRow.style.gap = "10px";
+
       const labIcons = document.createElement("label");
       labIcons.className = "label";
       labIcons.textContent = "Ícones (horário/rotina) — para facilitar a compreensão";
+      labIcons.style.margin = "0";
 
       const togIcons = document.createElement("label");
       togIcons.className = "toggle";
@@ -2944,6 +2522,9 @@ inpQty.setAttribute("list", dlQty.id);
         renderPaperDebounced();
       });
 
+      iconRow.appendChild(labIcons);
+      iconRow.appendChild(togIcons);
+
       const iconPick = document.createElement("div");
       iconPick.className = "iconPick";
 
@@ -2952,239 +2533,125 @@ inpQty.setAttribute("list", dlQty.id);
         b.icons = Array.isArray(b.icons) ? b.icons : [];
         if(b.icons.includes(k)) b.icons = b.icons.filter(x=> x !== k);
         else b.icons.push(k);
+        renderIconButtons();
         renderPaperDebounced();
       }
 
-      ICON_LIBRARY.forEach(it=>{
-        const tag = document.createElement("div");
-        tag.className = "iconTag" + (isOn(it.key) ? " on" : "");
-        tag.innerHTML = `<span>${it.ico}</span><span>${it.label}</span>`;
-        tag.addEventListener("click", ()=>{
-          toggleIcon(it.key);
-          tag.classList.toggle("on", isOn(it.key));
-        });
-        iconPick.appendChild(tag);
-      });
+      function renderIconButtons(){
+        iconPick.innerHTML = "";
+        for(const it of ICON_LIBRARY){
+          const pill = document.createElement("div");
+          pill.className = "iconTag" + (isOn(it.key) ? " on" : "");
+          pill.innerHTML = `<span style="font-size:14px">${it.ico}</span><span>${it.label}</span>`;
+          pill.addEventListener("click", ()=> toggleIcon(it.key));
+          iconPick.appendChild(pill);
+        }
+      }
+      renderIconButtons();
 
-      iconTools.appendChild(labIcons);
-      iconTools.appendChild(togIcons);
+      iconTools.appendChild(iconRow);
       iconTools.appendChild(iconPick);
-
       body.appendChild(iconTools);
 
       wrap.appendChild(top);
       wrap.appendChild(body);
-
       root.appendChild(wrap);
 
-      // minimiza anteriores
-      document.querySelectorAll(".rxBlock").forEach(node=>{
-        const bid = node.getAttribute("data-block");
-        if(bid && bid !== b.id){
-          node.classList.add("collapsed");
-          const bb = state.blocks.find(x=> x.id === bid);
-          if(bb) bb.collapsed = true;
-          const btn = node.querySelector(".rxTools .iconBtnDim");
-          if(btn){ btn.textContent = "▾"; btn.title = "Expandir"; }
+      // sincroniza qty UI inicial
+      b.qtyOptions = Array.isArray(b.qtyOptions) ? b.qtyOptions : [];
+      (function initQtyUI(){
+        const has = Array.isArray(b.qtyOptions) && b.qtyOptions.length > 0;
+        if(has){
+          // monta select com opções
+          const opts = b.qtyOptions.slice();
+          selQty.innerHTML = "";
+          const ph = document.createElement("option");
+          ph.value = "";
+          ph.textContent = "Selecionar…";
+          selQty.appendChild(ph);
+          for(const q of opts){
+            const o = document.createElement("option");
+            o.value = q;
+            o.textContent = q;
+            selQty.appendChild(o);
+          }
+          const oc = document.createElement("option");
+          oc.value = "__CUSTOM__";
+          oc.textContent = "Outro… (digitar)";
+          selQty.appendChild(oc);
+          selQty.value = "";
+          inpQtyCustom.style.display = "none";
+        }else{
+          selQty.style.display = "none";
+          inpQtyCustom.style.display = "block";
+          inpQtyCustom.value = safeText(b.qty || "");
         }
-      });
-
-      renumberBlocks();
+      })();
     }
 
     /************************************************************
      * Summaries
      ************************************************************/
     function updateSummaries(){
-      const medName = safeText(state.docName);
-      const crms = state.crms.map(safeText).filter(Boolean);
-      $("sumMedico").textContent = medName
-        ? `${state.docTitle} ${medName}${crms.length ? " • " + crms[0] : ""}`
-        : "Preencha nome/CRM";
+      // médico
+      const docNm = safeText(state.docName);
+      const crm = state.crms.map(safeText).filter(Boolean).slice(0,2);
+      const rqe = state.rqes.map(safeText).filter(Boolean).slice(0,2);
+      const parts = [];
+      if(docNm) parts.push(`${state.docTitle} ${docNm}`);
+      if(crm.length) parts.push(`CRM: ${crm.join(" · ")}`);
+      if(rqe.length) parts.push(`RQE: ${rqe.join(" · ")}`);
+      $("sumMedico").textContent = parts.length ? parts.join("  |  ") : "—";
 
-      const pName = safeText(state.patientName);
-      const pType = safeText(state.patientDocType);
-      const pDoc = safeText(state.patientDocValue);
-      $("sumPaciente").textContent = pName
-        ? (pDoc ? `${pName} • ${pType}: ${pDoc}` : pName)
-        : "Preencha o paciente";
+      // paciente
+      const pn = safeText(state.patientName);
+      const dt = safeText(state.patientDocType);
+      const dv = safeText(state.patientDocValue);
+      const p2 = [];
+      if(pn) p2.push(pn);
+      if(dv) p2.push(`${dt}: ${dv}`);
+      $("sumPaciente").textContent = p2.length ? p2.join("  |  ") : "—";
 
-      $("sumMeds").textContent = state.blocks.length
-        ? `${state.blocks.length} item(ns) • ${medsPerPage()} por página`
-        : "Adicione remédios";
+      // meds
+      const count = state.blocks.length;
+      const named = state.blocks.filter(b => safeText(b.name)).length;
+      $("sumMeds").textContent = count ? `${count} item(ns) · ${named} preenchido(s)` : "—";
     }
 
     /************************************************************
-     * Paper render — branco, margens seguras, R// obrigatório, numerado
+     * Pagination
      ************************************************************/
-    function formatInstitutionAddress(){
-      const st = safeText(state.addrStreet);
-      const no = safeText(state.addrNumber);
-      const di = safeText(state.addrDistrict);
-      const ci = safeText(state.addrCity);
-      const uf = safeText(state.addrState).toUpperCase();
-      const cep = safeText(state.addrCep);
-
-      const parts = [];
-      const line1 = [st, no ? "nº " + no : ""].filter(Boolean).join(", ");
-      if(line1) parts.push(line1);
-
-      const line2 = [di, ci && uf ? `${ci}-${uf}` : (ci || uf)].filter(Boolean).join(". ");
-      if(line2) parts.push(line2);
-
-      if(cep) parts.push(`CEP. ${cep}`);
-
-      return parts.join(". ");
+    function medsPerPage(){
+      const px = rxFontPx();
+      if(px <= 9.1) return 12;
+      if(px <= 9.7) return 11;
+      if(px <= 10.3) return 10;
+      if(px <= 10.9) return 9;
+      if(px <= 11.5) return 9;
+      if(px <= 12.4) return 8;
+      if(px <= 13.0) return 7;
+      return 6;
+    }
+    function paginateBlocks(){
+      const per = medsPerPage();
+      const pages = [];
+      let cur = [];
+      state.blocks.forEach(b=>{
+        cur.push(b);
+        if(cur.length >= per){
+          pages.push(cur);
+          cur = [];
+        }
+      });
+      if(cur.length || pages.length===0) pages.push(cur);
+      return pages;
     }
 
-    function docFooterHTML(){
-      const title = safeText(state.docTitle);
-      const name = safeText(state.docName);
-
-      const crms = (state.crms || []).map(safeText).filter(Boolean);
-      const rqes = (state.rqes || []).map(safeText).filter(Boolean);
-
-      const lines = [];
-      if(crms.length) lines.push(crms.join(" • "));
-      if(rqes.length) lines.push(rqes.join(" • "));
-
-      const displayName = [title, name].filter(Boolean).join(" ");
-
-      const instN = safeText(state.instName);
-      const instA = formatInstitutionAddress();
-
-      const instBlock = (instN || instA) ? `
-        <div class="instFooterGray">
-          ${instN ? `<div style="font-weight:900;">${instN}</div>` : ""}
-          ${instA ? `<div>${instA}</div>` : ""}
-        </div>
-      ` : "";
-
-      const inner = `
-        <div class="sigLine"></div>
-        <div class="docCenter">
-          <div class="docName">${displayName || "&nbsp;"}</div>
-          ${lines.map(l=> `<div class="docLine">${l}</div>`).join("") || `<div class="docLine">&nbsp;</div>`}
-        </div>
-        ${instBlock}
-      `;
-
-      return `
-        <div class="sigWrap">
-          <div style="text-align:center;">
-            <div class="docSig">${inner}</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function headerImgSrc(){ return safeText(state.headerImgData || state.headerImgUrl); }
-    function footerImgSrc(){ return safeText(state.footerImgData || state.footerImgUrl); }
-
-    function iconsHTML(b){
-      if(!b || b.showIcons === false) return "";
-      const arr = Array.isArray(b.icons) ? b.icons : [];
-      if(!arr.length) return "";
-      const icons = arr.map(k=>{
-        const it = ICON_LIBRARY.find(x=> x.key === k);
-        return it ? `<span>${it.ico} ${it.label}</span>` : "";
-      }).filter(Boolean).join("");
-      if(!icons) return "";
-      return `<div class="useIconsBelow">${icons}</div>`;
-    }
-
-    function pageHTML(blocks, startIndex){
-      const patient = safeText(state.patientName);
-      const docType = safeText(state.patientDocType) || "CPF";
-      const docVal = safeText(state.patientDocValue);
-
-      const showDate = !!state.includeDate;
-      const date = safeText(state.dateValue);
-
-      const rxFont = rxFontPx().toFixed(1) + "px";
-      const rxFamily = rxFamilyCSS();
-
-      const items = blocks.map((b, i)=>{
-        const n = (startIndex || 0) + i + 1;
-
-        const name = safeText(b.name) || "—";
-        const dose = safeText(b.dose) || "";
-        const showName = dose ? `${name} ${dose}` : name;
-
-        const qty = safeText(b.qty) || "";
-        const use = safeText(b.use) || "";
-
-        const qtyPart = qty
-          ? `<div class="qty">${qty}</div>`
-          : `<div class="qty" style="opacity:.55;">&nbsp;</div>`;
-
-        const instr = use ? `<div class="rxInstr">${use}</div>` : ``;
-
-        return `
-          <div class="rxItem">
-            <div class="rxLine">
-              <div class="rxNo">${n}.</div>
-              <div class="drugName">${showName}</div>
-              <div class="leaderText">${leaderHyphens()}</div>
-              ${qtyPart}
-            </div>
-            ${instr}
-            ${iconsHTML(b)}
-          </div>
-        `;
-      }).join("");
-
-      const datePill = showDate
-        ? `<div class="rxDatePill">Data: ${date || "&nbsp;"}</div>`
-        : ``;
-
-      const docInline = docVal
-        ? `<span class="docInline">• ${docType}: ${docVal}</span>`
-        : "";
-
-      const hsrc = headerImgSrc();
-      const fsrc = footerImgSrc();
-
-      return `
-        <div class="rxPaper" style="--rxFont:${rxFont}; --rxFamily:${rxFamily};">
-          <div class="headerArea">
-            ${hsrc ? `<img class="instImgSimple" src="${hsrc}" alt="" />` : ""}
-          </div>
-
-          <div class="rxMeta">
-            <div class="rxPatientLine">${patient || "&nbsp;"}${docInline}</div>
-            ${datePill}
-          </div>
-
-          <div class="rxDividerLine"></div>
-
-          <div class="rxSymbol">R//</div>
-
-          <div class="rxList">
-            ${items || `<div style="font-size:12px;color:#111; font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">Adicione medicamentos no editor.</div>`}
-          </div>
-
-          <div class="footerArea">
-            ${fsrc ? `<img class="instImgSimple instImgSimple--footer" src="${fsrc}" alt="" />` : ""}
-          </div>
-
-          ${docFooterHTML()}
-        </div>
-      `;
-    }
-
-    function renderPaper(){
-      const pages = paginateBlocks();
+    function syncPageUI(pages){
       const total = pages.length;
+      state.selectedPage = clamp(state.selectedPage, 1, total);
 
-      state.selectedPage = clamp(parseInt(state.selectedPage,10) || 1, 1, total);
-
-      const paper = $("paper");
-      paper.classList.remove("paperA4","paperLetter","paperA5","paperLegal");
-      if(state.paperSize==="LETTER") paper.classList.add("paperLetter");
-      else if(state.paperSize==="A5") paper.classList.add("paperA5");
-      else if(state.paperSize==="LEGAL") paper.classList.add("paperLegal");
-      else paper.classList.add("paperA4");
+      $("pageInfo").textContent = `Página ${state.selectedPage} de ${total}`;
 
       const sel = $("pageSelect");
       sel.innerHTML = "";
@@ -3196,434 +2663,483 @@ inpQty.setAttribute("list", dlQty.id);
         sel.appendChild(opt);
       }
 
-      $("pageInfo").textContent = `Página ${state.selectedPage} de ${total}`;
+      const paper = $("paper");
+      paper.classList.remove("paperA4","paperLetter","paperA5","paperLegal");
+      if(state.paperSize === "LETTER") paper.classList.add("paperLetter");
+      else if(state.paperSize === "A5") paper.classList.add("paperA5");
+      else if(state.paperSize === "LEGAL") paper.classList.add("paperLegal");
+      else paper.classList.add("paperA4");
+    }
+
+    /************************************************************
+     * Render Paper
+     ************************************************************/
+    function renderPaper(){
+      const pages = paginateBlocks();
+      syncPageUI(pages);
+
+      const pageIdx = state.selectedPage - 1;
+      const pageBlocks = pages[pageIdx] || [];
+
+      const rx = $("rxPaper");
+      rx.style.setProperty("--rxFont", rxFontPx()+"px");
+      rx.style.setProperty("--rxFamily", rxFamilyCSS());
+
+      const headerSrc = safeText(state.headerImgUrl);
+      const footerSrc = safeText(state.footerImgUrl);
+
+      const patientName = safeText(state.patientName);
+      const docType = safeText(state.patientDocType);
+      const docValue = safeText(state.patientDocValue);
+      const patientDoc = docValue ? ` · ${docType}: ${docValue}` : "";
+
+      const dateText = safeText(state.dateValue) || todayBR();
+      const showDate = !!state.includeDate;
+
+      const docTitle = safeText(state.docTitle);
+      const docName = safeText(state.docName);
+      const crms = state.crms.map(safeText).filter(Boolean);
+      const rqes = state.rqes.map(safeText).filter(Boolean);
+
+      const docLines = [];
+      if(crms.length) docLines.push(crms.join(" · "));
+      if(rqes.length) docLines.push(rqes.join(" · "));
+
+      const instName = safeText(state.instName);
+      const instAddress = safeText(state.instAddress);
+
+      let html = "";
+
+      // Header image area
+      html += `<div class="headerArea">`;
+      if(headerSrc){
+        html += `<img class="instImgSimple" alt="" src="${escapeAttr(headerSrc)}">`;
+      }
+      html += `</div>`;
+
+      // REQUIRED center title
+      html += `<div class="rxTitleCenter">RECEITA MÉDICA</div>`;
+
+      // Patient + date line
+      html += `<div class="rxMeta">`;
+      html += `<div class="rxPatientLine">${escapeHtml(patientName || "Paciente")}<span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
+      html += showDate ? `<div class="rxDatePill">${escapeHtml(dateText)}</div>` : `<div></div>`;
+      html += `</div>`;
+
+      html += `<div class="rxDividerLine"></div>`;
+
+      // R//
+      html += `<div class="rxSymbol">R//</div>`;
+
+      // List
+      html += `<div class="rxList">`;
+      pageBlocks.forEach((b, i)=>{
+        const idxGlobal = (pageIdx * medsPerPage()) + i + 1;
+
+        const name = safeText(b.name);
+        const dose = safeText(b.dose);
+        const qty = safeText(b.qty);
+
+        if(!name && !dose && !qty && !safeText(b.use)) return;
+
+        const fullName = [name, dose].filter(Boolean).join(" ").trim();
+        const qtyText = qty || "";
+
+        html += `<div class="rxItem">`;
+        html += `<div class="rxLine">`;
+        html += `<div class="rxNo">${idxGlobal}.</div>`;
+        html += `<div class="drugName">${escapeHtml(fullName || "—")}</div>`;
+        html += `<div class="leaderText">${leaderHyphens()}</div>`;
+        html += `<div class="qty">${escapeHtml(qtyText)}</div>`;
+        html += `</div>`;
+
+        const use = safeText(b.use);
+        if(use){
+          html += `<div class="rxInstr">${escapeHtml(use)}</div>`;
+        }
+
+        if(b.showIcons !== false && Array.isArray(b.icons) && b.icons.length){
+          const pills = b.icons.map(k=>{
+            const it = ICON_LIBRARY.find(x=>x.key===k);
+            return it ? `<span>${escapeHtml(it.ico)} ${escapeHtml(it.label)}</span>` : "";
+          }).filter(Boolean).join("");
+          if(pills){
+            html += `<div class="useIconsBelow">${pills}</div>`;
+          }
+        }
+
+        html += `</div>`;
+      });
+      html += `</div>`;
+
+      // Signature
+      html += `<div class="sigWrap">`;
+      html += `<div class="docSig">`;
+      html += `<div class="sigLine"></div>`;
+      html += `<div class="docCenter">`;
+      html += `<div class="docName">${escapeHtml([docTitle, docName].filter(Boolean).join(" ").trim() || "Médico")}</div>`;
+      if(docLines.length){
+        docLines.forEach(line=>{
+          html += `<div class="docLine">${escapeHtml(line)}</div>`;
+        });
+      }
+      html += `</div>`;
+      html += `</div>`;
+      html += `</div>`;
+
+      // Footer image area
+      html += `<div class="footerArea">`;
+      if(footerSrc){
+        html += `<img class="instImgSimple instImgSimple--footer" alt="" src="${escapeAttr(footerSrc)}">`;
+      }
+      html += `</div>`;
+
+      // Institution footer gray (optional)
+      const instFooter = [instName, instAddress].filter(Boolean).join(" · ");
+      if(instFooter){
+        html += `<div class="instFooterGray">${escapeHtml(instFooter)}</div>`;
+      }
+
+      rx.innerHTML = html;
+    }
+
+    const renderPaperDebounced = debounce(renderPaper, 120);
+
+    function escapeHtml(s){
+      return (s||"").toString()
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+    }
+    function escapeAttr(s){ return escapeHtml(s); }
+
+    /************************************************************
+     * Print (todas as páginas)
+     ************************************************************/
+    function buildPrintAll(){
+      const pages = paginateBlocks();
+
+      const headerSrc = safeText(state.headerImgUrl);
+      const footerSrc = safeText(state.footerImgUrl);
+
+      const patientName = safeText(state.patientName);
+      const docType = safeText(state.patientDocType);
+      const docValue = safeText(state.patientDocValue);
+      const patientDoc = docValue ? ` · ${docType}: ${docValue}` : "";
+
+      const dateText = safeText(state.dateValue) || todayBR();
+      const showDate = !!state.includeDate;
+
+      const docTitle = safeText(state.docTitle);
+      const docName = safeText(state.docName);
+      const crms = state.crms.map(safeText).filter(Boolean);
+      const rqes = state.rqes.map(safeText).filter(Boolean);
+
+      const docLines = [];
+      if(crms.length) docLines.push(crms.join(" · "));
+      if(rqes.length) docLines.push(rqes.join(" · "));
+
+      const instName = safeText(state.instName);
+      const instAddress = safeText(state.instAddress);
+      const instFooter = [instName, instAddress].filter(Boolean).join(" · ");
 
       const per = medsPerPage();
-      const startIndex = (state.selectedPage - 1) * per;
 
-      $("rxPaper").innerHTML = pageHTML(pages[state.selectedPage-1], startIndex);
+      let out = "";
+      pages.forEach((pageBlocks, pIdx)=>{
+        out += `<div class="printPage">`;
+        out += `<div class="rxPaper" style="--rxFont:${rxFontPx()}px; --rxFamily:${rxFamilyCSS()}; font-family:${rxFamilyCSS()}; font-size:${rxFontPx()}px; padding:${getComputedStyle(document.documentElement).getPropertyValue("--paperPad") || "20mm"};">`;
 
-      const printAll = $("printAll");
-      printAll.innerHTML = pages.map((p, idx)=>{
-        return `
-          <div class="printPage">
-            ${pageHTML(p, idx * per)}
-          </div>
-          ${idx < pages.length-1 ? `<div style="break-after:page;"></div>` : ``}
-        `;
-      }).join("");
-    }
+        out += `<div class="headerArea" style="height:78px; position:relative; margin-bottom:6px;">`;
+        if(headerSrc) out += `<img class="instImgSimple" alt="" src="${escapeAttr(headerSrc)}">`;
+        out += `</div>`;
 
-    function debounce(fn, ms=120){
-      let t;
-      return (...args)=>{
-        clearTimeout(t);
-        t = setTimeout(()=>fn(...args), ms);
-      };
-    }
-    const renderPaperDebounced = debounce(renderPaper, 90);
+        out += `<div class="rxTitleCenter">RECEITA MÉDICA</div>`;
 
-    /************************************************************
-     * Histórico
-     ************************************************************/
-    function snapshotStateForHistory(){
-      return {
-        ts: Date.now(),
-        patientName: safeText(state.patientName),
-        patientDocType: safeText(state.patientDocType),
-        patientDocValue: safeText(state.patientDocValue),
+        out += `<div class="rxMeta">`;
+        out += `<div class="rxPatientLine">${escapeHtml(patientName || "Paciente")}<span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
+        out += showDate ? `<div class="rxDatePill">${escapeHtml(dateText)}</div>` : `<div></div>`;
+        out += `</div>`;
 
-        docTitle: safeText(state.docTitle),
-        docName: safeText(state.docName),
-        crms: (state.crms||[]).map(safeText),
-        rqes: (state.rqes||[]).map(safeText),
+        out += `<div class="rxDividerLine"></div>`;
+        out += `<div class="rxSymbol">R//</div>`;
 
-        paperSize: state.paperSize,
-        includeDate: !!state.includeDate,
-        dateValue: safeText(state.dateValue),
-        rxFontSize: rxFontPx(),
-        rxFontFamily: state.rxFontFamily,
+        out += `<div class="rxList">`;
+        pageBlocks.forEach((b, i)=>{
+          const idxGlobal = (pIdx * per) + i + 1;
+          const name = safeText(b.name);
+          const dose = safeText(b.dose);
+          const qty = safeText(b.qty);
+          const use = safeText(b.use);
 
-        instName: safeText(state.instName),
-        addrStreet: safeText(state.addrStreet),
-        addrNumber: safeText(state.addrNumber),
-        addrDistrict: safeText(state.addrDistrict),
-        addrCity: safeText(state.addrCity),
-        addrState: safeText(state.addrState),
-        addrCep: safeText(state.addrCep),
+          if(!name && !dose && !qty && !use) return;
 
-        headerImgData: safeText(state.headerImgData),
-        headerImgUrl: safeText(state.headerImgUrl),
-        footerImgData: safeText(state.footerImgData),
-        footerImgUrl: safeText(state.footerImgUrl),
+          const fullName = [name, dose].filter(Boolean).join(" ").trim();
+          out += `<div class="rxItem">`;
+          out += `<div class="rxLine">`;
+          out += `<div class="rxNo">${idxGlobal}.</div>`;
+          out += `<div class="drugName">${escapeHtml(fullName || "—")}</div>`;
+          out += `<div class="leaderText">${leaderHyphens()}</div>`;
+          out += `<div class="qty">${escapeHtml(qty || "")}</div>`;
+          out += `</div>`;
+          if(use) out += `<div class="rxInstr">${escapeHtml(use)}</div>`;
 
-        blocks: (state.blocks||[]).map(b=>({
-          name: safeText(b.name),
-          dose: safeText(b.dose),
-          qty: safeText(b.qty),
-          use: safeText(b.use),
-          showIcons: b.showIcons !== false,
-          icons: Array.isArray(b.icons) ? b.icons.slice(0) : []
-        }))
-      };
-    }
+          if(b.showIcons !== false && Array.isArray(b.icons) && b.icons.length){
+            const pills = b.icons.map(k=>{
+              const it = ICON_LIBRARY.find(x=>x.key===k);
+              return it ? `<span>${escapeHtml(it.ico)} ${escapeHtml(it.label)}</span>` : "";
+            }).filter(Boolean).join("");
+            if(pills) out += `<div class="useIconsBelow">${pills}</div>`;
+          }
 
-    function saveToHistoryAndPrint(){
-      if(!(state.user && state.user.email)){
-        openLogin();
-        return;
-      }
-      renderPaper();
-
-      const snap = snapshotStateForHistory();
-      const entry = {
-        id: uid(),
-        ts: snap.ts,
-        patient: snap.patientName || "Paciente",
-        pagesHTML: $("printAll").innerHTML,
-        snapshot: snap
-      };
-
-      const arr = loadHistory();
-      arr.unshift(entry);
-      saveHistory(arr.slice(0, 200));
-      window.print();
-    }
-
-    function printOnly(){
-      renderPaper();
-      window.print();
-    }
-
-    function isHistoryRoute(){
-      const p = (location.pathname || "").toLowerCase();
-      return p.includes("historico-receita");
-    }
-
-    function goToHistory(){
-      window.location.href = "https://www.usojaleco.com.br/historico-receita";
-    }
-
-    function goToApp(){
-      window.location.href = "https://www.usojaleco.com.br/";
-    }
-
-    function renderHistoryPage(){
-      const has = !!(state.user && state.user.email);
-      $("btnClearHistory").style.display = has ? "inline-flex" : "none";
-      const top = $("histTopInfo");
-      const list = $("histList");
-      list.innerHTML = "";
-
-      if(!has){
-        top.textContent = "Faça login para ver seu histórico.";
-        const msg = document.createElement("div");
-        msg.className = "mini";
-        msg.textContent = "Você precisa estar logado na mesma conta usada ao salvar prescrições neste dispositivo.";
-        list.appendChild(msg);
-        return;
-      }
-
-      const arr = loadHistory();
-      top.textContent = arr.length ? `${arr.length} prescrição(ões) salva(s).` : "Nenhuma prescrição salva ainda.";
-
-      if(!arr.length){
-        const msg = document.createElement("div");
-        msg.className = "mini";
-        msg.textContent = "Volte para a prescrição e use “Imprimir + Guardar no Histórico”.";
-        list.appendChild(msg);
-        return;
-      }
-
-      arr.forEach((it)=>{
-        const d = new Date(it.ts);
-        const when = `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()} • ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-
-        const card = document.createElement("div");
-        card.className = "histItem";
-
-        const meta = document.createElement("div");
-        meta.className = "histMeta";
-        meta.innerHTML = `<b>${safeText(it.patient) || "Paciente"}</b><small>${when}</small>`;
-
-        const tools = document.createElement("div");
-        tools.style.display = "flex";
-        tools.style.gap = "10px";
-        tools.style.alignItems = "center";
-        tools.style.flexWrap = "wrap";
-
-        const btnPrint = document.createElement("button");
-        btnPrint.className = "btn btnPrimary";
-        btnPrint.type = "button";
-        btnPrint.textContent = "Imprimir";
-        btnPrint.addEventListener("click", ()=>{
-          $("printAll").innerHTML = it.pagesHTML || "";
-          window.print();
+          out += `</div>`;
         });
+        out += `</div>`;
 
-        const btnDel = document.createElement("button");
-        btnDel.className = "btn btnGhost";
-        btnDel.type = "button";
-        btnDel.textContent = "Excluir";
-        btnDel.addEventListener("click", ()=>{
-          if(!confirm("Excluir esta prescrição do histórico?")) return;
-          const next = loadHistory().filter(x=> x.id !== it.id);
-          saveHistory(next);
-          renderHistoryPage();
-        });
+        out += `<div class="sigWrap">`;
+        out += `<div class="docSig">`;
+        out += `<div class="sigLine"></div>`;
+        out += `<div class="docCenter">`;
+        out += `<div class="docName">${escapeHtml([docTitle, docName].filter(Boolean).join(" ").trim() || "Médico")}</div>`;
+        if(docLines.length){
+          docLines.forEach(line=>{
+            out += `<div class="docLine">${escapeHtml(line)}</div>`;
+          });
+        }
+        out += `</div>`;
+        out += `</div>`;
+        out += `</div>`;
 
-        tools.appendChild(btnPrint);
-        tools.appendChild(btnDel);
+        out += `<div class="footerArea" style="height:62px; position:relative; margin-top:10px;">`;
+        if(footerSrc) out += `<img class="instImgSimple instImgSimple--footer" alt="" src="${escapeAttr(footerSrc)}">`;
+        out += `</div>`;
 
-        card.appendChild(meta);
-        card.appendChild(tools);
-        list.appendChild(card);
+        if(instFooter){
+          out += `<div class="instFooterGray">${escapeHtml(instFooter)}</div>`;
+        }
+
+        out += `</div>`;
+        out += `</div>`;
       });
+
+      $("printAll").innerHTML = out;
     }
 
     /************************************************************
-     * Bind inputs
+     * Config modal
      ************************************************************/
-    function bind(){
-      // login
+    function openConfig(){
+      $("configMask").style.display = "flex";
+      $("configMask").setAttribute("aria-hidden","false");
+      syncConfigFieldsFromState();
+      syncThumbs();
+    }
+    function closeConfig(){
+      $("configMask").style.display = "none";
+      $("configMask").setAttribute("aria-hidden","true");
+    }
+    function syncThumbs(){
+      $("headerThumb").src = safeText(state.headerImgUrl) || PLACEHOLDER_PNG;
+      $("footerThumb").src = safeText(state.footerImgUrl) || PLACEHOLDER_PNG;
+    }
+    function syncConfigFieldsFromState(){
+      $("paperSize").value = state.paperSize;
+      $("rxFontFamily").value = state.rxFontFamily;
+      $("rxFontSize").value = String(rxFontPx());
+      $("includeDate").checked = !!state.includeDate;
+      $("dateValue").value = safeText(state.dateValue);
+      $("headerUrl").value = safeText(state.headerImgUrl);
+      $("footerUrl").value = safeText(state.footerImgUrl);
+      $("instName").value = safeText(state.instName);
+      $("instAddress").value = safeText(state.instAddress);
+    }
+    function readConfigFieldsToState(){
+      const ps = $("paperSize").value;
+      state.paperSize = (ps==="LETTER"||ps==="A5"||ps==="LEGAL") ? ps : "A4";
+
+      const fam = $("rxFontFamily").value;
+      state.rxFontFamily = (fam==="ARIAL"||fam==="CALIBRI") ? fam : "TIMES";
+
+      const fz = safeText($("rxFontSize").value).replace(",", ".");
+      state.rxFontSize = parseFloat(fz) || state.rxFontSize;
+
+      state.includeDate = !!$("includeDate").checked;
+      state.dateValue = safeText($("dateValue").value);
+
+      state.headerImgUrl = safeText($("headerUrl").value);
+      state.footerImgUrl = safeText($("footerUrl").value);
+
+      state.instName = safeText($("instName").value);
+      state.instAddress = safeText($("instAddress").value);
+    }
+
+    /************************************************************
+     * UI Events
+     ************************************************************/
+    function bindUI(){
       $("btnLogin").addEventListener("click", openLogin);
       $("btnCloseLogin").addEventListener("click", closeLogin);
       $("btnCloseLogin2").addEventListener("click", closeLogin);
+      $("loginMask").addEventListener("click", (e)=>{ if(e.target === $("loginMask")) closeLogin(); });
+
       $("btnLogout").addEventListener("click", logout);
 
-      // histórico
-      $("btnHistory").addEventListener("click", goToHistory);
-      $("btnBackToApp").addEventListener("click", goToApp);
-      $("btnClearHistory").addEventListener("click", ()=>{
-        if(!(state.user && state.user.email)) return;
-        if(!confirm("Limpar TODO o histórico desta conta neste dispositivo?")) return;
-        saveHistory([]);
-        renderHistoryPage();
-      });
-
-      // médico
-      $("docTitle").addEventListener("change", (e)=>{
-        state.docTitle = (e.target.value === "Dra.") ? "Dra." : "Dr.";
-        updateSummaries();
-        renderPaperDebounced();
-        saveProfileDebounced();
-      });
-      $("docName").addEventListener("input", (e)=>{
-        state.docName = safeText(e.target.value);
-        updateSummaries();
-        renderPaperDebounced();
-        saveProfileDebounced();
-      });
-
-      // paciente
-      $("patientName").addEventListener("input", (e)=>{
-        state.patientName = safeText(e.target.value);
-        updateSummaries();
-        renderPaperDebounced();
-      });
-      $("patientDocType").addEventListener("change", (e)=>{
-        state.patientDocType = (e.target.value === "RG" || e.target.value === "CNS") ? e.target.value : "CPF";
-        updateSummaries();
-        renderPaperDebounced();
-      });
-      $("patientDocValue").addEventListener("input", (e)=>{
-        state.patientDocValue = safeText(e.target.value);
-        updateSummaries();
-        renderPaperDebounced();
-      });
-
-      // meds
       $("btnAddMed").addEventListener("click", ()=> addBlock({focusName:true}));
       $("btnAddMed2").addEventListener("click", ()=> addBlock({focusName:true}));
 
       $("btnClear").addEventListener("click", ()=>{
-        state.patientName = "";
-        state.patientDocType = "CPF";
-        state.patientDocValue = "";
+        if(!confirm("Limpar todos os medicamentos e campos desta prescrição?")) return;
         state.blocks = [];
-        state.selectedPage = 1;
-
-        $("patientName").value = "";
-        $("patientDocType").value = "CPF";
-        $("patientDocValue").value = "";
-
         renderBlocksInitial();
         updateSummaries();
         renderPaperDebounced();
       });
 
-      // navegação páginas
-      $("pageSelect").addEventListener("change", (e)=>{
-        state.selectedPage = parseInt(e.target.value,10) || 1;
+      $("docTitle").addEventListener("change", ()=>{
+        state.docTitle = $("docTitle").value === "Dra." ? "Dra." : "Dr.";
+        updateSummaries();
+        renderPaperDebounced();
+        saveProfileDebounced();
+      });
+      $("docName").addEventListener("input", ()=>{
+        state.docName = safeText($("docName").value);
+        updateSummaries();
+        renderPaperDebounced();
+        saveProfileDebounced();
+      });
+
+      $("patientName").addEventListener("input", ()=>{
+        state.patientName = safeText($("patientName").value);
+        updateSummaries();
         renderPaperDebounced();
       });
-      $("btnPrevPage").addEventListener("click", ()=>{
-        const pages = paginateBlocks();
-        state.selectedPage = clamp(state.selectedPage - 1, 1, pages.length);
+      $("patientDocType").addEventListener("change", ()=>{
+        state.patientDocType = safeText($("patientDocType").value);
+        updateSummaries();
         renderPaperDebounced();
       });
-      $("btnNextPage").addEventListener("click", ()=>{
-        const pages = paginateBlocks();
-        state.selectedPage = clamp(state.selectedPage + 1, 1, pages.length);
+      $("patientDocValue").addEventListener("input", ()=>{
+        state.patientDocValue = safeText($("patientDocValue").value);
+        updateSummaries();
         renderPaperDebounced();
       });
 
-      $("btnPrintOnly").addEventListener("click", printOnly);
-      $("btnPrintSave").addEventListener("click", saveToHistoryAndPrint);
+      $("btnAddCRM").addEventListener("click", ()=>{
+        state.crms.push("");
+        renderCrmList();
+        updateSummaries();
+        renderPaperDebounced();
+        saveProfileDebounced();
+      });
+      $("btnAddRQE").addEventListener("click", ()=>{
+        state.rqes.push("");
+        renderRqeList();
+        updateSummaries();
+        renderPaperDebounced();
+        saveProfileDebounced();
+      });
 
-      // Config (gear)
       $("btnOpenConfig").addEventListener("click", openConfig);
       $("btnCloseConfig").addEventListener("click", closeConfig);
       $("btnCloseConfig2").addEventListener("click", closeConfig);
+      $("configMask").addEventListener("click", (e)=>{ if(e.target === $("configMask")) closeConfig(); });
 
-      // patterns actions
-      $("btnApplyPattern").addEventListener("click", ()=>{
-        const pid = $("patternSelect").value;
-        if(!pid) return;
-        applyPatternById(pid);
-      });
-      $("btnEditPattern").addEventListener("click", ()=>{
-        if(!(state.user && state.user.email)){ openLogin(); return; }
-        editSelectedPattern();
-      });
-      $("btnDeletePattern").addEventListener("click", ()=>{
-        if(!(state.user && state.user.email)){ openLogin(); return; }
-        const pid = $("patternSelect").value;
-        if(!pid) return;
-        deletePatternById(pid);
-      });
-
-      $("btnToggleNewPattern").addEventListener("click", ()=>{
-        if(!(state.user && state.user.email)){ openLogin(); return; }
-        toggleNewPatternArea();
-      });
-      $("btnCancelNewPattern").addEventListener("click", ()=>{
-        $("newPatternArea").style.display = "none";
-        $("btnToggleNewPattern").textContent = "+ Criar novo padrão";
-        editingPatternId = null;
-        $("patternName").value = "";
-        syncConfigFieldsFromState();
-        setThumbs();
-      });
-
-      // live config changes -> preview
-      const live = ["paperSize","includeDate","dateValue","rxFontFamily","rxFontSize","instName","addrStreet","addrNumber","addrDistrict","addrCity","addrState","addrCep","headerUrl","footerUrl"];
-      live.forEach(id=>{
-        const el = $(id);
-        const ev = (el && el.tagName === "SELECT") ? "change" : "input";
-        el.addEventListener(ev, ()=>{
+      ["paperSize","rxFontFamily","rxFontSize","includeDate","dateValue","headerUrl","footerUrl","instName","instAddress"].forEach(id=>{
+        $(id).addEventListener("input", ()=>{
           readConfigFieldsToState();
-          setThumbs();
+          syncThumbs();
+          renderPaperDebounced();
+        });
+        $(id).addEventListener("change", ()=>{
+          readConfigFieldsToState();
+          syncThumbs();
           renderPaperDebounced();
         });
       });
 
-      // upload header/footer
-      $("btnPickHeader").addEventListener("click", ()=> pickImageTo("header"));
-      $("btnPickFooter").addEventListener("click", ()=> pickImageTo("footer"));
-
-      $("fileHeader").addEventListener("change", ()=>{
-        const f = $("fileHeader").files && $("fileHeader").files[0];
-        $("fileHeader").value = "";
-        handlePickedFile("header", f);
+      $("pageSelect").addEventListener("change", ()=>{
+        state.selectedPage = parseInt($("pageSelect").value, 10) || 1;
+        renderPaperDebounced();
       });
-      $("fileFooter").addEventListener("change", ()=>{
-        const f = $("fileFooter").files && $("fileFooter").files[0];
-        $("fileFooter").value = "";
-        handlePickedFile("footer", f);
+      $("btnPrevPage").addEventListener("click", ()=>{
+        state.selectedPage = Math.max(1, state.selectedPage - 1);
+        renderPaperDebounced();
       });
-
-      $("btnSavePattern").addEventListener("click", ()=>{
-        if(!(state.user && state.user.email)){ openLogin(); return; }
-        const id = upsertPatternFromFields(editingPatternId);
-        if(id){
-          editingPatternId = id;
-          applyPatternById(id);
-          alert("Padrão salvo.");
-        }
+      $("btnNextPage").addEventListener("click", ()=>{
+        const total = paginateBlocks().length;
+        state.selectedPage = Math.min(total, state.selectedPage + 1);
+        renderPaperDebounced();
       });
 
-      // Tabs mobile
+      $("btnPrintOnly").addEventListener("click", ()=>{
+        buildPrintAll();
+        window.print();
+      });
+
+      // mobile tabs (leve)
       const tabEditor = $("tabEditor");
       const tabPreview = $("tabPreview");
-      const panelEditor = $("panelEditor");
-      const panelPreview = $("panelPreview");
-
-      function showEditor(){
+      tabEditor.addEventListener("click", ()=>{
         tabEditor.classList.add("on");
         tabPreview.classList.remove("on");
-        panelEditor.classList.remove("hide");
-        panelPreview.classList.remove("show");
-      }
-      function showPreview(){
+        $("panelEditor").scrollIntoView({ behavior:"smooth", block:"start" });
+      });
+      tabPreview.addEventListener("click", ()=>{
         tabPreview.classList.add("on");
         tabEditor.classList.remove("on");
-        panelEditor.classList.add("hide");
-        panelPreview.classList.add("show");
-      }
-
-      tabEditor.addEventListener("click", showEditor);
-      tabPreview.addEventListener("click", showPreview);
-    }
-
-    function applyBrandLogo(){
-      const img = $("brandMark");
-      const url = BRAND_LOGO_URL || PLACEHOLDER_PNG;
-
-      img.src = url;
-      img.style.width = BRAND_LOGO_SIZE_PX + "px";
-      img.style.height = BRAND_LOGO_SIZE_PX + "px";
+        $("panelPreview").scrollIntoView({ behavior:"smooth", block:"start" });
+      });
     }
 
     /************************************************************
      * Init
      ************************************************************/
-    (function init(){
-      // sempre abre no topo
-      try{ history.scrollRestoration = "manual"; }catch(e){}
+    async function init(){
       window.scrollTo(0,0);
 
-      state.dateValue = todayBR();
+      applyLogo();
+      bindUI();
 
-      applyBrandLogo();
+      // session
+      const u = loadSession();
+      if(u){
+        state.user = u;
+        applyUserUI();
+        const p = loadProfile();
+        if(p){
+          state.docTitle = (p.docTitle === "Dra.") ? "Dra." : "Dr.";
+          state.docName = safeText(p.docName);
+          state.crms = Array.isArray(p.crms) && p.crms.length ? p.crms.map(safeText) : [""];
+          state.rqes = Array.isArray(p.rqes) && p.rqes.length ? p.rqes.map(safeText) : [""];
+          $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
+        }
+      }
 
+      $("docTitle").value = state.docTitle;
+      $("docName").value = state.docName;
       renderCrmList();
       renderRqeList();
 
-      // meds: começa com 1 bloco, sem focar
-      state.blocks = [];
-      renderBlocksInitial();
-      addBlock({focusName:false});
-
-      bind();
-
-      const u = loadSession();
-      if(u){
-        onLogged(u);
-      }else{
-        applyUserUI();
-        refreshPatternSelect();
-      }
-
-      $("dateValue").value = state.dateValue;
+      // Config defaults
       $("rxFontSize").value = String(rxFontPx());
+      $("dateValue").value = state.dateValue || todayBR();
+      state.dateValue = $("dateValue").value;
+      syncThumbs();
 
-      // seções retraídas ao abrir
-      document.querySelectorAll("details.sec").forEach(d=> d.open = false);
-
+      // Start with one block
+      if(!state.blocks.length) addBlock({focusName:false});
+      renderBlocksInitial();
       updateSummaries();
+
+      // Load DB
+      loadMedicamentosDB();
+
       renderPaper();
+    }
 
-      // carrega DB multi-abas (silencioso)
-      loadSheetDB();
-
-      const isHist = isHistoryRoute();
-      $("mainApp").style.display = isHist ? "none" : "grid";
-      $("historyPage").style.display = isHist ? "block" : "none";
-      if(isHist) renderHistoryPage();
-
-      setTimeout(()=> window.scrollTo(0,0), 0);
-    })();
+    init();
   </script>
 </body>
 </html>
