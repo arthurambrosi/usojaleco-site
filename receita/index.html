@@ -481,9 +481,10 @@
     }
     .rxTools{ display:flex; gap:8px; align-items:center; flex: 0 0 auto; }
 
+    /* >>> ALTERADO: 2 colunas (Nome + Quantidade/Apresentação) */
     .rxGrid{
       display:grid;
-      grid-template-columns: 1.15fr .55fr .90fr;
+      grid-template-columns: 1.35fr .90fr;
       gap: 12px;
       align-items:start;
     }
@@ -1452,7 +1453,8 @@
       instName: "",
       instAddress: "",
 
-      blocks: [], // {id,name,dose,qty,qtyMode,qtyCustom,use,showIcons,icons,collapsed}
+      // dose foi removida do editor (o usuário pode digitar no próprio nome, se quiser)
+      blocks: [], // {id,name,qty,qtyOptions,use,showIcons,icons,collapsed}
 
       selectedPage: 1
     };
@@ -1932,7 +1934,7 @@
     }
 
     /************************************************************
-     * Med blocks + Autocomplete (nova lógica)
+     * Med blocks + Autocomplete
      ************************************************************/
     const ICON_LIBRARY = [
       { key:"MANHA", label:"Manhã", ico:"☀️" },
@@ -1951,10 +1953,7 @@
       const b = {
         id: uid(),
         name:"",
-        dose:"",
         qty:"",
-        qtyMode:"SELECT",     // SELECT | CUSTOM
-        qtyCustom:"",
         qtyOptions: [],
         use:"",
         collapsed:false,
@@ -2014,8 +2013,7 @@
         const title = node.querySelector(".rxTitle strong");
         if(title){
           const nm = (b && safeText(b.name)) ? safeText(b.name) : `Remédio ${i+1}`;
-          const ds = (b && safeText(b.dose)) ? " " + safeText(b.dose) : "";
-          title.textContent = nm + ds;
+          title.textContent = nm;
         }
       });
     }
@@ -2034,7 +2032,6 @@
       const query = keyify(q);
       const max = query ? 18 : 12;
 
-      // filtrar contra (A,B,D) => (main/sub) por item
       const candidates = [];
       for(const it of db_medicamentos){
         if(!query){
@@ -2042,14 +2039,12 @@
           continue;
         }
         if(it.search && it.search.includes(query)){
-          // priorizar que começam com o termo digitado
           const s = scoreItem(it, query);
           candidates.push({ it, score: s });
         }
       }
 
       if(!query){
-        // sem termo: primeiros por ordem
         for(let i=0;i<db_medicamentos.length && hits.length<max;i++){
           hits.push(db_medicamentos[i]);
         }
@@ -2121,8 +2116,6 @@
         const lineB = document.createElement("div");
         lineB.className = "medB";
 
-        // TIPO A: Comercial + Genérico (subtítulo)
-        // TIPO B: Genérico2 apenas (sem subtítulo)
         if(it.type === "A"){
           lineA.textContent = it.main || "—";
           lineB.textContent = it.sub ? it.sub : "—";
@@ -2183,7 +2176,7 @@
       small.className = "mini";
       small.style.marginTop = "0";
       small.style.color = "var(--muted)";
-      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, dosagem, quantidade e ícones";
+      small.textContent = b.collapsed ? "Clique para expandir e editar" : "Edite nome, quantidade e ícones";
 
       tcol.appendChild(strong);
       tcol.appendChild(small);
@@ -2254,95 +2247,66 @@
       }
       function openList(){ acList.style.display = "block"; }
 
+      // ===== Quantidade/Apresentação (input com sugestões da planilha)
+      const colQty = document.createElement("div");
+      const labQty = document.createElement("label");
+      labQty.className = "label";
+      labQty.textContent = "Quantidade / Apresentação";
+      colQty.appendChild(labQty);
+
+      const inpQty = document.createElement("input");
+      inpQty.className = "field";
+      inpQty.placeholder = "Digite (ou selecione uma opção)…";
+      inpQty.value = b.qty || "";
+      inpQty.setAttribute("data-field","qty");
+      inpQty.autocomplete = "off";
+      inpQty.spellcheck = false;
+      inpQty.inputMode = "text";
+
+      const dl = document.createElement("datalist");
+      dl.id = `dlQty_${b.id}`;
+      dl.setAttribute("data-field","qtyList");
+      inpQty.setAttribute("list", dl.id);
+
+      inpQty.addEventListener("input", ()=>{
+        b.qty = safeText(inpQty.value);
+        renderPaperDebounced();
+      });
+
+      colQty.appendChild(inpQty);
+      colQty.appendChild(dl);
+
+      function syncQtyUI(){
+        const listEl = wrap.querySelector(`datalist[data-field="qtyList"]`);
+        if(!listEl) return;
+
+        const opts = Array.isArray(b.qtyOptions) ? b.qtyOptions : [];
+        listEl.innerHTML = "";
+        for(const q of opts){
+          const o = document.createElement("option");
+          o.value = q;
+          listEl.appendChild(o);
+        }
+      }
+
       function applyChoice(it){
-        // TIPO A: preencher com Nome Comercial 1
-        // TIPO B: preencher com Nome Genérico 2
         const txt = safeText(it.main);
         b.name = txt;
         inpName.value = txt;
 
-        // qty select options
+        // opções de Quantidade / Apresentação vindas da planilha (coluna à direita)
         b.qtyOptions = Array.isArray(it.qty) ? it.qty.slice() : [];
         syncQtyUI();
 
         const nm = txt ? txt : `Remédio ${idx+1}`;
-        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
-        strong.textContent = nm + ds;
+        strong.textContent = nm;
 
         closeList();
         renderPaperDebounced();
         updateSummaries();
       }
 
-      function syncQtyUI(){
-        // UI é criada abaixo; aqui apenas dispara atualização se existir
-        const select = wrap.querySelector(`select[data-field="qtySelect"]`);
-        const custom = wrap.querySelector(`input[data-field="qtyCustom"]`);
-        if(!select || !custom) return;
-
-        const hasOpts = Array.isArray(b.qtyOptions) && b.qtyOptions.length > 0;
-
-        if(!hasOpts){
-          // sem opções da planilha: modo custom
-          b.qtyMode = "CUSTOM";
-          select.innerHTML = `<option value="__CUSTOM__" selected>Digitar manualmente</option>`;
-          select.value = "__CUSTOM__";
-          select.style.display = "none";
-          custom.style.display = "block";
-          custom.value = safeText(b.qty || b.qtyCustom || "");
-          b.qty = safeText(custom.value);
-          return;
-        }
-
-        // com opções: select visível + opção custom
-        select.style.display = "block";
-        custom.style.display = (b.qtyMode === "CUSTOM") ? "block" : "none";
-
-        const prev = safeText(b.qty);
-        const opts = b.qtyOptions.slice();
-
-        select.innerHTML = "";
-        const ph = document.createElement("option");
-        ph.value = "";
-        ph.textContent = "Selecionar…";
-        select.appendChild(ph);
-
-        for(const q of opts){
-          const o = document.createElement("option");
-          o.value = q;
-          o.textContent = q;
-          select.appendChild(o);
-        }
-        const oc = document.createElement("option");
-        oc.value = "__CUSTOM__";
-        oc.textContent = "Outro… (digitar)";
-        select.appendChild(oc);
-
-        // selecionar melhor opção
-        if(prev){
-          const found = opts.find(x => keyify(x) === keyify(prev));
-          if(found){
-            select.value = found;
-            b.qtyMode = "SELECT";
-            custom.style.display = "none";
-            b.qty = found;
-          }else{
-            // se prev não está nas opções, joga para custom
-            b.qtyMode = "CUSTOM";
-            select.value = "__CUSTOM__";
-            custom.style.display = "block";
-            custom.value = prev;
-            b.qtyCustom = prev;
-            b.qty = prev;
-          }
-        }else{
-          // se não tem qty ainda, deixa placeholder
-          select.value = "";
-          b.qty = "";
-        }
-      }
-
-      // clique por item (sem radios / sem subitens)
+      // clique por item
       acList.addEventListener("mousedown", (ev)=>{
         const itemEl = ev.target.closest(".medItem");
         if(!itemEl) return;
@@ -2356,8 +2320,7 @@
         b.name = safeText(inpName.value);
 
         const nm = b.name ? b.name : `Remédio ${idx+1}`;
-        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
-        strong.textContent = nm + ds;
+        strong.textContent = nm;
 
         renderPaperDebounced();
         updateSummaries();
@@ -2399,78 +2362,7 @@
       acWrap.appendChild(acList);
       col1.appendChild(acWrap);
 
-      // ===== Dosagem
-      const colDose = document.createElement("div");
-      const labDose = document.createElement("label");
-      labDose.className = "label";
-      labDose.textContent = "Dosagem";
-      colDose.appendChild(labDose);
-
-      const inpDose = document.createElement("input");
-      inpDose.className = "field";
-      inpDose.placeholder = "Ex: 50mg";
-      inpDose.value = b.dose || "";
-      inpDose.setAttribute("data-field","dose");
-      inpDose.autocomplete = "off";
-      inpDose.spellcheck = false;
-      inpDose.inputMode = "text";
-      inpDose.addEventListener("input", ()=>{
-        b.dose = safeText(inpDose.value);
-        const nm = safeText(b.name) ? safeText(b.name) : `Remédio ${idx+1}`;
-        const ds = safeText(b.dose) ? " " + safeText(b.dose) : "";
-        strong.textContent = nm + ds;
-        renderPaperDebounced();
-      });
-      colDose.appendChild(inpDose);
-
-      // ===== Quantidade (select + custom)
-      const colQty = document.createElement("div");
-      const labQty = document.createElement("label");
-      labQty.className = "label";
-      labQty.textContent = "Quantidade / Apresentação";
-      colQty.appendChild(labQty);
-
-      const selQty = document.createElement("select");
-      selQty.className = "select";
-      selQty.setAttribute("data-field","qtySelect");
-      selQty.innerHTML = `<option value="">Selecionar…</option><option value="__CUSTOM__">Outro… (digitar)</option>`;
-      selQty.addEventListener("change", ()=>{
-        const v = selQty.value;
-        if(v === "__CUSTOM__"){
-          b.qtyMode = "CUSTOM";
-          b.qty = safeText(b.qtyCustom || b.qty || "");
-          inpQtyCustom.style.display = "block";
-          inpQtyCustom.value = b.qty;
-          renderPaperDebounced();
-          return;
-        }
-        b.qtyMode = "SELECT";
-        b.qty = safeText(v);
-        b.qtyCustom = "";
-        inpQtyCustom.style.display = "none";
-        renderPaperDebounced();
-      });
-
-      const inpQtyCustom = document.createElement("input");
-      inpQtyCustom.className = "field";
-      inpQtyCustom.setAttribute("data-field","qtyCustom");
-      inpQtyCustom.placeholder = "Digite a quantidade…";
-      inpQtyCustom.style.display = "none";
-      inpQtyCustom.autocomplete = "off";
-      inpQtyCustom.spellcheck = false;
-      inpQtyCustom.inputMode = "text";
-      inpQtyCustom.addEventListener("input", ()=>{
-        b.qtyMode = "CUSTOM";
-        b.qtyCustom = safeText(inpQtyCustom.value);
-        b.qty = b.qtyCustom;
-        renderPaperDebounced();
-      });
-
-      colQty.appendChild(selQty);
-      colQty.appendChild(inpQtyCustom);
-
       grid.appendChild(col1);
-      grid.appendChild(colDose);
       grid.appendChild(colQty);
 
       body.appendChild(grid);
@@ -2557,36 +2449,9 @@
       wrap.appendChild(body);
       root.appendChild(wrap);
 
-      // sincroniza qty UI inicial
+      // inicializa datalist (se já houver opções)
       b.qtyOptions = Array.isArray(b.qtyOptions) ? b.qtyOptions : [];
-      (function initQtyUI(){
-        const has = Array.isArray(b.qtyOptions) && b.qtyOptions.length > 0;
-        if(has){
-          // monta select com opções
-          const opts = b.qtyOptions.slice();
-          selQty.innerHTML = "";
-          const ph = document.createElement("option");
-          ph.value = "";
-          ph.textContent = "Selecionar…";
-          selQty.appendChild(ph);
-          for(const q of opts){
-            const o = document.createElement("option");
-            o.value = q;
-            o.textContent = q;
-            selQty.appendChild(o);
-          }
-          const oc = document.createElement("option");
-          oc.value = "__CUSTOM__";
-          oc.textContent = "Outro… (digitar)";
-          selQty.appendChild(oc);
-          selQty.value = "";
-          inpQtyCustom.style.display = "none";
-        }else{
-          selQty.style.display = "none";
-          inpQtyCustom.style.display = "block";
-          inpQtyCustom.value = safeText(b.qty || "");
-        }
-      })();
+      syncQtyUI();
     }
 
     /************************************************************
@@ -2737,18 +2602,17 @@
         const idxGlobal = (pageIdx * medsPerPage()) + i + 1;
 
         const name = safeText(b.name);
-        const dose = safeText(b.dose);
         const qty = safeText(b.qty);
 
-        if(!name && !dose && !qty && !safeText(b.use)) return;
+        if(!name && !qty && !safeText(b.use)) return;
 
-        const fullName = [name, dose].filter(Boolean).join(" ").trim();
+        const fullName = (name || "—").trim();
         const qtyText = qty || "";
 
         html += `<div class="rxItem">`;
         html += `<div class="rxLine">`;
         html += `<div class="rxNo">${idxGlobal}.</div>`;
-        html += `<div class="drugName">${escapeHtml(fullName || "—")}</div>`;
+        html += `<div class="drugName">${escapeHtml(fullName)}</div>`;
         html += `<div class="leaderText">${leaderHyphens()}</div>`;
         html += `<div class="qty">${escapeHtml(qtyText)}</div>`;
         html += `</div>`;
@@ -2870,17 +2734,15 @@
         pageBlocks.forEach((b, i)=>{
           const idxGlobal = (pIdx * per) + i + 1;
           const name = safeText(b.name);
-          const dose = safeText(b.dose);
           const qty = safeText(b.qty);
           const use = safeText(b.use);
 
-          if(!name && !dose && !qty && !use) return;
+          if(!name && !qty && !use) return;
 
-          const fullName = [name, dose].filter(Boolean).join(" ").trim();
           out += `<div class="rxItem">`;
           out += `<div class="rxLine">`;
           out += `<div class="rxNo">${idxGlobal}.</div>`;
-          out += `<div class="drugName">${escapeHtml(fullName || "—")}</div>`;
+          out += `<div class="drugName">${escapeHtml((name || "—").trim())}</div>`;
           out += `<div class="leaderText">${leaderHyphens()}</div>`;
           out += `<div class="qty">${escapeHtml(qty || "")}</div>`;
           out += `</div>`;
