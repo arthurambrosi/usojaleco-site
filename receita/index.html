@@ -1792,7 +1792,7 @@
                 main: A,            // Nome Comercial 1
                 sub: B,             // Nome Genérico 1
                 qty: splitQty(C),   // Quantidade 1
-                categoria: tab.categoria || `Aba ${tab.gid}`
+                categoria: tab.name || `Aba ${tab.gid}`
               });
             }
             if(D){
@@ -1801,7 +1801,7 @@
                 main: D,            // Nome Genérico 2
                 sub: "",
                 qty: splitQty(E),   // Quantidade 2
-                categoria: tab.categoria || `Aba ${tab.gid}`
+                categoria: tab.name || `Aba ${tab.gid}`
               });
             }
           }
