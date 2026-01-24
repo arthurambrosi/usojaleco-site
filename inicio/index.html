@@ -1,1 +1,534 @@
 
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | WeMEDS-like</title>
+
+  <!-- Fonte do nome "usojaleco" (Outfit) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+
+      --pill:#f6f7f7;
+      --pillStroke:#e7ebf2;
+
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+
+      --radiusIcon: 26px;
+      --iconSize: 92px;
+
+      --containerMax: 1160px;
+      --containerPad: 24px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* HEADER */
+    .topbarWrap{
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(17,24,39,.10); /* sombra embaixo do header */
+    }
+    .topbar{
+      max-width: var(--containerMax);
+      padding: 16px var(--containerPad);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 190px;
+    }
+    .brand img{
+      height: 28px;
+      width: auto;
+      display:block;
+    }
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap: 0;                /* <-- "usojaleco" junto */
+      font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; /* <-- Outfit aqui */
+      font-size: 18px;
+      font-weight: 400;      /* "uso" normal */
+      letter-spacing: -0.01em;
+      color:#475569;
+      user-select:none;
+    }
+    .brandName b{
+      font-weight: 800;      /* "jaleco" em negrito */
+      color:#334155;
+    }
+
+    .searchWrap{
+      flex: 1 1 auto;
+      display:flex;
+      justify-content:center;
+    }
+
+    .searchPill{
+      width: min(640px, 62vw);
+      height: 40px;
+      border-radius: 999px;
+      background: var(--pill);
+      border: 1px solid var(--pillStroke);
+      display:flex;
+      align-items:center;
+      padding: 0 12px;
+      gap: 10px;
+    }
+    .searchPill svg{ flex:0 0 auto; opacity:.55; }
+    .searchInput{
+      appearance:none;
+      border:0;
+      outline:0;
+      background: transparent;
+      width: 100%;
+      font-size: 14px;
+      color:#4b5563;
+    }
+    .kbd{
+      display:flex;
+      align-items:center;
+      gap: 6px;
+      margin-left: 8px;
+      flex:0 0 auto;
+      user-select:none;
+      color:#6b7280;
+      font-size: 12px;
+      font-weight: 600;
+      opacity:.95;
+    }
+    .kbdKey{
+      border: 1px solid #cfd6e3;
+      background:#fff;
+      padding: 2px 8px;
+      border-radius: 8px;
+      line-height: 1.1;
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+    }
+    .kbdPlus{
+      opacity:.75;
+      font-weight: 800;
+      margin: 0 2px;
+    }
+
+    .actions{
+      min-width: 120px;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap: 14px;
+    }
+    .iconBtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: #f97316;
+    }
+    .iconBtn:hover{
+      background:#fff7ed;
+      border-color:#fed7aa;
+    }
+    .iconBtn svg{ width: 22px; height: 22px; }
+
+    /* CONTEÚDO */
+    main{
+      max-width: var(--containerMax);
+      padding: 12px var(--containerPad) 46px;
+      margin: 0 auto;
+    }
+
+    .sectionLine{
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+      margin-top: 14px;
+    }
+    .sectionLine:first-child{
+      border-top: none;
+      padding-top: 10px;
+      margin-top: 0;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 44px 34px;
+      align-items:start;
+      justify-items:center;
+      padding: 10px 0 6px;
+    }
+
+    .tile{
+      width: 100%;
+      max-width: 150px;
+      text-decoration:none;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 12px;
+      color: inherit;
+    }
+
+    .iconBox{
+      width: var(--iconSize);
+      height: var(--iconSize);
+      border-radius: var(--radiusIcon);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background:#fff;
+      display:grid;
+      place-items:center;
+      transform: translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .iconBox img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit: cover;
+    }
+
+    .tileLabel{
+      font-size: 15px;
+      font-weight: 500;
+      color:#374151;
+      line-height: 1.15;
+      text-align:center;
+      max-width: 150px;
+      word-break: break-word;
+    }
+
+    .tile:hover .iconBox{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow2);
+    }
+
+    /* Mensagens */
+    .status{
+      display:none;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color:#475569;
+      background:#fbfdff;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .status.show{ display:block; }
+
+    /* Responsivo */
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px 22px; }
+      .brand{ min-width: 170px; }
+      .actions{ min-width: 96px; }
+    }
+    @media (max-width: 720px){
+      :root{ --containerPad: 16px; --iconSize: 86px; --radiusIcon: 24px; }
+      .topbar{ padding: 14px var(--containerPad); }
+      .brand{ min-width: auto; }
+      .searchWrap{ justify-content:stretch; }
+      .searchPill{ width: 100%; }
+      .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 14px; }
+      .tile{ max-width: 140px; }
+      .tileLabel{ font-size: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbarWrap">
+    <header class="topbar">
+      <div class="brand" aria-label="UsoJaleco">
+        <img
+          alt="Logo UsoJaleco"
+          src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+        />
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
+      </div>
+
+      <div class="searchWrap">
+        <div class="searchPill" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+
+          <input id="q" class="searchInput" type="text" placeholder="Busque no UsoJaleco" autocomplete="off" />
+
+          <div class="kbd" aria-hidden="true">
+            <span class="kbdKey">CTRL</span>
+            <span class="kbdPlus">+</span>
+            <span class="kbdKey">K</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="iconBtn" id="toggleTheme" type="button" aria-label="Alternar tema (visual)">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 13.2A8.2 8.2 0 1 1 10.8 3a6.8 6.8 0 1 0 10.2 10.2Z"
+                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="iconBtn" type="button" aria-label="Conta">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <div id="status" class="status"></div>
+
+    <section class="sectionLine" aria-label="Atalhos - Parte 1">
+      <div id="gridTop" class="grid"></div>
+    </section>
+
+    <section class="sectionLine" aria-label="Atalhos - Parte 2">
+      <div id="gridBottom" class="grid"></div>
+    </section>
+  </main>
+
+  <script>
+    const SHEET_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx/pub?output=csv";
+
+    const SPLIT_AFTER = 12;
+
+    const $ = (sel)=>document.querySelector(sel);
+
+    function setStatus(msg){
+      const el = $("#status");
+      if(!msg){ el.classList.remove("show"); el.textContent=""; return; }
+      el.textContent = msg;
+      el.classList.add("show");
+    }
+
+    function parseCSV(text){
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for(let i=0;i<text.length;i++){
+        const ch = text[i];
+        const next = text[i+1];
+
+        if(ch === '"' ){
+          if(inQuotes && next === '"'){
+            cur += '"';
+            i++;
+          }else{
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+
+        if(!inQuotes && (ch === "," || ch === "\n" || ch === "\r")){
+          if(ch === "," ){
+            row.push(cur);
+            cur = "";
+            continue;
+          }
+
+          if(ch === "\r" && next === "\n"){ i++; }
+          row.push(cur);
+          cur = "";
+
+          if(row.some(v => (v || "").trim() !== "")){
+            rows.push(row);
+          }
+          row = [];
+          continue;
+        }
+
+        cur += ch;
+      }
+
+      if(cur.length || row.length){
+        row.push(cur);
+        if(row.some(v => (v || "").trim() !== "")) rows.push(row);
+      }
+      return rows;
+    }
+
+    function isHeaderRow(r){
+      const a = (r[0]||"").toLowerCase();
+      const b = (r[1]||"").toLowerCase();
+      const c = (r[2]||"").toLowerCase();
+      return (
+        a.includes("nome") || a.includes("name") ||
+        b.includes("imagem") || b.includes("image") ||
+        c.includes("link") || c.includes("url")
+      );
+    }
+
+    function normalizeSection(v){
+      const s = (v||"").toString().trim().toLowerCase();
+      if(!s) return "";
+      if(["top","cima","superior","1","a"].includes(s)) return "top";
+      if(["bottom","baixo","inferior","2","b"].includes(s)) return "bottom";
+      return "";
+    }
+
+    function buildTile(item){
+      const a = document.createElement("a");
+      a.className = "tile";
+      a.href = item.href || "#";
+      a.target = "_blank";
+      a.rel = "noopener";
+
+      const icon = document.createElement("div");
+      icon.className = "iconBox";
+
+      const img = document.createElement("img");
+      img.alt = item.name || "Atalho";
+      img.loading = "lazy";
+      img.src = item.img || "";
+      img.onerror = () => {
+        icon.style.background = "#f8fafc";
+        icon.style.display = "grid";
+        icon.style.placeItems = "center";
+        img.remove();
+        const fallback = document.createElement("div");
+        fallback.style.fontWeight = "800";
+        fallback.style.color = "#94a3b8";
+        fallback.style.fontSize = "22px";
+        fallback.textContent = (item.name || "?").slice(0,1).toUpperCase();
+        icon.appendChild(fallback);
+      };
+
+      icon.appendChild(img);
+
+      const label = document.createElement("div");
+      label.className = "tileLabel";
+      label.textContent = item.name || "";
+
+      a.appendChild(icon);
+      a.appendChild(label);
+      return a;
+    }
+
+    function renderGrids(items){
+      const gridTop = $("#gridTop");
+      const gridBottom = $("#gridBottom");
+      gridTop.innerHTML = "";
+      gridBottom.innerHTML = "";
+
+      const q = ($("#q").value || "").trim().toLowerCase();
+      const filtered = !q ? items : items.filter(it => (it.name||"").toLowerCase().includes(q));
+
+      const hasSection = filtered.some(it => it.section === "top" || it.section === "bottom");
+      let top = [];
+      let bottom = [];
+
+      if(hasSection){
+        top = filtered.filter(it => it.section !== "bottom");
+        bottom = filtered.filter(it => it.section === "bottom");
+      }else{
+        const sepIdx = filtered.findIndex(it => it.separator === true);
+        if(sepIdx >= 0){
+          top = filtered.slice(0, sepIdx);
+          bottom = filtered.slice(sepIdx + 1);
+        }else{
+          top = filtered.slice(0, SPLIT_AFTER);
+          bottom = filtered.slice(SPLIT_AFTER);
+        }
+      }
+
+      top.forEach(it => gridTop.appendChild(buildTile(it)));
+      bottom.forEach(it => gridBottom.appendChild(buildTile(it)));
+
+      gridBottom.parentElement.style.display = bottom.length ? "" : "none";
+    }
+
+    async function loadSheet(){
+      setStatus("Carregando atalhos...");
+      try{
+        const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+        if(!res.ok) throw new Error("Falha ao carregar CSV");
+        const text = await res.text();
+        const rows = parseCSV(text);
+
+        const out = [];
+        for(let i=0;i<rows.length;i++){
+          const r = rows[i].map(v => (v ?? "").trim());
+          if(!r.length) continue;
+          if(i === 0 && isHeaderRow(r)) continue;
+
+          const name = r[0] || "";
+          const img  = r[1] || "";
+          const href = r[2] || "";
+          const section = normalizeSection(r[3] || "");
+
+          if(!name && !img && !href){
+            out.push({ separator:true });
+            continue;
+          }
+
+          if(!name && !img && !href) continue;
+
+          out.push({ name, img, href, section });
+        }
+
+        setStatus("");
+        window.__UJ_ITEMS__ = out;
+        renderGrids(out);
+      }catch(err){
+        console.error(err);
+        setStatus("Não foi possível carregar a planilha (CSV). Verifique se ela está publicada e acessível.");
+      }
+    }
+
+    window.addEventListener("keydown", (e) => {
+      const k = e.key.toLowerCase();
+      if((e.ctrlKey || e.metaKey) && k === "k"){
+        e.preventDefault();
+        $("#q").focus();
+      }
+    });
+
+    $("#q").addEventListener("input", () => {
+      renderGrids(window.__UJ_ITEMS__ || []);
+    });
+
+    $("#toggleTheme").addEventListener("click", () => {
+      $("#q").focus();
+    });
+
+    loadSheet();
+  </script>
+</body>
+</html>
