@@ -70,10 +70,11 @@
     ::selection{background:rgba(185,195,214,.25)}
 
     .wrap{
-      max-width: var(--container);
-      margin:0 auto;
-      padding: 18px var(--padX) 30px;
-    }
+  width: 100%;
+  max-width: none;     /* remove o “miolo estreito” no desktop */
+  margin: 0;           /* não centraliza em container fixo */
+  padding: 18px var(--padX) 30px;
+}
 
     /* ===== Topbar (full width shell + inner max-width) ===== */
     .topbarShell{
@@ -85,10 +86,11 @@
       pointer-events:none; /* evita “pegar” clique fora do card */
     }
     .topbarInner{
-      max-width: var(--container);
-      margin:0 auto;
-      pointer-events:auto;
-    }
+  width: 100%;
+  max-width: none;   /* remove a limitação de largura */
+  margin: 0;
+  pointer-events:auto;
+}
     .topbar{
       width:100%;
       display:flex;
@@ -110,15 +112,20 @@
       flex: 1 1 auto;
     }
     .markImg{
-      width:40px; height:40px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.02);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 0 50px rgba(255,255,255,.06);
-      object-fit: contain;
-      padding: 6px;
-      flex: 0 0 auto;
-    }
+  width: var(--brandLogoSize, 44px);
+  height: var(--brandLogoSize, 44px);
+  object-fit: contain;
+  display:block;
+
+  /* sem “retângulo/badge” */
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+
+  flex: 0 0 auto;
+}
     .brandTxt{
       min-width:0;
       display:flex;
@@ -248,12 +255,12 @@
 
     /* ===== Main layout ===== */
     .main{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: var(--gap2);
-      align-items:start;
-    }
+  margin-top: 16px;
+  display:grid;
+  grid-template-columns: 1fr; /* coluna única: Editor em cima, Prévia embaixo */
+  gap: var(--gap2);
+  align-items:start;
+}
 
     .card{
       border:1px solid var(--line);
@@ -343,8 +350,7 @@
       padding: 12px 12px;
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap: 10px;
+      justify-content:space-between;      gap: 10px;
       user-select:none;
     }
     details.sec > summary::-webkit-details-marker{ display:none; }
@@ -563,12 +569,11 @@
       text-overflow:ellipsis;
     }
     .medSubs{
-      display:none;
-      gap: 8px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-    }
-    .medItem.open .medSubs{ display:flex; }
+  display:flex;
+  gap: 8px;
+  flex-wrap:wrap;
+  margin-top: 10px;
+}
 
     .subBtn{
       cursor:pointer;
@@ -603,17 +608,51 @@
       flex-wrap:wrap;
       margin-bottom: 12px;
     }
+    /* Barra acima da prévia (botões + navegação) */
+.paperHead{
+  border:1px solid var(--line2);
+  background: rgba(255,255,255,.02);
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 12px; /* “colado” na folha */
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.paperHeadRow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+
+.paperHeadLeft{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.paperHeadRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  margin-left:auto;
+}
+
     .paperWrap{ display:flex; justify-content:center; }
     .paper{
-      width: 100%;
-      max-width: 520px;
-      border-radius: 18px;
-      border:1px solid rgba(0,0,0,.12);
-      background:#fff;
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
-      overflow:hidden;
-      position:relative;
-    }
+  width: 100%;
+  max-width: 760px; /* aumenta a visualização no desktop */
+  border-radius: 18px;
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+  overflow:hidden;
+  position:relative;
+}
     .paperInner{
       padding: var(--paperPad);
       background:#fff;
@@ -889,13 +928,17 @@
     }
 
     @media (max-width: 980px){
-      .main{ grid-template-columns: 1fr; }
-      .paper{ max-width: 620px; }
-      .mobileTabs{ display:flex; }
-      .panel[data-panel="preview"]{ display:none; }
-      .panel[data-panel="preview"].show{ display:block; }
-      .panel[data-panel="editor"].hide{ display:none; }
-    }
+  .main{ grid-template-columns: 1fr; }
+
+  /* mantém a navegação mobile (se você quiser), mas sem esconder painéis */
+  .mobileTabs{ display:flex; }
+
+  /* prévia SEMPRE visível embaixo no mobile também */
+  .panel[data-panel="preview"]{ display:block; }
+  .panel[data-panel="editor"]{ display:block; }
+
+  .paper{ max-width: 620px; }
+}
 
     @media (max-width: 520px){
       .brand p{ display:none; }
@@ -1169,37 +1212,42 @@
         </div>
 
         <div class="cardBody paperShell">
-          <div class="paperControls">
-            <div class="mini" id="pageInfo">Página 1 de 1</div>
 
-            <div class="row" style="gap:8px; justify-content:flex-end;">
-              <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
-              <select class="select" id="pageSelect" style="width: 160px;">
-                <option value="1" selected>Página 1</option>
-              </select>
-              <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
-            </div>
-          </div>
+  <!-- Barra “colada” no topo da prévia (botões + navegação de páginas) -->
+  <div class="paperHead">
+    <div class="paperHeadRow">
+      <div class="paperHeadLeft">
+        <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
+        <button class="btn btnGhost" id="btnPrintSave" type="button" style="display:none;">Imprimir + Guardar no Histórico</button>
+      </div>
 
-          <div class="paperWrap">
-            <div class="paper paperA4" id="paper">
-              <div class="paperInner">
-                <div class="rxPaper" id="rxPaper"></div>
-              </div>
-            </div>
-          </div>
+      <div class="paperHeadRight">
+        <div class="mini" id="pageInfo">Página 1 de 1</div>
 
-          <div class="divider"></div>
-
-          <div class="row" style="justify-content:space-between; gap:10px;">
-            <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
-            <button class="btn btnGhost" id="btnPrintSave" type="button" style="display:none;">Imprimir + Guardar no Histórico</button>
-          </div>
-
-          <div class="mini" id="histHint" style="margin-top:10px; display:none;">
-            Dica: o histórico fica salvo nesta conta neste dispositivo.
-          </div>
+        <div class="row" style="gap:8px; justify-content:flex-end;">
+          <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
+          <select class="select" id="pageSelect" style="width: 160px;">
+            <option value="1" selected>Página 1</option>
+          </select>
+          <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
         </div>
+      </div>
+    </div>
+
+    <div class="mini" id="histHint" style="margin-top:10px; display:none;">
+      Dica: o histórico fica salvo nesta conta neste dispositivo.
+    </div>
+  </div>
+
+  <!-- Folha -->
+  <div class="paperWrap">
+    <div class="paper paperA4" id="paper">
+      <div class="paperInner">
+        <div class="rxPaper" id="rxPaper"></div>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </div>
 
@@ -1432,9 +1480,19 @@
     /************************************************************
      * CONFIG (dentro do código) — Ícone do topo (UsoJaleco)
      ************************************************************/
-    let BRAND_LOGO_URL = "https://github.com/arthurambrosi/usojaleco/blob/1a17b841f2297bbb9237f5121ea34b67c1f18c45/Design%20sem%20nomes%20(28).png";
-    let BRAND_LOGO_SIZE_PX = 40;
+    let BRAND_LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
+    let BRAND_LOGO_SIZE_PX = 50;
+function applyBrandLogo(){
+  const img = document.getElementById("brandMark");
+  if(!img) return;
 
+  img.src = BRAND_LOGO_URL || PLACEHOLDER_PNG;
+
+  const size = parseInt(BRAND_LOGO_SIZE_PX, 10);
+  const px = (isFinite(size) && size >= 16 && size <= 96) ? size : 44;
+
+  document.documentElement.style.setProperty("--brandLogoSize", px + "px");
+}
     /************************************************************
      * LOGIN GOOGLE (GIS)
      ************************************************************/
@@ -1498,6 +1556,7 @@
     };
 
     const $ = (id)=>document.getElementById(id);
+    applyBrandLogo();
 
     function safeText(s){ return (s||"").toString().replace(/\s+/g," ").trim(); }
     function norm(s){
@@ -1881,11 +1940,6 @@
     { "gid": "1285273334", "name": "Agentes antibacterianos" }
   ];
 }
-        return tabs;
-      }catch(e){
-        return [{ gid:"0", name:"Medicamentos" }];
-      }
-    }
 
     async function fetchGvizByGid(gid){
       const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
@@ -2598,20 +2652,11 @@
           item.appendChild(dot);
           item.appendChild(main);
 
-          // abre/fecha subitens (sem duplicar resultados)
-          item.addEventListener("mousedown", (ev)=>{
-            // se clicou em botão, deixa o handler do botão agir
-            if(ev.target && ev.target.closest && ev.target.closest("button")) return;
-            ev.preventDefault();
-            const open = item.classList.toggle("open");
-            // fecha outros
-            Array.from(acList.querySelectorAll(".medItem.open")).forEach(x=>{
-              if(x !== item) x.classList.remove("open");
-            });
-            // se abriu, não fecha a lista
-            if(open) openList();
-          });
-
+          // clicar no corpo do item NÃO abre nada — só mantém o foco no input
+item.addEventListener("mousedown", (ev)=>{
+  if(ev.target && ev.target.closest && ev.target.closest("button")) return;
+  ev.preventDefault(); // evita blur/fechamento da lista
+});
           acList.appendChild(item);
         });
 
