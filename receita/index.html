@@ -1798,30 +1798,89 @@
     }
 
     async function fetchSheetTabsFromPubhtml(){
-      try{
-        const res = await fetch(SHEET_PUBHTML, { cache:"no-store" });
-        const html = await res.text();
-
-        // tenta achar tabs do pubhtml (#gid=...">Nome</a>)
-        const re = /#gid=(\d+)[^"]*">([\s\S]*?)<\/a>/g;
-        const tabs = [];
-        const seen = new Set();
-
-        let m;
-        while((m = re.exec(html))){
-          const gid = String(m[1] || "").trim();
-          let name = decodeHTMLEntities(String(m[2] || "")).replace(/\s+/g," ").trim();
-          if(!gid) continue;
-          if(!name) name = `Aba ${gid}`;
-          if(seen.has(gid)) continue;
-          seen.add(gid);
-          tabs.push({ gid, name });
-        }
-
-        // fallback: se não achou nada, usa gid 0
-        if(!tabs.length){
-          return [{ gid:"0", name:"Medicamentos" }];
-        }
+  return [
+    { "gid": "915261507",  "name": "Agentes antirreumáticos específicos" },
+    { "gid": "478511829",  "name": "Agentes imunizantes" },
+    { "gid": "1411845420", "name": "Alcalinizantes" },
+    { "gid": "395560222",  "name": "Analgésicos-Antipiréticos" },
+    { "gid": "862085121",  "name": "Anestésicos locais" },
+    { "gid": "20003638",   "name": "Anti-Histamínicos H1" },
+    { "gid": "1822197995", "name": "Anti-hemorroidários" },
+    { "gid": "1061659817", "name": "Anti-infecciosos do trato gastrintestinal" },
+    { "gid": "1661597209", "name": "Anti-infecciosos tópicos e relacionados" },
+    { "gid": "1954155192", "name": "Antialcoólicos" },
+    { "gid": "1265384594", "name": "Antialérgicos" },
+    { "gid": "563048962",  "name": "Antiastênicos-Energéticos" },
+    { "gid": "827175960",  "name": "Antibióticos" },
+    { "gid": "1098787868", "name": "Agentes anti-inflamatórios não esteróides" },
+    { "gid": "1418395467", "name": "Anticoncepcionais" },
+    { "gid": "2118860551", "name": "Antidiabéticos" },
+    { "gid": "1848961101", "name": "Antidiarreicos" },
+    { "gid": "388566765",  "name": "Antieméticos" },
+    { "gid": "803029356",  "name": "Antifiséticos (Antiflatulentos)" },
+    { "gid": "839735687",  "name": "Antifúngicos" },
+    { "gid": "1604110756", "name": "Antifúngicos tópicos" },
+    { "gid": "138405399",  "name": "Antilipêmicos" },
+    { "gid": "1785559041", "name": "Antineuríticos" },
+    { "gid": "1333824946", "name": "Antissépticos" },
+    { "gid": "551218037",  "name": "Antitussígenos" },
+    { "gid": "132076127",  "name": "Antivaricosos" },
+    { "gid": "368598785",  "name": "Antiácidos" },
+    { "gid": "1057228386", "name": "Antídotos, agentes quelantes e outros" },
+    { "gid": "1424426563", "name": "Broncodilatadores" },
+    { "gid": "258241824",  "name": "Corticosteróides" },
+    { "gid": "1184992018", "name": "Dissuasores de álcool" },
+    { "gid": "142814384",  "name": "Diuréticos" },
+    { "gid": "1554213437", "name": "Emolientes, demulcentes e protetores" },
+    { "gid": "2005343620", "name": "Espasmolíticos" },
+    { "gid": "1203728329", "name": "Expectorantes" },
+    { "gid": "542940365",  "name": "Fornecedores de água e sais minerais" },
+    { "gid": "1781539542", "name": "Anti-hipertensivos" },
+    { "gid": "1393215463", "name": "Anti-inflamatórios locais" },
+    { "gid": "1927396219", "name": "Antianêmicos" },
+    { "gid": "1077847451", "name": "Fármacos antiarrítmicos" },
+    { "gid": "834788399",  "name": "Antiobesidade" },
+    { "gid": "579731426",  "name": "Antiprotozoários para distúrbios gastrintestinais" },
+    { "gid": "46875283",   "name": "Antivertiginosos" },
+    { "gid": "37066094",   "name": "Fármacos com outros usos terapêuticos" },
+    { "gid": "17226000",   "name": "Coagulação sanguínea e hemostípticos" },
+    { "gid": "1946266019", "name": "Fármacos para hiperparatireoidismo" },
+    { "gid": "1138414149", "name": "Fármacos para hipotireoidismo" },
+    { "gid": "293362851",  "name": "Fármacos para insuficiência cardíaca congestiva" },
+    { "gid": "264388654",  "name": "Fármacos para o resfriado/gripe" },
+    { "gid": "1275257911", "name": "Ansiolíticos" },
+    { "gid": "1253291853", "name": "Antidepressivos" },
+    { "gid": "1803919161", "name": "Antiepilépticos" },
+    { "gid": "920573383",  "name": "Antipsicóticos" },
+    { "gid": "725911",     "name": "Antidemência" },
+    { "gid": "329680812",  "name": "Psicoestimulantes" },
+    { "gid": "2138352132", "name": "Sedativos ansiolíticos" },
+    { "gid": "1736193150", "name": "Sedativos hipnóticos" },
+    { "gid": "983295901",  "name": "Fármacos que atuam no metabolismo do ácido úrico" },
+    { "gid": "382171978",  "name": "Fármacos usados no tratamento da gota" },
+    { "gid": "400958663",  "name": "Hipnoanalgésicos" },
+    { "gid": "1238735812", "name": "Inibidores específicos da reabsorção óssea" },
+    { "gid": "1840608601", "name": "Laxantes de contato" },
+    { "gid": "175034763",  "name": "Medicamento Antroposófico" },
+    { "gid": "981256256",  "name": "Medicamentos nasofaríngeos" },
+    { "gid": "675507405",  "name": "Medicamentos otológicos" },
+    { "gid": "1413136239", "name": "Medicamentos para distúrbios gastrointestinais funcionais" },
+    { "gid": "310730728",  "name": "Miorrelaxantes" },
+    { "gid": "588781851",  "name": "Outros analgésicos" },
+    { "gid": "235558101",  "name": "Outros fármacos para constipação" },
+    { "gid": "1270044698", "name": "Probiótico" },
+    { "gid": "655464895",  "name": "Quimioterápicos/Antissépticos para o trato urinário" },
+    { "gid": "2102197488", "name": "Sangue e frações do sangue" },
+    { "gid": "1176403748", "name": "Tranquilizantes" },
+    { "gid": "897302584",  "name": "Tratamento de doenças degenerativas e traumáticas das articulações" },
+    { "gid": "1272484250", "name": "Tratamento de perda de massa óssea" },
+    { "gid": "326771482",  "name": "lostáticos e Hansenostáticos" },
+    { "gid": "1783656678", "name": "Uso Sistêmico" },
+    { "gid": "552279527",  "name": "Vasoconstritores" },
+    { "gid": "225561128",  "name": "Vitaminas" },
+    { "gid": "1285273334", "name": "Agentes antibacterianos" }
+  ];
+}
         return tabs;
       }catch(e){
         return [{ gid:"0", name:"Medicamentos" }];
