@@ -481,7 +481,7 @@
     }
     .rxTools{ display:flex; gap:8px; align-items:center; flex: 0 0 auto; }
 
-    /* >>> ALTERADO: 2 colunas (Nome + Quantidade/Apresentação) */
+    /* >>> 2 colunas (Nome + Quantidade/Apresentação) */
     .rxGrid{
       display:grid;
       grid-template-columns: 1.35fr .90fr;
@@ -676,17 +676,48 @@
       height: 62px;
       margin-top: 10px;
     }
-    .instImgSimple{
+
+    /* ===== NOVO: Transform box p/ arrastar/redimensionar (prévia) ===== */
+    .instImgBox{
       position:absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%,-50%);
-      max-height: 74px;
-      max-width: 92%;
+      transform: translate(-50%,-50%) translate(var(--tx, 0px), var(--ty, 0px)) scale(var(--sc, 1));
+      transform-origin: center;
+      user-select: none;
+      touch-action: none;
+      cursor: grab;
+      z-index: 4;
+      border-radius: 8px;
+    }
+    .instImgBox:active{ cursor: grabbing; }
+    .instImgBox:hover{ outline: 1px dashed rgba(0,0,0,.28); outline-offset: 2px; }
+    .instImgBox.active{ outline: 1px dashed rgba(0,0,0,.38); outline-offset: 2px; }
+    .instImgBox .instImg{
+      display:block;
       object-fit: contain;
       pointer-events:none;
+      max-width: 92%;
+      max-height: 74px;
     }
-    .instImgSimple--footer{ max-height: 58px; }
+    .instImgBox.footer .instImg{ max-height: 58px; }
+
+    /* Handle simples (canto inferior direito) — resize uniforme */
+    .instHandle{
+      position:absolute;
+      right: -7px;
+      bottom: -7px;
+      width: 14px;
+      height: 14px;
+      border-radius: 5px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(0,0,0,.28);
+      box-shadow: 0 6px 16px rgba(0,0,0,.22);
+      cursor: nwse-resize;
+      touch-action:none;
+    }
+    .instImgBox:hover .instHandle{ opacity: 1; }
+    .instHandle{ opacity: .92; }
 
     /* ===== Título central "RECEITA MÉDICA" ===== */
     .rxTitleCenter{
@@ -709,15 +740,21 @@
       font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:#111;
     }
+
+    /* >>> ALTERADO: "Nome:" em negrito e nome sem negrito + alinhamento com data */
     .rxPatientLine{
-      font-weight: 900;
+      font-weight: 400;
       font-size: 12.8px;
       letter-spacing:.15px;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
       max-width: 68ch;
+      margin-top: 3px; /* desce o texto para alinhar com a caixinha da data */
     }
+    .rxNameLabel{ font-weight: 900; }
+    .rxNameValue{ font-weight: 400; }
+
     .rxPatientLine .docInline{
       font-weight: 800;
       opacity:.9;
@@ -757,10 +794,14 @@
       font-size: var(--rxFont);
       line-height: 1.34;
     }
+
+    /* >>> ALTERADO: permitir quebra em múltiplas linhas (sem reticências) */
     .rxLine{
       display:flex;
-      align-items:flex-end;
+      align-items:baseline;
       gap: 10px;
+      flex-wrap: wrap;
+      row-gap: 2px;
     }
     .rxNo{
       font-weight: 900;
@@ -771,13 +812,15 @@
     .drugName{
       font-weight: 800;
       letter-spacing:.15px;
-      max-width: 58%;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      max-width: none;
+      flex: 1 1 320px;
+      min-width: 180px;
     }
     .leaderText{
-      flex: 1;
+      flex: 1 1 120px;
       overflow:hidden;
       white-space:nowrap;
       color:#000;
@@ -786,14 +829,16 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 12px;
       letter-spacing: .2px;
+      min-width: 60px;
     }
     .qty{
       font-weight: 800;
-      white-space:nowrap;
+      white-space: normal;
       color:#000;
-      max-width: 40%;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      max-width: none;
+      overflow: visible;
+      text-overflow: clip;
+      flex: 0 1 auto;
     }
 
     .rxInstr{
@@ -934,6 +979,7 @@
       .userPill b, .userPill small{ max-width: 22ch; }
       .gearBtn{ width: 100%; justify-content:space-between; }
       .rxTitleCenter{ font-size: 16px; }
+      .drugName{ min-width: 160px; }
     }
 
     /* ===== Modal ===== */
@@ -990,6 +1036,10 @@
       .wrap{ max-width:none; padding:0; }
       .printAll{ display:block !important; }
       @page { margin: 20mm; }
+
+      /* não imprimir handles/outline */
+      .instHandle{ display:none !important; }
+      .instImgBox{ outline: none !important; cursor: default !important; }
     }
   </style>
 </head>
@@ -1316,10 +1366,15 @@
               <input class="field" id="instAddress" placeholder="Rua, nº, bairro, cidade/UF, CEP" />
             </div>
           </div>
+
+          <div class="divider"></div>
+          <div class="mini">Dica: na prévia, você pode <b>arrastar</b> e <b>redimensionar</b> (sem deformar) as imagens do cabeçalho/rodapé diretamente no papel.</div>
         </div>
       </div>
 
       <div class="modalFoot">
+        <button class="btn btnGhost" id="btnResetConfig" type="button">Voltar ao padrão</button>
+        <button class="btn btnPrimary" id="btnSaveConfig" type="button">Salvar</button>
         <button class="btn btnGhost" id="btnCloseConfig2" type="button">Fechar</button>
       </div>
     </div>
@@ -1453,6 +1508,10 @@
       instName: "",
       instAddress: "",
 
+      // NOVO: transformações (prévia/print) — posição (px) e escala (uniforme)
+      headerTransform: { x: 0, y: 0, scale: 1 },
+      footerTransform: { x: 0, y: 0, scale: 1 },
+
       // dose foi removida do editor (o usuário pode digitar no próprio nome, se quiser)
       blocks: [], // {id,name,qty,qtyOptions,use,showIcons,icons,collapsed}
 
@@ -1501,6 +1560,22 @@
     }
 
     function leaderHyphens(){ return "-".repeat(220); }
+
+    function getDefaultPageConfig(){
+      return {
+        paperSize: "A4",
+        includeDate: true,
+        dateValue: todayBR(),
+        rxFontSize: 13.2,
+        rxFontFamily: "TIMES",
+        headerImgUrl: "",
+        footerImgUrl: "",
+        instName: "",
+        instAddress: "",
+        headerTransform: { x: 0, y: 0, scale: 1 },
+        footerTransform: { x: 0, y: 0, scale: 1 }
+      };
+    }
 
     /************************************************************
      * Logo apply
@@ -2537,6 +2612,145 @@
     }
 
     /************************************************************
+     * Header/Footer Transform Controls (drag + resize uniforme)
+     ************************************************************/
+    let instDragCtx = null;
+
+    function getTransform(role){
+      const t = (role==="footer") ? state.footerTransform : state.headerTransform;
+      return {
+        x: isFinite(+t?.x) ? +t.x : 0,
+        y: isFinite(+t?.y) ? +t.y : 0,
+        scale: isFinite(+t?.scale) ? +t.scale : 1
+      };
+    }
+    function setTransform(role, t){
+      const next = { x: +t.x || 0, y: +t.y || 0, scale: +t.scale || 1 };
+      if(role==="footer") state.footerTransform = next;
+      else state.headerTransform = next;
+    }
+    function applyBoxTransformVars(box, t){
+      box.style.setProperty("--tx", `${t.x}px`);
+      box.style.setProperty("--ty", `${t.y}px`);
+      box.style.setProperty("--sc", `${t.scale}`);
+    }
+
+    function bindInstTransformControls(){
+      const boxes = document.querySelectorAll("#rxPaper .instImgBox");
+      boxes.forEach(box=>{
+        const role = box.getAttribute("data-role") || "header";
+        const t = getTransform(role);
+        applyBoxTransformVars(box, t);
+
+        // Move (arrastar)
+        box.addEventListener("pointerdown", (ev)=>{
+          if(ev.button !== 0) return;
+          if(ev.target && ev.target.classList && ev.target.classList.contains("instHandle")) return;
+          ev.preventDefault();
+
+          const tt = getTransform(role);
+          instDragCtx = {
+            mode: "move",
+            role,
+            box,
+            pid: ev.pointerId,
+            sx: ev.clientX,
+            sy: ev.clientY,
+            ox: tt.x,
+            oy: tt.y
+          };
+
+          box.classList.add("active");
+          try{ box.setPointerCapture(ev.pointerId); }catch(e){}
+        });
+
+        // Resize (handle)
+        const handle = box.querySelector(".instHandle");
+        if(handle){
+          handle.addEventListener("pointerdown", (ev)=>{
+            if(ev.button !== 0) return;
+            ev.preventDefault();
+
+            const rect = box.getBoundingClientRect();
+            const cx = rect.left + rect.width/2;
+            const cy = rect.top + rect.height/2;
+
+            const tt = getTransform(role);
+            const startDist = Math.max(1, Math.hypot(ev.clientX - cx, ev.clientY - cy));
+
+            instDragCtx = {
+              mode: "resize",
+              role,
+              box,
+              pid: ev.pointerId,
+              cx, cy,
+              startDist,
+              os: tt.scale
+            };
+
+            box.classList.add("active");
+            try{ handle.setPointerCapture(ev.pointerId); }catch(e){}
+          });
+        }
+      });
+    }
+
+    function ensureGlobalPointerHandlers(){
+      if(ensureGlobalPointerHandlers._done) return;
+      ensureGlobalPointerHandlers._done = true;
+
+      window.addEventListener("pointermove", (ev)=>{
+        if(!instDragCtx) return;
+        if(ev.pointerId !== instDragCtx.pid) return;
+
+        const role = instDragCtx.role;
+        const cur = getTransform(role);
+
+        if(instDragCtx.mode === "move"){
+          const dx = ev.clientX - instDragCtx.sx;
+          const dy = ev.clientY - instDragCtx.sy;
+
+          const nx = clamp(instDragCtx.ox + dx, -600, 600);
+          const ny = clamp(instDragCtx.oy + dy, -600, 600);
+
+          const next = { x: nx, y: ny, scale: cur.scale };
+          setTransform(role, next);
+          applyBoxTransformVars(instDragCtx.box, next);
+          return;
+        }
+
+        if(instDragCtx.mode === "resize"){
+          const dist = Math.max(1, Math.hypot(ev.clientX - instDragCtx.cx, ev.clientY - instDragCtx.cy));
+          const ratio = dist / instDragCtx.startDist;
+          const ns = clamp(instDragCtx.os * ratio, 0.2, 5);
+
+          const next = { x: cur.x, y: cur.y, scale: ns };
+          setTransform(role, next);
+          applyBoxTransformVars(instDragCtx.box, next);
+          return;
+        }
+      });
+
+      function endPointer(ev){
+        if(!instDragCtx) return;
+        if(ev.pointerId !== instDragCtx.pid) return;
+        try{ instDragCtx.box.classList.remove("active"); }catch(e){}
+        instDragCtx = null;
+        // não re-renderiza aqui para não “piscar”; o estado já está atualizado
+      }
+      window.addEventListener("pointerup", endPointer);
+      window.addEventListener("pointercancel", endPointer);
+
+      // Clique fora remove destaque (visual)
+      document.addEventListener("mousedown", (ev)=>{
+        const active = document.querySelector("#rxPaper .instImgBox.active");
+        if(!active) return;
+        if(ev.target && ev.target.closest && ev.target.closest(".instImgBox")) return;
+        active.classList.remove("active");
+      });
+    }
+
+    /************************************************************
      * Render Paper
      ************************************************************/
     function renderPaper(){
@@ -2573,12 +2787,20 @@
       const instName = safeText(state.instName);
       const instAddress = safeText(state.instAddress);
 
+      const ht = getTransform("header");
+      const ft = getTransform("footer");
+
       let html = "";
 
-      // Header image area
+      // Header image area (draggable/resizable)
       html += `<div class="headerArea">`;
       if(headerSrc){
-        html += `<img class="instImgSimple" alt="" src="${escapeAttr(headerSrc)}">`;
+        html += `
+          <div class="instImgBox" data-role="header" style="--tx:${ht.x}px;--ty:${ht.y}px;--sc:${ht.scale};">
+            <img class="instImg" alt="" src="${escapeAttr(headerSrc)}">
+            <div class="instHandle" aria-hidden="true"></div>
+          </div>
+        `;
       }
       html += `</div>`;
 
@@ -2587,7 +2809,7 @@
 
       // Patient + date line
       html += `<div class="rxMeta">`;
-      html += `<div class="rxPatientLine">${escapeHtml(patientName || "Paciente")}<span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
+      html += `<div class="rxPatientLine"><span class="rxNameLabel">Nome: </span><span class="rxNameValue">${escapeHtml(patientName || "Paciente")}</span><span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
       html += showDate ? `<div class="rxDatePill">${escapeHtml(dateText)}</div>` : `<div></div>`;
       html += `</div>`;
 
@@ -2651,10 +2873,15 @@
       html += `</div>`;
       html += `</div>`;
 
-      // Footer image area
+      // Footer image area (draggable/resizable)
       html += `<div class="footerArea">`;
       if(footerSrc){
-        html += `<img class="instImgSimple instImgSimple--footer" alt="" src="${escapeAttr(footerSrc)}">`;
+        html += `
+          <div class="instImgBox footer" data-role="footer" style="--tx:${ft.x}px;--ty:${ft.y}px;--sc:${ft.scale};">
+            <img class="instImg" alt="" src="${escapeAttr(footerSrc)}">
+            <div class="instHandle" aria-hidden="true"></div>
+          </div>
+        `;
       }
       html += `</div>`;
 
@@ -2665,6 +2892,9 @@
       }
 
       rx.innerHTML = html;
+
+      // (re)bind drag/resize controls after render
+      bindInstTransformControls();
     }
 
     const renderPaperDebounced = debounce(renderPaper, 120);
@@ -2711,19 +2941,29 @@
 
       const per = medsPerPage();
 
+      const ht = getTransform("header");
+      const ft = getTransform("footer");
+
       let out = "";
       pages.forEach((pageBlocks, pIdx)=>{
         out += `<div class="printPage">`;
         out += `<div class="rxPaper" style="--rxFont:${rxFontPx()}px; --rxFamily:${rxFamilyCSS()}; font-family:${rxFamilyCSS()}; font-size:${rxFontPx()}px; padding:${getComputedStyle(document.documentElement).getPropertyValue("--paperPad") || "20mm"};">`;
 
         out += `<div class="headerArea" style="height:78px; position:relative; margin-bottom:6px;">`;
-        if(headerSrc) out += `<img class="instImgSimple" alt="" src="${escapeAttr(headerSrc)}">`;
+        if(headerSrc){
+          out += `
+            <div class="instImgBox" data-role="header" style="--tx:${ht.x}px;--ty:${ht.y}px;--sc:${ht.scale};">
+              <img class="instImg" alt="" src="${escapeAttr(headerSrc)}">
+              <div class="instHandle" aria-hidden="true"></div>
+            </div>
+          `;
+        }
         out += `</div>`;
 
         out += `<div class="rxTitleCenter">RECEITA MÉDICA</div>`;
 
         out += `<div class="rxMeta">`;
-        out += `<div class="rxPatientLine">${escapeHtml(patientName || "Paciente")}<span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
+        out += `<div class="rxPatientLine"><span class="rxNameLabel">Nome: </span><span class="rxNameValue">${escapeHtml(patientName || "Paciente")}</span><span class="docInline">${escapeHtml(patientDoc)}</span></div>`;
         out += showDate ? `<div class="rxDatePill">${escapeHtml(dateText)}</div>` : `<div></div>`;
         out += `</div>`;
 
@@ -2775,7 +3015,14 @@
         out += `</div>`;
 
         out += `<div class="footerArea" style="height:62px; position:relative; margin-top:10px;">`;
-        if(footerSrc) out += `<img class="instImgSimple instImgSimple--footer" alt="" src="${escapeAttr(footerSrc)}">`;
+        if(footerSrc){
+          out += `
+            <div class="instImgBox footer" data-role="footer" style="--tx:${ft.x}px;--ty:${ft.y}px;--sc:${ft.scale};">
+              <img class="instImg" alt="" src="${escapeAttr(footerSrc)}">
+              <div class="instHandle" aria-hidden="true"></div>
+            </div>
+          `;
+        }
         out += `</div>`;
 
         if(instFooter){
@@ -2799,6 +3046,11 @@
       syncThumbs();
     }
     function closeConfig(){
+      // mantém o comportamento de "salvar ao fechar"
+      readConfigFieldsToState();
+      syncThumbs();
+      renderPaperDebounced();
+
       $("configMask").style.display = "none";
       $("configMask").setAttribute("aria-hidden","true");
     }
@@ -2835,6 +3087,36 @@
 
       state.instName = safeText($("instName").value);
       state.instAddress = safeText($("instAddress").value);
+    }
+
+    function saveConfigExplicit(){
+      readConfigFieldsToState();
+      syncThumbs();
+      renderPaperDebounced();
+    }
+
+    function resetConfigToDefault(){
+      const d = getDefaultPageConfig();
+
+      state.paperSize = d.paperSize;
+      state.includeDate = d.includeDate;
+      state.dateValue = d.dateValue;
+      state.rxFontSize = d.rxFontSize;
+      state.rxFontFamily = d.rxFontFamily;
+
+      state.headerImgUrl = d.headerImgUrl;
+      state.footerImgUrl = d.footerImgUrl;
+      state.instName = d.instName;
+      state.instAddress = d.instAddress;
+
+      state.headerTransform = { ...d.headerTransform };
+      state.footerTransform = { ...d.footerTransform };
+
+      state.selectedPage = 1;
+
+      syncConfigFieldsFromState();
+      syncThumbs();
+      renderPaperDebounced();
     }
 
     /************************************************************
@@ -2908,6 +3190,12 @@
       $("btnCloseConfig2").addEventListener("click", closeConfig);
       $("configMask").addEventListener("click", (e)=>{ if(e.target === $("configMask")) closeConfig(); });
 
+      $("btnSaveConfig").addEventListener("click", saveConfigExplicit);
+      $("btnResetConfig").addEventListener("click", ()=>{
+        if(!confirm("Voltar ao padrão original das configurações da página? (inclui imagens e posição/escala)")) return;
+        resetConfigToDefault();
+      });
+
       ["paperSize","rxFontFamily","rxFontSize","includeDate","dateValue","headerUrl","footerUrl","instName","instAddress"].forEach(id=>{
         $(id).addEventListener("input", ()=>{
           readConfigFieldsToState();
@@ -2963,6 +3251,7 @@
 
       applyLogo();
       bindUI();
+      ensureGlobalPointerHandlers();
 
       // session
       const u = loadSession();
