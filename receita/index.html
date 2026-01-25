@@ -39,9 +39,17 @@
       --edgeL: 24px;
       --edgeR: 24px;
       --paperMax: 600px;
-      --rightColW: 440px; /* agora controla a coluna do "Copiar" ao lado da Prévia */
+      --rightColW: 440px;         /* agora controla a largura do painel "Copiar" DENTRO do painel da prescrição */
       --deskGap: 22px;
 
+      /* >>> Sidebar (Sumário) */
+      --navW: 130px;
+      --navPad: 12px;
+      --navIcon: 46px;
+      --navIconR: 14px;
+      --navCardR: 24px;
+
+      /* ===== Layout vars (kept) ===== */
       --rBig:26px;
       --rMid:22px;
       --rSm:18px;
@@ -63,9 +71,10 @@
       :root{
         --edgeL: 16px;
         --edgeR: 16px;
-        --rightColW: 100%;
         --paperMax: 620px;
         --deskGap: 16px;
+        --rightColW: 100%;
+        --navW: 100%;
       }
     }
 
@@ -327,24 +336,131 @@
       box-shadow: 0 10px 18px rgba(249,115,22,.12);
     }
 
-    /* ===== Main layout (agora 1 coluna; Copy fica dentro da Prévia) ===== */
-    .main{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap2);
-      align-items:start;
-    }
-    .leftCol{
-      display:flex;
-      flex-direction:column;
-      gap: var(--gap2);
-      min-width: 0;
-    }
+    /* ===== Main layout (Sidebar fora + Conteúdo) ===== */
+.main{
+  margin-top: 16px;
+  display:grid;
+  grid-template-columns: var(--navW) 1fr; /* sidebar à esquerda */
+  gap: var(--deskGap);
+  align-items:start;
+}
 
-    @media (max-width: 980px){
-      .mobileTabs{ display:flex; }
-    }
+.contentCols{
+  display:flex;
+  flex-direction:column; /* mantém editor em cima e workspace embaixo */
+  gap: var(--gap2);
+  min-width: 0;
+  grid-column: 2;
+}
+
+.leftCol, .rightCol{
+  display:flex;
+  flex-direction:column;
+  gap: var(--gap2);
+  min-width: 0;
+}
+
+@media (max-width: 980px){
+  .main{ grid-template-columns: 1fr; gap: var(--gap2); }
+  .mobileTabs{ display:flex; }
+
+  /* sidebar vira "faixa" no topo no mobile */
+  .sideNav{
+    width: 100%;
+    padding: 10px;
+  }
+  .sideNavList{
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+  .navItem{
+    flex: 0 0 auto;
+    width: 110px;
+  }
+}
+/* ===== Sidebar (Sumário) ===== */
+.sideNav{
+  width: var(--navW);
+  padding: var(--navPad);
+  border: 1px solid var(--line);
+  border-radius: var(--navCardR);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+
+  position: fixed;           /* <- FIXO */
+  top: 86px;                 /* abaixo do header */
+  left: var(--edgeL);        /* alinha com o padding do site */
+  z-index: 35;
+
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+}
+
+.sideNavList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navLoading{
+  padding: 10px 8px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 12.6px;
+}
+
+.navItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+  min-width: 0;
+}
+
+.navItem:hover{
+  transform: translateY(-1px);
+  background: var(--surface2);
+  border-color: rgba(15,23,42,.14);
+  box-shadow: 0 12px 22px rgba(17,24,39,.08);
+}
+
+.navIcon{
+  width: var(--navIcon);
+  height: var(--navIcon);
+  border-radius: var(--navIconR);
+  object-fit: contain;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+  display: block;
+}
+
+.navLabel{
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.15;
+
+  max-width: 100%;
+  white-space: normal;       /* <- quebra linha */
+  overflow: visible;
+  text-overflow: clip;
+
+  overflow-wrap: anywhere;   /* <- não estoura */
+  word-break: break-word;
+  padding: 0 4px;
+}
 
     .card{
       border: 1px solid var(--line);
@@ -585,7 +701,6 @@
     .iconBtnDim{ opacity:.78; }
     .iconBtnDim:hover{ opacity:1; }
 
-    /* >>> 2 colunas (Nome + Quantidade/Apresentação) */
     .rxGrid{
       display:grid;
       grid-template-columns: 1.35fr .90fr;
@@ -714,102 +829,123 @@
       line-height: 1.25;
     }
 
-    /* ===== PRÉVIA + COPIAR (lado a lado) + BARRA LATERAL ===== */
-    .previewArea{
-      display:grid;
-      grid-template-columns: 108px 1fr;
-      gap: 16px;
-      align-items: stretch;
-      min-width: 0;
-    }
+    /* ===== Workspace (Barra + Prévia + Copiar) ===== */
+.workspaceBody{ padding: 16px; }
 
-    .sideNav{
-      height: 100%;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 12px 10px;
-      box-shadow:
-        16px 20px 32px rgba(17,24,39,.10),
-        8px 10px 18px rgba(17,24,39,.08);
+.workspaceGrid{
+  display:grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(320px, var(--rightColW));
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* a barra de imprimir/páginas fica acima das DUAS colunas */
+.workspaceGrid > .paperHead{
+  grid-column: 1 / -1;
+  margin-bottom: 0; /* importante: não empurrar tudo com margin */
+}
+
+.previewPane{
+  min-width: 0;
+  display:flex;
+  flex-direction: column;
+}
+
+.copyPane{
+  min-width: 0;
+  display:flex;
+  flex-direction: column;
+  border-left: 1px dashed rgba(15,23,42,.10);
+  padding-left: 10px;
+}
+
+/* quando ficar mais estreito, empilha: barra, prévia, copiar */
+@media (max-width: 1320px){
+  .workspaceGrid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .workspaceGrid > .paperHead{ grid-column: 1; }
+
+  .copyPane{
+    border-left: none;
+    border-top: 1px dashed rgba(15,23,42,.10);
+    padding-left: 0;
+    padding-top: 10px;
+  }
+}
+
+    .paneTitleRow{
       display:flex;
-      flex-direction:column;
-      gap: 14px;
-      min-width: 0;
-      overflow:hidden;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
     }
-
-    .sideItem{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 8px;
-      border-radius: 18px;
-      border: 1px solid transparent;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      transition: background var(--t), transform var(--t), border-color var(--t), box-shadow var(--t), filter var(--t);
-    }
-    .sideItem:hover{
-      background: var(--surface2);
-      border-color: rgba(15,23,42,.10);
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(17,24,39,.08);
-    }
-    .sideItem:active{ transform: translateY(0px); }
-
-    .sideIcon{
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background:#fff;
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      box-shadow: 0 10px 18px rgba(17,24,39,.06);
-      color:#334155;
-      font-weight: 900;
+    .paneTitleRow h3{
+      margin:0;
+      font-family: "DM Serif Display", serif;
       font-size: 16px;
-      line-height: 1;
+      letter-spacing:.2px;
+      line-height:1.1;
     }
-    .sideIcon img{
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      display:block;
-    }
-    .sideLabel{
-      font-size: 12.2px;
-      font-weight: 900;
-      color:#334155;
-      text-align:center;
-      line-height: 1.15;
-      max-width: 84px;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: normal;
-      word-break: break-word;
+    .paneTitleRow .sub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 12.4px;
+      line-height:1.25;
+      max-width: 60ch;
     }
 
-    .previewGrid{
-      display:grid;
-      grid-template-columns: minmax(520px, 1fr) minmax(320px, var(--rightColW));
-      gap: var(--deskGap);
-      align-items:start;
-      min-width: 0;
+    @media (max-width: 1320px){
+      .workspaceGrid{
+        grid-template-columns: var(--navW) 1fr;
+        grid-template-rows: auto auto;
+      }
+      .previewPane{ grid-column: 2; }
+      .copyPane{
+        grid-column: 2;
+        border-left: none;
+        border-top: 1px dashed rgba(15,23,42,.10);
+        padding-left: 0;
+        padding-top: 10px;
+      }
     }
 
     @media (max-width: 980px){
-      .previewArea{ grid-template-columns: 1fr; }
-      .sideNav{ display:none; }
-      .previewGrid{ grid-template-columns: 1fr; }
+      .workspaceGrid{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .sideNav{
+        width: 100%;
+        padding: 10px;
+      }
+      .sideNavList{
+        flex-direction: row;
+        gap: 10px;
+        justify-content: flex-start;
+        align-items: stretch;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: thin;
+      }
+      .navItem{
+        flex: 0 0 auto;
+        width: 110px;
+      }
+      .copyPane{
+        grid-column: 1;
+        border-top: none;
+        padding-top: 0;
+      }
     }
 
     /* ===== Preview / Paper ===== */
-    .paperShell{ padding: 16px; }
+    .paperShell{ padding: 0; }
 
     .paperHead{
       border:1px solid var(--line);
@@ -1001,7 +1137,7 @@
       line-height: 1.34;
     }
 
-    /* ===== Linha do medicamento: Nome ———— Quantidade (leader elástico) ===== */
+    /* ===== Linha do medicamento ===== */
     .rxLine{
       display: grid;
       grid-template-columns: auto fit-content(100%) 1fr auto;
@@ -1155,48 +1291,15 @@
       .rxTitle strong{ max-width: 66vw; }
     }
 
-    /* ===== Copy panel (agora dentro da Prévia) ===== */
-    .copyInlineCard{
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: #fff;
-      box-shadow: 0 10px 18px rgba(17,24,39,.06);
-      overflow:hidden;
-      min-width: 0;
-      position: sticky;
-      top: 92px;
-    }
-    @media (max-width: 980px){
-      .copyInlineCard{ position: relative; top:auto; }
-    }
-    .copyInlineHead{
-      padding: 14px 14px 10px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(15,23,42,.03), transparent);
-    }
-    .copyInlineHead b{
-      display:block;
-      font-size: 14px;
-      letter-spacing: .2px;
-    }
-    .copyInlineHead small{
-      display:block;
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12.6px;
-      font-weight: 700;
-      line-height: 1.25;
-    }
-    .copyInlineBody{ padding: 14px; }
-
+    /* ===== Copy panel (inside workspace) ===== */
     .copyBox{
       width: 100%;
+      flex: 1 1 auto;
       min-height: 320px;
       border-radius: 18px;
       border: 1px solid var(--line);
       background: #fff;
       padding: 12px 12px;
-      resize: vertical;
       outline: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size: 12.7px;
@@ -1205,15 +1308,27 @@
       box-shadow: 0 10px 18px rgba(17,24,39,.06);
       white-space: pre-wrap;
       word-break: break-word;
+      resize: vertical;
     }
     .copyHint{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-    }
+  display: grid;
+  grid-template-columns: 1fr; /* botão em largura total */
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.copyHint .btn{
+  width: 100%;
+}
+
+.copyPane{ 
+   padding-right: 10px;
+}
+
+.copyStatus{
+  width: 100%;
+  text-align: center;
+}
     .copyStatus{
       font-size: 12.4px;
       color: var(--muted);
@@ -1274,7 +1389,7 @@
 
     @media print{
       body{ background:#fff !important; color:#000 !important; }
-      .topbarWrap, .mobileTabs, #panelEditor, #previewArea, .modalMask, .acctWrap{ display:none !important; }
+      .topbarWrap, .mobileTabs, #panelEditor, #panelWorkspace, .modalMask, .acctWrap{ display:none !important; }
       .wrap{ max-width:none; padding:0; }
       .printAll{ display:block !important; }
       @page { margin: 20mm; }
@@ -1366,8 +1481,17 @@
     </div>
 
     <div class="main" id="mainApp">
-      <!-- LEFT COL -->
-      <div class="leftCol" id="leftCol">
+  <!-- Sidebar (Sumário) — fora do Editor e fora da Prévia/Copiar -->
+  <aside class="sideNav" id="sideNav" aria-label="Sumário do site">
+    <div class="navLoading">Carregando menu…</div>
+  </aside>
+
+  <!-- Conteúdo (Editor + Workspace) -->
+  <div class="contentCols" id="contentCols">
+
+    <!-- LEFT COL -->
+    <div class="leftCol" id="leftCol">
+
         <!-- ===== Editor ===== -->
         <div class="card panel" id="panelEditor">
           <div class="cardHeader">
@@ -1483,84 +1607,87 @@
             </details>
           </div>
         </div>
+      </div>
 
-        <!-- ===== PREVIEW AREA (Sidebar + Prévia + Copiar) ===== -->
-        <div class="previewArea" id="previewArea">
-          <!-- Sidebar (sumário) -->
-          <aside class="sideNav" id="sideNav" aria-label="Sumário">
-            <div class="mini">Carregando menu…</div>
-          </aside>
-
-          <!-- Card da Prévia (com Copiar ao lado) -->
-          <div class="card panel" id="panelPreview">
-            <div class="cardHeader">
-              <div>
-                <h2>Prévia</h2>
-                <p class="sub">Receita branca, margens seguras, R// obrigatório e lista numerada.</p>
-              </div>
-
-              <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; justify-content:flex-end;">
-                <button class="gearBtn" id="btnOpenConfig" type="button" title="Configurar prescrição">
-                  <span style="opacity:.95;">Configure sua prescrição</span>
-                  <span class="gico">⚙️</span>
-                </button>
-              </div>
+      <!-- RIGHT COL -->
+      <div class="rightCol" id="rightCol">
+        <!-- ===== Workspace: Sidebar + Prévia (esq) + Copiar (dir) ===== -->
+        <div class="card panel" id="panelWorkspace">
+          <div class="cardHeader">
+            <div>
+              <h2>Prévia & Copiar</h2>
+              <p class="sub">Prévia da prescrição (à esquerda) e texto pronto para copiar (à direita), com barra lateral de navegação.</p>
             </div>
 
-            <div class="cardBody">
-              <div class="previewGrid">
-                <!-- LEFT: preview -->
-                <div class="paperShell" style="padding:0;">
-                  <div class="paperHead">
-                    <div class="paperHeadRow">
-                      <div class="paperHeadLeft">
-                        <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
-                        <button class="btn btnGhost" id="btnPrintAll" type="button">Imprimir tudo</button>
-                      </div>
-
-                      <div class="paperHeadRight">
-                        <div class="mini" id="pageInfo">Página 1 de 1</div>
-
-                        <div class="row" style="gap:8px; justify-content:flex-end;">
-                          <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
-                          <select class="select" id="pageSelect" style="width: 160px;">
-                            <option value="1" selected>Página 1</option>
-                          </select>
-                          <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="paperWrap">
-                    <div class="paper paperA4" id="paper">
-                      <div class="paperInner">
-                        <div class="rxPaper" id="rxPaper"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- RIGHT: copiar -->
-                <div class="copyInlineCard" id="copyInlineCard">
-                  <div class="copyInlineHead">
-                    <b>Copiar texto</b>
-                    <small>Aqui fica só o conteúdo para copiar: nome, tracinhos, quantidade e posologia.</small>
-                  </div>
-                  <div class="copyInlineBody">
-                    <textarea class="copyBox" id="copyBox" readonly spellcheck="false" aria-label="Texto para copiar"></textarea>
-                    <div class="copyHint">
-                      <button class="btn btnPrimary" id="btnCopyText" type="button">Copiar texto</button>
-                      <div class="copyStatus" id="copyStatus">—</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; justify-content:flex-end;">
+              <button class="gearBtn" id="btnOpenConfig" type="button" title="Configurar prescrição">
+                <span style="opacity:.95;">Configure sua prescrição</span>
+                <span class="gico">⚙️</span>
+              </button>
             </div>
           </div>
-        </div><!-- /previewArea -->
-      </div><!-- /leftCol -->
-    </div><!-- /main -->
+
+          <div class="cardBody workspaceBody">
+            <div class="workspaceGrid">
+  <!-- Barra de impressão/páginas (fica acima de prévia + copiar) -->
+  <div class="paperHead">
+    <div class="paperHeadRow">
+      <div class="paperHeadLeft">
+        <button class="btn btnPrimary" id="btnPrintOnly" type="button">Imprimir / PDF</button>
+        <button class="btn btnGhost" id="btnPrintAll" type="button">Imprimir tudo</button>
+      </div>
+
+      <div class="paperHeadRight">
+        <div class="mini" id="pageInfo">Página 1 de 1</div>
+
+        <div class="row" style="gap:8px; justify-content:flex-end;">
+          <button class="btn btnGhost" id="btnPrevPage" type="button">◀</button>
+          <select class="select" id="pageSelect" style="width: 160px;">
+            <option value="1" selected>Página 1</option>
+          </select>
+          <button class="btn btnGhost" id="btnNextPage" type="button">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <section class="previewPane" aria-label="Prévia da prescrição">
+    <div class="paperShell">
+      <div class="paperWrap">
+        <div class="paper paperA4" id="paper">
+          <div class="paperInner">
+            <div class="rxPaper" id="rxPaper"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Copy -->
+  <section class="copyPane" aria-label="Copiar texto da prescrição">
+    <div class="paneTitleRow">
+      <div>
+        <h3>Copiar texto</h3>
+        <p class="sub">Conteúdo pronto para copiar: nome, tracinhos, quantidade e posologia.</p>
+      </div>
+    </div>
+
+    <textarea class="copyBox" id="copyBox" readonly spellcheck="false" aria-label="Texto para copiar"></textarea>
+    <div class="copyHint">
+      <button class="btn btnPrimary" id="btnCopyText" type="button">Copiar texto</button>
+      <div class="copyStatus" id="copyStatus">—</div>
+    </div>
+  </section>
+</div>
+       
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+  </div> <!-- /contentCols -->
 
     <div class="printAll" id="printAll"></div>
   </div>
@@ -1682,7 +1809,6 @@
 
           <div class="divider"></div>
 
-          <!-- >>> Layout controls (easy) -->
           <div class="grid2">
             <div>
               <label class="label" for="layoutEdgeL">Margem esquerda (px)</label>
@@ -1692,7 +1818,7 @@
             <div>
               <label class="label" for="layoutEdgeR">Margem direita (px)</label>
               <input class="field" id="layoutEdgeR" placeholder="Ex: 24" inputmode="numeric" />
-              <div class="mini" style="margin-top:6px;">Puxa botões + coluna de copiar.</div>
+              <div class="mini" style="margin-top:6px;">Puxa botões + todo conteúdo.</div>
             </div>
           </div>
 
@@ -1704,7 +1830,7 @@
               <input class="field" id="layoutPaperMax" placeholder="Ex: 600" inputmode="numeric" />
             </div>
             <div>
-              <label class="label" for="layoutRightColW">Largura da coluna de copiar (px)</label>
+              <label class="label" for="layoutRightColW">Largura do painel de copiar (px)</label>
               <input class="field" id="layoutRightColW" placeholder="Ex: 440" inputmode="numeric" />
             </div>
           </div>
@@ -1733,18 +1859,25 @@
     const GOOGLE_CLIENT_ID = "703476878000-7h4lq2cbpffp3qp7hdn1hksi9k43qqm1.apps.googleusercontent.com";
 
     /************************************************************
-     * SIDEBAR (SUMÁRIO) — Google Sheets (3 colunas: Nome | Imagem | Link)
-     * Links fornecidos:
+     * SIDEBAR (SUMÁRIO) — planilha (Nome | Imagem | Link)
+     * URLs fornecidas:
      * - https://docs.google.com/spreadsheets/d/15YnJdM_21o4E_9LmEew7mX1mmsN4iPRkoJI_fdiv3Zs/edit?gid=0#gid=0
      * - https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx/pubhtml
      ************************************************************/
-    const SIDENAV_SHEET_ID = "15YnJdM_21o4E_9LmEew7mX1mmsN4iPRkoJI_fdiv3Zs";
-    const SIDENAV_GID = "0";
-    const SIDENAV_PUBLISHED_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx/pub?output=csv";
+    const NAV_SHEET = {
+      sheetId: "15YnJdM_21o4E_9LmEew7mX1mmsN4iPRkoJI_fdiv3Zs",
+      gid: "0",
+      pubId: "2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx"
+    };
+
+    const NAV_CSV_URLS = [
+      `https://docs.google.com/spreadsheets/d/e/${encodeURIComponent(NAV_SHEET.pubId)}/pub?gid=${encodeURIComponent(NAV_SHEET.gid)}&single=true&output=csv`,
+      `https://docs.google.com/spreadsheets/d/${encodeURIComponent(NAV_SHEET.sheetId)}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(NAV_SHEET.gid)}`,
+      `https://docs.google.com/spreadsheets/d/${encodeURIComponent(NAV_SHEET.sheetId)}/export?format=csv&gid=${encodeURIComponent(NAV_SHEET.gid)}`
+    ];
 
     /************************************************************
-     * GOOGLE SHEETS — CSV multi-abas (base medicamentos)
+     * GOOGLE SHEETS — CSV multi-abas (MEDICAMENTOS)
      ************************************************************/
     const SHEET_ID = "1es05SmJavEvGAK99kejsgy986T4kRJKw64wozSLTDRQ";
 
@@ -2231,139 +2364,119 @@
       return out;
     }
 
-    async function fetchCsvGeneric(sheetId, gid){
-      const urls = [
-        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`,
-        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/export?format=csv&gid=${encodeURIComponent(gid)}`
-      ];
+    async function fetchTextWithFallback(urls){
       let lastErr = null;
       for(const url of urls){
         try{
           const res = await fetch(url, { cache:"no-store" });
           if(!res.ok) throw new Error(`HTTP ${res.status}`);
           const txt = await res.text();
-          if(!txt || txt.length < 3) throw new Error("CSV vazio");
+          if(!txt || txt.length < 3) throw new Error("Resposta vazia");
           return txt;
         }catch(e){
           lastErr = e;
         }
       }
-      throw lastErr || new Error("Falha ao buscar CSV");
-    }
-
-    async function fetchCsvByGid(gid){
-      return fetchCsvGeneric(SHEET_ID, gid);
+      throw lastErr || new Error("Falha ao buscar");
     }
 
     /************************************************************
-     * SIDEBAR (SUMÁRIO) — carregar do Excel (Google Sheets)
+     * SIDEBAR NAV (Sumário) — carrega da planilha
      ************************************************************/
-    function sideNavFallback(){
-      return [
-        { name: "Paciente", img: "", href: "#" },
-        { name: "Alertas", img: "", href: "#" },
-        { name: "Modelos (protocolos)", img: "", href: "#" },
-        { name: "Personalizar receituário", img: "", href: "#" }
-      ];
-    }
+    function renderSidebar(items){
+      const nav = $("sideNav");
+      nav.innerHTML = "";
 
-    function renderSideNav(items){
-      const box = $("sideNav");
-      if(!box) return;
-      box.innerHTML = "";
+      const list = document.createElement("div");
+      list.className = "sideNavList";
 
-      const clean = Array.isArray(items) ? items.filter(Boolean) : [];
-      const use = clean.length ? clean : sideNavFallback();
-
-      for(const it of use){
-        const name = safeText(it.name) || "—";
-        const img = safeText(it.img);
-        const href = safeText(it.href) || "#";
-
-        const a = document.createElement("a");
-        a.className = "sideItem";
-        a.href = href;
-
-        // abre em nova aba se for link externo (http/https)
-        if(/^https?:\/\//i.test(href)){
-          a.target = "_blank";
-          a.rel = "noopener";
-        }
-
-        const icon = document.createElement("div");
-        icon.className = "sideIcon";
-
-        if(img){
-          const im = document.createElement("img");
-          im.src = img;
-          im.alt = "";
-          im.loading = "lazy";
-          im.referrerPolicy = "no-referrer";
-          im.onerror = ()=>{
-            try{ im.remove(); }catch(e){}
-            icon.textContent = (name.trim()[0] || "•").toUpperCase();
-          };
-          icon.appendChild(im);
-        }else{
-          icon.textContent = (name.trim()[0] || "•").toUpperCase();
-        }
-
-        const lab = document.createElement("div");
-        lab.className = "sideLabel";
-        lab.textContent = name;
-
-        a.appendChild(icon);
-        a.appendChild(lab);
-        box.appendChild(a);
+      if(!items || !items.length){
+        const empty = document.createElement("div");
+        empty.className = "navLoading";
+        empty.textContent = "Menu vazio.";
+        nav.appendChild(empty);
+        return;
       }
+
+      for(const it of items){
+        const a = document.createElement("a");
+        a.className = "navItem";
+        a.href = it.href || "#";
+        a.rel = "noopener";
+        a.setAttribute("aria-label", it.name || "Atalho");
+
+        const img = document.createElement("img");
+        img.className = "navIcon";
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.src = it.img || PLACEHOLDER_PNG;
+        img.addEventListener("error", ()=>{ img.src = PLACEHOLDER_PNG; }, { once:true });
+
+        const label = document.createElement("div");
+        label.className = "navLabel";
+        label.textContent = it.name || "—";
+
+        a.appendChild(img);
+        a.appendChild(label);
+
+        list.appendChild(a);
+      }
+
+      nav.appendChild(list);
     }
 
-    async function loadSideNav(){
-      const box = $("sideNav");
-      if(!box) return;
-      box.innerHTML = `<div class="mini">Carregando menu…</div>`;
+    async function loadSidebarNav(){
+      const nav = $("sideNav");
+      if(nav) nav.innerHTML = `<div class="navLoading">Carregando menu…</div>`;
 
       try{
-        let csv = "";
-        try{
-          csv = await fetchCsvGeneric(SIDENAV_SHEET_ID, SIDENAV_GID);
-        }catch(e){
-          const res = await fetch(SIDENAV_PUBLISHED_CSV_URL, { cache:"no-store" });
-          if(!res.ok) throw new Error(`HTTP ${res.status}`);
-          csv = await res.text();
-        }
-
-        const rows = parseCSV(csv);
-        if(!rows.length) throw new Error("CSV vazio");
+        const csvText = await fetchTextWithFallback(NAV_CSV_URLS);
+        const rows = parseCSV(csvText);
+        if(!rows.length){ renderSidebar([]); return; }
 
         let start = 0;
         const h0 = keyify(rows[0]?.[0] || "");
         const h1 = keyify(rows[0]?.[1] || "");
         const h2 = keyify(rows[0]?.[2] || "");
-        if(h0.includes("nome") || h1.includes("imagem") || h1.includes("icone") || h2.includes("link") || h2.includes("url")){
-          start = 1;
-        }
+        const looksHeader =
+          (h0.includes("nome") || h0.includes("name") || h0.includes("titulo")) ||
+          (h1.includes("imagem") || h1.includes("icon") || h1.includes("icone")) ||
+          (h2.includes("link") || h2.includes("url") || h2.includes("redirect"));
+        if(looksHeader) start = 1;
 
         const items = [];
         for(let i=start;i<rows.length;i++){
           const r = rows[i] || [];
           const name = safeText(r[0] || "");
-          const img  = safeText(r[1] || "");
+          const img = safeText(r[1] || "");
           const href = safeText(r[2] || "");
-          if(!name && !img && !href) continue;
-          items.push({ name, img, href });
+          if(!name && !href && !img) continue;
+
+          items.push({
+            name: name || "Acesso",
+            img: img || "",
+            href: href || "#"
+          });
         }
 
-        if(!items.length) throw new Error("Sem linhas válidas");
-        renderSideNav(items);
+        renderSidebar(items);
       }catch(e){
-        renderSideNav(sideNavFallback());
+        renderSidebar([]);
       }
     }
 
     /************************************************************
-     * Base Medicamentos
+     * Medicamentos DB
      ************************************************************/
+    async function fetchCsvByGid(gid){
+      const urls = [
+        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`,
+        `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/export?format=csv&gid=${encodeURIComponent(gid)}`
+      ];
+      return await fetchTextWithFallback(urls);
+    }
+
     async function loadMedicamentosDB(){
       if(db_loading) return;
       db_loading = true;
@@ -2483,253 +2596,1345 @@
       const row = document.createElement("div");
       row.className = "row";
       row.style.alignItems = "center";
-      row.style.justifyContent = "stretch";
-      row.style.gap = "8px";
-      row.style.marginBottom = "8px";
+      row.style.justifyContent = "space-between";
+      row.style.gap = "10px";
+      row.style.flexWrap = "nowrap";
 
-      const input = document.createElement("input");
-      input.className = "field";
-      input.placeholder = type === "crm"
-        ? (idx===0 ? "CRM (ex: CRM-BA 12345)" : `CRM ${idx+1}`)
-        : (idx===0 ? "RQE (ex: RQE 9876)" : `RQE ${idx+1}`);
-      input.inputMode = "text";
-      input.autocomplete = "off";
-      input.spellcheck = false;
+      const wrap = document.createElement("div");
+      wrap.style.display = "flex";
+      wrap.style.alignItems = "center";
+      wrap.style.gap = "10px";
+      wrap.style.flex = "1";
+      wrap.style.minWidth = "0";
 
-      input.value = (type==="crm" ? state.crms[idx] : state.rqes[idx]) || "";
+      const inp = document.createElement("input");
+      inp.className = "field";
+      inp.placeholder = (type === "CRM") ? "Ex: BA 12345" : "Ex: 123456";
+      inp.value = safeText((type === "CRM" ? state.crms[idx] : state.rqes[idx]) || "");
+      inp.autocomplete = "off";
+      inp.inputMode = "text";
+      inp.style.flex = "1";
+      inp.style.minWidth = "0";
 
-      input.addEventListener("input", ()=>{
-        const v = safeText(input.value);
-        if(type==="crm") state.crms[idx] = v;
-        else state.rqes[idx] = v;
-
+      inp.addEventListener("input", ()=>{
+        const v = safeText(inp.value);
+        if(type === "CRM"){
+          state.crms[idx] = v;
+        }else{
+          state.rqes[idx] = v;
+        }
+        if(state.user) saveProfileDebounced();
         updateSummaries();
         renderPaperDebounced();
-        saveProfileDebounced();
       });
 
-      const del = document.createElement("button");
-      del.className = "iconBtn iconBtnDanger";
-      del.type = "button";
-      del.textContent = "✕";
-      del.title = "Remover";
-      const arr = (type==="crm") ? state.crms : state.rqes;
-      del.disabled = arr.length === 1;
-      del.style.opacity = (arr.length === 1) ? .45 : 1;
+      const btnX = document.createElement("button");
+      btnX.className = "btn btnGhost";
+      btnX.type = "button";
+      btnX.textContent = "Remover";
+      btnX.style.height = "40px";
 
-      del.addEventListener("click", ()=>{
-        const arr2 = (type==="crm") ? state.crms : state.rqes;
-        if(arr2.length === 1) return;
-        arr2.splice(idx, 1);
-        if(type==="crm") renderCrmList(); else renderRqeList();
+      btnX.addEventListener("click", ()=>{
+        if(type === "CRM"){
+          state.crms.splice(idx, 1);
+          if(!state.crms.length) state.crms = [""];
+          renderCrmList();
+        }else{
+          state.rqes.splice(idx, 1);
+          if(!state.rqes.length) state.rqes = [""];
+          renderRqeList();
+        }
+        if(state.user) saveProfileDebounced();
         updateSummaries();
         renderPaperDebounced();
-        saveProfileDebounced();
       });
 
-      row.appendChild(input);
-      row.appendChild(del);
+      wrap.appendChild(inp);
+      row.appendChild(wrap);
+      row.appendChild(btnX);
+
       return row;
     }
 
     function renderCrmList(){
-      const box = $("crmList");
-      box.innerHTML = "";
-      state.crms.forEach((_, idx)=> box.appendChild(buildLineRow("crm", idx)));
+      const host = $("crmList");
+      host.innerHTML = "";
+      state.crms = Array.isArray(state.crms) && state.crms.length ? state.crms : [""];
+      state.crms.forEach((_, idx)=>{
+        host.appendChild(buildLineRow("CRM", idx));
+      });
     }
+
     function renderRqeList(){
-      const box = $("rqeList");
-      box.innerHTML = "";
-      state.rqes.forEach((_, idx)=> box.appendChild(buildLineRow("rqe", idx)));
+      const host = $("rqeList");
+      host.innerHTML = "";
+      state.rqes = Array.isArray(state.rqes) && state.rqes.length ? state.rqes : [""];
+      state.rqes.forEach((_, idx)=>{
+        host.appendChild(buildLineRow("RQE", idx));
+      });
     }
 
     /************************************************************
-     * Med blocks + Autocomplete
+     * Summaries
      ************************************************************/
-    const ICON_LIBRARY = [
-      { key:"MANHA", label:"Manhã", ico:"☀️" },
-      { key:"TARDE", label:"Tarde", ico:"🌤️" },
-      { key:"NOITE", label:"Noite", ico:"🌙" },
-      { key:"JEJUM", label:"Jejum", ico:"☕" },
-      { key:"ANTES", label:"Antes refeição", ico:"🍽️" },
-      { key:"APOS", label:"Após refeição", ico:"✅" },
-      { key:"8H", label:"8/8h", ico:"⏱️" },
-      { key:"12H", label:"12/12h", ico:"⏱️" }
-    ];
+    function updateSummaries(){
+      // Médico
+      const docNm = safeText(state.docName);
+      const crms = (state.crms||[]).map(safeText).filter(Boolean);
+      const rqes = (state.rqes||[]).map(safeText).filter(Boolean);
 
-    function addBlock({focusName=true} = {}){
-      state.blocks.forEach(b=> b.collapsed = true);
+      const sumMed = [];
+      if(docNm) sumMed.push(`${state.docTitle} ${docNm}`);
+      if(crms.length) sumMed.push(`CRM: ${crms.join(" | ")}`);
+      if(rqes.length) sumMed.push(`RQE: ${rqes.join(" | ")}`);
+      $("sumMedico").textContent = sumMed.length ? sumMed.join(" — ") : "—";
 
-      const b = {
-        id: uid(),
-        name:"",
-        qty:"",
-        qtyOptions: [],
-        use:"",
-        collapsed:false,
-        showIcons:true,
-        icons:[]
-      };
-      state.blocks.push(b);
+      // Paciente
+      const pn = safeText(state.patientName);
+      const dv = safeText(state.patientDocValue);
+      const dt = safeText(state.patientDocType);
+      const sumPac = [];
+      if(pn) sumPac.push(pn);
+      if(dv) sumPac.push(`${dt}: ${dv}`);
+      $("sumPaciente").textContent = sumPac.length ? sumPac.join(" — ") : "—";
 
-      appendBlockDOM(b, state.blocks.length-1);
-      updateSummaries();
-      renderPaperDebounced();
-
-      if(focusName){
-        setTimeout(()=>{
-          const el = document.querySelector(`[data-block="${b.id}"] input[data-field="name"]`);
-          if(el) el.focus({ preventScroll:true });
-        }, 0);
-      }
+      // Meds
+      const n = (state.blocks||[]).length;
+      $("sumMeds").textContent = n ? `${n} medicamento${n>1?"s":""}` : "—";
     }
 
-    function removeBlock(id){
-      const idx = state.blocks.findIndex(x=> x.id === id);
-      if(idx < 0) return;
-      state.blocks.splice(idx,1);
+    /************************************************************
+     * Autocomplete (Medicamentos)
+     ************************************************************/
+    function scoreText(q, text){
+      const qq = keyify(q);
+      const tt = keyify(text);
+      if(!qq || !tt) return 0;
 
-      const el = document.querySelector(`[data-block="${id}"]`);
-      if(el) el.remove();
+      if(tt === qq) return 120;
+      if(tt.startsWith(qq)) return 95;
+      if(tt.includes(qq)) return 70;
 
-      renumberBlocks();
-
-      if(state.blocks.length && !state.blocks.some(b=> !b.collapsed)){
-        state.blocks[state.blocks.length-1].collapsed = false;
-        const lastEl = document.querySelector(`[data-block="${state.blocks[state.blocks.length-1].id}"]`);
-        if(lastEl) lastEl.classList.remove("collapsed");
-      }
-
-      updateSummaries();
-      renderPaperDebounced();
-    }
-
-    function toggleBlock(id){
-      const b = state.blocks.find(x=> x.id === id);
-      const el = document.querySelector(`[data-block="${id}"]`);
-      if(!b || !el) return;
-      b.collapsed = !b.collapsed;
-      el.classList.toggle("collapsed", !!b.collapsed);
-    }
-
-    function renumberBlocks(){
-      const nodes = document.querySelectorAll(".rxBlock");
-      nodes.forEach((node, i)=>{
-        const num = node.querySelector(".rxNum");
-        if(num) num.textContent = String(i+1);
-
-        const bid = node.getAttribute("data-block");
-        const b = state.blocks.find(x=> x.id === bid);
-        const title = node.querySelector(".rxTitle strong");
-        if(title){
-          const nm = (b && safeText(b.name)) ? safeText(b.name) : `Medicamento ${i+1}`;
-          title.textContent = nm;
+      // tokens
+      const toks = qq.split(/\s+/).filter(Boolean);
+      let s = 0;
+      let hit = 0;
+      for(const t of toks){
+        if(!t) continue;
+        if(tt.includes(t)){
+          hit++;
+          s += (t.length >= 4 ? 18 : 10);
+          if(tt.startsWith(t)) s += 6;
         }
-      });
-    }
-
-    function scoreItem(it, q){
-      const main = it.mainKey || "";
-      const sub = it.subKey || "";
-      if(main.startsWith(q)) return 0;
-      if(it.type === "A" && sub && sub.startsWith(q)) return 1;
-
-      const im = main.indexOf(q);
-      let best = im >= 0 ? 2 + (im/100) : 999;
-
-      if(it.type === "A"){
-        const is = sub.indexOf(q);
-        if(is >= 0) best = Math.min(best, 3 + (is/100));
       }
-      return best;
+      if(hit === 0) return 0;
+
+      // small penalty by distance (rough)
+      const pos = tt.indexOf(toks[0] || "");
+      if(pos > 0) s -= Math.min(12, Math.floor(pos/6));
+
+      return s;
     }
 
     function computeHits(q){
-      const hits = [];
-      if(!db_loaded) return hits;
+      const qq = safeText(q);
+      if(!qq) return [];
+      const list = db_loaded ? db_medicamentos : [];
+      if(!list.length) return [];
 
-      const query = keyify(q);
-      const max = query ? 18 : 12;
-
-      const candidates = [];
-      for(const it of db_medicamentos){
-        if(!query){
-          candidates.push({ it, score: 999 });
-          continue;
-        }
-        if(it.search && it.search.includes(query)){
-          const s = scoreItem(it, query);
-          candidates.push({ it, score: s });
-        }
+      const out = [];
+      for(const it of list){
+        const s1 = scoreText(qq, it.main || "");
+        const s2 = it.sub ? scoreText(qq, it.sub) * 0.85 : 0;
+        const s3 = it.catLabel ? scoreText(qq, it.catLabel) * 0.65 : 0;
+        const sc = Math.max(s1, s2, s3);
+        if(sc <= 0) continue;
+        out.push({ it, sc });
       }
-
-      if(!query){
-        for(let i=0;i<db_medicamentos.length && hits.length<max;i++){
-          hits.push(db_medicamentos[i]);
-        }
-        return hits;
-      }
-
-      candidates.sort((a,b)=>{
-        if(a.score !== b.score) return a.score - b.score;
-        return (a.it.main||"").localeCompare((b.it.main||""), "pt-BR", { sensitivity:"base" });
-      });
-
-      for(const c of candidates){
-        hits.push(c.it);
-        if(hits.length >= max) break;
-      }
-      return hits;
+      out.sort((a,b)=> b.sc - a.sc);
+      return out.slice(0, 12).map(x=> x.it);
     }
 
-    function renderHits(acList, hits, q){
-      acList.innerHTML = "";
+    /************************************************************
+     * Medicamento blocks UI
+     ************************************************************/
+    const ICONS = [
+      { id:"manha", label:"Manhã", emoji:"☀️" },
+      { id:"tarde", label:"Tarde", emoji:"🌤️" },
+      { id:"noite", label:"Noite", emoji:"🌙" },
+      { id:"refeicao", label:"Com refeição", emoji:"🍽️" },
+      { id:"jejum", label:"Em jejum", emoji:"⏳" },
+      { id:"agua", label:"Com água", emoji:"💧" },
+      { id:"dose", label:"Dose", emoji:"💊" },
+      { id:"alarme", label:"Horário", emoji:"⏰" }
+    ];
 
-      if(!hits.length){
-        const d = document.createElement("div");
-        d.className = "acEmpty";
-        d.textContent = q
-          ? "Nenhum resultado. Continue digitando ou insira manualmente."
-          : (db_loading ? "Carregando planilha…" : "Digite para buscar em toda a base (todas as abas).");
-        acList.appendChild(d);
-        acList.style.display = "block";
+    function newBlock(){
+      return {
+        id: uid(),
+        name: "",
+        qty: "",
+        qtyOptions: [],
+        use: "",
+        showIcons: false,
+        icons: [],
+        collapsed: false,
+        _selectedKey: "" // internal
+      };
+    }
+
+    function addBlock(){
+      state.blocks = Array.isArray(state.blocks) ? state.blocks : [];
+      state.blocks.push(newBlock());
+      updateSummaries();
+      renderRxBlocks();
+      renderPaperDebounced();
+    }
+
+    function duplicateBlock(id){
+      const idx = (state.blocks||[]).findIndex(b=> b.id === id);
+      if(idx < 0) return;
+      const src = state.blocks[idx];
+      const copy = {
+        ...src,
+        id: uid(),
+        icons: Array.isArray(src.icons) ? src.icons.slice() : [],
+        qtyOptions: Array.isArray(src.qtyOptions) ? src.qtyOptions.slice() : []
+      };
+      state.blocks.splice(idx+1, 0, copy);
+      updateSummaries();
+      renderRxBlocks();
+      renderPaperDebounced();
+    }
+
+    function removeBlock(id){
+      state.blocks = (state.blocks||[]).filter(b=> b.id !== id);
+      if(!state.blocks.length) state.blocks = [];
+      updateSummaries();
+      renderRxBlocks();
+      renderPaperDebounced();
+    }
+
+    function toggleCollapseBlock(id){
+      const b = (state.blocks||[]).find(x=> x.id === id);
+      if(!b) return;
+      b.collapsed = !b.collapsed;
+      renderRxBlocks();
+    }
+
+    function setBlockSelected(block, item){
+      if(!block) return;
+      block.name = safeText(item?.main || "");
+      block._selectedKey = keyify(block.name);
+      block.qtyOptions = Array.isArray(item?.qty) ? item.qty.slice() : [];
+    }
+
+    function renderRxBlocks(){
+      const host = $("rxBlocks");
+      host.innerHTML = "";
+
+      const blocks = Array.isArray(state.blocks) ? state.blocks : [];
+      if(!blocks.length){
+        const hint = document.createElement("div");
+        hint.className = "mini";
+        hint.style.padding = "10px 2px";
+        hint.textContent = "Nenhum medicamento ainda. Clique em “+ Adicionar medicamento”.";
+        host.appendChild(hint);
         return;
       }
 
-      for(const it of hits){
-        const item = document.createElement("div");
-        item.className = "medItem";
+      blocks.forEach((b, index)=>{
+        const block = document.createElement("div");
+        block.className = "rxBlock" + (b.collapsed ? " collapsed" : "");
+        block.dataset.id = b.id;
 
-        const dot = document.createElement("div");
-        dot.className = "medDot";
-        dot.style.background = it.color || DEFAULT_DOT_COLOR;
+        // Top
+        const top = document.createElement("div");
+        top.className = "rxTop";
 
-        const main = document.createElement("div");
-        main.className = "medMain";
+        const title = document.createElement("div");
+        title.className = "rxTitle";
 
-        const topRow = document.createElement("div");
-        topRow.className = "medTopRow";
+        const num = document.createElement("div");
+        num.className = "rxNum";
+        num.textContent = String(index+1);
 
-        const txtBox = document.createElement("div");
-        txtBox.style.minWidth = "0";
+        const strong = document.createElement("strong");
+        strong.textContent = safeText(b.name) || "Medicamento sem nome";
 
-        const lineA = document.createElement("div");
-        lineA.className = "medA";
+        title.appendChild(num);
+        title.appendChild(strong);
 
-        const lineB = document.createElement("div");
-        lineB.className = "medB";
+        const tools = document.createElement("div");
+        tools.className = "rxTools";
 
-        if(it.type === "A"){
-          lineA.textContent = it.main || "—";
-          lineB.textContent = it.sub ? it.sub : "—";
-          lineB.style.display = "block";
-        }else{
-          lineA.textContent = it.main || "—";
-          lineB.textContent = "";
-          lineB.style.display = "none";
+        const btnCollapse = document.createElement("button");
+        btnCollapse.type = "button";
+        btnCollapse.className = "iconBtn iconBtnDim";
+        btnCollapse.title = b.collapsed ? "Expandir" : "Recolher";
+        btnCollapse.textContent = b.collapsed ? "▾" : "▴";
+        btnCollapse.addEventListener("click", ()=> toggleCollapseBlock(b.id));
+
+        const btnDup = document.createElement("button");
+        btnDup.type = "button";
+        btnDup.className = "iconBtn iconBtnDim";
+        btnDup.title = "Duplicar";
+        btnDup.textContent = "⎘";
+        btnDup.addEventListener("click", ()=> duplicateBlock(b.id));
+
+        const btnDel = document.createElement("button");
+        btnDel.type = "button";
+        btnDel.className = "iconBtn iconBtnDanger";
+        btnDel.title = "Remover";
+        btnDel.textContent = "✕";
+        btnDel.addEventListener("click", ()=> removeBlock(b.id));
+
+        tools.appendChild(btnCollapse);
+        tools.appendChild(btnDup);
+        tools.appendChild(btnDel);
+
+        top.appendChild(title);
+        top.appendChild(tools);
+
+        // Body
+        const expanded = document.createElement("div");
+        expanded.className = "rxExpandedBody";
+
+        const grid = document.createElement("div");
+        grid.className = "rxGrid";
+
+        // Name + autocomplete
+        const colA = document.createElement("div");
+        const labA = document.createElement("label");
+        labA.className = "label";
+        labA.textContent = "Medicamento";
+        colA.appendChild(labA);
+
+        const acWrap = document.createElement("div");
+        acWrap.className = "acWrap";
+
+        const inpName = document.createElement("input");
+        inpName.className = "field";
+        inpName.placeholder = db_loaded ? "Digite para buscar…" : "Digite o nome do medicamento…";
+        inpName.value = safeText(b.name);
+        inpName.autocomplete = "off";
+        inpName.spellcheck = false;
+
+        const acList = document.createElement("div");
+        acList.className = "acList";
+
+        const hideList = ()=>{ acList.style.display = "none"; acList.innerHTML = ""; };
+        const showList = (items)=>{
+          acList.innerHTML = "";
+          if(!items.length){
+            const empty = document.createElement("div");
+            empty.className = "acEmpty";
+            empty.textContent = db_loaded ? "Nenhum resultado." : "Base não carregada. Você pode digitar manualmente.";
+            acList.appendChild(empty);
+            acList.style.display = "block";
+            return;
+          }
+
+          for(const it of items){
+            const row = document.createElement("div");
+            row.className = "medItem";
+
+            const dot = document.createElement("div");
+            dot.className = "medDot";
+            dot.style.background = it.color || DEFAULT_DOT_COLOR;
+
+            const main = document.createElement("div");
+            main.className = "medMain";
+
+            const topRow = document.createElement("div");
+            topRow.className = "medTopRow";
+
+            const a = document.createElement("div");
+            a.className = "medA";
+            a.textContent = it.main || "—";
+
+            const tag = document.createElement("div");
+            tag.className = "medTag";
+            tag.textContent = it.catLabel || "—";
+
+            topRow.appendChild(a);
+            topRow.appendChild(tag);
+
+            main.appendChild(topRow);
+
+            if(it.sub){
+              const bsub = document.createElement("div");
+              bsub.className = "medB";
+              bsub.textContent = it.sub;
+              main.appendChild(bsub);
+            }
+
+            row.appendChild(dot);
+            row.appendChild(main);
+
+            row.addEventListener("mousedown", (e)=> e.preventDefault());
+            row.addEventListener("click", ()=>{
+              setBlockSelected(b, it);
+              inpName.value = b.name;
+
+              // Re-render this block's qty datalist quickly:
+              renderRxBlocks();
+              renderPaperDebounced();
+            });
+
+            acList.appendChild(row);
+          }
+
+          acList.style.display = "block";
+        };
+
+        const runSearch = debounce(()=>{
+          const q = safeText(inpName.value);
+          // manual typing always updates
+          b.name = q;
+          b._selectedKey = keyify(q);
+
+          if(!db_loaded || !q){
+            hideList();
+            updateSummaries();
+            renderPaperDebounced();
+            return;
+          }
+          const hits = computeHits(q);
+          showList(hits);
+          updateSummaries();
+          renderPaperDebounced();
+        }, 80);
+
+        inpName.addEventListener("input", runSearch);
+        inpName.addEventListener("focus", ()=>{
+          const q = safeText(inpName.value);
+          if(db_loaded && q){
+            const hits = computeHits(q);
+            showList(hits);
+          }
+        });
+        inpName.addEventListener("blur", ()=> setTimeout(hideList, 140));
+
+        acWrap.appendChild(inpName);
+        acWrap.appendChild(acList);
+
+        colA.appendChild(acWrap);
+
+        const mini = document.createElement("div");
+        mini.className = "mini";
+        mini.style.marginTop = "8px";
+        mini.textContent = db_loaded ? "Clique em um resultado para puxar as opções de “Quantidade / Apresentação”." : "Carregando base… (ou digite manualmente).";
+        colA.appendChild(mini);
+
+        // Qty
+        const colB = document.createElement("div");
+        const labB = document.createElement("label");
+        labB.className = "label";
+        labB.textContent = "Quantidade / Apresentação";
+        colB.appendChild(labB);
+
+        const inpQty = document.createElement("input");
+        inpQty.className = "field";
+        inpQty.placeholder = "Ex: 30 comprimidos / 1 frasco / 1 caixa…";
+        inpQty.value = safeText(b.qty);
+        inpQty.autocomplete = "off";
+
+        const listId = `qtyList_${b.id}`;
+        inpQty.setAttribute("list", listId);
+
+        const dlist = document.createElement("datalist");
+        dlist.id = listId;
+
+        const opts = Array.isArray(b.qtyOptions) ? b.qtyOptions : [];
+        for(const opt of opts.slice(0, 50)){
+          const o = document.createElement("option");
+          o.value = opt;
+          dlist.appendChild(o);
         }
 
-        txtBox.appendChild(lineA);
-        txtBox.appendChild(lineB);
+        inpQty.addEventListener("input", ()=>{
+          b.qty = safeText(inpQty.value);
+          renderPaperDebounced();
+        });
 
-        const tag = document.createElement("
+        colB.appendChild(inpQty);
+        colB.appendChild(dlist);
+
+        grid.appendChild(colA);
+        grid.appendChild(colB);
+
+        const full = document.createElement("div");
+        full.className = "rxFull";
+
+        const labC = document.createElement("label");
+        labC.className = "label";
+        labC.textContent = "Posologia / Orientações";
+        full.appendChild(labC);
+
+        const ta = document.createElement("textarea");
+        ta.className = "field";
+        ta.placeholder = "Ex: Tomar 1 comprimido VO a cada 12 horas por 7 dias.";
+        ta.value = (b.use || "");
+        ta.addEventListener("input", ()=>{
+          b.use = ta.value;
+          renderPaperDebounced();
+        });
+        full.appendChild(ta);
+
+        const row2 = document.createElement("div");
+        row2.className = "row";
+        row2.style.marginTop = "10px";
+
+        const toggle = document.createElement("label");
+        toggle.className = "toggle";
+        toggle.title = "Mostrar ícones abaixo do texto na receita";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!b.showIcons;
+        const sp = document.createElement("span");
+        sp.textContent = "Ícones abaixo";
+        cb.addEventListener("change", ()=>{
+          b.showIcons = !!cb.checked;
+          renderRxBlocks();
+          renderPaperDebounced();
+        });
+        toggle.appendChild(cb);
+        toggle.appendChild(sp);
+
+        const btnClearUse = document.createElement("button");
+        btnClearUse.className = "btn btnGhost";
+        btnClearUse.type = "button";
+        btnClearUse.textContent = "Limpar posologia";
+        btnClearUse.addEventListener("click", ()=>{
+          b.use = "";
+          renderRxBlocks();
+          renderPaperDebounced();
+        });
+
+        row2.appendChild(toggle);
+        row2.appendChild(btnClearUse);
+
+        full.appendChild(row2);
+
+        const iconPick = document.createElement("div");
+        iconPick.className = "iconPick";
+        iconPick.style.display = b.showIcons ? "flex" : "none";
+
+        const chosen = new Set((b.icons||[]).map(String));
+        for(const ic of ICONS){
+          const tag = document.createElement("div");
+          tag.className = "iconTag" + (chosen.has(ic.id) ? " on" : "");
+          tag.innerHTML = `<span aria-hidden="true">${ic.emoji}</span><span>${ic.label}</span>`;
+          tag.addEventListener("click", ()=>{
+            b.icons = Array.isArray(b.icons) ? b.icons : [];
+            const set = new Set(b.icons.map(String));
+            if(set.has(ic.id)) set.delete(ic.id);
+            else set.add(ic.id);
+            b.icons = Array.from(set);
+            renderRxBlocks();
+            renderPaperDebounced();
+          });
+          iconPick.appendChild(tag);
+        }
+
+        full.appendChild(iconPick);
+
+        expanded.appendChild(grid);
+        expanded.appendChild(full);
+
+        block.appendChild(top);
+        block.appendChild(expanded);
+
+        host.appendChild(block);
+      });
+    }
+
+    /************************************************************
+     * Pages (heuristic pagination)
+     ************************************************************/
+    function estimateLinesForBlock(b){
+      let n = 1; // main line
+      const u = safeText(b.use);
+      if(u){
+        n += Math.max(1, Math.ceil(u.length / 72));
+      }
+      if(b.showIcons && Array.isArray(b.icons) && b.icons.length) n += 1;
+      return n;
+    }
+
+    function maxLinesPerPage(){
+      const font = rxFontPx();
+      const base = 34; // tuned for ~13px Times A4 with margins
+      const m = Math.floor(base * (13.2 / font));
+      return clamp(m, 20, 40);
+    }
+
+    function splitIntoPages(blocks){
+      const pages = [];
+      const maxL = maxLinesPerPage();
+
+      let cur = [];
+      let used = 0;
+
+      for(const b of blocks){
+        const need = estimateLinesForBlock(b);
+        if(cur.length && used + need > maxL){
+          pages.push(cur);
+          cur = [];
+          used = 0;
+        }
+        cur.push(b);
+        used += need;
+      }
+      if(cur.length) pages.push(cur);
+      if(!pages.length) pages.push([]);
+      return pages;
+    }
+
+    /************************************************************
+     * Paper render + Copy
+     ************************************************************/
+    function doctorLine(){
+      const title = safeText(state.docTitle) || "Dr.";
+      const name = safeText(state.docName);
+      return name ? `${title} ${name}` : "";
+    }
+
+    function crmLine(){
+      const crms = (state.crms||[]).map(safeText).filter(Boolean);
+      if(!crms.length) return "";
+      return `CRM: ${crms.join(" | ")}`;
+    }
+
+    function rqeLine(){
+      const rqes = (state.rqes||[]).map(safeText).filter(Boolean);
+      if(!rqes.length) return "";
+      return `RQE: ${rqes.join(" | ")}`;
+    }
+
+    function patientLine(){
+      const pn = safeText(state.patientName);
+      if(!pn) return "";
+      const dt = safeText(state.patientDocType);
+      const dv = safeText(state.patientDocValue);
+      if(dv) return `<span class="rxNameLabel">Paciente:</span> <span class="rxNameValue">${escapeHtml(pn)}</span><span class="docInline">${escapeHtml(dt)}: ${escapeHtml(dv)}</span>`;
+      return `<span class="rxNameLabel">Paciente:</span> <span class="rxNameValue">${escapeHtml(pn)}</span>`;
+    }
+
+    function getIconPills(ids){
+      const set = new Set((ids||[]).map(String));
+      const pills = [];
+      for(const ic of ICONS){
+        if(set.has(ic.id)){
+          pills.push(`<span>${escapeHtml(ic.emoji)} ${escapeHtml(ic.label)}</span>`);
+        }
+      }
+      return pills.join("");
+    }
+
+    function paperSizeClass(){
+      if(state.paperSize === "LETTER") return "paperLetter";
+      if(state.paperSize === "A5") return "paperA5";
+      if(state.paperSize === "LEGAL") return "paperLegal";
+      return "paperA4";
+    }
+
+    function applyPaperSize(){
+      const p = $("paper");
+      p.classList.remove("paperA4","paperLetter","paperA5","paperLegal");
+      p.classList.add(paperSizeClass());
+    }
+
+    function buildHeaderFooter(kind){
+      const isHeader = kind === "header";
+      const url = safeText(isHeader ? state.headerImgUrl : state.footerImgUrl);
+      const tf = isHeader ? (state.headerTransform||{x:0,y:0,scale:1}) : (state.footerTransform||{x:0,y:0,scale:1});
+      const cls = isHeader ? "instImgBox header" : "instImgBox footer";
+      if(!url) return "";
+
+      return `
+        <div class="${cls}"
+             data-kind="${isHeader ? "header" : "footer"}"
+             style="--tx:${(tf.x||0)}px;--ty:${(tf.y||0)}px;--sc:${(tf.scale||1)};">
+          <img class="instImg" src="${escapeAttr(url)}" alt="" draggable="false" />
+          <div class="instHandle" title="Arraste para redimensionar"></div>
+        </div>
+      `;
+    }
+
+    function renderPaper(){
+      applyLayoutVars();
+      applyPaperSize();
+
+      // enforce “qty” no wrap (and number already nowrap)
+      if(!document.getElementById("qtyNoWrapStyle")){
+        const st = document.createElement("style");
+        st.id = "qtyNoWrapStyle";
+        st.textContent = `.rxLine .qty{ white-space: nowrap; }`;
+        document.head.appendChild(st);
+      }
+
+      const blocks = Array.isArray(state.blocks) ? state.blocks : [];
+      const pages = splitIntoPages(blocks);
+
+      // clamp selected page
+      state.selectedPage = clamp(parseInt(state.selectedPage,10) || 1, 1, pages.length);
+
+      // page selector
+      const sel = $("pageSelect");
+      sel.innerHTML = "";
+      for(let i=1;i<=pages.length;i++){
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = `Página ${i}`;
+        if(i === state.selectedPage) opt.selected = true;
+        sel.appendChild(opt);
+      }
+      $("pageInfo").textContent = `Página ${state.selectedPage} de ${pages.length}`;
+
+      // render current page
+      const cur = pages[state.selectedPage - 1] || [];
+      const rx = $("rxPaper");
+
+      // rx styles
+      rx.style.setProperty("--rxFont", `${rxFontPx()}px`);
+      rx.style.setProperty("--rxFamily", rxFamilyCSS());
+
+      const hasDate = !!state.includeDate;
+      const dt = safeText(state.dateValue) || todayBR();
+
+      // numbering across ALL blocks
+      const indexMap = new Map();
+      blocks.forEach((b, i)=> indexMap.set(b.id, i+1));
+
+      const medsHtml = cur.map((b)=>{
+        const idx = indexMap.get(b.id) || 1;
+        const nm = safeText(b.name) || "—";
+        const qt = safeText(b.qty);
+        const use = safeText(b.use);
+
+        const line = `
+          <div class="rxLine">
+            <span class="rxNo">${idx}.</span>
+            <span class="drugName">${escapeHtml(nm)}</span>
+            <span class="leaderText" aria-hidden="true"></span>
+            <span class="qty">${escapeHtml(qt || " ")}</span>
+          </div>
+        `;
+        const instr = use ? `<div class="rxInstr">${escapeHtml(use)}</div>` : "";
+        const icons = (b.showIcons && Array.isArray(b.icons) && b.icons.length)
+          ? `<div class="useIconsBelow">${getIconPills(b.icons)}</div>` : "";
+        return `<div>${line}${instr}${icons}</div>`;
+      }).join("");
+
+      const docNm = doctorLine();
+      const crm = crmLine();
+      const rqe = rqeLine();
+
+      const sigLines = [
+        docNm ? `<div class="docName">${escapeHtml(docNm)}</div>` : `<div class="docName">—</div>`,
+        crm ? `<div class="docLine">${escapeHtml(crm)}</div>` : "",
+        rqe ? `<div class="docLine">${escapeHtml(rqe)}</div>` : ""
+      ].filter(Boolean).join("");
+
+      const instFooter = [safeText(state.instName), safeText(state.instAddress)].filter(Boolean).join(" • ");
+
+      rx.innerHTML = `
+        <div class="headerArea">
+          ${buildHeaderFooter("header")}
+        </div>
+
+        <div class="rxTitleCenter">RECEITA MÉDICA</div>
+
+        <div class="rxMeta">
+          <div class="rxPatientLine">${patientLine() || ""}</div>
+          ${hasDate ? `<div class="rxDatePill">${escapeHtml(dt)}</div>` : ""}
+        </div>
+
+        <div class="rxDividerLine"></div>
+
+        <div class="rxSymbol">R//</div>
+
+        <div class="rxList">${medsHtml || ""}</div>
+
+        <div class="sigWrap">
+          <div class="docSig">
+            <div class="sigLine"></div>
+            <div class="docCenter">${sigLines}</div>
+          </div>
+        </div>
+
+        <div class="footerArea">
+          ${buildHeaderFooter("footer")}
+        </div>
+
+        ${instFooter ? `<div class="instFooterGray">${escapeHtml(instFooter)}</div>` : ``}
+      `;
+
+      wireTransformHandlers();
+
+      // copy box always = tudo (todas as páginas)
+      renderCopyText(blocks);
+    }
+
+    const renderPaperDebounced = debounce(renderPaper, 70);
+
+    function renderCopyText(blocks){
+      const out = [];
+      const dashes = "-".repeat(34);
+
+      blocks.forEach((b, i)=>{
+        const nm = safeText(b.name);
+        const qt = safeText(b.qty);
+        const use = safeText(b.use);
+
+        if(!nm && !qt && !use) return;
+
+        const idx = i+1;
+        out.push(`${idx}. ${nm || "—"} ${dashes} ${qt || ""}`.trimEnd());
+        if(use) out.push(`   ${use}`);
+        if(b.showIcons && Array.isArray(b.icons) && b.icons.length){
+          const pills = [];
+          for(const ic of ICONS){
+            if(b.icons.includes(ic.id)) pills.push(`${ic.emoji} ${ic.label}`);
+          }
+          if(pills.length) out.push(`   ${pills.join("  ")}`);
+        }
+        out.push(""); // blank line
+      });
+
+      $("copyBox").value = out.join("\n");
+      $("copyStatus").textContent = blocks.length ? "Atualizado." : "—";
+    }
+
+    /************************************************************
+     * Drag/Resize header/footer images on paper
+     ************************************************************/
+    function wireTransformHandlers(){
+      const boxes = Array.from(document.querySelectorAll("#rxPaper .instImgBox"));
+      boxes.forEach((box)=>{
+        if(box.dataset.bound === "1") return;
+        box.dataset.bound = "1";
+
+        const kind = box.dataset.kind === "footer" ? "footer" : "header";
+        const handle = box.querySelector(".instHandle");
+
+        const getTf = ()=> (kind === "header" ? state.headerTransform : state.footerTransform);
+        const setTf = (tf)=>{
+          if(kind === "header") state.headerTransform = tf;
+          else state.footerTransform = tf;
+        };
+
+        let mode = "drag"; // drag | resize
+        let startX = 0, startY = 0;
+        let base = null;
+
+        const apply = (tf)=>{
+          box.style.setProperty("--tx", `${tf.x}px`);
+          box.style.setProperty("--ty", `${tf.y}px`);
+          box.style.setProperty("--sc", `${tf.scale}`);
+        };
+
+        const onDown = (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+
+          mode = (handle && e.target === handle) ? "resize" : "drag";
+          box.classList.add("active");
+
+          const tf = getTf() || { x:0, y:0, scale:1 };
+          base = { x: tf.x||0, y: tf.y||0, scale: tf.scale||1 };
+          startX = e.clientX;
+          startY = e.clientY;
+
+          box.setPointerCapture(e.pointerId);
+        };
+
+        const onMove = (e)=>{
+          if(!base) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+
+          if(mode === "drag"){
+            const tf = {
+              x: clamp(base.x + dx, -260, 260),
+              y: clamp(base.y + dy, -160, 160),
+              scale: base.scale
+            };
+            setTf(tf);
+            apply(tf);
+          }else{
+            // uniform scale based on diagonal delta
+            const d = (dx - dy) / 220; // tuned
+            const sc = clamp(base.scale + d, 0.25, 2.4);
+            const tf = { x: base.x, y: base.y, scale: sc };
+            setTf(tf);
+            apply(tf);
+          }
+        };
+
+        const onUp = (e)=>{
+          if(!base) return;
+          base = null;
+          box.classList.remove("active");
+          try{ box.releasePointerCapture(e.pointerId); }catch(err){}
+          // persist
+          saveConfig();
+        };
+
+        box.addEventListener("pointerdown", onDown);
+        box.addEventListener("pointermove", onMove);
+        box.addEventListener("pointerup", onUp);
+        box.addEventListener("pointercancel", onUp);
+      });
+    }
+
+    /************************************************************
+     * Config modal
+     ************************************************************/
+    function syncConfigToInputs(){
+      $("paperSize").value = state.paperSize;
+      $("rxFontFamily").value = state.rxFontFamily;
+      $("rxFontSize").value = String(rxFontPx());
+      $("includeDate").checked = !!state.includeDate;
+      $("dateValue").value = safeText(state.dateValue) || todayBR();
+
+      $("headerUrl").value = safeText(state.headerImgUrl);
+      $("footerUrl").value = safeText(state.footerImgUrl);
+
+      $("headerThumb").src = safeText(state.headerImgUrl) || PLACEHOLDER_PNG;
+      $("footerThumb").src = safeText(state.footerImgUrl) || PLACEHOLDER_PNG;
+
+      $("instName").value = safeText(state.instName);
+      $("instAddress").value = safeText(state.instAddress);
+
+      $("layoutEdgeL").value = String(parseInt(state.edgeL,10) || 0);
+      $("layoutEdgeR").value = String(parseInt(state.edgeR,10) || 0);
+      $("layoutPaperMax").value = String(parseInt(state.paperMax,10) || 600);
+      $("layoutRightColW").value = String(parseInt(state.rightColW,10) || 440);
+    }
+
+    function readConfigFromInputs(){
+      state.paperSize = $("paperSize").value || "A4";
+      state.rxFontFamily = $("rxFontFamily").value || "TIMES";
+
+      state.rxFontSize = rxFontPx(); // keep current first
+      const fs = parseFloat(String($("rxFontSize").value||"").replace(",", "."));
+      if(isFinite(fs)) state.rxFontSize = clamp(fs, 7.5, 18);
+
+      state.includeDate = !!$("includeDate").checked;
+      state.dateValue = safeText($("dateValue").value) || todayBR();
+
+      state.headerImgUrl = safeText($("headerUrl").value);
+      state.footerImgUrl = safeText($("footerUrl").value);
+
+      state.instName = safeText($("instName").value);
+      state.instAddress = safeText($("instAddress").value);
+
+      const el = parseInt($("layoutEdgeL").value,10);
+      const er = parseInt($("layoutEdgeR").value,10);
+      const pm = parseInt($("layoutPaperMax").value,10);
+      const rc = parseInt($("layoutRightColW").value,10);
+
+      if(isFinite(el)) state.edgeL = clamp(el, 0, 120);
+      if(isFinite(er)) state.edgeR = clamp(er, 0, 120);
+      if(isFinite(pm)) state.paperMax = clamp(pm, 320, 1100);
+      if(isFinite(rc)) state.rightColW = clamp(rc, 280, 920);
+
+      applyLayoutVars();
+    }
+
+    function openConfig(){
+      syncConfigToInputs();
+      $("configMask").style.display = "flex";
+      $("configMask").setAttribute("aria-hidden","false");
+    }
+    function closeConfig(){
+      $("configMask").style.display = "none";
+      $("configMask").setAttribute("aria-hidden","true");
+    }
+
+    /************************************************************
+     * Mobile tabs
+     ************************************************************/
+    function setMobileTab(which){
+      const isMobile = window.matchMedia("(max-width: 980px)").matches;
+      if(!isMobile){
+        $("leftCol").style.display = "";
+        $("rightCol").style.display = "";
+        $("tabEditor").classList.add("on");
+        $("tabPreview").classList.remove("on");
+        return;
+      }
+
+      if(which === "preview"){
+        $("leftCol").style.display = "none";
+        $("rightCol").style.display = "";
+        $("tabEditor").classList.remove("on");
+        $("tabPreview").classList.add("on");
+      }else{
+        $("leftCol").style.display = "";
+        $("rightCol").style.display = "none";
+        $("tabEditor").classList.add("on");
+        $("tabPreview").classList.remove("on");
+      }
+    }
+
+    /************************************************************
+     * Print
+     ************************************************************/
+    function renderPrintPages(pagesToPrint){
+      const all = $("printAll");
+      all.innerHTML = "";
+
+      const blocks = Array.isArray(state.blocks) ? state.blocks : [];
+      const pages = splitIntoPages(blocks);
+
+      const wanted = pagesToPrint === "all"
+        ? pages.map((_,i)=> i+1)
+        : [state.selectedPage];
+
+      // numbering across all meds
+      const indexMap = new Map();
+      blocks.forEach((b, i)=> indexMap.set(b.id, i+1));
+
+      wanted.forEach((pno, idx)=>{
+        const cur = pages[pno-1] || [];
+
+        const shell = document.createElement("div");
+        shell.className = "printPage";
+
+        const paper = document.createElement("div");
+        paper.className = `paper ${paperSizeClass()}`;
+        paper.style.maxWidth = "none";
+
+        const inner = document.createElement("div");
+        inner.className = "paperInner";
+
+        const rx = document.createElement("div");
+        rx.className = "rxPaper";
+        rx.style.setProperty("--rxFont", `${rxFontPx()}px`);
+        rx.style.setProperty("--rxFamily", rxFamilyCSS());
+
+        const hasDate = !!state.includeDate;
+        const dt = safeText(state.dateValue) || todayBR();
+
+        const medsHtml = cur.map((b)=>{
+          const idxG = indexMap.get(b.id) || 1;
+          const nm = safeText(b.name) || "—";
+          const qt = safeText(b.qty);
+          const use = safeText(b.use);
+          const line = `
+            <div class="rxLine">
+              <span class="rxNo">${idxG}.</span>
+              <span class="drugName">${escapeHtml(nm)}</span>
+              <span class="leaderText" aria-hidden="true"></span>
+              <span class="qty">${escapeHtml(qt || " ")}</span>
+            </div>
+          `;
+          const instr = use ? `<div class="rxInstr">${escapeHtml(use)}</div>` : "";
+          const icons = (b.showIcons && Array.isArray(b.icons) && b.icons.length)
+            ? `<div class="useIconsBelow">${getIconPills(b.icons)}</div>` : "";
+          return `<div>${line}${instr}${icons}</div>`;
+        }).join("");
+
+        const docNm = doctorLine();
+        const crm = crmLine();
+        const rqe = rqeLine();
+        const sigLines = [
+          docNm ? `<div class="docName">${escapeHtml(docNm)}</div>` : `<div class="docName">—</div>`,
+          crm ? `<div class="docLine">${escapeHtml(crm)}</div>` : "",
+          rqe ? `<div class="docLine">${escapeHtml(rqe)}</div>` : ""
+        ].filter(Boolean).join("");
+
+        const instFooter = [safeText(state.instName), safeText(state.instAddress)].filter(Boolean).join(" • ");
+
+        rx.innerHTML = `
+          <div class="headerArea">${buildHeaderFooter("header")}</div>
+          <div class="rxTitleCenter">PRESCRIÇÃO</div>
+          <div class="rxMeta">
+            <div class="rxPatientLine">${patientLine() || ""}</div>
+            ${hasDate ? `<div class="rxDatePill">${escapeHtml(dt)}</div>` : ""}
+          </div>
+          <div class="rxDividerLine"></div>
+          <div class="rxSymbol">R//</div>
+          <div class="rxList">${medsHtml || ""}</div>
+          <div class="sigWrap">
+            <div class="docSig">
+              <div class="sigLine"></div>
+              <div class="docCenter">${sigLines}</div>
+            </div>
+          </div>
+          <div class="footerArea">${buildHeaderFooter("footer")}</div>
+          ${instFooter ? `<div class="instFooterGray">${escapeHtml(instFooter)}</div>` : ``}
+        `;
+
+        inner.appendChild(rx);
+        paper.appendChild(inner);
+        shell.appendChild(paper);
+
+        all.appendChild(shell);
+      });
+    }
+
+    function printCurrent(){
+      renderPrintPages("one");
+      window.print();
+    }
+    function printAll(){
+      renderPrintPages("all");
+      window.print();
+    }
+
+    /************************************************************
+     * Init + Bindings
+     ************************************************************/
+    function bindEvents(){
+      // login
+      $("btnGoogleLogin").addEventListener("click", openLogin);
+      $("btnCloseLogin").addEventListener("click", closeLogin);
+      $("btnCloseLogin2").addEventListener("click", closeLogin);
+      $("loginMask").addEventListener("mousedown", (e)=>{ if(e.target === $("loginMask")) closeLogin(); });
+
+      // account
+      $("btnAccount").addEventListener("click", (e)=>{ e.stopPropagation(); toggleAccountMenu(); });
+      $("btnLogout").addEventListener("click", logout);
+      document.addEventListener("click", ()=> closeAccountMenu());
+
+      // médico
+      $("docTitle").addEventListener("change", ()=>{
+        state.docTitle = $("docTitle").value === "Dra." ? "Dra." : "Dr.";
+        if(state.user) saveProfileDebounced();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("docName").addEventListener("input", ()=>{
+        state.docName = safeText($("docName").value);
+        if(state.user) saveProfileDebounced();
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      $("btnAddCRM").addEventListener("click", ()=>{
+        state.crms = Array.isArray(state.crms) ? state.crms : [];
+        state.crms.push("");
+        renderCrmList();
+      });
+      $("btnAddRQE").addEventListener("click", ()=>{
+        state.rqes = Array.isArray(state.rqes) ? state.rqes : [];
+        state.rqes.push("");
+        renderRqeList();
+      });
+
+      // paciente
+      $("patientName").addEventListener("input", ()=>{
+        state.patientName = safeText($("patientName").value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("patientDocType").addEventListener("change", ()=>{
+        state.patientDocType = $("patientDocType").value || "CPF";
+        updateSummaries();
+        renderPaperDebounced();
+      });
+      $("patientDocValue").addEventListener("input", ()=>{
+        state.patientDocValue = safeText($("patientDocValue").value);
+        updateSummaries();
+        renderPaperDebounced();
+      });
+
+      // meds
+      $("btnAddMed").addEventListener("click", addBlock);
+      $("btnAddMed2").addEventListener("click", addBlock);
+
+      $("btnClear").addEventListener("click", ()=>{
+        // limpa paciente + meds (mantém médico/config)
+        state.patientName = "";
+        state.patientDocValue = "";
+        state.patientDocType = "CPF";
+        state.blocks = [];
+        state.selectedPage = 1;
+
+        $("patientName").value = "";
+        $("patientDocValue").value = "";
+        $("patientDocType").value = "CPF";
+
+        renderRxBlocks();
+        updateSummaries();
+        renderPaperDebounced();
+        setMobileTab("editor");
+      });
+
+      // config modal
+      $("btnOpenConfig").addEventListener("click", openConfig);
+      $("btnCloseConfig").addEventListener("click", closeConfig);
+      $("btnCloseConfig2").addEventListener("click", closeConfig);
+      $("configMask").addEventListener("mousedown", (e)=>{ if(e.target === $("configMask")) closeConfig(); });
+
+      // preview thumbs live
+      $("headerUrl").addEventListener("input", ()=>{
+        $("headerThumb").src = safeText($("headerUrl").value) || PLACEHOLDER_PNG;
+      });
+      $("footerUrl").addEventListener("input", ()=>{
+        $("footerThumb").src = safeText($("footerUrl").value) || PLACEHOLDER_PNG;
+      });
+      $("headerThumb").addEventListener("error", ()=>{ $("headerThumb").src = PLACEHOLDER_PNG; }, { once:true });
+      $("footerThumb").addEventListener("error", ()=>{ $("footerThumb").src = PLACEHOLDER_PNG; }, { once:true });
+
+      $("btnResetConfig").addEventListener("click", ()=>{
+        const d = getDefaultPageConfig();
+        Object.assign(state, d);
+        applyLayoutVars();
+        saveConfig();
+        syncConfigToInputs();
+        renderPaperDebounced();
+      });
+
+      $("btnSaveConfig").addEventListener("click", ()=>{
+        readConfigFromInputs();
+        saveConfig();
+        closeConfig();
+        renderPaperDebounced();
+      });
+
+      // print
+      $("btnPrintOnly").addEventListener("click", printCurrent);
+      $("btnPrintAll").addEventListener("click", printAll);
+
+      // copy
+      $("btnCopyText").addEventListener("click", async ()=>{
+        try{
+          await navigator.clipboard.writeText($("copyBox").value || "");
+          $("copyStatus").textContent = "Copiado ✅";
+          setTimeout(()=>{ $("copyStatus").textContent = "Atualizado."; }, 900);
+        }catch(e){
+          $("copyStatus").textContent = "Não foi possível copiar automaticamente.";
+        }
+      });
+
+      // pages
+      $("pageSelect").addEventListener("change", ()=>{
+        state.selectedPage = parseInt($("pageSelect").value, 10) || 1;
+        renderPaperDebounced();
+      });
+      $("btnPrevPage").addEventListener("click", ()=>{
+        state.selectedPage = Math.max(1, (parseInt(state.selectedPage,10)||1) - 1);
+        renderPaperDebounced();
+      });
+      $("btnNextPage").addEventListener("click", ()=>{
+        // we don't know max without computing; render will clamp
+        state.selectedPage = (parseInt(state.selectedPage,10)||1) + 1;
+        renderPaperDebounced();
+      });
+
+      // mobile tabs
+      $("tabEditor").addEventListener("click", ()=> setMobileTab("editor"));
+      $("tabPreview").addEventListener("click", ()=> setMobileTab("preview"));
+      window.addEventListener("resize", ()=> setMobileTab($("tabPreview").classList.contains("on") ? "preview" : "editor"));
+
+      // escape closes modals
+      window.addEventListener("keydown", (e)=>{
+        if(e.key === "Escape"){
+          closeLogin();
+          closeConfig();
+          closeAccountMenu();
+        }
+      });
+    }
+
+    function applyLoadedConfig(){
+      const cfg = loadConfig();
+      if(!cfg) return;
+
+      state.paperSize = cfg.paperSize || state.paperSize;
+      state.includeDate = (cfg.includeDate !== undefined) ? !!cfg.includeDate : state.includeDate;
+      state.dateValue = safeText(cfg.dateValue) || state.dateValue;
+
+      state.rxFontSize = isFinite(cfg.rxFontSize) ? clamp(cfg.rxFontSize, 7.5, 18) : state.rxFontSize;
+      state.rxFontFamily = cfg.rxFontFamily || state.rxFontFamily;
+
+      state.headerImgUrl = safeText(cfg.headerImgUrl);
+      state.footerImgUrl = safeText(cfg.footerImgUrl);
+      state.instName = safeText(cfg.instName);
+      state.instAddress = safeText(cfg.instAddress);
+
+      state.headerTransform = cfg.headerTransform || state.headerTransform;
+      state.footerTransform = cfg.footerTransform || state.footerTransform;
+
+      state.edgeL = isFinite(cfg.edgeL) ? clamp(cfg.edgeL, 0, 120) : state.edgeL;
+      state.edgeR = isFinite(cfg.edgeR) ? clamp(cfg.edgeR, 0, 120) : state.edgeR;
+      state.paperMax = isFinite(cfg.paperMax) ? clamp(cfg.paperMax, 320, 1100) : state.paperMax;
+      state.rightColW = isFinite(cfg.rightColW) ? clamp(cfg.rightColW, 280, 920) : state.rightColW;
+
+      applyLayoutVars();
+    }
+
+    function init(){
+      // brand logo override
+      $("brandLogo").src = LOGO_URL || $("brandLogo").src;
+
+      // default date
+      state.dateValue = todayBR();
+
+      // load config
+      applyLoadedConfig();
+
+      // session/profile
+      const u = loadSession();
+      if(u){
+        state.user = u;
+      }
+      applyUserUI();
+
+      if(state.user && state.user.email){
+        const p = loadProfile();
+        if(p){
+          state.docTitle = (p.docTitle === "Dra.") ? "Dra." : "Dr.";
+          state.docName = safeText(p.docName);
+          state.crms = Array.isArray(p.crms) && p.crms.length ? p.crms.map(safeText) : [""];
+          state.rqes = Array.isArray(p.rqes) && p.rqes.length ? p.rqes.map(safeText) : [""];
+        }
+        $("persistHint").textContent = "Logado — suas alterações do médico serão salvas automaticamente nesta conta.";
+      }
+
+      // apply to inputs
+      $("docTitle").value = state.docTitle;
+      $("docName").value = state.docName;
+
+      renderCrmList();
+      renderRqeList();
+
+      $("patientName").value = state.patientName;
+      $("patientDocType").value = state.patientDocType;
+      $("patientDocValue").value = state.patientDocValue;
+
+      // bind
+      bindEvents();
+
+      // sidebar
+      loadSidebarNav();
+
+      // meds DB
+      loadMedicamentosDB().then(()=>{
+        // refresh any open autocomplete hints
+        renderRxBlocks();
+        renderPaperDebounced();
+      });
+
+      // initial blocks (optional)
+      if(!Array.isArray(state.blocks) || !state.blocks.length){
+        state.blocks = [];
+      }
+
+      // initial summaries / render
+      updateSummaries();
+      renderRxBlocks();
+      setMobileTab("editor");
+      renderPaperDebounced();
+    }
+
+    init();
+  </script>
+</body>
+</html>
