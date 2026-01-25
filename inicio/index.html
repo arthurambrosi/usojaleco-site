@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -43,7 +42,7 @@
     /* HEADER */
     .topbarWrap{
       background:#fff;
-      box-shadow: 0 10px 22px rgba(17,24,39,.10); /* sombra embaixo do header */
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
     }
     .topbar{
       max-width: var(--containerMax);
@@ -59,25 +58,42 @@
       align-items:center;
       gap: 10px;
       min-width: 190px;
+
+      /* === impede "cursor de texto", seleção e arrasto === */
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .brand img{
       height: 28px;
       width: auto;
       display:block;
+
+      /* === impede arrastar a imagem / seleção === */
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none; /* clique não "pega" na imagem */
     }
     .brandName{
       display:flex;
       align-items:baseline;
-      gap: 0;                /* <-- "usojaleco" junto */
-      font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; /* <-- Outfit aqui */
+      gap: 0;
+      font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 18px;
-      font-weight: 400;      /* "uso" normal */
+      font-weight: 400;
       letter-spacing: -0.01em;
       color:#475569;
-      user-select:none;
+
+      /* === impede selecionar/copiar e cursor de texto === */
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      pointer-events: none; /* clique não "pega" no texto */
     }
     .brandName b{
-      font-weight: 800;      /* "jaleco" em negrito */
+      font-weight: 800;
       color:#334155;
     }
 
@@ -270,6 +286,7 @@
         <img
           alt="Logo UsoJaleco"
           src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+          draggable="false"
         />
         <div class="brandName"><span>uso</span><b>jaleco</b></div>
       </div>
@@ -527,6 +544,9 @@
     $("#toggleTheme").addEventListener("click", () => {
       $("#q").focus();
     });
+
+    // extra: garante que nada do header seja "selecionável" ao clicar/arrastar
+    document.querySelector(".brand")?.addEventListener("mousedown", (e)=> e.preventDefault());
 
     loadSheet();
   </script>
