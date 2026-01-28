@@ -1331,6 +1331,68 @@
     return "Gap osmolar sem elevação relevante (regra geral).";
   }
 
+  // =========================
+  // Interpretações curtas (melhoradas)
+  // =========================
+  const isNum = (v)=> (typeof v === "number" && Number.isFinite(v));
+
+  function hco3ShortTxt(hco3, refs){
+    if(!isNum(hco3)) return "—";
+    if(hco3 < refs.hco3Low) return `HCO₃ baixo (<${fmt(refs.hco3Low,0)}) → componente metabólico acidótico.`;
+    if(hco3 > refs.hco3High) return `HCO₃ alto (>${fmt(refs.hco3High,0)}) → componente metabólico alcalótico.`;
+    return `HCO₃ na faixa (${fmt(refs.hco3Low,0)}–${fmt(refs.hco3High,0)}).`;
+  }
+
+  function hco3ConsistencyTxt(hco3m, hco3c){
+    if(!isNum(hco3m) || !isNum(hco3c)) return "—";
+    const diff = Math.abs(hco3m - hco3c);
+    if(diff < 2) return "Medido ≈ calculado → consistente.";
+    if(diff < 4) return `Discrepância pequena (~${fmt(diff,1)}).`;
+    return `Discrepância relevante (~${fmt(diff,1)}) → checar unidade/laudo/entrada.`;
+  }
+
+  function agShortTxt(agVal, refs, tag=""){
+    if(!isNum(agVal)) return "—";
+    const up = refs.agUpper;
+    if(agVal > up) return `AG${tag} elevado (>${fmt(up,0)}) → ânions não medidos (HAGMA se HCO₃↓).`;
+    return `AG${tag} não elevado (≤${fmt(up,0)}) → se HCO₃↓, pensar em NAGMA/hipercloremia.`;
+  }
+
+  function osmShortTxt(osm){
+    if(!isNum(osm)) return "—";
+    if(osm >= 320) return "Osm ≥320 → hiperosmolaridade importante (regra geral).";
+    if(osm > 295) return "Osm >295 → hiperosmolaridade (regra geral).";
+    if(osm < 275) return "Osm <275 → hipo-osmolaridade (regra geral).";
+    return "Osm em faixa usual (~275–295).";
+  }
+
+  function osmGapShortTxt(osmGap){
+    if(!isNum(osmGap)) return "—";
+    if(osmGap >= 20) return "Gap osm ≥20 → osmóis não medidos (intoxicações etc.).";
+    if(osmGap > 10) return "Gap osm 11–19 → possível osmóis não medidos/variação.";
+    if(osmGap < -10) return "Gap osm <−10 → checar unidades/fórmula.";
+    return "Gap osm sem elevação relevante (±10).";
+  }
+
+  function pfShortTxt(pf){
+    if(!isNum(pf)) return "—";
+    if(pf >= 300) return "P/F ≥300: preservado.";
+    if(pf >= 200) return "P/F 200–299: leve.";
+    if(pf >= 100) return "P/F 100–199: moderado.";
+    return "P/F <100: grave.";
+  }
+
+  function aaShortTxt(Aa, AaExp, fio2){
+    if(!isNum(Aa)) return "—";
+    if(isNum(fio2) && fio2 > 0.30) return "A–a com FiO₂ alta tende a aumentar; interpretar com cautela.";
+    if(isNum(AaExp)){
+      if(Aa <= AaExp) return `A–a ≤ esperado (~${fmt(AaExp,0)}) → sem aumento claro (ar ambiente).`;
+      if(Aa <= AaExp + 10) return `A–a levemente acima do esperado (~${fmt(AaExp,0)}).`;
+      return `A–a acima do esperado (~${fmt(AaExp,0)}) → V/Q, shunt ou difusão (c/ cautela).`;
+    }
+    return "Compare com idade/FiO₂ e contexto clínico.";
+  }
+
   function badgeFor(sev){
     const cls = sev==="bad" ? "bad" : sev==="warn" ? "warn" : sev==="ok" ? "ok" : "";
     const text = sev==="bad" ? "Alerta" : sev==="warn" ? "Atenção" : sev==="ok" ? "Sem alertas críticos" : "—";
@@ -1454,21 +1516,86 @@
       rows.push(`<tr><td>${name}</td><td class="mono">${value}</td><td>${interp}</td></tr>`);
     }
 
-    row("HCO₃⁻ (calculado)", ctx.hco3c===null?"—":fmt(ctx.hco3c,1)+" mEq/L", ctx.hco3c===null?"—":"Henderson–Hasselbalch");
-    row("HCO₃⁻ (usado)", ctx.hco3===null?"—":fmt(ctx.hco3,1)+" mEq/L", ctx.hco3===null?"—":(ctx.hco3Source));
+    // HCO3
+    row(
+      "HCO₃⁻ (calculado)",
+      ctx.hco3c===null ? "—" : `${fmt(ctx.hco3c,1)} mEq/L`,
+      ctx.hco3c===null
+        ? "Preencha pH e PaCO₂ para calcular."
+        : `Derivado de pH/PaCO₂. ${hco3ConsistencyTxt(ctx.hco3m, ctx.hco3c)}`
+    );
 
-    row("Ânion gap (AG)", ctx.ag===null?"—":fmt(ctx.ag,1)+" mEq/L", agTxt(ctx.ag, ctx.refs.agUpper));
-    row("AG corrigido (albumina)", ctx.agCorr===null?"—":fmt(ctx.agCorr,1)+" mEq/L", ctx.agCorr===null?"Preencha albumina para corrigir." : "AG + 2,5×(albRef − alb).");
-    row("AG com K⁺ (opcional)", ctx.agK===null?"—":fmt(ctx.agK,1)+" mEq/L", ctx.agK===null?"Preencha K⁺ para calcular." : "Alguns serviços incluem K⁺.");
+    row(
+      "HCO₃⁻ (usado)",
+      ctx.hco3===null ? "—" : `${fmt(ctx.hco3,1)} mEq/L`,
+      ctx.hco3===null
+        ? "Preencha HCO₃ medido ou pH/PaCO₂ (p/ calculado)."
+        : `${hco3ShortTxt(ctx.hco3, ctx.refs)} (${ctx.hco3Source})`
+    );
 
-    row("Delta ratio (Δ)", ctx.dr===null?"—":fmt(ctx.dr,2), deltaTxt(ctx.dr));
+    // AG
+    row(
+      "Ânion gap (AG)",
+      ctx.ag===null ? "—" : `${fmt(ctx.ag,1)} mEq/L`,
+      ctx.ag===null ? "Preencha Na⁺, Cl⁻ e HCO₃⁻." : agShortTxt(ctx.ag, ctx.refs)
+    );
 
-    row("Osmolaridade calculada", ctx.osm===null?"—":fmt(ctx.osm,0)+" mOsm/kg", ctx.osm===null?"Preencha Na⁺ (ideal: glicose + ureia/BUN).":"2×Na + glicose/18 + ureia/BUN + etanol/4,6.");
-    row("Gap osmolar", ctx.osmGap===null?"—":fmt(ctx.osmGap,0)+" mOsm/kg", osmGapTxt(ctx.osmGap));
+    row(
+      "AG corrigido (albumina)",
+      ctx.agCorr===null ? "—" : `${fmt(ctx.agCorr,1)} mEq/L`,
+      ctx.agCorr===null
+        ? (ctx.ag===null ? "Preencha Na⁺/Cl⁻/HCO₃⁻; depois albumina p/ corrigir." : "Preencha albumina (e Alb ref) para corrigir.")
+        : agShortTxt(ctx.agCorr, ctx.refs, " corr")
+    );
 
-    row("Relação PaO₂/FiO₂ (P/F)", ctx.pf===null?"—":fmt(ctx.pf,0), pfTxt(ctx.pf));
-    row("PAO₂ (equação alveolar)", ctx.PAO2===null?"—":fmt(ctx.PAO2,1)+" mmHg", ctx.PAO2===null?"—":"FiO₂×(Patm−PH₂O) − PaCO₂/RQ.");
-    row("Gradiente A–a", ctx.Aa===null?"—":fmt(ctx.Aa,1)+" mmHg", (ctx.Aa===null?"—":(ctx.AaExp!==null ? `Estimativa A–a esperado (ar ambiente) ~${fmt(ctx.AaExp,1)}; comparar com cautela.` : "Compare com contexto/FiO₂/idade.")));
+    row(
+      "AG com K⁺ (opcional)",
+      ctx.agK===null ? "—" : `${fmt(ctx.agK,1)} mEq/L`,
+      ctx.agK===null
+        ? "Preencha K⁺ para calcular."
+        : "Inclui K⁺; o “normal” costuma ser um pouco maior — use a referência do seu serviço."
+    );
+
+    // Delta ratio
+    row(
+      "Delta ratio (Δ)",
+      ctx.dr===null ? "—" : fmt(ctx.dr,2),
+      ctx.dr===null ? "Precisa de AG (ou AGcorr) e HCO₃." : deltaTxt(ctx.dr)
+    );
+
+    // Osm
+    row(
+      "Osmolaridade calculada",
+      ctx.osm===null ? "—" : `${fmt(ctx.osm,0)} mOsm/kg`,
+      ctx.osm===null
+        ? "Preencha Na⁺ (ideal: glicose + ureia/BUN; etanol se aplicável)."
+        : osmShortTxt(ctx.osm)
+    );
+
+    row(
+      "Gap osmolar",
+      ctx.osmGap===null ? "—" : `${fmt(ctx.osmGap,0)} mOsm/kg`,
+      ctx.osmGap===null ? "Preencha osmolaridade medida para comparar." : osmGapShortTxt(ctx.osmGap)
+    );
+
+    // Oxigenação
+    row(
+      "Relação PaO₂/FiO₂ (P/F)",
+      ctx.pf===null ? "—" : fmt(ctx.pf,0),
+      ctx.pf===null ? "Preencha PaO₂ e FiO₂." : pfShortTxt(ctx.pf)
+    );
+
+    row(
+      "PAO₂ (equação alveolar)",
+      ctx.PAO2===null ? "—" : `${fmt(ctx.PAO2,1)} mmHg`,
+      ctx.PAO2===null ? "Preencha PaCO₂, FiO₂, Patm, PH₂O e RQ." : "Usada para calcular o gradiente A–a."
+    );
+
+    row(
+      "Gradiente A–a",
+      ctx.Aa===null ? "—" : `${fmt(ctx.Aa,1)} mmHg`,
+      ctx.Aa===null ? "Preencha PaO₂ + variáveis para PAO₂." : aaShortTxt(ctx.Aa, ctx.AaExp, ctx.fio2)
+    );
 
     return rows;
   }
