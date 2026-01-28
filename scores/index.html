@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UsoJaleco | Scores</title>
+
+  <!-- ====== DESIGN KIT: FONTES ====== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fonts (base) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Outfit (brand only) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== TOKENS (white) ===== */
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface2:#f8fafc;
+
+      --text:#0f172a;
+      --muted:#6b7280;
+
+      --line:#e9eef5;
+
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+
+      --accent:#f97316;
+
+      /* ===== Layout controls ===== */
+      --edgeL: 24px;
+      --edgeR: 24px;
+      --deskGap: 18px;
+
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
+
+      --t: .18s ease;
+
+      --topH: 44px;
+    }
+
+    @media (max-width: 720px){
+      :root{
+        --edgeL: 16px;
+        --edgeR: 16px;
+        --deskGap: 14px;
+      }
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+
+    body{
+      margin:0;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%),
+        radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
+      overflow-x:hidden;
+      color-scheme: light;
+    }
+
+    a{ color:inherit; text-decoration:none }
+    button, input, textarea, select{ font:inherit }
+    ::selection{ background:rgba(249,115,22,.18) }
+
+    /* ===== HEADER ===== */
+    .topbarWrap{
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .topbar{
+      width: 100%;
+      padding: 16px var(--edgeR);
+      padding-left: var(--edgeL);
+      margin: 0;
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 190px;
+
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .brand img{
+      height: 28px;
+      width: auto;
+      display:block;
+
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
+    }
+
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap: 0;
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color:#475569;
+
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      pointer-events:none;
+    }
+    .brandName b{ font-weight: 800; color:#334155; }
+
+    .headRight{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+
+    .headBtn{
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid #e7ebf2;
+      background: #fff;
+      color:#334155;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background var(--t), filter var(--t), transform var(--t);
+      white-space: nowrap;
+
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height: 1;
+    }
+
+    .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
+    .headBtn:active{ transform: translateY(0px); }
+
+    .headBtnPrimary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+    }
+    .headBtnPrimary:hover{
+      background: var(--accent);
+      border-color: var(--accent);
+      filter: brightness(.92);
+    }
+
+    .iconBtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: #f97316;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconBtn:hover{
+      background:#fff7ed;
+      border-color:#fed7aa;
+      transform: translateY(-1px);
+    }
+    .iconBtn:active{ transform: translateY(0px); }
+
+    @media (max-width: 720px){
+      .topbar{ padding-top: 14px; padding-bottom: 14px; }
+      .brand{ min-width: auto; }
+      .headRight{ gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+      .headBtn{ height: 36px; padding: 0 12px; font-size: 13px; }
+    }
+
+    /* ===== Account dropdown ===== */
+    .acctWrap{
+      position: fixed;
+      top: 74px;
+      right: 18px;
+      z-index: 60;
+      display:none;
+    }
+    .acctCard{
+      width: min(360px, 92vw);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    .acctRow{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-bottom: 10px;
+      min-width: 0;
+    }
+    .acctRow img{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      flex: 0 0 auto;
+    }
+    .acctInfo{ min-width: 0; display:flex; flex-direction: column; gap: 2px; }
+    .acctInfo b{
+      font-size: 13.5px;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 30ch;
+      line-height: 1.1;
+    }
+    .acctInfo small{
+      color: var(--muted);
+      font-size: 12.3px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 34ch;
+      line-height: 1.1;
+    }
+    .acctBtns{ display:flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+    /* ===== App wrap ===== */
+    .wrap{
+      width:100%;
+      margin:0;
+      padding: 18px var(--edgeR) 30px;
+      padding-left: var(--edgeL);
+    }
+
+    /* ===== Cards ===== */
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--rBig);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+      min-width: 0;
+    }
+
+    /* ===== Campos ===== */
+    .label{
+      display:block;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: .2px;
+    }
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 11px 12px;
+      outline:none;
+      transition: border-color var(--t), background var(--t), box-shadow var(--t);
+    }
+    .field:focus, .select:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+      background: #fff;
+    }
+
+    .btn{
+      cursor:pointer;
+      border-radius: var(--rBtn);
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      height: var(--topH);
+      font-weight: 900;
+      font-size: 13.5px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      white-space: nowrap;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .btnPrimary{
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(249,115,22,.18);
+    }
+    .btnPrimary:hover{
+      filter: brightness(.97);
+      box-shadow: 0 12px 22px rgba(249,115,22,.22);
+      border-color: rgba(249,115,22,.92);
+      background: rgba(249,115,22,.98);
+    }
+    .btnGhost{ background: #fff; border-color: var(--line); color: var(--text); }
+
+    /* ===== Scores layout ===== */
+    .scoresGrid{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap: var(--deskGap);
+      align-items: start;
+    }
+
+    @media (min-width: 980px){
+      .scoresGrid{
+        height: calc(100vh - 110px);
+      }
+      .scoresLeft, .scoresRight{
+        height: 100%;
+      }
+    }
+
+    @media (max-width: 980px){
+      .scoresGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== Left panel ===== */
+    .scoresLeft{
+      padding: 16px;
+      display:flex;
+      flex-direction:column;
+      min-width: 0;
+    }
+
+    .scoresLeftTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .scoresLeftTop h1{
+      margin:0;
+      font-family: "DM Serif Display", serif;
+      font-size: 28px;
+      line-height: 1.0;
+      letter-spacing: .2px;
+    }
+    .scoresLeftTop p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12.8px;
+      line-height: 1.25;
+      max-width: 36ch;
+    }
+
+    .searchRow{
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .searchRow .field{
+      padding-left: 38px;
+      border-radius: 16px;
+      background: #fff;
+    }
+    .searchIcon{
+      position:absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: #94a3b8;
+      pointer-events:none;
+    }
+
+    .scoreList{
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 18px;
+      padding: 8px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      overflow:auto;
+      min-height: 220px;
+      flex: 1 1 auto;
+    }
+
+    .scoreItem{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      cursor:pointer;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .scoreItem:hover{
+      transform: translateY(-1px);
+      background: var(--surface2);
+      border-color: rgba(15,23,42,.10);
+    }
+    .scoreItem.on{
+      background: rgba(249,115,22,.08);
+      border-color: rgba(249,115,22,.28);
+      box-shadow: 0 10px 18px rgba(249,115,22,.10);
+    }
+
+    .scoreItemTitle{
+      font-weight: 900;
+      font-size: 13.5px;
+      line-height: 1.15;
+      color: var(--text);
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 26ch;
+    }
+    .scoreItemSub{
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 26ch;
+    }
+    .scoreLock{
+      color: #94a3b8;
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      display:grid;
+      place-items:center;
+      opacity: .9;
+    }
+
+    /* ===== Right panel ===== */
+    .scoresRight{
+      display:flex;
+      flex-direction:column;
+      min-width: 0;
+    }
+
+    .rightHead{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15,23,42,.03), rgba(15,23,42,0));
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .scoreTitle{
+      margin:0;
+      font-family: "DM Serif Display", serif;
+      font-size: 22px;
+      line-height: 1.05;
+      letter-spacing: .2px;
+    }
+
+    .scoreMeta{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12.8px;
+      line-height: 1.25;
+      max-width: 80ch;
+    }
+
+    .rightActions{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .tabs{
+      padding: 8px 16px 0;
+      display:flex;
+      gap: 18px;
+      align-items:flex-end;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tabBtn{
+      appearance:none;
+      border:none;
+      background: transparent;
+      padding: 10px 2px 12px;
+      cursor:pointer;
+      font-weight: 900;
+      color: #334155;
+      position: relative;
+      transition: color var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tabBtn:hover{ color:#111827; }
+    .tabBtn.on{
+      color:#111827;
+    }
+    .tabBtn.on::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-1px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+
+    .rightBody{
+      padding: 14px 16px 16px;
+      overflow:auto;
+      min-height: 240px;
+      flex: 1 1 auto;
+    }
+
+    /* ===== Calculator UI ===== */
+    .qBlock{
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(15,23,42,.06);
+    }
+    .qLabel{
+      font-weight: 900;
+      color:#0f172a;
+      font-size: 14px;
+      line-height: 1.25;
+      margin: 0 0 10px;
+    }
+    .qHelp{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 12.6px;
+      line-height: 1.25;
+    }
+
+    /* Segmented (Sim/Não) estilo da imagem */
+    .seg{
+      width: 100%;
+      background: #f1f5f9;
+      border: 1px solid rgba(15,23,42,.08);
+      border-radius: 999px;
+      padding: 6px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .segBtn{
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 999px;
+      padding: 10px 10px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap: 10px;
+      font-weight: 900;
+      color:#334155;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .segBtn:hover{ transform: translateY(-1px); }
+    .segBtn:active{ transform: translateY(0px); }
+    .segBtn.on{
+      background: #fff;
+      border-color: rgba(15,23,42,.10);
+      box-shadow: 0 10px 18px rgba(17,24,39,.08);
+    }
+    .ptPill{
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      font-size: 11.5px;
+      font-weight: 900;
+      background: rgba(15,23,42,.08);
+      color:#0f172a;
+      flex: 0 0 auto;
+    }
+    .segBtn.on .ptPill{
+      background: rgba(249,115,22,.18);
+      color:#7c2d12;
+    }
+
+    /* Resultado */
+    .resultWrap{
+      margin-top: 16px;
+      padding-top: 12px;
+    }
+    .resultTitle{
+      text-align:center;
+      font-weight: 900;
+      font-size: 18px;
+      margin: 0 0 10px;
+      letter-spacing: .2px;
+    }
+    .resultCard{
+      border: 1px solid rgba(15,23,42,.08);
+      background: #fff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+    }
+    .resultMain{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .resultScore{
+      display:flex;
+      align-items:baseline;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 14px;
+    }
+    .resultScore b{
+      font-size: 22px;
+      letter-spacing: -.02em;
+    }
+    .resultTag{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 900;
+      font-size: 12.5px;
+      border: 1px solid rgba(15,23,42,.10);
+      background: #f8fafc;
+      color:#0f172a;
+      white-space: nowrap;
+    }
+    .resultText{
+      margin-top: 10px;
+      color:#334155;
+      font-weight: 750;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    /* Texto interpretativo */
+    .doc h3{
+      margin: 16px 0 8px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color:#0f172a;
+    }
+    .doc p{
+      margin: 8px 0;
+      color:#334155;
+      font-weight: 650;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+    .doc ul{ margin: 8px 0 8px 18px; color:#334155; }
+    .doc li{ margin: 6px 0; font-weight: 650; font-size: 13.5px; line-height: 1.45; }
+    .doc .mutedNote{
+      margin-top: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12.6px;
+      line-height: 1.35;
+    }
+
+    /* ===== Modal (Fonte CSV) ===== */
+    .modalMask{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 90;
+    }
+    .modal{
+      width: min(760px, 96vw);
+      border-radius: 22px;
+      border:1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      background: linear-gradient(180deg, rgba(15,23,42,.03), transparent);
+    }
+    .modalHead b{ font-size: 14px; letter-spacing:.2px; }
+    .modalBody{ padding: 14px; }
+    .modalFoot{
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .modalCard{
+      border:1px solid var(--line);
+      background: #fff;
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12.5px;
+      line-height: 1.35;
+      color:#0f172a;
+    }
+
+    /* ===== Mobile polish ===== */
+    @media (max-width: 980px){
+      .rightHead{ padding-bottom: 12px; }
+      .scoreMeta{ max-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== HEADER (VISUAL) ===== -->
+  <div class="topbarWrap">
+    <header class="topbar">
+      <div class="brand" aria-label="UsoJaleco">
+        <img
+          alt="Logo UsoJaleco"
+          src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+          draggable="false"
+        />
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
+      </div>
+
+      <div class="headRight">
+        <button class="headBtn headBtnPrimary" id="btnLogin" type="button">Entrar com Google</button>
+        <button class="headBtn" id="btnAddScore" type="button">+ Adicionar score</button>
+
+        <button class="iconBtn" id="btnAcct" type="button" aria-label="Conta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4.5 20.1a8.6 8.6 0 0 1 15 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- ===== Dropdown conta (VISUAL) ===== -->
+  <div class="acctWrap" id="acctWrap" aria-hidden="true">
+    <div class="acctCard">
+      <div class="acctRow">
+        <img alt="" src="" />
+        <div class="acctInfo">
+          <b>—</b>
+          <small>—</small>
+        </div>
+      </div>
+      <div class="acctBtns">
+        <button class="headBtn" id="btnDataSource" type="button">Fonte (planilha)</button>
+        <button class="headBtn" id="btnLogout" type="button">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="appWrap">
+    <div class="scoresGrid">
+
+      <!-- LEFT -->
+      <aside class="scoresLeft card" aria-label="Lista de scores">
+        <div class="scoresLeftTop">
+          <div>
+            <h1>Scores</h1>
+            <p>Escolha um score à esquerda. Preencha e veja resultado + interpretação.</p>
+          </div>
+
+          <button class="iconBtn" id="btnOpenSourceQuick" type="button" aria-label="Configurar fonte">
+            <!-- ícone sliders -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 21v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 10V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 21v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 8V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 21v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 12V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M2 10h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 8h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="searchRow">
+          <svg class="searchIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16.3 16.3 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input class="field" id="search" type="search" placeholder="Buscar score..." />
+        </div>
+
+        <div class="scoreList" id="scoreList">
+          <!-- preenchido via JS -->
+        </div>
+      </aside>
+
+      <!-- RIGHT -->
+      <main class="scoresRight card" aria-label="Conteúdo do score selecionado">
+        <div class="rightHead">
+          <div>
+            <h2 class="scoreTitle" id="scoreTitle">Selecione um score</h2>
+            <div class="scoreMeta" id="scoreMeta">—</div>
+          </div>
+
+          <div class="rightActions">
+            <button class="iconBtn" id="btnEdit" type="button" title="Editar (placeholder)">
+              <!-- lápis -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="iconBtn" id="btnStar" type="button" title="Favoritar (placeholder)">
+              <!-- estrela -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m12 17.3-5.8 3.2 1.3-6.6L2 8.9l6.7-.8L12 2l3.3 6.1 6.7.8-5.5 5 1.3 6.6L12 17.3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="iconBtn" id="btnAa" type="button" title="Ajuste visual (placeholder)">
+              <span style="font-weight:900; font-size:12px; color:currentColor;">Aa</span>
+            </button>
+          </div>
+        </div>
+
+        <nav class="tabs" aria-label="Abas">
+          <button class="tabBtn on" data-tab="calc" type="button">Calculadora</button>
+          <button class="tabBtn" data-tab="interp" type="button">Interpretação</button>
+          <button class="tabBtn" data-tab="refs" type="button">Evidências</button>
+        </nav>
+
+        <div class="rightBody" id="rightBody">
+          <!-- preenchido via JS -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Fonte (CSV) ===== -->
+  <div class="modalMask" id="modalMask" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <b>Fonte dos scores (planilha)</b>
+        <button class="iconBtn" id="btnCloseModal" type="button" aria-label="Fechar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <div class="modalCard">
+          <label class="label">URL CSV publicada (Google Sheets)</label>
+          <input class="field" id="csvUrl" placeholder="Cole aqui o link CSV (output=csv)..." />
+          <div class="mono" style="margin-top:10px;">
+            <b>Formato de colunas (mínimo):</b><br>
+            id, nome, subtitulo, area, tags, descricao_curta, inputs_json, interpret_json, evidencias_json<br><br>
+            <b>tags</b>: separado por vírgula (ex: pancreatite, gravidade)<br>
+            <b>inputs_json</b>: JSON array (campos da calculadora)<br>
+            <b>interpret_json</b>: JSON com faixas + texto<br>
+            <b>evidencias_json</b>: JSON array de referências (strings)
+          </div>
+        </div>
+
+        <div class="mono mutedNote" style="margin-top:12px;">
+          Dica: no Google Sheets, publique / exporte como CSV (output=csv). O link fica salvo no navegador (localStorage).
+        </div>
+      </div>
+
+      <div class="modalFoot">
+        <button class="btn btnGhost" id="btnUseDemo" type="button">Usar demo</button>
+        <button class="btn btnPrimary" id="btnSaveSource" type="button">Salvar e carregar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /******************************************************************
+     * 1) DEMO (funciona sem planilha)
+     ******************************************************************/
+    const DEMO_SCORES = [
+      {
+        id: "bisap",
+        nome: "BISAP",
+        subtitulo: "Pancreatite",
+        area: "Gastroenterologia / Urgência",
+        tags: ["pancreatite", "gravidade", "risco", "mortalidade"],
+        descricao_curta: "Estratifica risco de mortalidade na pancreatite aguda (uso precoce).",
+        locked: false,
+
+        // inputs_json (esquema simples)
+        // type: "bool" (Sim/Não) ou "number" (numérico)
+        // scoring:
+        //  - bool_points: { yes: 1, no: 0 }
+        //  - threshold: { op: ">=", value: 60, points: 1, else_points: 0 }
+        // required: true/false
+        inputs: [
+          { id:"age60", type:"bool", label:"Idade > 60 anos", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"pleural", type:"bool", label:"Presença de derrame pleural", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"sirs2", type:"bool", label:"Pelo menos 2 critérios para SIRS", help:"SIRS é diferente de sepse/choque; avalie pelos critérios (FC, FR, T, leucócitos).", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"bun25", type:"bool", label:"BUN ≥ 25 mg/dL (ou ureia sérica > 50 mg/dL)", help:"Regra prática: ureia ≈ 2 × BUN.", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"ams", type:"bool", label:"Alteração do nível de consciência", help:"Ex.: rebaixamento, confusão, sonolência não habitual.", required:true, scoring:{ type:"bool_points", yes:1, no:0 } }
+        ],
+
+        interpret: {
+          intro: [
+            "O BISAP não tem objetivo diagnóstico. Ele é útil para estimar gravidade e risco de mortalidade na pancreatite aguda, auxiliando em decisões de monitorização e necessidade de avaliação adicional."
+          ],
+          ranges: [
+            {
+              min: 0, max: 1,
+              titulo: "Baixo risco",
+              resumo: "Risco baixo de mortalidade e complicações graves (em geral).",
+              proximos_passos: [
+                "Manter manejo inicial padrão (dor, hidratação, reavaliações).",
+                "Reavaliar clinicamente e por exames conforme evolução."
+              ]
+            },
+            {
+              min: 2, max: 2,
+              titulo: "Risco intermediário",
+              resumo: "Risco intermediário; considerar vigilância mais estreita.",
+              proximos_passos: [
+                "Aumentar frequência de reavaliações e monitorização.",
+                "Considerar imagem/consulta conforme sinais de piora."
+              ]
+            },
+            {
+              min: 3, max: 5,
+              titulo: "Alto risco",
+              resumo: "Maior risco de mortalidade e falência orgânica; exige atenção e monitorização intensiva conforme contexto.",
+              proximos_passos: [
+                "Monitorização intensiva conforme disponibilidade e gravidade clínica.",
+                "Avaliar necessidade de UTI/transferência/estratégias conforme protocolo local."
+              ]
+            }
+          ],
+          criterios: {
+            titulo: "Critérios e pontuações",
+            texto: [
+              "O BISAP é composto por 5 critérios clínicos/fisiológicos, com 1 ponto para cada critério presente."
+            ],
+            itens: [
+              { t: "BUN ≥ 25 mg/dL (ou ureia > 50 mg/dL)", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
+              { t: "Alteração do nível de consciência", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
+              { t: "SIRS ≥ 2 critérios", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
+              { t: "Idade > 60 anos", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
+              { t: "Derrame pleural", b: ["Sim: 1 ponto", "Não: 0 pontos"] }
+            ]
+          },
+          lembre_se: [
+            "Existem outros escores para pancreatite e gravidade (p. ex., classificação de Atlanta e outros), e a decisão clínica deve considerar o quadro global."
+          ]
+        },
+
+        evidencias: [
+          "Wu BU, Johannes RS, Sun X, Tabak Y, Conwell DL, Banks PA. The early prediction of mortality in acute pancreatitis: a large population-based study. Gut. 2008;57(12):1698–703.",
+          "Tenner S, Baillie J, DeWitt J, Vege SS. American College of Gastroenterology guideline: management of acute pancreatitis. Am J Gastroenterol. 2013;108(9):1400–15.",
+          "Gompertz M, Fernández L, Lara I, Miranda JP, Mancilla C, Berger Z. Bedside index for severity in acute pancreatitis (BISAP) as a predictor of clinical outcome in acute pancreatitis. Rev Med Chil. 2012;140(8):977–83.",
+          "Papachristou GI, Muddana V, Yadav D, et al. Comparison of BISAP, Ranson's, APACHE-II, and CTSI scores in predicting organ failure, complications, and mortality in acute pancreatitis. Am J Gastroenterol. 2010;105(2):435–41."
+        ]
+      },
+
+      // Exemplo “esqueleto” para você duplicar:
+      {
+        id: "qsofa",
+        nome: "qSOFA",
+        subtitulo: "Sepse (triagem)",
+        area: "Emergência / Clínica Médica",
+        tags: ["sepse", "triagem", "risco"],
+        descricao_curta: "Triagem rápida para risco de desfecho ruim em pacientes com infecção suspeita.",
+        locked: false,
+        inputs: [
+          { id:"rr22", type:"bool", label:"FR ≥ 22 irpm", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"sbp100", type:"bool", label:"PAS ≤ 100 mmHg", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
+          { id:"ams", type:"bool", label:"Alteração do nível de consciência", required:true, scoring:{ type:"bool_points", yes:1, no:0 } }
+        ],
+        interpret: {
+          intro: ["qSOFA não substitui avaliação clínica e protocolos locais; é uma triagem."],
+          ranges: [
+            { min:0, max:1, titulo:"Menor probabilidade", resumo:"Risco menor (não zero).", proximos_passos:["Avaliar quadro completo e sinais de disfunção orgânica."] },
+            { min:2, max:3, titulo:"Maior risco", resumo:"Maior risco de desfecho ruim; considerar avaliação ampliada.", proximos_passos:["Aumentar vigilância; considerar protocolos de sepse."] }
+          ],
+          criterios: {
+            titulo:"Critérios",
+            texto:["1 ponto para cada critério presente."],
+            itens:[
+              { t:"FR ≥ 22", b:["Sim: 1", "Não: 0"] },
+              { t:"PAS ≤ 100", b:["Sim: 1", "Não: 0"] },
+              { t:"Alteração de consciência", b:["Sim: 1", "Não: 0"] }
+            ]
+          },
+          lembre_se:["Use junto com sinais de hipoperfusão, lactato, SOFA completo quando indicado."]
+        },
+        evidencias: []
+      }
+    ];
+
+    /******************************************************************
+     * 2) Estado global
+     ******************************************************************/
+    let SCORES = [];
+    let selectedId = null;
+    let activeTab = "calc";
+    let formState = {}; // { inputId: value }
+
+    const els = {
+      scoreList: document.getElementById("scoreList"),
+      search: document.getElementById("search"),
+      scoreTitle: document.getElementById("scoreTitle"),
+      scoreMeta: document.getElementById("scoreMeta"),
+      rightBody: document.getElementById("rightBody"),
+
+      tabs: [...document.querySelectorAll(".tabBtn")],
+
+      acctWrap: document.getElementById("acctWrap"),
+      btnAcct: document.getElementById("btnAcct"),
+
+      modalMask: document.getElementById("modalMask"),
+      btnCloseModal: document.getElementById("btnCloseModal"),
+      btnSaveSource: document.getElementById("btnSaveSource"),
+      btnUseDemo: document.getElementById("btnUseDemo"),
+      csvUrl: document.getElementById("csvUrl"),
+
+      btnDataSource: document.getElementById("btnDataSource"),
+      btnOpenSourceQuick: document.getElementById("btnOpenSourceQuick"),
+    };
+
+    /******************************************************************
+     * 3) Helpers
+     ******************************************************************/
+    const clamp = (n, a, b)=> Math.max(a, Math.min(b, n));
+    const esc = (s)=> String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+    const isBool = (v)=> v === true || v === false;
+
+    function normalizeScore(raw){
+      // aceita tanto o formato demo quanto o vindo da planilha
+      const s = {...raw};
+
+      // tags em string -> array
+      if(typeof s.tags === "string"){
+        s.tags = s.tags.split(",").map(x=>x.trim()).filter(Boolean);
+      }
+      // inputs_json -> inputs
+      if(!s.inputs && s.inputs_json){
+        try{ s.inputs = JSON.parse(s.inputs_json); }catch(e){ s.inputs = []; }
+      }
+      // interpret_json -> interpret
+      if(!s.interpret && s.interpret_json){
+        try{ s.interpret = JSON.parse(s.interpret_json); }catch(e){ s.interpret = {}; }
+      }
+      // evidencias_json -> evidencias
+      if(!s.evidencias && s.evidencias_json){
+        try{ s.evidencias = JSON.parse(s.evidencias_json); }catch(e){ s.evidencias = []; }
+      }
+      s.inputs = Array.isArray(s.inputs) ? s.inputs : [];
+      s.tags = Array.isArray(s.tags) ? s.tags : [];
+      s.evidencias = Array.isArray(s.evidencias) ? s.evidencias : [];
+      s.interpret = s.interpret && typeof s.interpret === "object" ? s.interpret : {};
+      s.locked = !!s.locked;
+      return s;
+    }
+
+    /******************************************************************
+     * 4) CSV (Google Sheets) — parser simples
+     ******************************************************************/
+    function parseCSV(text){
+      // parser básico com suporte a aspas
+      const rows = [];
+      let row = [], cur = "", inQ = false;
+
+      for(let i=0;i<text.length;i++){
+        const c = text[i];
+        const next = text[i+1];
+
+        if(inQ){
+          if(c === '"' && next === '"'){ cur += '"'; i++; continue; }
+          if(c === '"'){ inQ = false; continue; }
+          cur += c;
+        }else{
+          if(c === '"'){ inQ = true; continue; }
+          if(c === ','){ row.push(cur); cur = ""; continue; }
+          if(c === '\n'){
+            row.push(cur); cur = "";
+            // remove \r de campos finais
+            row = row.map(x=> x.endsWith("\r") ? x.slice(0,-1) : x);
+            rows.push(row);
+            row = [];
+            continue;
+          }
+          cur += c;
+        }
+      }
+      if(cur.length || row.length){
+        row.push(cur);
+        row = row.map(x=> x.endsWith("\r") ? x.slice(0,-1) : x);
+        rows.push(row);
+      }
+
+      if(rows.length < 2) return [];
+      const header = rows[0].map(h=> h.trim());
+      const out = [];
+
+      for(let r=1;r<rows.length;r++){
+        const obj = {};
+        for(let c=0;c<header.length;c++){
+          obj[header[c]] = rows[r][c] ?? "";
+        }
+        // normaliza alguns campos comuns
+        if(obj.locked !== undefined){
+          const v = String(obj.locked).trim().toLowerCase();
+          obj.locked = (v === "1" || v === "true" || v === "sim" || v === "yes");
+        }
+        out.push(obj);
+      }
+      return out;
+    }
+
+    async function loadFromCSV(url){
+      const res = await fetch(url, {cache:"no-store"});
+      if(!res.ok) throw new Error("Falha ao carregar CSV: " + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      const scores = rows.map(normalizeScore).filter(s=> s.id && s.nome);
+      return scores;
+    }
+
+    /******************************************************************
+     * 5) Render da lista (esquerda)
+     ******************************************************************/
+    function renderList(){
+      const q = (els.search.value || "").trim().toLowerCase();
+      const filtered = SCORES.filter(s=>{
+        const hay = [
+          s.nome, s.subtitulo, s.area, (s.tags||[]).join(" "), s.descricao_curta
+        ].join(" ").toLowerCase();
+        return !q || hay.includes(q);
+      });
+
+      els.scoreList.innerHTML = filtered.length ? "" : `<div style="padding:10px 8px; color: var(--muted); font-weight:900;">Nada encontrado.</div>`;
+
+      for(const s of filtered){
+        const on = (s.id === selectedId) ? "on" : "";
+        const lock = s.locked ? `
+          <span class="scoreLock" title="Bloqueado (placeholder)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M6 11h12v10H6V11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </span>` : `<span style="width:18px; height:18px;"></span>`;
+
+        const div = document.createElement("div");
+        div.className = `scoreItem ${on}`;
+        div.innerHTML = `
+          <div style="min-width:0;">
+            <div class="scoreItemTitle">${esc(s.nome)}${s.subtitulo ? " ("+esc(s.subtitulo)+")" : ""}</div>
+            <div class="scoreItemSub">${esc(s.area || "")}</div>
+          </div>
+          ${lock}
+        `;
+        div.addEventListener("click", ()=> selectScore(s.id));
+        els.scoreList.appendChild(div);
+      }
+    }
+
+    /******************************************************************
+     * 6) Tabs + render do painel direito
+     ******************************************************************/
+    function setTab(tab){
+      activeTab = tab;
+      for(const b of els.tabs){
+        b.classList.toggle("on", b.dataset.tab === tab);
+      }
+      renderRight();
+    }
+
+    function selectScore(id){
+      selectedId = id;
+      formState = {};
+      renderList();
+      renderRight();
+    }
+
+    function currentScore(){
+      return SCORES.find(s=> s.id === selectedId) || null;
+    }
+
+    function renderRight(){
+      const s = currentScore();
+      if(!s){
+        els.scoreTitle.textContent = "Selecione um score";
+        els.scoreMeta.textContent = "—";
+        els.rightBody.innerHTML = `
+          <div class="doc">
+            <p>Escolha um item na lista à esquerda para abrir a calculadora, interpretação e evidências.</p>
+            <p class="mutedNote">Você pode configurar uma planilha CSV em “Conta → Fonte (planilha)”.</p>
+          </div>
+        `;
+        return;
+      }
+
+      els.scoreTitle.textContent = `${s.nome}${s.subtitulo ? " ("+s.subtitulo+")" : ""}`;
+      const metaBits = [];
+      if(s.area) metaBits.push(s.area);
+      if(s.tags?.length) metaBits.push("Tags: " + s.tags.join(", "));
+      if(s.descricao_curta) metaBits.push(s.descricao_curta);
+      els.scoreMeta.textContent = metaBits.join(" · ") || "—";
+
+      if(activeTab === "calc") renderCalc(s);
+      if(activeTab === "interp") renderInterp(s);
+      if(activeTab === "refs") renderRefs(s);
+    }
+
+    /******************************************************************
+     * 7) Calculadora
+     ******************************************************************/
+    function allRequiredFilled(s){
+      for(const inp of (s.inputs||[])){
+        if(!inp.required) continue;
+        const v = formState[inp.id];
+        if(inp.type === "bool"){
+          if(!isBool(v)) return false;
+        }else if(inp.type === "number"){
+          if(typeof v !== "number" || !Number.isFinite(v)) return false;
+        }else{
+          // tipos futuros
+          if(v == null || v === "") return false;
+        }
+      }
+      return true;
+    }
+
+    function scorePointsForInput(inp, value){
+      const sc = inp.scoring || {};
+      if(inp.type === "bool"){
+        const yes = Number(sc.yes ?? 1);
+        const no  = Number(sc.no ?? 0);
+        if(value === true) return yes;
+        if(value === false) return no;
+        return null;
+      }
+      if(inp.type === "number"){
+        const n = (typeof value === "number" && Number.isFinite(value)) ? value : null;
+        if(n == null) return null;
+
+        if(sc.type === "threshold"){
+          const op = sc.op || ">=";
+          const v = Number(sc.value);
+          const pts = Number(sc.points ?? 1);
+          const elsePts = Number(sc.else_points ?? 0);
+
+          const ok =
+            (op === ">"  && n >  v) ||
+            (op === ">=" && n >= v) ||
+            (op === "<"  && n <  v) ||
+            (op === "<=" && n <= v) ||
+            (op === "==" && n === v);
+
+          return ok ? pts : elsePts;
+        }
+
+        if(sc.type === "ranges" && Array.isArray(sc.ranges)){
+          for(const r of sc.ranges){
+            const min = (r.min ?? -Infinity);
+            const max = (r.max ?? +Infinity);
+            if(n >= min && n <= max) return Number(r.points ?? 0);
+          }
+          return 0;
+        }
+
+        return 0;
+      }
+      return 0;
+    }
+
+    function computeTotal(s){
+      let total = 0;
+      for(const inp of (s.inputs||[])){
+        const pts = scorePointsForInput(inp, formState[inp.id]);
+        if(typeof pts === "number") total += pts;
+      }
+      return total;
+    }
+
+    function findRange(interp, total){
+      const ranges = interp?.ranges;
+      if(!Array.isArray(ranges)) return null;
+      for(const r of ranges){
+        const min = (r.min ?? -Infinity);
+        const max = (r.max ?? +Infinity);
+        if(total >= min && total <= max) return r;
+      }
+      return null;
+    }
+
+    function renderCalc(s){
+      let html = `<div class="doc">`;
+
+      for(const inp of (s.inputs||[])){
+        html += `
+          <div class="qBlock">
+            <div class="qLabel">${esc(inp.label || inp.id)}</div>
+            ${inp.help ? `<div class="qHelp">${esc(inp.help)}</div>` : ``}
+        `;
+
+        if(inp.type === "bool"){
+          const v = formState[inp.id];
+          const yesPts = Number(inp.scoring?.yes ?? 1);
+          const noPts  = Number(inp.scoring?.no ?? 0);
+
+          html += `
+            <div class="seg" data-inp="${esc(inp.id)}">
+              <button class="segBtn ${v===true ? "on":""}" data-val="true" type="button">
+                <span class="ptPill">${yesPts >= 0 ? "+"+yesPts : String(yesPts)}</span>
+                <span>Sim</span>
+              </button>
+              <button class="segBtn ${v===false ? "on":""}" data-val="false" type="button">
+                <span class="ptPill">${noPts >= 0 ? "+"+noPts : String(noPts)}</span>
+                <span>Não</span>
+              </button>
+            </div>
+          `;
+        }else if(inp.type === "number"){
+          const v = formState[inp.id];
+          html += `
+            <input class="field" inputmode="decimal" data-inp="${esc(inp.id)}" placeholder="${esc(inp.placeholder || "Digite um valor")}" value="${(typeof v==="number" && Number.isFinite(v)) ? v : ""}">
+          `;
+        }else{
+          html += `<div class="mutedNote">Tipo de campo não suportado ainda: ${esc(inp.type)}</div>`;
+        }
+
+        html += `</div>`;
+      }
+
+      // Resultado
+      const filled = allRequiredFilled(s);
+      const total = filled ? computeTotal(s) : null;
+      const range = (filled && s.interpret) ? findRange(s.interpret, total) : null;
+
+      html += `
+        <div class="resultWrap">
+          <div class="resultTitle">Resultado</div>
+          <div class="resultCard">
+            ${!filled ? `
+              <div style="color:var(--muted); font-weight:900;">Preencha todos os campos acima para o resultado.</div>
+            ` : `
+              <div class="resultMain">
+                <div class="resultScore">Pontuação: <b>${total}</b></div>
+                <div class="resultTag">${esc(range?.titulo || "—")}</div>
+              </div>
+              <div class="resultText">${esc(range?.resumo || "—")}</div>
+              ${Array.isArray(range?.proximos_passos) && range.proximos_passos.length ? `
+                <div class="doc" style="margin-top:10px;">
+                  <h3>Próximos passos</h3>
+                  <ul>
+                    ${range.proximos_passos.map(x=>`<li>${esc(x)}</li>`).join("")}
+                  </ul>
+                </div>
+              ` : ``}
+            `}
+          </div>
+          <div class="mutedNote">Obs.: o resultado é apoio e não substitui julgamento clínico e protocolos locais.</div>
+        </div>
+      `;
+
+      html += `</div>`;
+      els.rightBody.innerHTML = html;
+
+      // eventos (toggles e números)
+      els.rightBody.querySelectorAll(".seg").forEach(seg=>{
+        const id = seg.getAttribute("data-inp");
+        seg.querySelectorAll(".segBtn").forEach(btn=>{
+          btn.addEventListener("click", ()=>{
+            const val = btn.getAttribute("data-val") === "true";
+            formState[id] = val;
+            renderRight(); // recalcula e re-renderiza
+          });
+        });
+      });
+
+      els.rightBody.querySelectorAll("input.field[data-inp]").forEach(input=>{
+        input.addEventListener("input", ()=>{
+          const id = input.getAttribute("data-inp");
+          const raw = input.value.replace(",", ".").trim();
+          const n = raw === "" ? null : Number(raw);
+          formState[id] = (n != null && Number.isFinite(n)) ? n : null;
+          renderRight();
+        });
+      });
+    }
+
+    /******************************************************************
+     * 8) Interpretação
+     ******************************************************************/
+    function renderInterp(s){
+      const I = s.interpret || {};
+      const intro = Array.isArray(I.intro) ? I.intro : [];
+      const criterios = I.criterios || null;
+      const lembre = Array.isArray(I.lembre_se) ? I.lembre_se : [];
+
+      let html = `<div class="doc">`;
+
+      intro.forEach(p=> html += `<p>${esc(p)}</p>`);
+
+      // ranges (resumo por faixas)
+      if(Array.isArray(I.ranges) && I.ranges.length){
+        html += `<h3>Próximos passos</h3>`;
+        html += `<ul>`;
+        for(const r of I.ranges){
+          const faixa = (r.min!=null && r.max!=null) ? `${r.min}–${r.max}` : (r.min!=null ? `≥ ${r.min}` : `≤ ${r.max}`);
+          html += `<li><b>${esc(r.titulo || "Faixa")}</b> ( ${esc(faixa)} ): ${esc(r.resumo || "")}</li>`;
+        }
+        html += `</ul>`;
+      }
+
+      // critérios e pontuações
+      if(criterios){
+        html += `<h3>${esc(criterios.titulo || "Critérios")}</h3>`;
+        (Array.isArray(criterios.texto) ? criterios.texto : []).forEach(p=> html += `<p>${esc(p)}</p>`);
+        if(Array.isArray(criterios.itens) && criterios.itens.length){
+          html += `<ul>`;
+          for(const it of criterios.itens){
+            html += `<li><b>${esc(it.t || "")}</b>`;
+            if(Array.isArray(it.b) && it.b.length){
+              html += `<ul>${it.b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+            }
+            html += `</li>`;
+          }
+          html += `</ul>`;
+        }
+      }
+
+      if(lembre.length){
+        html += `<h3>Lembre-se</h3><ul>${lembre.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+      }
+
+      html += `<div class="mutedNote">Obs.: textos aqui são resumo operacional; mantenha as referências oficiais e protocolos locais.</div>`;
+      html += `</div>`;
+      els.rightBody.innerHTML = html;
+    }
+
+    /******************************************************************
+     * 9) Evidências / Referências
+     ******************************************************************/
+    function renderRefs(s){
+      const refs = Array.isArray(s.evidencias) ? s.evidencias : [];
+      let html = `<div class="doc">`;
+      html += `<h3>Evidências</h3>`;
+
+      if(!refs.length){
+        html += `<p>Nenhuma referência cadastrada ainda. Você pode preencher na planilha (evidencias_json).</p>`;
+      }else{
+        html += `<ul>${refs.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>`;
+      }
+
+      html += `<div class="mutedNote">Dica: guarde DOI/PMID quando possível e a versão da diretriz utilizada.</div>`;
+      html += `</div>`;
+      els.rightBody.innerHTML = html;
+    }
+
+    /******************************************************************
+     * 10) UI: Account dropdown + modal
+     ******************************************************************/
+    function toggleAcct(force){
+      const show = (typeof force === "boolean") ? force : (els.acctWrap.style.display !== "block");
+      els.acctWrap.style.display = show ? "block" : "none";
+      els.acctWrap.setAttribute("aria-hidden", show ? "false" : "true");
+    }
+
+    function openModal(){
+      els.modalMask.style.display = "flex";
+      els.modalMask.setAttribute("aria-hidden","false");
+      els.csvUrl.value = localStorage.getItem("uj_scores_csv_url") || "";
+      toggleAcct(false);
+      setTimeout(()=> els.csvUrl.focus(), 50);
+    }
+
+    function closeModal(){
+      els.modalMask.style.display = "none";
+      els.modalMask.setAttribute("aria-hidden","true");
+    }
+
+    async function applySource(url){
+      if(!url){
+        localStorage.removeItem("uj_scores_csv_url");
+        SCORES = DEMO_SCORES.map(normalizeScore);
+        selectedId = SCORES[0]?.id || null;
+        renderList();
+        renderRight();
+        return;
+      }
+      const scores = await loadFromCSV(url);
+      SCORES = scores.map(normalizeScore);
+      localStorage.setItem("uj_scores_csv_url", url);
+      selectedId = SCORES[0]?.id || null;
+      renderList();
+      renderRight();
+    }
+
+    /******************************************************************
+     * 11) Boot
+     ******************************************************************/
+    async function boot(){
+      // tabs
+      els.tabs.forEach(b=> b.addEventListener("click", ()=> setTab(b.dataset.tab)));
+
+      // search
+      els.search.addEventListener("input", renderList);
+
+      // account
+      els.btnAcct.addEventListener("click", ()=> toggleAcct());
+      document.addEventListener("click", (e)=>{
+        const inside = els.acctWrap.contains(e.target) || els.btnAcct.contains(e.target);
+        if(!inside) toggleAcct(false);
+      });
+
+      // modal openers
+      document.getElementById("btnDataSource").addEventListener("click", openModal);
+      els.btnOpenSourceQuick.addEventListener("click", openModal);
+
+      // modal buttons
+      els.btnCloseModal.addEventListener("click", closeModal);
+      els.modalMask.addEventListener("click", (e)=>{ if(e.target === els.modalMask) closeModal(); });
+
+      els.btnUseDemo.addEventListener("click", async ()=>{
+        try{
+          await applySource("");
+          closeModal();
+        }catch(err){
+          alert("Erro: " + err.message);
+        }
+      });
+
+      els.btnSaveSource.addEventListener("click", async ()=>{
+        const url = els.csvUrl.value.trim();
+        try{
+          await applySource(url);
+          closeModal();
+        }catch(err){
+          alert("Não consegui carregar essa fonte.\n\n" + err.message);
+        }
+      });
+
+      // Load initial data
+      const saved = localStorage.getItem("uj_scores_csv_url");
+      if(saved){
+        try{
+          await applySource(saved);
+        }catch(err){
+          // fallback
+          SCORES = DEMO_SCORES.map(normalizeScore);
+          selectedId = SCORES[0]?.id || null;
+        }
+      }else{
+        SCORES = DEMO_SCORES.map(normalizeScore);
+        selectedId = SCORES[0]?.id || null;
+      }
+
+      renderList();
+      renderRight();
+    }
+
+    boot();
+  </script>
+</body>
+</html>
