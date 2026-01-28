@@ -344,12 +344,8 @@
     }
 
     @media (min-width: 980px){
-      .scoresGrid{
-        height: calc(100vh - 110px);
-      }
-      .scoresLeft, .scoresRight{
-        height: 100%;
-      }
+      .scoresGrid{ height: calc(100vh - 110px); }
+      .scoresLeft, .scoresRight{ height: 100%; }
     }
 
     @media (max-width: 980px){
@@ -538,15 +534,11 @@
       -webkit-tap-highlight-color: transparent;
     }
     .tabBtn:hover{ color:#111827; }
-    .tabBtn.on{
-      color:#111827;
-    }
+    .tabBtn.on{ color:#111827; }
     .tabBtn.on::after{
       content:"";
       position:absolute;
-      left:0;
-      right:0;
-      bottom:-1px;
+      left:0; right:0; bottom:-1px;
       height: 3px;
       background: var(--accent);
       border-radius: 999px;
@@ -579,7 +571,7 @@
       line-height: 1.25;
     }
 
-    /* Segmented (Sim/Não) estilo da imagem */
+    /* Segmented (Sim/Não) */
     .seg{
       width: 100%;
       background: #f1f5f9;
@@ -626,6 +618,39 @@
       flex: 0 0 auto;
     }
     .segBtn.on .ptPill{
+      background: rgba(249,115,22,.18);
+      color:#7c2d12;
+    }
+
+    /* Select (opções) */
+    .choiceGrid{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+    .choiceBtn{
+      border: 1px solid rgba(15,23,42,.08);
+      background: #f1f5f9;
+      border-radius: 999px;
+      padding: 10px 12px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 900;
+      color:#334155;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .choiceBtn:hover{ transform: translateY(-1px); }
+    .choiceBtn:active{ transform: translateY(0px); }
+    .choiceBtn.on{
+      background:#fff;
+      border-color: rgba(15,23,42,.10);
+      box-shadow: 0 10px 18px rgba(17,24,39,.08);
+    }
+    .choiceBtn.on .ptPill{
       background: rgba(249,115,22,.18);
       color:#7c2d12;
     }
@@ -916,14 +941,15 @@
       <div class="modalBody">
         <div class="modalCard">
           <label class="label">URL CSV publicada (Google Sheets)</label>
-          <input class="field" id="csvUrl" placeholder="Cole aqui o link CSV (output=csv)..." />
+          <input class="field" id="csvUrl" placeholder="https://docs.google.com/spreadsheets/d/e/2PACX-1vTjAIwKgX2mO51n7coaki7bSVgp4ieZgdd9OUrh9drlkMqBYQro6yamZAxBboQU-k1D2magO0F8wkHX/pub?output=csv" />
           <div class="mono" style="margin-top:10px;">
             <b>Formato de colunas (mínimo):</b><br>
-            id, nome, subtitulo, area, tags, descricao_curta, inputs_json, interpret_json, evidencias_json<br><br>
-            <b>tags</b>: separado por vírgula (ex: pancreatite, gravidade)<br>
-            <b>inputs_json</b>: JSON array (campos da calculadora)<br>
-            <b>interpret_json</b>: JSON com faixas + texto<br>
-            <b>evidencias_json</b>: JSON array de referências (strings)
+            id, nome, subtitulo, area, tags, descricao_curta, inputs_json, calc_json, interpret_json, evidencias_json/refs<br><br>
+            <b>tags</b>: separado por vírgula <i>ou</i> ponto e vírgula (ex: sepse; triagem)<br>
+            <b>inputs_json</b>: JSON array (campos). Suporta <b>bool/boolean</b>, <b>number</b> e <b>select</b><br>
+            <b>calc_json</b>: JSON (modo points + rules) ou (modo por input scoring)<br>
+            <b>interpret_json</b>: JSON (faixas). Suporta schema “demo” e schema Fagerström (label/text/notes)<br>
+            <b>evidencias_json</b> ou <b>refs</b>: JSON array (strings)
           </div>
         </div>
 
@@ -952,13 +978,6 @@
         tags: ["pancreatite", "gravidade", "risco", "mortalidade"],
         descricao_curta: "Estratifica risco de mortalidade na pancreatite aguda (uso precoce).",
         locked: false,
-
-        // inputs_json (esquema simples)
-        // type: "bool" (Sim/Não) ou "number" (numérico)
-        // scoring:
-        //  - bool_points: { yes: 1, no: 0 }
-        //  - threshold: { op: ">=", value: 60, points: 1, else_points: 0 }
-        // required: true/false
         inputs: [
           { id:"age60", type:"bool", label:"Idade > 60 anos", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
           { id:"pleural", type:"bool", label:"Presença de derrame pleural", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
@@ -966,45 +985,18 @@
           { id:"bun25", type:"bool", label:"BUN ≥ 25 mg/dL (ou ureia sérica > 50 mg/dL)", help:"Regra prática: ureia ≈ 2 × BUN.", required:true, scoring:{ type:"bool_points", yes:1, no:0 } },
           { id:"ams", type:"bool", label:"Alteração do nível de consciência", help:"Ex.: rebaixamento, confusão, sonolência não habitual.", required:true, scoring:{ type:"bool_points", yes:1, no:0 } }
         ],
-
         interpret: {
           intro: [
             "O BISAP não tem objetivo diagnóstico. Ele é útil para estimar gravidade e risco de mortalidade na pancreatite aguda, auxiliando em decisões de monitorização e necessidade de avaliação adicional."
           ],
           ranges: [
-            {
-              min: 0, max: 1,
-              titulo: "Baixo risco",
-              resumo: "Risco baixo de mortalidade e complicações graves (em geral).",
-              proximos_passos: [
-                "Manter manejo inicial padrão (dor, hidratação, reavaliações).",
-                "Reavaliar clinicamente e por exames conforme evolução."
-              ]
-            },
-            {
-              min: 2, max: 2,
-              titulo: "Risco intermediário",
-              resumo: "Risco intermediário; considerar vigilância mais estreita.",
-              proximos_passos: [
-                "Aumentar frequência de reavaliações e monitorização.",
-                "Considerar imagem/consulta conforme sinais de piora."
-              ]
-            },
-            {
-              min: 3, max: 5,
-              titulo: "Alto risco",
-              resumo: "Maior risco de mortalidade e falência orgânica; exige atenção e monitorização intensiva conforme contexto.",
-              proximos_passos: [
-                "Monitorização intensiva conforme disponibilidade e gravidade clínica.",
-                "Avaliar necessidade de UTI/transferência/estratégias conforme protocolo local."
-              ]
-            }
+            { min: 0, max: 1, titulo: "Baixo risco", resumo: "Risco baixo de mortalidade e complicações graves (em geral).", proximos_passos: ["Manter manejo inicial padrão (dor, hidratação, reavaliações).","Reavaliar clinicamente e por exames conforme evolução."] },
+            { min: 2, max: 2, titulo: "Risco intermediário", resumo: "Risco intermediário; considerar vigilância mais estreita.", proximos_passos: ["Aumentar frequência de reavaliações e monitorização.","Considerar imagem/consulta conforme sinais de piora."] },
+            { min: 3, max: 5, titulo: "Alto risco", resumo: "Maior risco de mortalidade e falência orgânica; exige atenção e monitorização intensiva conforme contexto.", proximos_passos: ["Monitorização intensiva conforme disponibilidade e gravidade clínica.","Avaliar necessidade de UTI/transferência/estratégias conforme protocolo local."] }
           ],
           criterios: {
             titulo: "Critérios e pontuações",
-            texto: [
-              "O BISAP é composto por 5 critérios clínicos/fisiológicos, com 1 ponto para cada critério presente."
-            ],
+            texto: ["O BISAP é composto por 5 critérios clínicos/fisiológicos, com 1 ponto para cada critério presente."],
             itens: [
               { t: "BUN ≥ 25 mg/dL (ou ureia > 50 mg/dL)", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
               { t: "Alteração do nível de consciência", b: ["Sim: 1 ponto", "Não: 0 pontos"] },
@@ -1017,7 +1009,6 @@
             "Existem outros escores para pancreatite e gravidade (p. ex., classificação de Atlanta e outros), e a decisão clínica deve considerar o quadro global."
           ]
         },
-
         evidencias: [
           "Wu BU, Johannes RS, Sun X, Tabak Y, Conwell DL, Banks PA. The early prediction of mortality in acute pancreatitis: a large population-based study. Gut. 2008;57(12):1698–703.",
           "Tenner S, Baillie J, DeWitt J, Vege SS. American College of Gastroenterology guideline: management of acute pancreatitis. Am J Gastroenterol. 2013;108(9):1400–15.",
@@ -1025,8 +1016,6 @@
           "Papachristou GI, Muddana V, Yadav D, et al. Comparison of BISAP, Ranson's, APACHE-II, and CTSI scores in predicting organ failure, complications, and mortality in acute pancreatitis. Am J Gastroenterol. 2010;105(2):435–41."
         ]
       },
-
-      // Exemplo “esqueleto” para você duplicar:
       {
         id: "qsofa",
         nome: "qSOFA",
@@ -1075,18 +1064,14 @@
       scoreTitle: document.getElementById("scoreTitle"),
       scoreMeta: document.getElementById("scoreMeta"),
       rightBody: document.getElementById("rightBody"),
-
       tabs: [...document.querySelectorAll(".tabBtn")],
-
       acctWrap: document.getElementById("acctWrap"),
       btnAcct: document.getElementById("btnAcct"),
-
       modalMask: document.getElementById("modalMask"),
       btnCloseModal: document.getElementById("btnCloseModal"),
       btnSaveSource: document.getElementById("btnSaveSource"),
       btnUseDemo: document.getElementById("btnUseDemo"),
       csvUrl: document.getElementById("csvUrl"),
-
       btnDataSource: document.getElementById("btnDataSource"),
       btnOpenSourceQuick: document.getElementById("btnOpenSourceQuick"),
     };
@@ -1099,31 +1084,105 @@
       "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
     }[m]));
     const isBool = (v)=> v === true || v === false;
+    const isNum  = (v)=> (typeof v === "number" && Number.isFinite(v));
+
+    function prettyScoreLabel(key){
+      const k = String(key || "").trim().toLowerCase();
+      if(!k) return "Pontuação";
+      if(k === "pontos") return "Pontos";
+      if(k === "score") return "Score";
+      return k.charAt(0).toUpperCase() + k.slice(1);
+    }
+
+    function normalizeInputType(t){
+      const x = String(t || "").trim().toLowerCase();
+      if(x === "boolean") return "bool";
+      if(x === "bool") return "bool";
+      if(x === "number" || x === "numeric" || x === "num") return "number";
+      if(x === "select" || x === "enum" || x === "choice") return "select";
+      return x || "text";
+    }
 
     function normalizeScore(raw){
-      // aceita tanto o formato demo quanto o vindo da planilha
       const s = {...raw};
 
-      // tags em string -> array
+      // tags em string -> array (aceita "," ou ";")
       if(typeof s.tags === "string"){
-        s.tags = s.tags.split(",").map(x=>x.trim()).filter(Boolean);
+        s.tags = s.tags
+          .split(/[;,]/g)
+          .map(x=>x.trim())
+          .filter(Boolean);
       }
+
       // inputs_json -> inputs
       if(!s.inputs && s.inputs_json){
         try{ s.inputs = JSON.parse(s.inputs_json); }catch(e){ s.inputs = []; }
       }
+
+      // calc_json -> calc
+      if(!s.calc && s.calc_json){
+        try{ s.calc = JSON.parse(s.calc_json); }catch(e){ s.calc = null; }
+      }
+
       // interpret_json -> interpret
       if(!s.interpret && s.interpret_json){
         try{ s.interpret = JSON.parse(s.interpret_json); }catch(e){ s.interpret = {}; }
       }
+
       // evidencias_json -> evidencias
       if(!s.evidencias && s.evidencias_json){
         try{ s.evidencias = JSON.parse(s.evidencias_json); }catch(e){ s.evidencias = []; }
       }
+
+      // refs (alternativo) -> evidencias
+      if((!s.evidencias || !Array.isArray(s.evidencias) || !s.evidencias.length) && s.refs){
+        if(Array.isArray(s.refs)){
+          s.evidencias = s.refs;
+        }else{
+          const str = String(s.refs || "").trim();
+          if(str){
+            try{
+              const parsed = JSON.parse(str);
+              s.evidencias = Array.isArray(parsed) ? parsed : [String(parsed)];
+            }catch(_e){
+              // fallback: separa por ; ou quebra de linha
+              s.evidencias = str.split(/[\n;]+/g).map(x=>x.trim()).filter(Boolean);
+            }
+          }
+        }
+      }
+
       s.inputs = Array.isArray(s.inputs) ? s.inputs : [];
       s.tags = Array.isArray(s.tags) ? s.tags : [];
       s.evidencias = Array.isArray(s.evidencias) ? s.evidencias : [];
       s.interpret = s.interpret && typeof s.interpret === "object" ? s.interpret : {};
+      s.calc = (s.calc && typeof s.calc === "object") ? s.calc : null;
+
+      // Normaliza inputs vindos da planilha:
+      // - key -> id
+      // - boolean -> bool
+      // - garante required boolean
+      // - mantém options (select)
+      s.inputs = s.inputs.map((inp, idx)=>{
+        const o = {...inp};
+        o.id = o.id || o.key || `q${idx+1}`;
+        o.type = normalizeInputType(o.type);
+        o.required = !!o.required;
+
+        // normaliza options
+        if(o.type === "select"){
+          o.options = Array.isArray(o.options) ? o.options : [];
+          o.options = o.options
+            .map(opt=>{
+              if(opt && typeof opt === "object") return { label: String(opt.label ?? opt.value ?? ""), value: String(opt.value ?? opt.label ?? "") };
+              return { label: String(opt), value: String(opt) };
+            })
+            .filter(opt=> opt.label && opt.value);
+        }
+
+        return o;
+      });
+
       s.locked = !!s.locked;
       return s;
     }
@@ -1132,7 +1191,6 @@
      * 4) CSV (Google Sheets) — parser simples
      ******************************************************************/
     function parseCSV(text){
-      // parser básico com suporte a aspas
       const rows = [];
       let row = [], cur = "", inQ = false;
 
@@ -1149,7 +1207,6 @@
           if(c === ','){ row.push(cur); cur = ""; continue; }
           if(c === '\n'){
             row.push(cur); cur = "";
-            // remove \r de campos finais
             row = row.map(x=> x.endsWith("\r") ? x.slice(0,-1) : x);
             rows.push(row);
             row = [];
@@ -1173,7 +1230,6 @@
         for(let c=0;c<header.length;c++){
           obj[header[c]] = rows[r][c] ?? "";
         }
-        // normaliza alguns campos comuns
         if(obj.locked !== undefined){
           const v = String(obj.locked).trim().toLowerCase();
           obj.locked = (v === "1" || v === "true" || v === "sim" || v === "yes");
@@ -1279,22 +1335,136 @@
     }
 
     /******************************************************************
-     * 7) Calculadora
+     * 7) Motor de pontuação
+     *  - Suporta:
+     *    A) per-input scoring (demo)
+     *    B) calc_json { mode:"points", rules:[{if:"...", add: N}, ...] } (Fagerström)
      ******************************************************************/
-    function allRequiredFilled(s){
-      for(const inp of (s.inputs||[])){
-        if(!inp.required) continue;
-        const v = formState[inp.id];
-        if(inp.type === "bool"){
-          if(!isBool(v)) return false;
-        }else if(inp.type === "number"){
-          if(typeof v !== "number" || !Number.isFinite(v)) return false;
-        }else{
-          // tipos futuros
-          if(v == null || v === "") return false;
+    function stripOuterParens(s){
+      let x = String(s || "").trim();
+      if(!x) return x;
+      // remove parênteses externos repetidos se estiverem “casando”
+      while(x.startsWith("(") && x.endsWith(")")){
+        const inner = x.slice(1, -1).trim();
+        // checagem simples de balanceamento
+        let bal = 0, ok = true;
+        for(const ch of inner){
+          if(ch === "(") bal++;
+          if(ch === ")") bal--;
+          if(bal < 0){ ok = false; break; }
+        }
+        if(ok && bal === 0) x = inner;
+        else break;
+      }
+      return x;
+    }
+
+    function parseAtomicCondition(cond){
+      // cond: "tempo_acordar == 'le5'" ou "fuma_doente == true"
+      const c = stripOuterParens(cond);
+      const m = c.match(/^\s*([a-zA-Z0-9_]+)\s*(==|!=|>=|<=|>|<)\s*(.+?)\s*$/);
+      if(!m) return null;
+
+      const key = m[1];
+      const op  = m[2];
+      let rhsRaw = String(m[3] ?? "").trim();
+
+      // string
+      if((rhsRaw.startsWith("'") && rhsRaw.endsWith("'")) || (rhsRaw.startsWith('"') && rhsRaw.endsWith('"'))){
+        rhsRaw = rhsRaw.slice(1, -1);
+        return { key, op, value: rhsRaw, type: "string" };
+      }
+
+      // boolean
+      if(rhsRaw.toLowerCase() === "true") return { key, op, value: true, type: "bool" };
+      if(rhsRaw.toLowerCase() === "false") return { key, op, value: false, type: "bool" };
+
+      // number
+      const asNum = Number(rhsRaw);
+      if(Number.isFinite(asNum)) return { key, op, value: asNum, type: "number" };
+
+      // fallback: trata como string “crua”
+      return { key, op, value: rhsRaw, type: "string" };
+    }
+
+    function evalAtomic(parsed){
+      if(!parsed) return false;
+      const left = formState[parsed.key];
+
+      // normalize right
+      const right = parsed.value;
+
+      // se left indefinido => false (não soma)
+      if(left === undefined || left === null) return false;
+
+      // comparações
+      const op = parsed.op;
+
+      // para números, tenta converter left
+      if(parsed.type === "number"){
+        const ln = (typeof left === "number") ? left : Number(String(left).replace(",", "."));
+        if(!Number.isFinite(ln)) return false;
+        if(op === "==") return ln === right;
+        if(op === "!=") return ln !== right;
+        if(op === ">")  return ln >  right;
+        if(op === ">=") return ln >= right;
+        if(op === "<")  return ln <  right;
+        if(op === "<=") return ln <= right;
+        return false;
+      }
+
+      // boolean
+      if(parsed.type === "bool"){
+        const lb = (left === true || left === false) ? left : String(left).toLowerCase() === "true";
+        if(op === "==") return lb === right;
+        if(op === "!=") return lb !== right;
+        return false;
+      }
+
+      // string
+      const ls = String(left);
+      const rs = String(right);
+      if(op === "==") return ls === rs;
+      if(op === "!=") return ls !== rs;
+      // comparações “lexicais” (raras aqui) — mantém simples
+      if(op === ">")  return ls >  rs;
+      if(op === ">=") return ls >= rs;
+      if(op === "<")  return ls <  rs;
+      if(op === "<=") return ls <= rs;
+      return false;
+    }
+
+    function evalCondition(expr){
+      // suporte básico a "&&" e "||"
+      const raw = stripOuterParens(expr);
+      if(!raw) return false;
+
+      const orParts = raw.split("||").map(x=>x.trim()).filter(Boolean);
+      if(orParts.length > 1){
+        return orParts.some(part => evalCondition(part));
+      }
+
+      const andParts = raw.split("&&").map(x=>x.trim()).filter(Boolean);
+      if(andParts.length > 1){
+        return andParts.every(part => evalCondition(part));
+      }
+
+      return evalAtomic(parseAtomicCondition(raw));
+    }
+
+    function computeTotalByRules(s){
+      const rules = s.calc?.rules;
+      if(!Array.isArray(rules)) return 0;
+      let total = 0;
+      for(const r of rules){
+        const expr = r.if;
+        if(!expr) continue;
+        if(evalCondition(expr)){
+          const add = Number(r.add ?? 0);
+          if(Number.isFinite(add)) total += add;
         }
       }
-      return true;
+      return total;
     }
 
     function scorePointsForInput(inp, value){
@@ -1337,16 +1507,71 @@
 
         return 0;
       }
+      // select/text: normalmente usa calc_json rules
       return 0;
     }
 
     function computeTotal(s){
+      if(s.calc && String(s.calc.mode || "").toLowerCase() === "points" && Array.isArray(s.calc.rules)){
+        return computeTotalByRules(s);
+      }
       let total = 0;
       for(const inp of (s.inputs||[])){
         const pts = scorePointsForInput(inp, formState[inp.id]);
         if(typeof pts === "number") total += pts;
       }
       return total;
+    }
+
+    function getChoicePointsFromRules(s, key, targetValue){
+      if(!(s.calc && String(s.calc.mode || "").toLowerCase() === "points" && Array.isArray(s.calc.rules))) return null;
+
+      let sum = 0;
+      let found = false;
+
+      for(const r of s.calc.rules){
+        const expr = String(r.if || "").trim();
+        if(!expr) continue;
+
+        // só tenta “pontuar opção” quando a condição é simples (ou AND/OR simples)
+        // (se for muito complexo, retorna null)
+        // Aqui: se qualquer atômico não casar, ainda pode haver outros; mas a ideia é só capturar os casos diretos.
+        const parsed = parseAtomicCondition(stripOuterParens(expr));
+        if(!parsed) continue;
+        if(parsed.key !== key) continue;
+        if(parsed.op !== "==") continue;
+
+        // compara o valor alvo
+        if(parsed.value === targetValue){
+          const add = Number(r.add ?? 0);
+          if(Number.isFinite(add)){
+            sum += add;
+            found = true;
+          }
+        }
+      }
+
+      return found ? sum : 0; // se não encontrou regra específica, assume 0
+    }
+
+    /******************************************************************
+     * 7b) Required
+     ******************************************************************/
+    function allRequiredFilled(s){
+      for(const inp of (s.inputs||[])){
+        if(!inp.required) continue;
+        const v = formState[inp.id];
+        if(inp.type === "bool"){
+          if(!isBool(v)) return false;
+        }else if(inp.type === "number"){
+          if(!isNum(v)) return false;
+        }else if(inp.type === "select"){
+          if(v == null || v === "") return false;
+        }else{
+          if(v == null || v === "") return false;
+        }
+      }
+      return true;
     }
 
     function findRange(interp, total){
@@ -1360,6 +1585,9 @@
       return null;
     }
 
+    /******************************************************************
+     * 8) Render Calculadora
+     ******************************************************************/
     function renderCalc(s){
       let html = `<div class="doc">`;
 
@@ -1372,8 +1600,13 @@
 
         if(inp.type === "bool"){
           const v = formState[inp.id];
-          const yesPts = Number(inp.scoring?.yes ?? 1);
-          const noPts  = Number(inp.scoring?.no ?? 0);
+
+          // tenta pegar pontos do calc_json (rules) — se não tiver, cai no scoring do input
+          const yesPtsFromRules = getChoicePointsFromRules(s, inp.id, true);
+          const noPtsFromRules  = getChoicePointsFromRules(s, inp.id, false);
+
+          const yesPts = (yesPtsFromRules != null) ? yesPtsFromRules : Number(inp.scoring?.yes ?? 1);
+          const noPts  = (noPtsFromRules  != null) ? noPtsFromRules  : Number(inp.scoring?.no  ?? 0);
 
           html += `
             <div class="seg" data-inp="${esc(inp.id)}">
@@ -1392,6 +1625,22 @@
           html += `
             <input class="field" inputmode="decimal" data-inp="${esc(inp.id)}" placeholder="${esc(inp.placeholder || "Digite um valor")}" value="${(typeof v==="number" && Number.isFinite(v)) ? v : ""}">
           `;
+        }else if(inp.type === "select"){
+          const v = formState[inp.id];
+          const opts = Array.isArray(inp.options) ? inp.options : [];
+
+          html += `<div class="choiceGrid" data-inp="${esc(inp.id)}">`;
+          for(const opt of opts){
+            const pts = getChoicePointsFromRules(s, inp.id, String(opt.value));
+            const pill = (pts == null) ? `` : `<span class="ptPill">${pts >= 0 ? "+"+pts : String(pts)}</span>`;
+            html += `
+              <button class="choiceBtn ${String(v)===String(opt.value) ? "on":""}" data-val="${esc(opt.value)}" type="button">
+                ${pill}
+                <span>${esc(opt.label)}</span>
+              </button>
+            `;
+          }
+          html += `</div>`;
         }else{
           html += `<div class="mutedNote">Tipo de campo não suportado ainda: ${esc(inp.type)}</div>`;
         }
@@ -1404,6 +1653,10 @@
       const total = filled ? computeTotal(s) : null;
       const range = (filled && s.interpret) ? findRange(s.interpret, total) : null;
 
+      const tagText = range ? (range.titulo || range.label || "—") : "—";
+      const mainText = range ? (range.resumo || range.text || "—") : "—";
+      const scoreLabel = prettyScoreLabel(s.calc?.result_key);
+
       html += `
         <div class="resultWrap">
           <div class="resultTitle">Resultado</div>
@@ -1412,16 +1665,24 @@
               <div style="color:var(--muted); font-weight:900;">Preencha todos os campos acima para o resultado.</div>
             ` : `
               <div class="resultMain">
-                <div class="resultScore">Pontuação: <b>${total}</b></div>
-                <div class="resultTag">${esc(range?.titulo || "—")}</div>
+                <div class="resultScore">${esc(scoreLabel)}: <b>${total}</b></div>
+                <div class="resultTag">${esc(tagText)}</div>
               </div>
-              <div class="resultText">${esc(range?.resumo || "—")}</div>
+              <div class="resultText">${esc(mainText)}</div>
+
               ${Array.isArray(range?.proximos_passos) && range.proximos_passos.length ? `
                 <div class="doc" style="margin-top:10px;">
                   <h3>Próximos passos</h3>
                   <ul>
                     ${range.proximos_passos.map(x=>`<li>${esc(x)}</li>`).join("")}
                   </ul>
+                </div>
+              ` : ``}
+
+              ${Array.isArray(s.interpret?.notes) && s.interpret.notes.length ? `
+                <div class="doc" style="margin-top:10px;">
+                  <h3>Notas</h3>
+                  <ul>${s.interpret.notes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
                 </div>
               ` : ``}
             `}
@@ -1433,18 +1694,31 @@
       html += `</div>`;
       els.rightBody.innerHTML = html;
 
-      // eventos (toggles e números)
+      // eventos (bool)
       els.rightBody.querySelectorAll(".seg").forEach(seg=>{
         const id = seg.getAttribute("data-inp");
         seg.querySelectorAll(".segBtn").forEach(btn=>{
           btn.addEventListener("click", ()=>{
             const val = btn.getAttribute("data-val") === "true";
             formState[id] = val;
-            renderRight(); // recalcula e re-renderiza
+            renderRight();
           });
         });
       });
 
+      // eventos (select)
+      els.rightBody.querySelectorAll(".choiceGrid").forEach(grid=>{
+        const id = grid.getAttribute("data-inp");
+        grid.querySelectorAll(".choiceBtn").forEach(btn=>{
+          btn.addEventListener("click", ()=>{
+            const val = btn.getAttribute("data-val");
+            formState[id] = val;
+            renderRight();
+          });
+        });
+      });
+
+      // eventos (number)
       els.rightBody.querySelectorAll("input.field[data-inp]").forEach(input=>{
         input.addEventListener("input", ()=>{
           const id = input.getAttribute("data-inp");
@@ -1457,57 +1731,100 @@
     }
 
     /******************************************************************
-     * 8) Interpretação
+     * 9) Interpretação (suporta 2 schemas)
      ******************************************************************/
     function renderInterp(s){
       const I = s.interpret || {};
-      const intro = Array.isArray(I.intro) ? I.intro : [];
-      const criterios = I.criterios || null;
-      const lembre = Array.isArray(I.lembre_se) ? I.lembre_se : [];
+
+      const ranges = Array.isArray(I.ranges) ? I.ranges : [];
+      const hasFagerSchema = ranges.some(r => ("label" in r) || ("text" in r)) || Array.isArray(I.notes);
+      const hasDemoSchema = Array.isArray(I.intro) || I.criterios || Array.isArray(I.lembre_se) || ranges.some(r => ("titulo" in r) || ("resumo" in r));
 
       let html = `<div class="doc">`;
 
-      intro.forEach(p=> html += `<p>${esc(p)}</p>`);
+      // --- Schema demo (se existir)
+      if(hasDemoSchema){
+        const intro = Array.isArray(I.intro) ? I.intro : [];
+        const criterios = I.criterios || null;
+        const lembre = Array.isArray(I.lembre_se) ? I.lembre_se : [];
 
-      // ranges (resumo por faixas)
-      if(Array.isArray(I.ranges) && I.ranges.length){
-        html += `<h3>Próximos passos</h3>`;
-        html += `<ul>`;
-        for(const r of I.ranges){
-          const faixa = (r.min!=null && r.max!=null) ? `${r.min}–${r.max}` : (r.min!=null ? `≥ ${r.min}` : `≤ ${r.max}`);
-          html += `<li><b>${esc(r.titulo || "Faixa")}</b> ( ${esc(faixa)} ): ${esc(r.resumo || "")}</li>`;
-        }
-        html += `</ul>`;
-      }
+        intro.forEach(p=> html += `<p>${esc(p)}</p>`);
 
-      // critérios e pontuações
-      if(criterios){
-        html += `<h3>${esc(criterios.titulo || "Critérios")}</h3>`;
-        (Array.isArray(criterios.texto) ? criterios.texto : []).forEach(p=> html += `<p>${esc(p)}</p>`);
-        if(Array.isArray(criterios.itens) && criterios.itens.length){
+        if(Array.isArray(I.ranges) && I.ranges.length){
+          html += `<h3>Faixas</h3>`;
           html += `<ul>`;
-          for(const it of criterios.itens){
-            html += `<li><b>${esc(it.t || "")}</b>`;
-            if(Array.isArray(it.b) && it.b.length){
-              html += `<ul>${it.b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
-            }
-            html += `</li>`;
+          for(const r of I.ranges){
+            const faixa = (r.min!=null && r.max!=null) ? `${r.min}–${r.max}` : (r.min!=null ? `≥ ${r.min}` : `≤ ${r.max}`);
+            const title = r.titulo || r.label || "Faixa";
+            const text  = r.resumo || r.text || "";
+            html += `<li><b>${esc(title)}</b> ( ${esc(faixa)} ): ${esc(text)}</li>`;
           }
           html += `</ul>`;
         }
+
+        if(criterios){
+          html += `<h3>${esc(criterios.titulo || "Critérios")}</h3>`;
+          (Array.isArray(criterios.texto) ? criterios.texto : []).forEach(p=> html += `<p>${esc(p)}</p>`);
+          if(Array.isArray(criterios.itens) && criterios.itens.length){
+            html += `<ul>`;
+            for(const it of criterios.itens){
+              html += `<li><b>${esc(it.t || "")}</b>`;
+              if(Array.isArray(it.b) && it.b.length){
+                html += `<ul>${it.b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+              }
+              html += `</li>`;
+            }
+            html += `</ul>`;
+          }
+        }
+
+        if(lembre.length){
+          html += `<h3>Lembre-se</h3><ul>${lembre.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+        }
+
+        if(Array.isArray(I.notes) && I.notes.length){
+          html += `<h3>Notas</h3><ul>${I.notes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+        }
+
+        html += `<div class="mutedNote">Obs.: textos aqui são resumo operacional; mantenha as referências oficiais e protocolos locais.</div>`;
+        html += `</div>`;
+        els.rightBody.innerHTML = html;
+        return;
       }
 
-      if(lembre.length){
-        html += `<h3>Lembre-se</h3><ul>${lembre.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+      // --- Schema Fagerström (se não tiver o demo)
+      if(hasFagerSchema){
+        if(I.based_on){
+          html += `<p><b>Baseado em:</b> ${esc(I.based_on)}</p>`;
+        }
+
+        if(ranges.length){
+          html += `<h3>Faixas</h3><ul>`;
+          for(const r of ranges){
+            const faixa = (r.min!=null && r.max!=null) ? `${r.min}–${r.max}` : (r.min!=null ? `≥ ${r.min}` : `≤ ${r.max}`);
+            html += `<li><b>${esc(r.label || "Faixa")}</b> ( ${esc(faixa)} ): ${esc(r.text || "")}</li>`;
+          }
+          html += `</ul>`;
+        }
+
+        if(Array.isArray(I.notes) && I.notes.length){
+          html += `<h3>Notas</h3><ul>${I.notes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+        }
+
+        html += `<div class="mutedNote">Obs.: textos aqui são resumo operacional; mantenha as referências oficiais e protocolos locais.</div>`;
+        html += `</div>`;
+        els.rightBody.innerHTML = html;
+        return;
       }
 
-      html += `<div class="mutedNote">Obs.: textos aqui são resumo operacional; mantenha as referências oficiais e protocolos locais.</div>`;
+      // fallback vazio
+      html += `<p>Nenhuma interpretação cadastrada.</p>`;
       html += `</div>`;
       els.rightBody.innerHTML = html;
     }
 
     /******************************************************************
-     * 9) Evidências / Referências
+     * 10) Evidências / Referências
      ******************************************************************/
     function renderRefs(s){
       const refs = Array.isArray(s.evidencias) ? s.evidencias : [];
@@ -1515,7 +1832,7 @@
       html += `<h3>Evidências</h3>`;
 
       if(!refs.length){
-        html += `<p>Nenhuma referência cadastrada ainda. Você pode preencher na planilha (evidencias_json).</p>`;
+        html += `<p>Nenhuma referência cadastrada ainda. Você pode preencher na planilha (evidencias_json ou refs).</p>`;
       }else{
         html += `<ul>${refs.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>`;
       }
@@ -1526,7 +1843,7 @@
     }
 
     /******************************************************************
-     * 10) UI: Account dropdown + modal
+     * 11) UI: Account dropdown + modal
      ******************************************************************/
     function toggleAcct(force){
       const show = (typeof force === "boolean") ? force : (els.acctWrap.style.display !== "block");
@@ -1565,7 +1882,7 @@
     }
 
     /******************************************************************
-     * 11) Boot
+     * 12) Boot
      ******************************************************************/
     async function boot(){
       // tabs
@@ -1614,7 +1931,6 @@
         try{
           await applySource(saved);
         }catch(err){
-          // fallback
           SCORES = DEMO_SCORES.map(normalizeScore);
           selectedId = SCORES[0]?.id || null;
         }
