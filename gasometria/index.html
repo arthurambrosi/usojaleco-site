@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UsoJaleco | Calculadora de Gasometria Arterial (ABG)</title>
+
+  <!-- ====== DESIGN KIT: FONTES ====== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fonts (base) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Outfit (brand only) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* ===== TOKENS (white) ===== */
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface2:#f8fafc;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+      --accent:#f97316;
+
+      /* ===== Layout controls ===== */
+      --edgeL: 24px;
+      --edgeR: 24px;
+      --paperMax: 640px; /* aqui vira “coluna de conteúdo” */
+      --rightColW: 440px;
+      --deskGap: 22px;
+
+      /* >>> Sidebar (Sumário) */
+      --navW: 130px;
+      --navPad: 12px;
+      --navIcon: 46px;
+      --navIconR: 14px;
+      --navCardR: 24px;
+
+      /* ===== Layout vars (kept) ===== */
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
+      --t: .18s ease;
+      --gap: 18px;
+      --gap2: 26px;
+      --topH: 44px;
+      --paperPad: 20mm;
+      --pillOrange: var(--accent);
+    }
+
+    @media (max-width: 720px){
+      :root{
+        --edgeL: 16px;
+        --edgeR: 16px;
+        --paperMax: 620px;
+        --deskGap: 16px;
+        --rightColW: 100%;
+        --navW: 100%;
+      }
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%),
+        radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
+      overflow-x:hidden;
+      color-scheme: light;
+    }
+    a{ color:inherit; text-decoration:none }
+    button, input, textarea, select{ font:inherit }
+    ::selection{ background:rgba(249,115,22,.18) }
+
+    /* ===== HEADER ===== */
+    .topbarWrap{
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar{
+      width: 100%;
+      padding: 16px var(--edgeR);
+      padding-left: var(--edgeL);
+      margin: 0;
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 190px;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .brand img{
+      height: 28px;
+      width: auto;
+      display:block;
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
+    }
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap: 0;
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color:#475569;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      pointer-events:none;
+    }
+    .brandName b{ font-weight: 800; color:#334155; }
+    .headRight{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .headBtn{
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid #e7ebf2;
+      background: #fff;
+      color:#334155;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background var(--t), filter var(--t), transform var(--t);
+      white-space: nowrap;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height: 1;
+    }
+    .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
+    .headBtn:active{ transform: translateY(0px); }
+    .headBtnPrimary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+    }
+    .headBtnPrimary:hover{
+      background: var(--accent);
+      border-color: var(--accent);
+      filter: brightness(.92);
+    }
+    .iconBtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: #f97316;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconBtn:hover{ background:#fff7ed; border-color:#fed7aa; transform: translateY(-1px); }
+    .iconBtn:active{ transform: translateY(0px); }
+
+    @media (max-width: 720px){
+      .topbar{ padding-top: 14px; padding-bottom: 14px; }
+      .brand{ min-width: auto; }
+      .headRight{ gap: 10px; }
+      .headBtn{ height: 36px; padding: 0 12px; font-size: 13px; }
+    }
+
+    /* ===== Account dropdown ===== */
+    .acctWrap{
+      position: fixed;
+      top: 74px;
+      right: 18px;
+      z-index: 60;
+      display:none;
+    }
+    .acctCard{
+      width: min(360px, 92vw);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    .acctRow{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      margin-bottom: 10px;
+      min-width: 0;
+    }
+    .acctRow img{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      flex: 0 0 auto;
+    }
+    .acctInfo{
+      min-width: 0;
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .acctInfo b{
+      font-size: 13.5px;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 30ch;
+      line-height: 1.1;
+    }
+    .acctInfo small{
+      color: var(--muted);
+      font-size: 12.3px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 34ch;
+      line-height: 1.1;
+    }
+    .acctBtns{ display:flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+    /* ===== App wrap ===== */
+    .wrap{
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding: 18px var(--edgeR) 30px;
+      padding-left: var(--edgeL);
+    }
+
+    /* ===== Mobile tabs ===== */
+    .mobileTabs{
+      display:none;
+      margin-top: 14px;
+      border:1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px;
+      gap: 6px;
+      box-shadow: var(--shadow);
+    }
+    .tab{
+      flex:1;
+      text-align:center;
+      padding: 10px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      transition: background var(--t), color var(--t), box-shadow var(--t), border-color var(--t);
+      border:1px solid transparent;
+    }
+    .tab.on{
+      color: var(--text);
+      border-color: rgba(249,115,22,.30);
+      background: rgba(249,115,22,.08);
+      box-shadow: 0 10px 18px rgba(249,115,22,.12);
+    }
+
+    /* ===== Main layout (Sidebar fora + Conteúdo) ===== */
+    .main{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: var(--navW) 1fr;
+      gap: var(--deskGap);
+      align-items:start;
+    }
+    .contentCols{
+      display:flex;
+      flex-direction:column;
+      gap: var(--gap2);
+      min-width: 0;
+      grid-column: 2;
+    }
+    .twoCols{
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--gap2);
+      align-items:start;
+      min-width:0;
+    }
+    @media (max-width: 1100px){
+      .twoCols{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px){
+      .main{ grid-template-columns: 1fr; gap: var(--gap2); }
+      .mobileTabs{ display:flex; }
+      .sideNav{ width: 100%; padding: 10px; }
+      .sideNavList{
+        flex-direction: row;
+        gap: 10px;
+        justify-content: flex-start;
+        align-items: stretch;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: thin;
+      }
+      .navItem{ flex: 0 0 auto; width: 110px; }
+    }
+
+    /* ===== Sidebar (Sumário) ===== */
+    .sideNav{
+      width: var(--navW);
+      padding: var(--navPad);
+      border: 1px solid var(--line);
+      border-radius: var(--navCardR);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      max-height: calc(100vh - 110px);
+      overflow: auto;
+    }
+    .sideNavList{ display: flex; flex-direction: column; gap: 10px; }
+    .navLoading{ padding: 10px 8px; color: var(--muted); font-weight: 800; font-size: 12.6px; }
+    .navItem{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 8px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      min-width: 0;
+    }
+    .navItem:hover{
+      transform: translateY(-1px);
+      background: var(--surface2);
+      border-color: rgba(15,23,42,.14);
+      box-shadow: 0 12px 22px rgba(17,24,39,.08);
+    }
+    .navIcon{
+      width: var(--navIcon);
+      height: var(--navIcon);
+      border-radius: var(--navIconR);
+      object-fit: contain;
+      background: var(--surface2);
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+      display: block;
+    }
+    .navLabel{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.15;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      padding: 0 4px;
+    }
+
+    /* ===== Cards ===== */
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--rBig);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+      min-width: 0;
+    }
+    .cardHeader{
+      padding: 16px 16px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15,23,42,.03), rgba(15,23,42,0));
+    }
+    .cardHeader h2{
+      margin:0;
+      font-family: "DM Serif Display", serif;
+      font-size: 18px;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
+    .cardHeader .sub{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size: 12.8px;
+      line-height:1.25;
+      max-width: 78ch;
+    }
+    .cardBody{ padding: 16px; }
+
+    /* ===== Campos ===== */
+    .mini{ font-size: 12.5px; color: var(--muted); line-height:1.2; }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 560px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .fieldWrap{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .labRow{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+    .labRow label{ font-size: 12.5px; color: var(--muted); font-weight: 850; letter-spacing:.2px; }
+    .unit{ font-size: 11.8px; color: var(--muted); font-weight: 800; white-space:nowrap; }
+
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 11px 12px;
+      outline:none;
+      transition: border-color var(--t), background var(--t), box-shadow var(--t);
+    }
+    .field:focus, .select:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+      background: #fff;
+    }
+
+    /* ===== Buttons (app) ===== */
+    .rowFlex{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .btn{
+      cursor:pointer;
+      border-radius: var(--rBtn);
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      height: var(--topH);
+      font-weight: 900;
+      font-size: 13.5px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      white-space: nowrap;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btnPrimary{
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(249,115,22,.18);
+    }
+    .btnPrimary:hover{
+      filter: brightness(.97);
+      box-shadow: 0 12px 22px rgba(249,115,22,.22);
+      border-color: rgba(249,115,22,.92);
+      background: rgba(249,115,22,.98);
+    }
+    .btnGhost{ background: #fff; border-color: var(--line); color: var(--text); }
+
+    /* ===== ABG sections (details) ===== */
+    details.abgSec{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 10px 12px;
+      background: #fbfbfd;
+      margin: 10px 0;
+      box-shadow: 0 10px 18px rgba(17,24,39,.04);
+    }
+    details.abgSec[open]{ background:#fff; }
+    summary.abgSum{
+      cursor:pointer;
+      font-weight: 950;
+      font-size: 13.2px;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      user-select:none;
+    }
+    summary.abgSum::-webkit-details-marker{ display:none; }
+    .pill{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background:#fff;
+      white-space:nowrap;
+    }
+
+    /* ===== Result blocks ===== */
+    .kpiGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 560px){ .kpiGrid{ grid-template-columns: 1fr; } }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background:#fff;
+      box-shadow: 0 10px 18px rgba(17,24,39,.05);
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width:0;
+    }
+    .kpi .t{ font-size: 12px; color: var(--muted); font-weight: 900; }
+    .kpi .v{ font-size: 18px; font-weight: 950; letter-spacing:-.01em; }
+    .kpi .n{ font-size: 12px; color: var(--muted); font-weight: 800; line-height:1.25; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-weight: 950;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .ok{ color:#16a34a; }
+    .warn{ color:#f59e0b; }
+    .bad{ color:#dc2626; }
+
+    .miniCards{ display:grid; gap: 12px; }
+    .miniCard{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background:#fff;
+      box-shadow: 0 10px 18px rgba(17,24,39,.05);
+      min-width:0;
+    }
+    .miniCard h3{
+      margin:0 0 8px 0;
+      font-size: 13.5px;
+      font-weight: 950;
+      letter-spacing:.1px;
+    }
+    .list{ margin:0; padding-left: 18px; }
+    .list li{ margin: 6px 0; color: var(--text); }
+
+    table.abgTable{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 18px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    .abgTable th, .abgTable td{
+      padding: 10px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size: 13px;
+      vertical-align: top;
+    }
+    .abgTable th{
+      background:#fbfbfd;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+    }
+    .abgTable tr:last-child td{ border-bottom:0; }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .copyBox{
+      width: 100%;
+      min-height: 160px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px 12px;
+      outline: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12.7px;
+      line-height: 1.35;
+      color: #0f172a;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+      white-space: pre-wrap;
+      word-break: break-word;
+      resize: vertical;
+    }
+    .copyActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .footNote{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12.6px;
+      line-height:1.45;
+    }
+
+    /* ===== PRINT ===== */
+    @media print{
+      body{ background:#fff !important; color:#000 !important; }
+      .topbarWrap, .mobileTabs, #sideNav, .sideNav, .acctWrap{ display:none !important; }
+      .wrap{ padding:0; }
+      .card{ box-shadow:none !important; }
+      @page { margin: 18mm; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== HEADER (VISUAL) ===== -->
+  <div class="topbarWrap">
+    <header class="topbar">
+      <div class="brand" aria-label="UsoJaleco">
+        <img
+          alt="Logo UsoJaleco"
+          src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+          draggable="false"
+        />
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
+      </div>
+
+      <div class="headRight">
+        <button class="headBtn" id="btnExample" type="button">Preencher exemplo</button>
+        <button class="headBtn" id="btnReset" type="button">Limpar</button>
+        <button class="headBtn headBtnPrimary" id="btnCopy" type="button">Copiar resumo</button>
+
+        <button class="iconBtn" id="acctBtn" type="button" aria-label="Conta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4.5 20.1a8.6 8.6 0 0 1 15 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- ===== Dropdown conta (VISUAL) ===== -->
+  <div class="acctWrap" id="acctWrap" aria-hidden="true">
+    <div class="acctCard">
+      <div class="acctRow">
+        <img alt="" src="" />
+        <div class="acctInfo">
+          <b>—</b>
+          <small>—</small>
+        </div>
+      </div>
+      <div class="acctBtns">
+        <button class="headBtn" type="button">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== APP ===== -->
+  <div class="wrap" id="appWrap">
+
+    <div class="mobileTabs" aria-label="Alternar entre dados e resultados">
+      <div class="tab on" id="tabEdit">Dados</div>
+      <div class="tab" id="tabPrev">Resultados</div>
+    </div>
+
+    <div class="main" id="mainApp">
+
+      <!-- Sidebar (Sumário) -->
+      <aside class="sideNav" id="sideNav" aria-label="Sumário do site">
+        <div class="navLoading">Carregando menu…</div>
+      </aside>
+
+      <!-- Conteúdo -->
+      <div class="contentCols" id="contentCols">
+
+        <div class="twoCols" id="twoCols">
+
+          <!-- COLUNA ESQUERDA: DADOS -->
+          <div class="leftCol" id="leftCol">
+            <div class="card" id="panelEditor">
+              <div class="cardHeader">
+                <div>
+                  <h2>Dados</h2>
+                  <p class="sub">Entradas + referências do laboratório + opções. Atualiza automaticamente conforme você digita.</p>
+                </div>
+              </div>
+
+              <div class="cardBody">
+                <form id="abgForm" autocomplete="off">
+
+                  <details class="abgSec" open>
+                    <summary class="abgSum">
+                      <span>Gasometria</span>
+                      <span class="pill">obrigatório</span>
+                    </summary>
+
+                    <div class="grid2">
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="ph">pH</label><span class="unit">—</span></div>
+                        <input class="field" id="ph" type="number" step="0.001" placeholder="ex: 7.28" />
+                        <div class="mini">Faixa típica: 7,35–7,45 (ajustável em “Referências”).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="paco2">PaCO₂</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="paco2" type="number" step="0.1" placeholder="ex: 55" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="pao2">PaO₂</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="pao2" type="number" step="0.1" placeholder="ex: 62" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="sao2">SatO₂</label><span class="unit">%</span></div>
+                        <input class="field" id="sao2" type="number" step="0.1" placeholder="ex: 90" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="hco3m">HCO₃⁻ (medido)</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="hco3m" type="number" step="0.1" placeholder="ex: 24" />
+                        <div class="mini">Se vazio, será usado o HCO₃⁻ calculado (Henderson–Hasselbalch).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="be">Base excess/deficit</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="be" type="number" step="0.1" placeholder="ex: -8" />
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="abgSec" open>
+                    <summary class="abgSum">
+                      <span>Eletrólitos e metabólicos</span>
+                      <span class="pill">obrigatório</span>
+                    </summary>
+
+                    <div class="grid2">
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="na">Na⁺</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="na" type="number" step="0.1" placeholder="ex: 140" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="k">K⁺</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="k" type="number" step="0.1" placeholder="ex: 4.2" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="cl">Cl⁻</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="cl" type="number" step="0.1" placeholder="ex: 102" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="alb">Albumina</label><span class="unit">g/dL</span></div>
+                        <input class="field" id="alb" type="number" step="0.1" placeholder="ex: 3.0" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="glu">Glicose</label><span class="unit">mg/dL</span></div>
+                        <input class="field" id="glu" type="number" step="1" placeholder="ex: 180" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="ureaMode">Ureia/BUN</label><span class="unit">—</span></div>
+                        <select class="select" id="ureaMode">
+                          <option value="bun">BUN (mg/dL) — divisor 2,8</option>
+                          <option value="urea">Ureia (mg/dL) — divisor 6,0</option>
+                        </select>
+                        <div class="mini">Para osmolaridade: 2×Na + glicose/18 + (BUN/2,8 ou ureia/6) + etanol/4,6.</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="urea">Valor (BUN ou ureia)</label><span class="unit">mg/dL</span></div>
+                        <input class="field" id="urea" type="number" step="0.1" placeholder="ex: 28" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="lac">Lactato</label><span class="unit">mmol/L</span></div>
+                        <input class="field" id="lac" type="number" step="0.1" placeholder="ex: 4.8" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="etoh">Etanol (se relevante)</label><span class="unit">mg/dL</span></div>
+                        <input class="field" id="etoh" type="number" step="1" placeholder="ex: 0" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="osmm">Osmolaridade medida (opcional)</label><span class="unit">mOsm/kg</span></div>
+                        <input class="field" id="osmm" type="number" step="1" placeholder="ex: 320" />
+                        <div class="mini">Se preenchida, calcula “gap osmolar” = medida − calculada.</div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="abgSec" open>
+                    <summary class="abgSum">
+                      <span>Oxigenação e ventilação</span>
+                      <span class="pill">obrigatório</span>
+                    </summary>
+
+                    <div class="grid2">
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="fio2">FiO₂</label><span class="unit">fração (0–1) ou %</span></div>
+                        <input class="field" id="fio2" type="number" step="0.01" placeholder="ex: 0.21 ou 35" />
+                        <div class="mini">Se você digitar &gt; 1, o sistema entende como porcentagem (ex: 35 → 0,35).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="temp">Temperatura</label><span class="unit">°C</span></div>
+                        <input class="field" id="temp" type="number" step="0.1" placeholder="ex: 36.0" />
+                        <div class="mini">Correção por temperatura é opcional (ver “Opções”).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="age">Idade (opcional)</label><span class="unit">anos</span></div>
+                        <input class="field" id="age" type="number" step="1" placeholder="ex: 65" />
+                        <div class="mini">Usada apenas para estimar A–a “esperado” em ar ambiente (aproximação).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="rr">FR (opcional)</label><span class="unit">irpm</span></div>
+                        <input class="field" id="rr" type="number" step="1" placeholder="ex: 28" />
+                        <div class="mini">Não entra nas fórmulas principais; aparece no resumo, se preenchido.</div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="abgSec">
+                    <summary class="abgSum">
+                      <span>Opções</span>
+                      <span class="pill">avançado</span>
+                    </summary>
+
+                    <div class="grid2">
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="useTempCorr">Corrigir gases pela temperatura</label><span class="unit">—</span></div>
+                        <select class="select" id="useTempCorr">
+                          <option value="no">Não (padrão)</option>
+                          <option value="yes">Sim (aproximações lineares)</option>
+                        </select>
+                        <div class="mini">Aprox.: a cada 1°C abaixo de 37, PaO₂ ↓ ~5 mmHg, PaCO₂ ↓ ~2 mmHg, pH ↑ ~0,012–0,015.</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="hco3Prefer">Preferência de HCO₃⁻</label><span class="unit">—</span></div>
+                        <select class="select" id="hco3Prefer">
+                          <option value="measuredFirst">Usar medido (se houver), senão calculado</option>
+                          <option value="calculatedOnly">Usar apenas calculado</option>
+                          <option value="measuredOnly">Usar apenas medido</option>
+                        </select>
+                        <div class="mini">O sistema sempre mostra ambos (quando possível) e alerta inconsistências.</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="patm">Patm</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="patm" type="number" step="1" value="760" />
+                        <div class="mini">Pressão atmosférica (altitude altera o gradiente A–a).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="ph2o">PH₂O</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="ph2o" type="number" step="1" value="47" />
+                        <div class="mini">Vapor d’água (47 mmHg a 37°C; ajuste se necessário).</div>
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="rq">RQ</label><span class="unit">—</span></div>
+                        <input class="field" id="rq" type="number" step="0.01" value="0.8" />
+                        <div class="mini">Quociente respiratório (usual 0,8).</div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="abgSec">
+                    <summary class="abgSum">
+                      <span>Referências do laboratório</span>
+                      <span class="pill">ajustes</span>
+                    </summary>
+
+                    <div class="grid2">
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="phLow">pH (limite inferior)</label><span class="unit">—</span></div>
+                        <input class="field" id="phLow" type="number" step="0.001" value="7.35" />
+                      </div>
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="phHigh">pH (limite superior)</label><span class="unit">—</span></div>
+                        <input class="field" id="phHigh" type="number" step="0.001" value="7.45" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="co2Low">PaCO₂ (baixo)</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="co2Low" type="number" step="0.1" value="35" />
+                      </div>
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="co2High">PaCO₂ (alto)</label><span class="unit">mmHg</span></div>
+                        <input class="field" id="co2High" type="number" step="0.1" value="45" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="hco3Low">HCO₃⁻ (baixo)</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="hco3Low" type="number" step="0.1" value="22" />
+                      </div>
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="hco3High">HCO₃⁻ (alto)</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="hco3High" type="number" step="0.1" value="26" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="agUpper">Anion Gap “normal” (upper)</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="agUpper" type="number" step="0.1" value="12" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="albRef">Albumina referência</label><span class="unit">g/dL</span></div>
+                        <input class="field" id="albRef" type="number" step="0.1" value="4.4" />
+                      </div>
+
+                      <div class="fieldWrap">
+                        <div class="labRow"><label for="hco3Ref">HCO₃⁻ “normal”</label><span class="unit">mEq/L</span></div>
+                        <input class="field" id="hco3Ref" type="number" step="0.1" value="24" />
+                      </div>
+                    </div>
+                  </details>
+
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUNA DIREITA: RESULTADOS -->
+          <div class="rightCol" id="rightCol">
+            <div class="card" id="panelWorkspace">
+              <div class="cardHeader">
+                <div>
+                  <h2>Resultados e interpretação</h2>
+                  <p class="sub">AG, AG corrigido, Δ ratio, osmolaridade, P/F, A–a, compensações e síntese ácido-base.</p>
+                </div>
+                <span id="statusBadge" class="badge"><span class="mini">—</span></span>
+              </div>
+
+              <div class="cardBody">
+                <div class="kpiGrid">
+                  <div class="kpi">
+                    <div class="t">Diagnóstico ácido-base (síntese)</div>
+                    <div class="v" id="kpiPrimary">—</div>
+                    <div class="n" id="kpiPrimaryNote">Preencha pH, PaCO₂ e HCO₃⁻ para interpretar.</div>
+                  </div>
+                  <div class="kpi">
+                    <div class="t">Oxigenação</div>
+                    <div class="v" id="kpiOxy">—</div>
+                    <div class="n" id="kpiOxyNote">P/F e A–a aparecem ao preencher PaO₂ e FiO₂.</div>
+                  </div>
+                </div>
+
+                <div class="miniCards">
+                  <div class="miniCard">
+                    <h3>Alertas</h3>
+                    <ul class="list" id="alertsList"><li class="mini">—</li></ul>
+                  </div>
+
+                  <div class="miniCard">
+                    <h3>Ácido-base (passo a passo)</h3>
+                    <div id="acidBaseText" class="mini">—</div>
+                  </div>
+
+                  <div class="miniCard">
+                    <h3>Cálculos</h3>
+                    <table class="abgTable">
+                      <thead>
+                        <tr>
+                          <th>Parâmetro</th>
+                          <th>Valor</th>
+                          <th>Interpretação curta</th>
+                        </tr>
+                      </thead>
+                      <tbody id="calcTable">
+                        <tr><td class="mini" colspan="3">—</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="miniCard">
+                    <h3>Resumo copiável</h3>
+
+                    <div class="copyActions">
+                      <button class="btn btnPrimary" type="button" id="btnCopy2">Copiar</button>
+                      <button class="btn btnGhost" type="button" id="btnCopyFormula">Copiar fórmulas usadas</button>
+                    </div>
+
+                    <textarea id="copyBox" class="copyBox" readonly></textarea>
+
+                    <div class="footNote">
+                      Observação: ferramenta educacional. Em cenário real, interpretação depende do contexto clínico, altitude/Patm, ventilação,
+                      coleta e calibração do laboratório. Em caso de gravidade, siga protocolos locais e supervisão.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="footNote" style="margin-top:10px">
+              <b>Nota de segurança/uso:</b> este calculador é educacional e não substitui julgamento clínico.
+              “Correção por temperatura” é controversa e muitos serviços reportam gases a 37°C.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+
+  /* =========================
+     Sidebar demo (troque pelo seu loader real)
+     ========================= */
+  const sideNav = $("sideNav");
+  const toDataUri = (svg) => "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+
+  const NAV_ITEMS = [
+    { label: "Prescrições", href: "#", icon: toDataUri(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#f97316" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h6" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>`) },
+    { label: "Gasometria", href: "#", icon: toDataUri(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M4 18c3-6 5-8 8-8s5 2 8 8" stroke="#f97316" stroke-width="2" stroke-linecap="round"/><path d="M6 18h12" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><path d="M12 6v4" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>`) },
+    { label: "Dose", href: "#", icon: toDataUri(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M10 4h4v6a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4Z" stroke="#f97316" stroke-width="2"/><path d="M8 12h8v8H8v-8Z" stroke="#0f172a" stroke-width="2"/></svg>`) },
+    { label: "Hub", href: "#", icon: toDataUri(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M12 3 20 7v10l-8 4-8-4V7l8-4Z" stroke="#f97316" stroke-width="2"/><path d="M12 7v10" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/><path d="M8 10h8" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>`) },
+  ];
+
+  function renderSideNav(items){
+    const list = document.createElement("div");
+    list.className = "sideNavList";
+    items.forEach(it=>{
+      const a = document.createElement("a");
+      a.className = "navItem";
+      a.href = it.href || "#";
+      a.innerHTML = `
+        <img class="navIcon" src="${it.icon || ""}" alt="" />
+        <div class="navLabel">${it.label || ""}</div>
+      `;
+      list.appendChild(a);
+    });
+    sideNav.innerHTML = "";
+    sideNav.appendChild(list);
+  }
+
+  renderSideNav(NAV_ITEMS);
+
+  /* =========================
+     Mobile tabs: alternar colunas
+     ========================= */
+  const tabEdit = $("tabEdit");
+  const tabPrev = $("tabPrev");
+  const leftCol = $("leftCol");
+  const rightCol = $("rightCol");
+
+  function setMobileTab(which){
+    const isMobile = window.matchMedia("(max-width: 1100px)").matches;
+    if(!isMobile){
+      leftCol.style.display = "";
+      rightCol.style.display = "";
+      tabEdit.classList.add("on");
+      tabPrev.classList.remove("on");
+      return;
+    }
+    if(which === "results"){
+      leftCol.style.display = "none";
+      rightCol.style.display = "";
+      tabEdit.classList.remove("on");
+      tabPrev.classList.add("on");
+    }else{
+      leftCol.style.display = "";
+      rightCol.style.display = "none";
+      tabEdit.classList.add("on");
+      tabPrev.classList.remove("on");
+    }
+  }
+
+  tabEdit.addEventListener("click", ()=>setMobileTab("data"));
+  tabPrev.addEventListener("click", ()=>setMobileTab("results"));
+  window.addEventListener("resize", ()=>setMobileTab(tabPrev.classList.contains("on") ? "results" : "data"));
+  setMobileTab("data");
+
+  /* =========================
+     Conta dropdown (visual)
+     ========================= */
+  const acctBtn = $("acctBtn");
+  const acctWrap = $("acctWrap");
+  function toggleAcct(){
+    const open = acctWrap.style.display === "block";
+    acctWrap.style.display = open ? "none" : "block";
+    acctWrap.setAttribute("aria-hidden", open ? "true" : "false");
+  }
+  acctBtn.addEventListener("click", (e)=>{ e.stopPropagation(); toggleAcct(); });
+  document.addEventListener("click", ()=>{ acctWrap.style.display = "none"; acctWrap.setAttribute("aria-hidden","true"); });
+
+  /* =========================
+     ABG CALCULATOR (JS ORIGINAL)
+     ========================= */
+
+  // Inputs
+  const el = {
+    ph:$("ph"), paco2:$("paco2"), pao2:$("pao2"), sao2:$("sao2"),
+    hco3m:$("hco3m"), be:$("be"),
+    na:$("na"), k:$("k"), cl:$("cl"), alb:$("alb"), glu:$("glu"),
+    ureaMode:$("ureaMode"), urea:$("urea"), lac:$("lac"), etoh:$("etoh"),
+    osmm:$("osmm"),
+    fio2:$("fio2"), temp:$("temp"), age:$("age"), rr:$("rr"),
+    useTempCorr:$("useTempCorr"), hco3Prefer:$("hco3Prefer"),
+    patm:$("patm"), ph2o:$("ph2o"), rq:$("rq"),
+    // refs
+    phLow:$("phLow"), phHigh:$("phHigh"), co2Low:$("co2Low"), co2High:$("co2High"),
+    hco3Low:$("hco3Low"), hco3High:$("hco3High"),
+    agUpper:$("agUpper"), albRef:$("albRef"), hco3Ref:$("hco3Ref"),
+  };
+
+  // Outputs
+  const out = {
+    statusBadge:$("statusBadge"),
+    kpiPrimary:$("kpiPrimary"), kpiPrimaryNote:$("kpiPrimaryNote"),
+    kpiOxy:$("kpiOxy"), kpiOxyNote:$("kpiOxyNote"),
+    alertsList:$("alertsList"),
+    acidBaseText:$("acidBaseText"),
+    calcTable:$("calcTable"),
+    copyBox:$("copyBox")
+  };
+
+  const btnExample = $("btnExample");
+  const btnReset = $("btnReset");
+  const btnCopy = $("btnCopy");
+  const btnCopy2 = $("btnCopy2");
+  const btnCopyFormula = $("btnCopyFormula");
+
+  const fmt = (v, d=2)=> (v===null || v===undefined || Number.isNaN(v)) ? "—" : (Math.round(v*10**d)/10**d).toFixed(d);
+  const fmtSmart = (v)=> (v===null || v===undefined || Number.isNaN(v)) ? "—" : (Math.abs(v)>=100 ? fmt(v,0) : fmt(v,2));
+  const clamp = (x, a, b)=> Math.min(b, Math.max(a, x));
+
+  function num(input){
+    const raw = (input && input.value!==undefined) ? String(input.value).trim() : "";
+    if(!raw) return null;
+    const v = Number(raw.replace(",", "."));
+    return Number.isFinite(v) ? v : null;
+  }
+
+  function getFiO2(){
+    const v = num(el.fio2);
+    if(v===null) return null;
+    if(v>1) return clamp(v/100, 0.21, 1.0);
+    return clamp(v, 0.21, 1.0);
+  }
+
+  function getRefs(){
+    return {
+      phLow: num(el.phLow) ?? 7.35,
+      phHigh: num(el.phHigh) ?? 7.45,
+      co2Low: num(el.co2Low) ?? 35,
+      co2High: num(el.co2High) ?? 45,
+      hco3Low: num(el.hco3Low) ?? 22,
+      hco3High: num(el.hco3High) ?? 26,
+      agUpper: num(el.agUpper) ?? 12,
+      albRef: num(el.albRef) ?? 4.4,
+      hco3Ref: num(el.hco3Ref) ?? 24
+    };
+  }
+
+  function tempCorrect({ph, paco2, pao2, tempC}){
+    if(ph===null || paco2===null || tempC===null) return {phC:ph, paco2C:paco2, pao2C:pao2, applied:false};
+    const dT = 37 - tempC;
+    const phC = ph + (0.015 * dT);
+    const paco2C = paco2 - (2 * dT);
+    const pao2C = (pao2===null) ? null : (pao2 - (5 * dT));
+    return {phC, paco2C, pao2C, applied:true};
+  }
+
+  function hco3Calculated(ph, paco2){
+    if(ph===null || paco2===null) return null;
+    return 0.03 * paco2 * Math.pow(10, (ph - 6.1));
+  }
+
+  function anionGap(na, cl, hco3){
+    if(na===null || cl===null || hco3===null) return null;
+    return na - (cl + hco3);
+  }
+
+  function anionGapWithK(na, k, cl, hco3){
+    if(na===null || k===null || cl===null || hco3===null) return null;
+    return (na + k) - (cl + hco3);
+  }
+
+  function anionGapCorrected(ag, albumin, albRef){
+    if(ag===null) return null;
+    if(albumin===null || albRef===null) return null;
+    return ag + 2.5 * (albRef - albumin);
+  }
+
+  function deltaRatio(agUsed, agUpper, hco3, hco3Ref){
+    if(agUsed===null || agUpper===null || hco3===null || hco3Ref===null) return null;
+    const den = (hco3Ref - hco3);
+    if(den === 0) return null;
+    return (agUsed - agUpper) / den;
+  }
+
+  function calcOsm(na, glu, ureaVal, etoh, mode){
+    if(na===null) return null;
+    const g = (glu===null) ? 0 : glu/18;
+    let u = 0;
+    if(ureaVal!==null){
+      u = (mode==="urea") ? (ureaVal/6.0) : (ureaVal/2.8);
+    }
+    const e = (etoh===null) ? 0 : (etoh/4.6);
+    return (2*na) + g + u + e;
+  }
+
+  function pfRatio(pao2, fio2){
+    if(pao2===null || fio2===null || fio2===0) return null;
+    return pao2 / fio2;
+  }
+
+  function alveolarGas(paco2, fio2, patm, ph2o, rq){
+    if(paco2===null || fio2===null || patm===null || ph2o===null || rq===null || rq===0) return null;
+    return fio2 * (patm - ph2o) - (paco2 / rq);
+  }
+
+  function aAGradient(pao2, PAO2){
+    if(pao2===null || PAO2===null) return null;
+    return PAO2 - pao2;
+  }
+
+  function expectedAaAge(age){
+    if(age===null) return null;
+    return (age/4) + 4;
+  }
+
+  function wintersExpectedPaco2(hco3){
+    if(hco3===null) return null;
+    const exp = (1.5 * hco3) + 8;
+    return {exp, low: exp-2, high: exp+2};
+  }
+
+  function metabolicAlkExpectedPaco2(hco3, hco3Ref){
+    if(hco3===null || hco3Ref===null) return null;
+    const exp = 0.7 * (hco3 - hco3Ref) + 40;
+    return {exp, low: exp-5, high: exp+5};
+  }
+
+  function respAcidosisExpectedHco3(paco2){
+    if(paco2===null) return null;
+    const delta = (paco2 - 40);
+    const acute = 24 + (1.0 * (delta/10));
+    const chronic = 24 + (3.5 * (delta/10));
+    return {acute, chronic};
+  }
+
+  function respAlkalosisExpectedHco3(paco2){
+    if(paco2===null) return null;
+    const delta = (40 - paco2);
+    const acute = 24 - (2.0 * (delta/10));
+    const chronic = 24 - (5.0 * (delta/10));
+    return {acute, chronic};
+  }
+
+  function pickHco3(hco3m, hco3c, prefer){
+    if(prefer==="calculatedOnly") return hco3c;
+    if(prefer==="measuredOnly") return hco3m;
+    return (hco3m!==null) ? hco3m : hco3c;
+  }
+
+  function deltaTxt(dr){
+    if(dr===null) return "—";
+    if(dr < 0.4) return "Δ ratio muito baixo → sugere NAGMA predominante (ou HCO₃ alto prévio).";
+    if(dr < 0.8) return "Δ ratio baixo → HAGMA + NAGMA provável.";
+    if(dr <= 2.0) return "Δ ratio ~0,8–2 → HAGMA “puro” (aproximação).";
+    return "Δ ratio >2 → HAGMA + alcalose metabólica (ou HCO₃ alto prévio).";
+  }
+
+  function pfTxt(pf){
+    if(pf===null) return "—";
+    if(pf >= 300) return "P/F ≥300 → oxigenação preservada (regra geral).";
+    if(pf >= 200) return "P/F 200–299 → comprometimento leve.";
+    if(pf >= 100) return "P/F 100–199 → comprometimento moderado.";
+    return "P/F <100 → comprometimento grave.";
+  }
+
+  function agTxt(ag, agUpper){
+    if(ag===null || agUpper===null) return "—";
+    if(ag > agUpper) return "AG elevado → sugere HAGMA (se pH/HCO₃ compatíveis).";
+    return "AG não elevado → se acidose metabólica, considerar NAGMA (hiperclorêmica) e outras causas.";
+  }
+
+  function osmGapTxt(osmGap){
+    if(osmGap===null) return "—";
+    if(osmGap > 10) return "Gap osmolar >10 → osmóis não medidos (ex: intoxicações/álcoois) ou variação.";
+    if(osmGap < -10) return "Gap osmolar muito negativo → checar unidade, coleta e fórmula escolhida.";
+    return "Gap osmolar sem elevação relevante (regra geral).";
+  }
+
+  function badgeFor(sev){
+    const cls = sev==="bad" ? "bad" : sev==="warn" ? "warn" : sev==="ok" ? "ok" : "";
+    const text = sev==="bad" ? "Alerta" : sev==="warn" ? "Atenção" : sev==="ok" ? "Sem alertas críticos" : "—";
+    out.statusBadge.className = "badge " + cls;
+    out.statusBadge.innerHTML = `<span class="${cls}">●</span> <span>${text}</span>`;
+  }
+
+  function addAlert(arr, sev, msg){ arr.push({sev, msg}); }
+
+  function renderAlerts(alerts){
+    if(!alerts.length){
+      out.alertsList.innerHTML = `<li class="mini">Nenhum alerta automático pelos thresholds configurados.</li>`;
+      badgeFor("ok");
+      return;
+    }
+    const hasBad = alerts.some(a=>a.sev==="bad");
+    const hasWarn = alerts.some(a=>a.sev==="warn");
+    badgeFor(hasBad ? "bad" : hasWarn ? "warn" : "ok");
+
+    out.alertsList.innerHTML = alerts.map(a=>{
+      const cls = a.sev==="bad" ? "bad" : a.sev==="warn" ? "warn" : "ok";
+      return `<li><span class="${cls}" style="font-weight:950">${a.sev.toUpperCase()}</span> — ${a.msg}</li>`;
+    }).join("");
+  }
+
+  function acidBaseInterpretation({ph, paco2, hco3, refs, ag, agCorr, dr, winters, metAlk, raExp, ralkExp}){
+    const lines = [];
+
+    if(ph===null || paco2===null || hco3===null){
+      return {
+        primary:"—",
+        note:"Preencha pH, PaCO₂ e HCO₃⁻ para interpretar.",
+        text:`<div class="mini">Campos mínimos: pH, PaCO₂ e HCO₃⁻ (medido ou calculado).</div>`
+      };
+    }
+
+    const acidemia = ph < refs.phLow;
+    const alkalemia = ph > refs.phHigh;
+
+    const co2High = paco2 > refs.co2High;
+    const co2Low  = paco2 < refs.co2Low;
+    const hco3High = hco3 > refs.hco3High;
+    const hco3Low  = hco3 < refs.hco3Low;
+
+    if(acidemia) lines.push(`<b>1) pH</b> ${fmt(ph,3)} &lt; ${fmt(refs.phLow,3)} → <b>acidemia</b>.`);
+    else if(alkalemia) lines.push(`<b>1) pH</b> ${fmt(ph,3)} &gt; ${fmt(refs.phHigh,3)} → <b>alcalemia</b>.`);
+    else lines.push(`<b>1) pH</b> dentro da faixa → pode haver <b>distúrbio compensado</b> ou <b>misto</b>.`);
+
+    let primary = [];
+    if(acidemia){
+      if(co2High && hco3Low) primary.push("Acidose mista (metabólica + respiratória)");
+      else if(hco3Low) primary.push("Acidose metabólica");
+      else if(co2High) primary.push("Acidose respiratória");
+      else primary.push("Acidemia sem padrão clássico (rever dados/refs)");
+    } else if(alkalemia){
+      if(co2Low && hco3High) primary.push("Alcalose mista (metabólica + respiratória)");
+      else if(hco3High) primary.push("Alcalose metabólica");
+      else if(co2Low) primary.push("Alcalose respiratória");
+      else primary.push("Alcalemia sem padrão clássico (rever dados/refs)");
+    } else {
+      if(co2High && hco3High) primary.push("Distúrbio compensado provável (resp. acidose crônica OU alcalose metabólica com compensação)");
+      else if(co2Low && hco3Low) primary.push("Distúrbio compensado provável (resp. alcalose crônica OU acidose metabólica com compensação)");
+      else if(co2High && hco3Low) primary.push("Distúrbio misto provável (acidose respiratória + acidose metabólica)");
+      else if(co2Low && hco3High) primary.push("Distúrbio misto provável (alcalose respiratória + alcalose metabólica)");
+      else primary.push("Sem distúrbio evidente pelas faixas (ou refs inadequadas)");
+    }
+
+    lines.push(`<b>2) Padrão pH/PaCO₂/HCO₃⁻</b> → <b>${primary.join(" / ")}</b>.`);
+
+    const comp = [];
+    function compCompare(measured, rangeObj, label){
+      if(measured===null || !rangeObj) return null;
+      if(measured > rangeObj.high) return `${label}: medido ${fmt(measured,1)} acima do esperado (${fmt(rangeObj.exp,1)} ±) → sugere <b>distúrbio adicional</b>.`;
+      if(measured < rangeObj.low) return `${label}: medido ${fmt(measured,1)} abaixo do esperado (${fmt(rangeObj.exp,1)} ±) → sugere <b>distúrbio adicional</b>.`;
+      return `${label}: medido ${fmt(measured,1)} dentro do esperado (${fmt(rangeObj.exp,1)} ±) → <b>compensação apropriada</b>.`;
+    }
+
+    if(hco3Low && winters){
+      comp.push(`<b>3) Compensação (Winters)</b>: PaCO₂ esperado ≈ ${fmt(winters.exp,1)} (faixa ${fmt(winters.low,1)}–${fmt(winters.high,1)}).`);
+      const c = compCompare(paco2, winters, "Comparação");
+      if(c) comp.push(c);
+    }
+
+    if(hco3High && metAlk){
+      comp.push(`<b>3) Compensação (Alcalose metabólica)</b>: PaCO₂ esperado ≈ ${fmt(metAlk.exp,1)} (faixa ${fmt(metAlk.low,1)}–${fmt(metAlk.high,1)}).`);
+      const c = compCompare(paco2, metAlk, "Comparação");
+      if(c) comp.push(c);
+    }
+
+    if(ag!==null){
+      const agU = refs.agUpper;
+      const agUsed = (agCorr!==null) ? agCorr : ag;
+      lines.push(`<b>4) Ânion gap</b>: AG = ${fmt(ag,1)} (upper ${fmt(agU,1)})${(agCorr!==null ? `; AG corrigido = ${fmt(agCorr,1)}` : "")}.`);
+      if(agUsed > agU) lines.push(`<span class="warn"><b>AG elevado</b></span> → se houver acidose metabólica, classificar como <b>HAGMA</b>.`);
+      else lines.push(`<span class="ok"><b>AG não elevado</b></span> → se houver acidose metabólica, pensar em <b>NAGMA</b>.`);
+      if(dr!==null){
+        lines.push(`<b>5) Delta ratio</b> = ${fmt(dr,2)} → ${deltaTxt(dr)}`);
+      }
+    }
+
+    let primaryLabel = primary.join(" / ");
+    if(primaryLabel.includes("Acidose metabólica")){
+      const agUsed = (agCorr!==null) ? agCorr : ag;
+      if(agUsed!==null && agUsed > refs.agUpper) primaryLabel = primaryLabel.replace("Acidose metabólica", "Acidose metabólica com ânion gap aumentado (HAGMA)");
+      else if(agUsed!==null) primaryLabel = primaryLabel.replace("Acidose metabólica", "Acidose metabólica sem ânion gap aumentado (NAGMA)");
+    }
+
+    return {
+      primary: primaryLabel,
+      note: (!acidemia && !alkalemia) ? "pH normal sugere distúrbio compensado ou misto." : "Checar compensação para confirmar se é simples ou misto.",
+      text: `<ul class="list">
+        ${lines.map(x=>`<li>${x}</li>`).join("")}
+        ${comp.length ? `<li style="margin-top:10px">${comp.join("<br>")}</li>` : ""}
+      </ul>`
+    };
+  }
+
+  function buildCalcRows(ctx){
+    const rows = [];
+    function row(name, value, interp){
+      rows.push(`<tr><td>${name}</td><td class="mono">${value}</td><td>${interp}</td></tr>`);
+    }
+
+    row("HCO₃⁻ (calculado)", ctx.hco3c===null?"—":fmt(ctx.hco3c,1)+" mEq/L", ctx.hco3c===null?"—":"Henderson–Hasselbalch");
+    row("HCO₃⁻ (usado)", ctx.hco3===null?"—":fmt(ctx.hco3,1)+" mEq/L", ctx.hco3===null?"—":(ctx.hco3Source));
+
+    row("Ânion gap (AG)", ctx.ag===null?"—":fmt(ctx.ag,1)+" mEq/L", agTxt(ctx.ag, ctx.refs.agUpper));
+    row("AG corrigido (albumina)", ctx.agCorr===null?"—":fmt(ctx.agCorr,1)+" mEq/L", ctx.agCorr===null?"Preencha albumina para corrigir." : "AG + 2,5×(albRef − alb).");
+    row("AG com K⁺ (opcional)", ctx.agK===null?"—":fmt(ctx.agK,1)+" mEq/L", ctx.agK===null?"Preencha K⁺ para calcular." : "Alguns serviços incluem K⁺.");
+
+    row("Delta ratio (Δ)", ctx.dr===null?"—":fmt(ctx.dr,2), deltaTxt(ctx.dr));
+
+    row("Osmolaridade calculada", ctx.osm===null?"—":fmt(ctx.osm,0)+" mOsm/kg", ctx.osm===null?"Preencha Na⁺ (ideal: glicose + ureia/BUN).":"2×Na + glicose/18 + ureia/BUN + etanol/4,6.");
+    row("Gap osmolar", ctx.osmGap===null?"—":fmt(ctx.osmGap,0)+" mOsm/kg", osmGapTxt(ctx.osmGap));
+
+    row("Relação PaO₂/FiO₂ (P/F)", ctx.pf===null?"—":fmt(ctx.pf,0), pfTxt(ctx.pf));
+    row("PAO₂ (equação alveolar)", ctx.PAO2===null?"—":fmt(ctx.PAO2,1)+" mmHg", ctx.PAO2===null?"—":"FiO₂×(Patm−PH₂O) − PaCO₂/RQ.");
+    row("Gradiente A–a", ctx.Aa===null?"—":fmt(ctx.Aa,1)+" mmHg", (ctx.Aa===null?"—":(ctx.AaExp!==null ? `Estimativa A–a esperado (ar ambiente) ~${fmt(ctx.AaExp,1)}; comparar com cautela.` : "Compare com contexto/FiO₂/idade.")));
+
+    return rows;
+  }
+
+  function buildCopySummary(ctx, abgDiag){
+    const parts = [];
+    const fio2Pct = (ctx.fio2===null) ? "—" : (ctx.fio2*100).toFixed(0)+"%";
+    const tline = ctx.temp===null ? "" : ` | Temp ${fmt(ctx.temp,1)}°C`;
+    const corrTag = (ctx.tempCorrApplied) ? " (corrigido p/ Temp)" : "";
+    const rrline = (ctx.rr===null) ? "" : ` | FR ${fmt(ctx.rr,0)}`;
+
+    parts.push(`GASOMETRIA: pH ${fmt(ctx.ph,3)} | PaCO2 ${fmt(ctx.paco2,1)} | PaO2 ${fmt(ctx.pao2,1)} | SatO2 ${fmt(ctx.sao2,1)} | FiO2 ${fio2Pct}${tline}${rrline}${corrTag}`);
+    parts.push(`HCO3 usado: ${fmt(ctx.hco3,1)} (med ${fmt(ctx.hco3m,1)} / calc ${fmt(ctx.hco3c,1)}) | BE ${fmt(ctx.be,1)} | Lactato ${fmt(ctx.lac,1)}`);
+    parts.push(`Eletrólitos: Na ${fmt(ctx.na,1)} | K ${fmt(ctx.k,1)} | Cl ${fmt(ctx.cl,1)} | Alb ${fmt(ctx.alb,1)} | Glicose ${fmt(ctx.glu,0)} | Ureia/BUN ${fmt(ctx.urea,0)} | Etanol ${fmt(ctx.etoh,0)}`);
+    parts.push(`ÁCIDO-BASE: ${abgDiag.primary}. ${abgDiag.note}`);
+    parts.push(`AG ${fmt(ctx.ag,1)} | AGcorr ${fmt(ctx.agCorr,1)} | Δratio ${fmt(ctx.dr,2)}`);
+    parts.push(`Osm calc ${fmt(ctx.osm,0)} | Osm medida ${fmt(ctx.osmm,0)} | Gap osm ${fmt(ctx.osmGap,0)}`);
+    parts.push(`Oxigenação: P/F ${fmt(ctx.pf,0)} | A–a ${fmt(ctx.Aa,1)} (PAO2 ${fmt(ctx.PAO2,1)})`);
+    parts.push(`Alertas: ${ctx.alertText || "—"}`);
+
+    return parts.filter(Boolean).join("\n");
+  }
+
+  function buildFormulaText(){
+    return [
+      "FÓRMULAS USADAS (resumo):",
+      "HCO3- calculado = 0.03 × PaCO2 × 10^(pH − 6.1)",
+      "AG = Na − (Cl + HCO3)",
+      "AGcorr = AG + 2.5 × (AlbRef − Alb)",
+      "Delta ratio = (AG_used − AG_upper) / (HCO3_ref − HCO3)",
+      "Osm calc = 2×Na + glicose/18 + (BUN/2.8 ou ureia/6.0) + etanol/4.6",
+      "P/F = PaO2 / FiO2",
+      "PAO2 = FiO2×(Patm − PH2O) − PaCO2/RQ",
+      "A–a = PAO2 − PaO2",
+      "Winters: PaCO2 esp = 1.5×HCO3 + 8 ±2",
+      "Alcalose metab: PaCO2 esp = 0.7×(HCO3 − HCO3_ref) + 40 ±5",
+      "Acidose resp: HCO3 esp aguda ≈ 24 + 1×(ΔPaCO2/10); crônica ≈ 24 + 3.5×(ΔPaCO2/10)",
+      "Alcalose resp: HCO3 esp aguda ≈ 24 − 2×(ΔPaCO2/10); crônica ≈ 24 − 5×(ΔPaCO2/10)",
+      "Correção por temperatura (aprox): a cada 1°C abaixo de 37 → PaO2 −5 mmHg, PaCO2 −2 mmHg, pH +0.015"
+    ].join("\n");
+  }
+
+  function recompute(){
+    const refs = getRefs();
+
+    let ph = num(el.ph);
+    let paco2 = num(el.paco2);
+    let pao2 = num(el.pao2);
+    let sao2 = num(el.sao2);
+    const hco3m = num(el.hco3m);
+    const be = num(el.be);
+
+    const na = num(el.na);
+    const k = num(el.k);
+    const cl = num(el.cl);
+    const alb = num(el.alb);
+    const glu = num(el.glu);
+    const ureaVal = num(el.urea);
+    const lac = num(el.lac);
+    const etoh = num(el.etoh);
+    const osmm = num(el.osmm);
+
+    const fio2 = getFiO2();
+    const temp = num(el.temp);
+    const age = num(el.age);
+    const rr = num(el.rr);
+
+    const patm = num(el.patm) ?? 760;
+    const ph2o = num(el.ph2o) ?? 47;
+    const rq = num(el.rq) ?? 0.8;
+
+    const doTempCorr = (el.useTempCorr.value === "yes");
+    const tc = (doTempCorr ? tempCorrect({ph, paco2, pao2, tempC: temp}) : {phC:ph, paco2C:paco2, pao2C:pao2, applied:false});
+    ph = tc.phC; paco2 = tc.paco2C; pao2 = tc.pao2C;
+
+    const hco3c = hco3Calculated(ph, paco2);
+
+    const prefer = el.hco3Prefer.value;
+    const hco3 = pickHco3(hco3m, hco3c, prefer);
+    const hco3Source = (prefer==="calculatedOnly") ? "Calculado (forçado)" :
+                       (prefer==="measuredOnly") ? "Medido (forçado)" :
+                       (hco3m!==null ? "Medido (prioritário)" : "Calculado (fallback)");
+
+    const ag = anionGap(na, cl, hco3);
+    const agK = anionGapWithK(na, k, cl, hco3);
+    const agCorr = anionGapCorrected(ag, alb, refs.albRef);
+
+    const agUsed = (agCorr!==null) ? agCorr : ag;
+    const dr = deltaRatio(agUsed, refs.agUpper, hco3, refs.hco3Ref);
+
+    const osm = calcOsm(na, glu, ureaVal, etoh, el.ureaMode.value);
+    const osmGap = (osm!==null && osmm!==null) ? (osmm - osm) : null;
+
+    const pf = pfRatio(pao2, fio2);
+    const PAO2 = alveolarGas(paco2, fio2, patm, ph2o, rq);
+    const Aa = aAGradient(pao2, PAO2);
+    const AaExp = expectedAaAge(age);
+
+    const winters = wintersExpectedPaco2(hco3);
+    const metAlk = metabolicAlkExpectedPaco2(hco3, refs.hco3Ref);
+    const raExp = respAcidosisExpectedHco3(paco2);
+    const ralkExp = respAlkalosisExpectedHco3(paco2);
+
+    const alerts = [];
+    if(ph!==null){
+      if(ph < 7.20) addAlert(alerts, "bad", `pH ${fmt(ph,2)} muito baixo (acidemia importante).`);
+      else if(ph < refs.phLow) addAlert(alerts, "warn", `pH ${fmt(ph,2)} abaixo da referência (acidemia).`);
+      if(ph > 7.60) addAlert(alerts, "bad", `pH ${fmt(ph,2)} muito alto (alcalemia importante).`);
+      else if(ph > refs.phHigh) addAlert(alerts, "warn", `pH ${fmt(ph,2)} acima da referência (alcalemia).`);
+    }
+    if(pao2!==null){
+      if(pao2 < 55) addAlert(alerts, "bad", `PaO₂ ${fmt(pao2,0)} sugere hipoxemia importante (dependente de FiO₂).`);
+      else if(pao2 < 70) addAlert(alerts, "warn", `PaO₂ ${fmt(pao2,0)} abaixo do ideal (interpretar com FiO₂).`);
+    }
+    if(paco2!==null){
+      if(paco2 > 60) addAlert(alerts, "warn", `PaCO₂ ${fmt(paco2,0)} elevado (hipercapnia).`);
+      if(paco2 < 30) addAlert(alerts, "warn", `PaCO₂ ${fmt(paco2,0)} baixo (hipocapnia).`);
+    }
+    if(lac!==null){
+      if(lac >= 4) addAlert(alerts, "bad", `Lactato ${fmt(lac,1)} elevado (acima de 4).`);
+      else if(lac >= 2) addAlert(alerts, "warn", `Lactato ${fmt(lac,1)} acima de 2 (avaliar perfusão/causas).`);
+    }
+    if(pf!==null){
+      if(pf < 100) addAlert(alerts, "bad", `P/F ${fmt(pf,0)} muito baixo → comprometimento grave da oxigenação.`);
+      else if(pf < 200) addAlert(alerts, "warn", `P/F ${fmt(pf,0)} baixo → comprometimento moderado.`);
+      else if(pf < 300) addAlert(alerts, "warn", `P/F ${fmt(pf,0)} sugere comprometimento leve.`);
+    }
+    if(agUsed!==null && hco3!==null){
+      if(agUsed > refs.agUpper && hco3 < refs.hco3Low) addAlert(alerts, "warn", `AG elevado + HCO₃ baixo → padrão compatível com HAGMA (confirmar com contexto).`);
+    }
+    if(hco3m!==null && hco3c!==null){
+      const diff = Math.abs(hco3m - hco3c);
+      if(diff >= 3) addAlert(alerts, "warn", `HCO₃ medido (${fmt(hco3m,1)}) difere do calculado (${fmt(hco3c,1)}) em ~${fmt(diff,1)} → checar unidade/entrada/laudo.`);
+    }
+
+    renderAlerts(alerts);
+
+    const abgDiag = acidBaseInterpretation({
+      ph, paco2, hco3,
+      refs, ag, agCorr, dr,
+      winters, metAlk,
+      raExp, ralkExp
+    });
+
+    out.kpiPrimary.textContent = abgDiag.primary;
+    out.kpiPrimaryNote.textContent = abgDiag.note;
+
+    const oxyMain = (pf!==null) ? `P/F ${fmt(pf,0)}` : "—";
+    out.kpiOxy.textContent = oxyMain;
+    out.kpiOxyNote.textContent =
+      (pf===null && Aa===null) ? "Preencha PaO₂ e FiO₂ (e PaCO₂ p/ A–a)." :
+      (pf!==null && Aa!==null) ? `${pfTxt(pf)} A–a ${fmt(Aa,1)}.` :
+      (pf!==null) ? pfTxt(pf) :
+      `A–a ${fmt(Aa,1)} (PAO₂ ${fmt(PAO2,1)}).`;
+
+    out.acidBaseText.innerHTML = abgDiag.text;
+
+    const ctx = {
+      ph, paco2, pao2, sao2,
+      hco3, hco3m, hco3c, hco3Source,
+      be, na, k, cl, alb, glu,
+      urea: ureaVal, lac, etoh, osmm,
+      fio2, temp, age, rr,
+      refs,
+      ag, agK, agCorr, dr,
+      osm, osmGap,
+      pf, PAO2, Aa, AaExp,
+      tempCorrApplied: tc.applied
+    };
+
+    out.calcTable.innerHTML = buildCalcRows(ctx).join("");
+
+    const alertText = alerts.map(a=>`${a.sev.toUpperCase()}: ${a.msg}`).join(" | ");
+    ctx.alertText = alertText || "";
+    out.copyBox.value = buildCopySummary(ctx, abgDiag);
+  }
+
+  function copyText(txt){
+    if(!txt) return;
+    navigator.clipboard.writeText(txt).catch(()=>{});
+  }
+
+  document.querySelectorAll("input,select").forEach(node=>{
+    node.addEventListener("input", recompute);
+    node.addEventListener("change", recompute);
+  });
+
+  btnReset.addEventListener("click", ()=>{
+    ["ph","paco2","pao2","sao2","hco3m","be","na","k","cl","alb","glu","urea","lac","etoh","osmm","fio2","temp","age","rr"].forEach(id=>{
+      const n = $(id);
+      if(n) n.value = "";
+    });
+    el.ureaMode.value = "bun";
+    el.useTempCorr.value = "no";
+    el.hco3Prefer.value = "measuredFirst";
+    el.patm.value = "760";
+    el.ph2o.value = "47";
+    el.rq.value = "0.8";
+    recompute();
+    setMobileTab("data");
+  });
+
+  btnExample.addEventListener("click", ()=>{
+    el.ph.value = "7.22";
+    el.paco2.value = "26";
+    el.pao2.value = "60";
+    el.sao2.value = "90";
+    el.hco3m.value = "11";
+    el.be.value = "-14";
+
+    el.na.value = "140";
+    el.k.value = "4.5";
+    el.cl.value = "102";
+    el.alb.value = "3.0";
+    el.glu.value = "180";
+    el.ureaMode.value = "bun";
+    el.urea.value = "28";
+    el.lac.value = "5.2";
+    el.etoh.value = "0";
+    el.osmm.value = "320";
+
+    el.fio2.value = "0.35";
+    el.temp.value = "36.5";
+    el.age.value = "55";
+    el.rr.value = "28";
+
+    el.useTempCorr.value = "no";
+    el.hco3Prefer.value = "measuredFirst";
+    recompute();
+    setMobileTab("results");
+  });
+
+  btnCopy.addEventListener("click", ()=>copyText(out.copyBox.value));
+  btnCopy2.addEventListener("click", ()=>copyText(out.copyBox.value));
+  btnCopyFormula.addEventListener("click", ()=>copyText(buildFormulaText()));
+
+  recompute();
+})();
+</script>
+
+</body>
+</html>
