@@ -1,1661 +1,1830 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>UsoJaleco | Criar Solicitação</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preenchimento de Documentos</title>
 
-  <!-- PDF.js (CDN) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.js" crossorigin="anonymous"></script>
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
 
   <style>
-    :root{
-      --bg:#0b0c10;
-      --panel:#11131a;
-      --panel2:#0f1117;
-      --card:#141824;
-      --line:#23283a;
-      --text:#e9ecf5;
-      --muted:#a6afc3;
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-      --purple:#a855f7;
-      --purple2:#7c3aed;
-
-      --good:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-
-      --shadow: 0 14px 35px rgba(0,0,0,.45);
-      --radius: 18px;
-      --radius2: 14px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --ui: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
     body{
-      margin:0;
-      font-family:var(--ui);
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 12% 8%, rgba(168,85,247,.18), transparent 60%),
-        radial-gradient(700px 420px at 86% 18%, rgba(124,58,237,.13), transparent 60%),
-        linear-gradient(180deg, #070810, #0b0c10 30%, #070810);
+      font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:#f5f5f5;
+      padding:20px;
+    }
+
+    .container{
+      max-width:1400px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:8px;
+      box-shadow:0 2px 10px rgba(0,0,0,.1);
       overflow:hidden;
     }
 
-    .topbar{
-      height:62px;
+    .header{
+      background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%);
+      color:#fff;
+      padding:30px;
+    }
+    .header h1{ font-size:28px; margin-bottom:10px; }
+    .header p{ opacity:.9; font-size:14px; }
+
+    .content{
+      display:grid;
+      grid-template-columns:360px 1fr;
+      gap:0;
+      min-height:calc(100vh - 200px);
+    }
+
+    .sidebar, .canvas-area { min-width:0; }
+
+    .sidebar{
+      background:#f8f9fa;
+      padding:20px;
+      border-right:1px solid #e0e0e0;
+      overflow:auto;
+    }
+
+    .block-title{
+      font-size:16px;
+      margin:0 0 10px;
+      color:#333;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .status-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .status-pill{
+      display:inline-block;
+      font-size:11px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#334155;
+      border:1px solid #c7d2fe;
+      user-select:none;
+    }
+    .status-pill.ok{
+      background:#e6fffa;
+      border-color:rgba(17,153,142,.35);
+      color:#0d7a6f;
+    }
+    .status-pill.warn{
+      background:#fff7ed;
+      border-color:rgba(234,88,12,.35);
+      color:#9a3412;
+    }
+    .status-pill.bad{
+      background:#fff5f5;
+      border-color:rgba(220,53,69,.35);
+      color:#b91c1c;
+    }
+
+    .catalog-search{
+      display:flex;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .catalog-search input{
+      flex:1;
+      padding:10px;
+      border:2px solid #e0e0e0;
+      border-radius:8px;
+      font-size:14px;
+      background:#fff;
+      outline:none;
+      transition:.2s;
+    }
+    .catalog-search input:focus{
+      border-color:#11998e;
+      background:#f0fff4;
+    }
+
+    .mini-btn{
+      border:1px solid #e5e7eb;
+      background:#ffffff;
+      padding:10px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      transition:.15s;
+      white-space:nowrap;
+    }
+    .mini-btn:hover{ transform:translateY(-1px); border-color:#cbd5e1; }
+
+    .catalog-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .catalog-card{
+      background:#fff;
+      border:2px solid #e0e0e0;
+      border-radius:10px;
+      padding:12px 12px;
+      cursor:pointer;
+      transition:all .15s;
+    }
+    .catalog-card:hover{
+      border-color:#11998e;
+      background:#f0fff4;
+    }
+    .catalog-card.active{
+      border-color:#11998e;
+      background:#e6fffa;
+    }
+    .catalog-card h4{
+      font-size:13px;
+      margin-bottom:4px;
+      color:#0f172a;
+      font-weight:900;
+    }
+    .catalog-card .sub{
+      font-size:12px;
+      color:#64748b;
+      line-height:1.35;
+    }
+    .catalog-empty{
+      font-size:13px;
+      color:#64748b;
+      text-align:center;
+      padding:14px 8px;
+      border:2px dashed #e5e7eb;
+      border-radius:10px;
+      background:#fff;
+    }
+
+    .hint{
+      font-size:12px;
+      color:#475569;
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      padding:10px 12px;
+      line-height:1.45;
+    }
+    .hint strong{ color:#0f172a; }
+
+    /* =========================
+       VIEWER
+       ========================= */
+    .canvas-area{
+      background:#fafafa;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+
+    .viewer-toolbar{
+      height:auto;
+      min-height:54px;
+      background:#fff;
+      border-bottom:1px solid #e5e7eb;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:0 16px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      background:rgba(10,12,16,.78);
-      backdrop-filter: blur(10px);
+      gap:12px;
+      padding:10px 14px;
+      flex:0 0 auto;
+      flex-wrap:wrap;
     }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:260px;
-    }
-    .dot{
-      width:12px;height:12px;border-radius:50%;
-      background:linear-gradient(135deg, var(--purple), #ff7a18);
-      box-shadow:0 0 0 4px rgba(168,85,247,.12);
-    }
-    .brand h1{font-size:15px;margin:0;font-weight:800;letter-spacing:.2px}
-    .brand .sub{font-size:12px;color:var(--muted);margin-top:2px}
-    .actions{
+
+    .toolbar-group{
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-end;
     }
-    .btn{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      padding:9px 12px;
-      border-radius:12px;
+
+    .zbtn{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid #e5e7eb;
+      background:#f8fafc;
       cursor:pointer;
-      font-weight:700;
-      font-size:12px;
-      display:inline-flex;
+      display:flex;
       align-items:center;
-      gap:8px;
+      justify-content:center;
+      font-size:18px;
+      transition:all .15s;
       user-select:none;
-      transition:.15s ease;
     }
-    .btn:hover{transform: translateY(-1px); border-color: rgba(168,85,247,.35)}
-    .btn:active{transform: translateY(0px)}
-    .btn.primary{
-      background: linear-gradient(135deg, rgba(168,85,247,.22), rgba(124,58,237,.14));
-      border-color: rgba(168,85,247,.35);
-    }
-    .btn.good{
-      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.08));
-      border-color: rgba(34,197,94,.35);
-    }
-    .btn.bad{
-      background: linear-gradient(135deg, rgba(239,68,68,.18), rgba(239,68,68,.08));
-      border-color: rgba(239,68,68,.35);
-    }
-    .btn.small{padding:7px 10px;border-radius:10px}
-    .pill{
-      font-family:var(--mono);
-      font-size:11px;
-      padding:6px 10px;
+    .zbtn:hover{ background:#e2e8f0; border-color:#cbd5e1; }
+
+    .zbtn.wide{
+      width:auto;
+      padding:0 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      color:var(--muted);
-      white-space:nowrap;
-    }
-
-    .layout{
-      height:calc(100% - 62px);
-      display:grid;
-      grid-template-columns: 320px 1fr 340px;
-      gap:12px;
-      padding:12px;
-    }
-    .panel{
-      background:rgba(17,19,26,.70);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-    }
-    .panel header{
-      padding:12px 12px 10px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .panel header h2{margin:0;font-size:13px;font-weight:900}
-    .panel header .hint{font-size:12px;color:var(--muted)}
-    .panel .content{padding:12px; overflow:auto; min-height:0}
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin-bottom:12px;
-    }
-    label{
       font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    input[type="text"], input[type="number"], select, textarea{
-      width:100%;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--text);
-      border-radius:12px;
-      padding:10px 11px;
-      outline:none;
-      font-weight:700;
-      font-size:13px;
-    }
-    textarea{min-height:90px; resize:vertical; font-weight:600}
-    input[type="file"]{
-      width:100%;
-      background:rgba(255,255,255,.04);
-      border:1px dashed rgba(255,255,255,.16);
-      border-radius:12px;
-      padding:10px;
-      color:var(--muted);
-      font-weight:700;
+      font-weight:900;
+      height:34px;
     }
 
-    .row{display:flex; gap:10px}
-    .row > *{flex:1}
-    .tools{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:6px;
-    }
-    .tool{
-      padding:10px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
-      cursor:pointer;
-      user-select:none;
-      transition:.15s ease;
-    }
-    .tool:hover{border-color: rgba(168,85,247,.35); transform:translateY(-1px)}
-    .tool strong{display:block; font-size:12px}
-    .tool span{display:block; font-size:11px; color:var(--muted); margin-top:4px; line-height:1.2}
-    .tool.active{
-      border-color: rgba(168,85,247,.55);
-      box-shadow: 0 0 0 4px rgba(168,85,247,.10);
-      background: rgba(168,85,247,.08);
+    .zoom-display{
+      font-size:14px;
+      font-weight:900;
+      min-width:72px;
+      text-align:center;
+      color:#0f172a;
     }
 
-    /* Viewer */
-    .viewer{
-      background: rgba(10,12,16,.55);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-      position:relative;
-    }
-    .viewer .vtop{
-      padding:10px 12px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      background:rgba(15,17,23,.55);
-      backdrop-filter: blur(10px);
-    }
-    .vtop .left, .vtop .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-    .vtop .title{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:800;
-      max-width:540px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .viewer .stage{
+    .viewer-scroll{
       flex:1;
-      min-height:0;
       overflow:auto;
-      padding:16px;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-    }
-    .pagewrap{
-      position:relative;
-      border-radius: 16px;
-      overflow:hidden;
-      background: #0b0c10;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow: 0 18px 50px rgba(0,0,0,.45);
-    }
-    canvas#pdfCanvas, img#imgCanvas{
-      display:block;
-      max-width: 100%;
-      height:auto;
-      user-select:none;
-      -webkit-user-drag:none;
-    }
-    img#imgCanvas{display:none}
-    canvas#pdfCanvas{display:none}
-
-    .overlay{
-      position:absolute;
-      inset:0;
-      pointer-events:none; /* fields will re-enable */
-    }
-    .fbox{
-      position:absolute;
-      border:2px solid rgba(168,85,247,.78);
-      border-radius: 10px;
-      background: rgba(168,85,247,.12);
-      box-shadow: 0 0 0 4px rgba(168,85,247,.08);
-      pointer-events:auto;
-      cursor:move;
-      display:flex;
-      align-items:flex-start;
-      justify-content:flex-start;
-      padding:6px 8px;
-      gap:6px;
-      overflow:hidden;
-      min-width:24px;
-      min-height:18px;
-    }
-    .fbox.selected{
-      border-color: rgba(168,85,247,1);
-      box-shadow: 0 0 0 4px rgba(168,85,247,.12), 0 14px 34px rgba(168,85,247,.10);
-      background: rgba(168,85,247,.16);
-    }
-    .fbox .tag{
-      font-family:var(--mono);
-      font-size:11px;
-      font-weight:900;
-      color: rgba(233,236,245,.95);
-      background: rgba(15,17,23,.55);
-      border:1px solid rgba(255,255,255,.10);
-      padding:4px 8px;
-      border-radius:999px;
-      white-space:nowrap;
-    }
-    .fbox .meta{
-      font-size:11px;
-      color: rgba(233,236,245,.85);
-      font-weight:800;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: 100%;
-      align-self:center;
-    }
-    .fbox[data-type="checkbox"]{
-      align-items:center;
-      justify-content:center;
-      padding:0;
-    }
-    .fbox[data-type="checkbox"]::after{
-      content:"";
-      width: 14px; height: 14px;
-      border: 2px solid rgba(233,236,245,.90);
-      border-radius: 4px;
-      background: rgba(255,255,255,.06);
-    }
-    .fbox[data-type="boxes"]{
-      padding:6px 8px;
-    }
-    .fbox[data-type="boxes"] .meta{display:none}
-    .fbox[data-type="boxes"]::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius: 8px;
-      opacity:.95;
-      pointer-events:none;
-      background-image:
-        repeating-linear-gradient(
-          to right,
-          transparent 0,
-          transparent calc((100%/var(--n)) - 1px),
-          rgba(168,85,247,.70) calc((100%/var(--n)) - 1px),
-          rgba(168,85,247,.70) calc(100%/var(--n))
-        );
-      mix-blend-mode: screen;
-    }
-
-    .handle{
-      position:absolute;
-      width:12px;height:12px;
-      border-radius:4px;
-      background: rgba(168,85,247,.95);
-      border:1px solid rgba(255,255,255,.65);
-      box-shadow: 0 8px 18px rgba(0,0,0,.45);
-      pointer-events:auto;
-      cursor:nwse-resize;
-      display:none;
-    }
-    .fbox.selected .handle{display:block}
-    .handle.nw{left:-6px; top:-6px; cursor:nwse-resize}
-    .handle.ne{right:-6px; top:-6px; cursor:nesw-resize}
-    .handle.sw{left:-6px; bottom:-6px; cursor:nesw-resize}
-    .handle.se{right:-6px; bottom:-6px; cursor:nwse-resize}
-
-    .empty{
-      margin:26px auto 0;
-      max-width: 860px;
       padding:18px;
-      border-radius: 18px;
-      border:1px dashed rgba(255,255,255,.14);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-weight:800;
-      line-height:1.35;
-    }
-    .empty strong{color:var(--text)}
-    .kbd{
-      font-family: var(--mono);
-      font-size: 11px;
-      padding:2px 7px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.05);
-      color: rgba(233,236,245,.92);
+      min-width:0;
     }
 
-    /* Modal */
-    .modal{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
-      display:none;
-      align-items:center;
-      justify-content:center;
+    #zoom-wrapper{
+      position:relative;
+      transform-origin: top left;
+      display:inline-block;
+    }
+
+    #canvas-container{
+      position:relative;
+      display:inline-block;
+      box-shadow:0 4px 20px rgba(0,0,0,.1);
+      background:#fff;
+    }
+
+    #document-canvas{ display:block; background:#fff; }
+
+    .placeholder-canvas{
       padding:16px;
-      z-index:999;
-    }
-    .modal.show{display:flex}
-    .modal .box{
-      width:min(980px, 100%);
-      max-height: min(82vh, 740px);
-      background: rgba(17,19,26,.92);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 18px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.60);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-    }
-    .modal .box header{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .modal .box header h3{margin:0;font-size:13px;font-weight:950}
-    .modal .box .body{padding:12px; overflow:auto; min-height:0}
-    .listItem{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 10px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      margin-bottom:10px;
-    }
-    .listItem .info{
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .listItem .info strong{
+      color:#6b7280;
       font-size:13px;
-      font-weight:950;
+      text-align:center;
+      border:2px dashed #e5e7eb;
+      border-radius:10px;
+      background:#fff;
+      max-width:520px;
+      margin:12px auto 0;
+    }
+
+    /* =========================
+       Overlays + texto
+       ========================= */
+    .field-overlay{
+      position:absolute;
+      border:2px solid rgba(17,153,142,0);
+      background:transparent;
+      pointer-events:auto;
+      cursor:text;
+      transition:all .12s;
+      border-radius:4px;
+    }
+    .field-overlay:hover{
+      border-color:rgba(17,153,142,.35);
+      background:rgba(17,153,142,.06);
+    }
+    .field-overlay.filled{
+      background:rgba(17,153,142,.10);
+      border-color:rgba(17,153,142,.30);
+    }
+    .field-overlay.selected{
+      border-color:rgba(13,122,111,.65);
+      box-shadow:0 0 0 2px rgba(255,255,255,.7);
+    }
+
+    /* Comb */
+    .field-overlay.comb{
+      border-color:rgba(255,0,0,.22);
+      background-image:repeating-linear-gradient(
+        to right,
+        transparent 0px,
+        transparent calc(var(--comb-step) - 1px),
+        rgba(255,0,0,.65) calc(var(--comb-step) - 1px),
+        rgba(255,0,0,.65) var(--comb-step)
+      );
+      background-clip:padding-box;
+    }
+    .field-overlay.comb.filled{
+      background-color:rgba(17,153,142,.10);
+    }
+
+    .filled-text{
+      position:absolute;
+      pointer-events:none;
+      user-select:none;
+      color:#000;
+      z-index:5;
+    }
+
+    .filled-box{
+      width:100%;
+      height:100%;
+      display:flex;
+      gap:6px;
+    }
+
+    .filled-content{
+      width:100%;
       white-space:nowrap;
       overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: 520px;
     }
-    .listItem .info span{
-      font-size:12px;
-      color: var(--muted);
-      font-weight:800;
+    .filled-content.wrap{
+      white-space:normal;
+      word-break:break-word;
+      overflow:hidden;
     }
-    .badges{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-    .badge{
-      font-family: var(--mono);
-      font-size: 11px;
-      padding:4px 8px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color: rgba(233,236,245,.90);
-    }
-    .badge.pub{border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.10)}
-    .badge.draft{border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.10)}
-    .listItem .ops{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
 
-    .toast{
-      position:fixed;
-      left:12px;
-      bottom:12px;
-      background: rgba(17,19,26,.92);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      padding:10px 12px;
-      font-weight:900;
-      color: var(--text);
-      box-shadow: 0 18px 50px rgba(0,0,0,.55);
-      display:none;
-      z-index:1000;
-      max-width: 560px;
+    .comb-text{
+      width:100%;
+      height:100%;
+      display:grid;
+      align-items:center;
+      justify-items:center;
     }
-    .toast.show{display:block}
-    .toast small{display:block; color: var(--muted); font-weight:800; margin-top:3px; line-height:1.2}
+    .comb-text span{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* =========================
+       Editor inline
+       ========================= */
+    .inline-editor{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:2px solid rgba(13,122,111,.85);
+      border-radius:4px;
+      background:rgba(255,255,255,.9);
+      outline:none;
+      padding:6px;
+      z-index:50;
+    }
+    .inline-editor.smallpad{ padding:4px; }
+
+    /* Comb: editor fantasma */
+    .inline-editor.comb-ghost{
+      background:transparent;
+      border:none;
+      padding:0;
+      color:transparent;
+      caret-color:#0d7a6f;
+      text-shadow:none;
+    }
   </style>
 </head>
+
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="dot"></div>
-      <div>
-        <h1>Criar Solicitação</h1>
-        <div class="sub">Editor visual de formulários (PDF/Imagem) — campos roxos clicáveis</div>
+<div class="container">
+  <div class="header">
+    <h1>✍️ Preenchimento de Documentos</h1>
+    <p>Selecione o formulário na lista (planilha) e preencha clicando direto na prévia. (O alinhamento vem do JSON.)</p>
+  </div>
+
+  <div class="content">
+    <div class="sidebar">
+      <div class="block-title">Formulários (Planilha)</div>
+
+      <div class="status-row">
+        <div id="sheet-status" class="status-pill warn">Planilha: —</div>
+        <div id="doc-status" class="status-pill warn">Documento: —</div>
+        <div id="tpl-status" class="status-pill warn">Template: —</div>
+      </div>
+
+      <div class="catalog-search">
+        <input id="catalog-search" type="text" placeholder="Pesquisar (ex: PAC, alta, etc.)" />
+        <button class="mini-btn" id="reload-catalog" title="Recarregar">↻</button>
+      </div>
+
+      <div id="catalog-list" class="catalog-list">
+        <div class="catalog-empty">Carregando lista...</div>
+      </div>
+
+      <div class="hint">
+        <strong>Como preencher:</strong><br>
+        • Clique em um campo no documento e digite.<br>
+        • <strong>TAB</strong> vai para o próximo campo (Shift+TAB volta).<br>
+        • <strong>Ctrl +</strong> / <strong>Ctrl -</strong> ajusta fonte só daquele campo.
       </div>
     </div>
 
-    <div class="actions">
-      <span class="pill" id="storagePill">Templates: 0 • Publicados: 0</span>
-      <button class="btn small" id="btnTemplates">📚 Templates</button>
-      <button class="btn small" id="btnNew">🧾 Novo</button>
-      <button class="btn small" id="btnSave">💾 Salvar</button>
-      <button class="btn small good" id="btnPublish">✅ Publicar</button>
-      <button class="btn small" id="btnExport">⬇️ Exportar</button>
-      <button class="btn small" id="btnImport">⬆️ Importar</button>
-      <input type="file" id="importFile" accept="application/json" hidden />
+    <!-- Viewer -->
+    <div class="canvas-area">
+      <div class="viewer-toolbar">
+        <div class="toolbar-group">
+          <button class="zbtn" id="zoom-out" title="Diminuir">-</button>
+          <span class="zoom-display" id="zoom-level">100%</span>
+          <button class="zbtn" id="zoom-in" title="Aumentar">+</button>
+          <button class="zbtn wide" id="fit-width" title="Ajustar na largura">Fit largura</button>
+          <button class="zbtn wide" id="fit-page" title="Ajustar na tela">Fit tela</button>
+          <button class="zbtn wide" id="zoom-reset" title="100%">100%</button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="zbtn wide" id="validate-btn" disabled>✓ Validar</button>
+          <button class="zbtn wide" id="download-btn" disabled>⬇ Baixar PNG</button>
+          <button class="zbtn wide" id="print-btn" disabled>🖨 Imprimir / PDF</button>
+          <button class="zbtn wide" id="clear-btn" disabled>🗑 Limpar</button>
+        </div>
+      </div>
+
+      <div class="viewer-scroll" id="viewer-scroll">
+        <div id="zoom-wrapper">
+          <div id="canvas-container">
+            <canvas id="document-canvas"></canvas>
+          </div>
+
+          <div id="canvas-placeholder" class="placeholder-canvas">
+            <strong>Selecione um formulário</strong> na lista da esquerda para carregar o documento e o template.
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="layout">
-    <!-- LEFT -->
-    <section class="panel">
-      <header>
-        <div>
-          <h2>Configuração</h2>
-          <div class="hint">Upload + nome do pedido</div>
-        </div>
-      </header>
-      <div class="content">
-        <div class="field">
-          <label>Nome do Pedido / Formulário</label>
-          <input id="tplName" type="text" placeholder="Ex: APAC • Laudo/Procedimento" />
-        </div>
-
-        <div class="field">
-          <label>Arquivo base (PDF ou imagem)</label>
-          <input id="fileInput" type="file" accept="application/pdf,image/*" />
-          <div style="margin-top:8px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.25">
-            Dica: se o PDF for enorme, ainda funciona (vai para IndexedDB). Tudo fica no navegador.
-          </div>
-        </div>
-
-        <div class="field" id="pdfNav" style="display:none">
-          <label>Navegação do PDF</label>
-          <div class="row">
-            <button class="btn" id="btnPrev">⬅️ Página</button>
-            <div class="pill" id="pageInfo" style="display:flex;align-items:center;justify-content:center;flex:1">1 / 1</div>
-            <button class="btn" id="btnNext">Página ➡️</button>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Ferramentas de campo (clique e depois clique na página)</label>
-          <div class="tools" id="tools">
-            <div class="tool" data-add="text">
-              <strong>Texto</strong>
-              <span>Uma linha (nome, CNS, etc.)</span>
-            </div>
-            <div class="tool" data-add="boxes">
-              <strong>Caixinhas</strong>
-              <span>1 char por quadrinho (CNES, CEP...)</span>
-            </div>
-            <div class="tool" data-add="checkbox">
-              <strong>Checkbox</strong>
-              <span>Marcar opção</span>
-            </div>
-            <div class="tool" data-add="textarea">
-              <strong>Área grande</strong>
-              <span>Justificativa / anamnese</span>
-            </div>
-          </div>
-
-          <div style="margin-top:10px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.25">
-            Atalhos: <span class="kbd">DEL</span> remover campo • <span class="kbd">ESC</span> cancelar ferramenta
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CENTER VIEWER -->
-    <section class="viewer">
-      <div class="vtop">
-        <div class="left">
-          <div class="title" id="fileTitle">Nenhum arquivo carregado</div>
-        </div>
-        <div class="right">
-          <span class="pill" id="fieldCount">Campos: 0</span>
-          <button class="btn small bad" id="btnClearFields">🧹 Limpar campos</button>
-        </div>
-      </div>
-
-      <div class="stage" id="stage">
-        <div class="empty" id="emptyMsg">
-          <strong>Comece fazendo upload</strong> de um PDF ou imagem. Depois selecione uma ferramenta (Texto, Caixinhas, etc.)
-          e clique no lugar certo do formulário.<br><br>
-          Você pode <strong>arrastar</strong> e <strong>redimensionar</strong> os campos roxos. Em seguida, <strong>Salvar</strong> ou <strong>Publicar</strong>.
-        </div>
-
-        <div class="pagewrap" id="pagewrap" style="display:none">
-          <canvas id="pdfCanvas"></canvas>
-          <img id="imgCanvas" alt="form" />
-          <div class="overlay" id="overlay"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT -->
-    <section class="panel">
-      <header>
-        <div>
-          <h2>Propriedades</h2>
-          <div class="hint">Campo selecionado</div>
-        </div>
-        <div class="pill" id="selPill">Nenhum</div>
-      </header>
-      <div class="content" id="props">
-        <div style="color:var(--muted);font-weight:800;line-height:1.3">
-          Selecione um campo roxo para editar tipo, id, label, quantidade de caixinhas, etc.
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Templates modal -->
-  <div class="modal" id="modal">
-    <div class="box">
-      <header>
-        <h3>Templates salvos</h3>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <input id="searchTpl" type="text" placeholder="Buscar..." style="width:260px" />
-          <button class="btn small" id="btnCloseModal">Fechar</button>
-        </div>
-      </header>
-      <div class="body" id="tplList"></div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
+</div>
 
 <script>
-/* =========================
-   STORAGE KEYS
-========================= */
-const LS_KEY = "UJ_SOLIC_TEMPLATES_V1"; // metadata + fields
-const DB_NAME = "uj_solic_assets_v1";
-const DB_STORE = "assets";
+  /********************************************************************
+   * CONFIG
+   ********************************************************************/
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTZOA79LT875AhL4fXYQLo49KLWzKC2sMVmZKX6gbbRJE23Pf3Tzu7DZ29UQPV6WUW2a6HqbOITp0-/pub?output=csv"; // <-- OBRIGATÓRIO
 
-/* =========================
-   STATE
-========================= */
-let state = {
-  currentTemplateId: null,
-  name: "",
-  asset: { type:null, fileName:null, mime:null, byteLength:0 }, // stored in IndexedDB
-  modeAdd: null, // 'text' | 'boxes' | 'checkbox' | 'textarea'
-  pdf: { doc:null, page:1, pages:1, arrayBuffer:null },
-  image: { objectUrl:null, naturalW:0, naturalH:0 },
-  render: { cssW:0, cssH:0 },
-  fields: [], // {id,label,type,page,x,y,w,h,required,boxesCount,maxLen}
-  selectedFieldId: null
-};
+  /********************************************************************
+   * Estado
+   ********************************************************************/
+  const state = {
+    catalog: [],
+    catalogLoaded: false,
+    activeCatalogId: null,
 
-const els = {
-  tplName: document.getElementById("tplName"),
-  fileInput: document.getElementById("fileInput"),
-  fileTitle: document.getElementById("fileTitle"),
-  pagewrap: document.getElementById("pagewrap"),
-  overlay: document.getElementById("overlay"),
-  emptyMsg: document.getElementById("emptyMsg"),
-  pdfCanvas: document.getElementById("pdfCanvas"),
-  imgCanvas: document.getElementById("imgCanvas"),
-  pdfNav: document.getElementById("pdfNav"),
-  pageInfo: document.getElementById("pageInfo"),
-  btnPrev: document.getElementById("btnPrev"),
-  btnNext: document.getElementById("btnNext"),
-  tools: document.getElementById("tools"),
-  fieldCount: document.getElementById("fieldCount"),
-  btnClearFields: document.getElementById("btnClearFields"),
-  props: document.getElementById("props"),
-  selPill: document.getElementById("selPill"),
-  storagePill: document.getElementById("storagePill"),
-  btnTemplates: document.getElementById("btnTemplates"),
-  modal: document.getElementById("modal"),
-  btnCloseModal: document.getElementById("btnCloseModal"),
-  tplList: document.getElementById("tplList"),
-  searchTpl: document.getElementById("searchTpl"),
-  btnNew: document.getElementById("btnNew"),
-  btnSave: document.getElementById("btnSave"),
-  btnPublish: document.getElementById("btnPublish"),
-  btnExport: document.getElementById("btnExport"),
-  btnImport: document.getElementById("btnImport"),
-  importFile: document.getElementById("importFile"),
-  toast: document.getElementById("toast"),
-};
+    currentTemplate: null,
+    formData: {},
+    fieldOverrides: {},
 
-function toast(msg, sub=""){
-  els.toast.innerHTML = `${msg}${sub?`<small>${sub}</small>`:""}`;
-  els.toast.classList.add("show");
-  clearTimeout(toast._t);
-  toast._t = setTimeout(()=> els.toast.classList.remove("show"), 2600);
-}
+    document: { loaded:false, dataUrl:null, width:0, height:0 },
 
-function nowISO(){ return new Date().toISOString(); }
-function uid(){
-  if (crypto && crypto.randomUUID) return crypto.randomUUID();
-  return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now();
-}
+    renderScale: { x:1, y:1 },
+    viewScale: 1,
 
-/* =========================
-   INDEXEDDB
-========================= */
-function openDB(){
-  return new Promise((resolve, reject)=>{
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = (e)=>{
-      const db = req.result;
-      if(!db.objectStoreNames.contains(DB_STORE)){
-        db.createObjectStore(DB_STORE, { keyPath: "id" });
+    editingFieldId: null,
+    selectedFieldId: null,
+
+    // OBS: alinhamento NÃO é mais global. Vem do JSON (por campo).
+    textSettings: {
+      fontFamily: '"Courier New", monospace',
+      fontWeight: '600',
+      fontSize: 14,
+      autoSize: true,
+      color: '#000000',
+      wrap: false,      // se você quiser forçar wrap global, troque para true
+      paddingX: 5,
+      paddingY: 3
+    },
+
+    _viewerClickBound: false
+  };
+
+  /********************************************************************
+   * DOM
+   ********************************************************************/
+  const canvas = document.getElementById("document-canvas");
+  const ctx = canvas.getContext("2d");
+  const canvasContainer = document.getElementById("canvas-container");
+  const placeholder = document.getElementById("canvas-placeholder");
+  const zoomWrapper = document.getElementById("zoom-wrapper");
+  const viewerScroll = document.getElementById("viewer-scroll");
+
+  const sheetStatus = document.getElementById("sheet-status");
+  const docStatus = document.getElementById("doc-status");
+  const tplStatus = document.getElementById("tpl-status");
+
+  const catalogList = document.getElementById("catalog-list");
+  const catalogSearch = document.getElementById("catalog-search");
+  const btnReloadCatalog = document.getElementById("reload-catalog");
+
+  const zoomLevel = document.getElementById("zoom-level");
+  const btnZoomIn = document.getElementById("zoom-in");
+  const btnZoomOut = document.getElementById("zoom-out");
+  const btnZoomReset = document.getElementById("zoom-reset");
+  const btnFitWidth = document.getElementById("fit-width");
+  const btnFitPage = document.getElementById("fit-page");
+
+  const btnValidate = document.getElementById("validate-btn");
+  const btnDownload = document.getElementById("download-btn");
+  const btnPrint = document.getElementById("print-btn");
+  const btnClear = document.getElementById("clear-btn");
+
+  /********************************************************************
+   * Measure ctx (para medir texto e ajustar fonte)
+   ********************************************************************/
+  const measureCanvas = document.createElement("canvas");
+  const mctx = measureCanvas.getContext("2d");
+
+  /********************************************************************
+   * Helpers UI
+   ********************************************************************/
+  function setPill(el, type, text){
+    el.textContent = text;
+    el.classList.remove("ok","warn","bad");
+    el.classList.add(type);
+  }
+
+  function clamp(v,min,max){ return Math.min(Math.max(v,min),max); }
+
+  function resolveUrl(u){
+    try { return new URL(u, window.location.href).toString(); }
+    catch(_) { return String(u || ""); }
+  }
+
+  function removeMask(value){ return (value || "").replace(/[^\w]/g, ""); }
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  /********************************************************************
+   * CSV parser (com aspas)
+   ********************************************************************/
+  function parseCSV(text){
+    const rows = [];
+    let row = [];
+    let field = "";
+    let inQuotes = false;
+
+    for(let i=0;i<text.length;i++){
+      const c = text[i];
+
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i+1] === '"'){ field += '"'; i++; }
+          else inQuotes = false;
+        } else {
+          field += c;
+        }
+      } else {
+        if(c === '"') inQuotes = true;
+        else if(c === ","){ row.push(field); field=""; }
+        else if(c === "\n"){ row.push(field); rows.push(row); row=[]; field=""; }
+        else if(c === "\r"){ /* ignore */ }
+        else field += c;
       }
-    };
-    req.onsuccess = ()=> resolve(req.result);
-    req.onerror = ()=> reject(req.error);
-  });
-}
+    }
+    row.push(field);
+    rows.push(row);
 
-async function dbPutAsset(id, file){
-  const ab = await file.arrayBuffer();
-  const rec = { id, mime: file.type || "application/octet-stream", fileName: file.name || "arquivo", data: ab, byteLength: ab.byteLength };
-  const db = await openDB();
-  return new Promise((resolve,reject)=>{
-    const tx = db.transaction(DB_STORE, "readwrite");
-    tx.objectStore(DB_STORE).put(rec);
-    tx.oncomplete = ()=> resolve(rec);
-    tx.onerror = ()=> reject(tx.error);
-  });
-}
-
-async function dbGetAsset(id){
-  const db = await openDB();
-  return new Promise((resolve,reject)=>{
-    const tx = db.transaction(DB_STORE, "readonly");
-    const req = tx.objectStore(DB_STORE).get(id);
-    req.onsuccess = ()=> resolve(req.result || null);
-    req.onerror = ()=> reject(req.error);
-  });
-}
-
-async function dbDeleteAsset(id){
-  const db = await openDB();
-  return new Promise((resolve,reject)=>{
-    const tx = db.transaction(DB_STORE, "readwrite");
-    tx.objectStore(DB_STORE).delete(id);
-    tx.oncomplete = ()=> resolve(true);
-    tx.onerror = ()=> reject(tx.error);
-  });
-}
-
-function blobUrlFromRecord(rec){
-  const blob = new Blob([rec.data], {type: rec.mime});
-  return URL.createObjectURL(blob);
-}
-
-/* =========================
-   LOCALSTORAGE TEMPLATES
-========================= */
-function loadTemplates(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? JSON.parse(raw) : [];
-  }catch(e){
-    console.warn(e);
-    return [];
+    return rows.filter(r => r.some(x => String(x).trim() !== ""));
   }
-}
-function saveTemplates(list){
-  localStorage.setItem(LS_KEY, JSON.stringify(list));
-  updateStoragePill();
-}
-function updateStoragePill(){
-  const list = loadTemplates();
-  const pub = list.filter(t=>t.published).length;
-  els.storagePill.textContent = `Templates: ${list.length} • Publicados: ${pub}`;
-}
 
-/* =========================
-   PDF.JS SETUP
-========================= */
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.worker.min.js";
+  function normalizeCatalogRows(rows){
+    if(!rows || rows.length === 0) return [];
 
-/* =========================
-   RENDERING
-========================= */
-async function renderCurrent(){
-  if(!state.asset.type) return;
+    const h = rows[0].map(s => String(s||"").trim().toLowerCase());
+    const hasHeader = h.some(x => x.includes("nome")) || h.some(x => x.includes("alias")) || h.some(x => x.includes("doc")) || h.some(x => x.includes("json"));
 
-  els.emptyMsg.style.display = "none";
-  els.pagewrap.style.display = "block";
+    const start = hasHeader ? 1 : 0;
+    const out = [];
 
-  // decide desired width based on stage width
-  const stageRect = document.getElementById("stage").getBoundingClientRect();
-  const desiredW = Math.max(520, Math.min(980, stageRect.width - 32));
+    for(let i=start;i<rows.length;i++){
+      const r = rows[i] || [];
+      const fullName = String(r[0] || "").trim();
+      const aliasCell = String(r[1] || "").trim();
+      const docUrl = String(r[2] || "").trim();
+      const jsonUrl = String(r[3] || "").trim();
 
-  if(state.asset.type === "pdf"){
-    els.imgCanvas.style.display = "none";
-    els.pdfCanvas.style.display = "block";
-    els.pdfNav.style.display = "block";
+      if(!fullName && !aliasCell) continue;
+      if(!docUrl || !jsonUrl) continue;
 
-    const page = await state.pdf.doc.getPage(state.pdf.page);
-    const vp1 = page.getViewport({ scale: 1 });
-    const scale = desiredW / vp1.width;
+      const aliases = aliasCell
+        .split(";")
+        .map(s => s.trim())
+        .filter(Boolean);
 
-    const viewport = page.getViewport({ scale });
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const display = aliases[0] || fullName || `Formulário ${i}`;
 
-    const canvas = els.pdfCanvas;
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = Math.floor(viewport.width * dpr);
-    canvas.height = Math.floor(viewport.height * dpr);
-    canvas.style.width = `${Math.floor(viewport.width)}px`;
-    canvas.style.height = `${Math.floor(viewport.height)}px`;
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0,0,viewport.width,viewport.height);
-
-    await page.render({ canvasContext: ctx, viewport }).promise;
-
-    state.render.cssW = Math.floor(viewport.width);
-    state.render.cssH = Math.floor(viewport.height);
-
-    els.pageInfo.textContent = `${state.pdf.page} / ${state.pdf.pages}`;
-    setOverlaySize();
-    drawFields();
-  } else {
-    els.pdfCanvas.style.display = "none";
-    els.imgCanvas.style.display = "block";
-    els.pdfNav.style.display = "none";
-
-    // load image to get natural ratio
-    const img = els.imgCanvas;
-    img.style.width = desiredW + "px";
-    img.onload = ()=>{
-      const rect = img.getBoundingClientRect();
-      state.render.cssW = Math.floor(rect.width);
-      state.render.cssH = Math.floor(rect.height);
-      setOverlaySize();
-      drawFields();
-    };
-    img.src = state.image.objectUrl;
-  }
-}
-
-function setOverlaySize(){
-  els.overlay.style.width = state.render.cssW + "px";
-  els.overlay.style.height = state.render.cssH + "px";
-  els.overlay.style.pointerEvents = "none";
-  // ensure wrapper fits overlay
-  els.pagewrap.style.width = state.render.cssW + "px";
-}
-
-/* =========================
-   FIELD DRAW / INTERACTION
-========================= */
-function getFieldById(id){ return state.fields.find(f=>f.id===id) || null; }
-
-function drawFields(){
-  els.overlay.innerHTML = "";
-  const page = (state.asset.type==="pdf") ? state.pdf.page : 1;
-  const fields = state.fields.filter(f=> (f.page||1) === page);
-
-  for(const f of fields){
-    const el = document.createElement("div");
-    el.className = "fbox" + (f.id===state.selectedFieldId ? " selected":"");
-    el.dataset.id = f.id;
-    el.dataset.type = f.type;
-
-    // position in px from normalized
-    const x = Math.round(f.x * state.render.cssW);
-    const y = Math.round(f.y * state.render.cssH);
-    const w = Math.round(f.w * state.render.cssW);
-    const h = Math.round(f.h * state.render.cssH);
-
-    el.style.left = x + "px";
-    el.style.top = y + "px";
-    el.style.width = Math.max(18,w) + "px";
-    el.style.height = Math.max(14,h) + "px";
-
-    if(f.type==="boxes"){
-      const n = Math.max(2, parseInt(f.boxesCount||8,10));
-      el.style.setProperty("--n", n);
-      const tag = document.createElement("div");
-      tag.className = "tag";
-      tag.textContent = (f.label || "Caixinhas") + ` (${n})`;
-      el.appendChild(tag);
-      const meta = document.createElement("div");
-      meta.className = "meta";
-      meta.textContent = f.id;
-      el.appendChild(meta);
-    }else if(f.type==="checkbox"){
-      // no inner
-    }else{
-      const tag = document.createElement("div");
-      tag.className = "tag";
-      tag.textContent = f.label || (f.type==="textarea" ? "Área" : "Texto");
-      el.appendChild(tag);
-
-      const meta = document.createElement("div");
-      meta.className = "meta";
-      meta.textContent = f.id;
-      el.appendChild(meta);
+      out.push({
+        id: `row-${i}`,
+        fullName,
+        display,
+        aliases,
+        docUrl,
+        jsonUrl,
+        _search: (fullName + " " + aliases.join(" ")).toLowerCase()
+      });
     }
 
-    // handles
-    ["nw","ne","sw","se"].forEach(pos=>{
-      const hEl = document.createElement("div");
-      hEl.className = "handle " + pos;
-      hEl.dataset.handle = pos;
-      el.appendChild(hEl);
-    });
-
-    // interactions
-    el.addEventListener("pointerdown", onFieldPointerDown);
-
-    els.overlay.appendChild(el);
+    return out;
   }
 
-  // overlay should allow interactions now
-  els.overlay.style.pointerEvents = "auto";
-
-  els.fieldCount.textContent = `Campos: ${state.fields.length}`;
-}
-
-let drag = null;
-
-function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
-
-function onFieldPointerDown(e){
-  e.preventDefault();
-  e.stopPropagation();
-
-  const box = e.currentTarget;
-  const id = box.dataset.id;
-  selectField(id);
-
-  const f = getFieldById(id);
-  if(!f) return;
-
-  const rect = els.overlay.getBoundingClientRect();
-  const startX = e.clientX;
-  const startY = e.clientY;
-
-  const handle = e.target && e.target.dataset ? e.target.dataset.handle : null;
-
-  drag = {
-    id,
-    handle, // null => move
-    startX, startY,
-    rect,
-    f0: { ...f }
-  };
-
-  box.setPointerCapture(e.pointerId);
-  box.addEventListener("pointermove", onFieldPointerMove);
-  box.addEventListener("pointerup", onFieldPointerUp, { once:true });
-  box.addEventListener("pointercancel", onFieldPointerUp, { once:true });
-}
-
-function onFieldPointerMove(e){
-  if(!drag) return;
-  const f = getFieldById(drag.id);
-  if(!f) return;
-
-  const dx = (e.clientX - drag.startX) / state.render.cssW;
-  const dy = (e.clientY - drag.startY) / state.render.cssH;
-
-  const minW = 18 / state.render.cssW;
-  const minH = 14 / state.render.cssH;
-
-  if(!drag.handle){
-    // move
-    f.x = clamp(drag.f0.x + dx, 0, 1 - f.w);
-    f.y = clamp(drag.f0.y + dy, 0, 1 - f.h);
-  } else {
-    // resize
-    let x = drag.f0.x, y = drag.f0.y, w = drag.f0.w, h = drag.f0.h;
-
-    if(drag.handle.includes("e")) w = clamp(drag.f0.w + dx, minW, 1 - x);
-    if(drag.handle.includes("s")) h = clamp(drag.f0.h + dy, minH, 1 - y);
-
-    if(drag.handle.includes("w")){
-      const newX = clamp(drag.f0.x + dx, 0, drag.f0.x + drag.f0.w - minW);
-      w = clamp(drag.f0.w + (drag.f0.x - newX), minW, 1 - newX);
-      x = newX;
-    }
-    if(drag.handle.includes("n")){
-      const newY = clamp(drag.f0.y + dy, 0, drag.f0.y + drag.f0.h - minH);
-      h = clamp(drag.f0.h + (drag.f0.y - newY), minH, 1 - newY);
-      y = newY;
+  async function loadCatalog(){
+    if(!SHEET_CSV_URL){
+      setPill(sheetStatus, "bad", "Planilha: defina SHEET_CSV_URL");
+      catalogList.innerHTML = `<div class="catalog-empty">Defina <strong>SHEET_CSV_URL</strong> no código.</div>`;
+      return;
     }
 
-    f.x=x; f.y=y; f.w=w; f.h=h;
+    setPill(sheetStatus, "warn", "Planilha: carregando...");
+    catalogList.innerHTML = `<div class="catalog-empty">Carregando lista...</div>`;
+
+    try{
+      const resp = await fetch(resolveUrl(SHEET_CSV_URL), { cache:"no-store" });
+      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const text = await resp.text();
+
+      const rows = parseCSV(text);
+      state.catalog = normalizeCatalogRows(rows);
+      state.catalogLoaded = true;
+
+      setPill(sheetStatus, "ok", `Planilha: OK (${state.catalog.length})`);
+      renderCatalog();
+
+    } catch(err){
+      console.error(err);
+      setPill(sheetStatus, "bad", "Planilha: erro");
+      catalogList.innerHTML = `<div class="catalog-empty">Erro ao carregar a planilha.<br><span style="color:#9a3412;font-size:12px">${escapeHtml(err.message)}</span></div>`;
+    }
   }
 
-  drawFields();
-  renderProps();
-}
+  function renderCatalog(){
+    const q = (catalogSearch.value || "").trim().toLowerCase();
+    const items = state.catalog.filter(it => !q || it._search.includes(q));
 
-function onFieldPointerUp(e){
-  const box = e.currentTarget;
-  box.removeEventListener("pointermove", onFieldPointerMove);
-  drag = null;
-}
+    catalogList.innerHTML = "";
+    if(items.length === 0){
+      catalogList.innerHTML = `<div class="catalog-empty">Nada encontrado.</div>`;
+      return;
+    }
 
-/* =========================
-   SELECT / PROPS
-========================= */
-function selectField(id){
-  state.selectedFieldId = id;
-  const f = getFieldById(id);
-  els.selPill.textContent = f ? f.id : "Nenhum";
-  drawFields();
-  renderProps();
-}
-
-function renderProps(){
-  const f = getFieldById(state.selectedFieldId);
-  if(!f){
-    els.props.innerHTML = `
-      <div style="color:var(--muted);font-weight:800;line-height:1.3">
-        Selecione um campo roxo para editar tipo, id, label, quantidade de caixinhas, etc.
-      </div>`;
-    return;
-  }
-
-  const page = (state.asset.type==="pdf") ? state.pdf.page : 1;
-  const posTxt = `${Math.round(f.x*100)}% / ${Math.round(f.y*100)}% • ${Math.round(f.w*100)}% × ${Math.round(f.h*100)}%`;
-
-  els.props.innerHTML = `
-    <div class="field">
-      <label>ID do campo (único)</label>
-      <input type="text" id="p_id" value="${escapeHtml(f.id)}" />
-    </div>
-
-    <div class="field">
-      <label>Label (aparece no roxo)</label>
-      <input type="text" id="p_label" value="${escapeHtml(f.label||"")}" placeholder="Ex: CNS do paciente" />
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label>Tipo</label>
-        <select id="p_type">
-          ${["text","boxes","checkbox","textarea"].map(t=>`<option value="${t}" ${f.type===t?"selected":""}>${t}</option>`).join("")}
-        </select>
-      </div>
-      <div class="field">
-        <label>Página</label>
-        <input type="number" id="p_page" min="1" max="${state.asset.type==="pdf"?state.pdf.pages:1}" value="${f.page||1}" />
-      </div>
-    </div>
-
-    <div class="row" id="boxesRow" style="display:${f.type==="boxes"?"flex":"none"}">
-      <div class="field">
-        <label>Qtd. caixinhas</label>
-        <input type="number" id="p_boxes" min="2" max="40" value="${parseInt(f.boxesCount||8,10)}" />
-      </div>
-      <div class="field">
-        <label>Somente números?</label>
-        <select id="p_numOnly">
-          <option value="no" ${(f.numOnly!=="yes")?"selected":""}>não</option>
-          <option value="yes" ${(f.numOnly==="yes")?"selected":""}>sim</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row" id="lenRow" style="display:${(f.type==="text"||f.type==="textarea")?"flex":"none"}">
-      <div class="field">
-        <label>Máx. caracteres</label>
-        <input type="number" id="p_max" min="1" max="4000" value="${parseInt(f.maxLen|| (f.type==="textarea"?500:80),10)}" />
-      </div>
-      <div class="field">
-        <label>Obrigatório?</label>
-        <select id="p_req">
-          <option value="no" ${(f.required!=="yes")?"selected":""}>não</option>
-          <option value="yes" ${(f.required==="yes")?"selected":""}>sim</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Posição/Tamanho (auto)</label>
-      <div class="pill">${posTxt} • visualizando página ${page}</div>
-    </div>
-
-    <div class="row">
-      <button class="btn bad" id="p_delete">🗑️ Apagar campo</button>
-      <button class="btn" id="p_dup">📌 Duplicar</button>
-    </div>
-  `;
-
-  // wire
-  const $ = (id)=> document.getElementById(id);
-
-  $("p_id").addEventListener("change", ()=>{
-    const v = $("p_id").value.trim();
-    if(!v) return toast("ID inválido", "O campo precisa de um ID.");
-    if(state.fields.some(x=>x.id===v && x!==f)) return toast("ID já existe", "Use um ID diferente.");
-    f.id = v;
-    els.selPill.textContent = f.id;
-    drawFields();
-  });
-
-  $("p_label").addEventListener("input", ()=>{
-    f.label = $("p_label").value;
-    drawFields();
-  });
-
-  $("p_type").addEventListener("change", ()=>{
-    f.type = $("p_type").value;
-    if(f.type==="boxes"){ f.boxesCount = f.boxesCount || 8; }
-    if(f.type==="text"||f.type==="textarea"){ f.maxLen = f.maxLen || (f.type==="textarea"?500:80); }
-    drawFields();
-    renderProps();
-  });
-
-  $("p_page").addEventListener("change", ()=>{
-    const p = parseInt($("p_page").value,10) || 1;
-    f.page = clamp(p, 1, state.asset.type==="pdf"?state.pdf.pages:1);
-    drawFields();
-  });
-
-  const boxes = $("p_boxes");
-  if(boxes){
-    boxes.addEventListener("input", ()=>{
-      f.boxesCount = clamp(parseInt(boxes.value,10)||8, 2, 40);
-      drawFields();
-    });
-  }
-  const numOnly = $("p_numOnly");
-  if(numOnly){
-    numOnly.addEventListener("change", ()=>{
-      f.numOnly = numOnly.value;
+    items.forEach(it => {
+      const card = document.createElement("div");
+      card.className = "catalog-card" + (state.activeCatalogId === it.id ? " active" : "");
+      card.innerHTML = `
+        <h4>${escapeHtml(it.display)}</h4>
+        <div class="sub">${escapeHtml(it.fullName || "")}</div>
+      `;
+      card.addEventListener("click", () => selectCatalogItem(it.id));
+      catalogList.appendChild(card);
     });
   }
 
-  const maxLen = $("p_max");
-  if(maxLen){
-    maxLen.addEventListener("change", ()=>{
-      f.maxLen = clamp(parseInt(maxLen.value,10)||80, 1, 4000);
+  function setActiveCatalogCard(id){
+    state.activeCatalogId = id;
+    renderCatalog();
+  }
+
+  /********************************************************************
+   * Documento (PDF/Imagem) via URL
+   ********************************************************************/
+  function blobToDataUrl(blob){
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = () => reject(fr.error || new Error("Erro FileReader"));
+      fr.readAsDataURL(blob);
     });
   }
-  const req = $("p_req");
-  if(req){
-    req.addEventListener("change", ()=> f.required = req.value);
+
+  async function loadDocumentFromUrl(url){
+    setPill(docStatus, "warn", "Documento: carregando...");
+    const abs = resolveUrl(url);
+
+    const resp = await fetch(abs, { cache:"no-store" });
+    if(!resp.ok) throw new Error(`Doc HTTP ${resp.status}`);
+
+    const ct = (resp.headers.get("content-type") || "").toLowerCase();
+    const isPdf = ct.includes("pdf") || abs.toLowerCase().includes(".pdf");
+
+    if(isPdf){
+      const buf = await resp.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      const page = await pdf.getPage(1);
+
+      const scale = 2.0;
+      const viewport = page.getViewport({ scale });
+
+      const temp = document.createElement("canvas");
+      temp.width = viewport.width;
+      temp.height = viewport.height;
+      const tctx = temp.getContext("2d");
+
+      await page.render({ canvasContext: tctx, viewport }).promise;
+
+      const dataUrl = temp.toDataURL("image/png");
+      await renderDocumentFromDataUrl(dataUrl);
+    } else {
+      const blob = await resp.blob();
+      const dataUrl = await blobToDataUrl(blob);
+      await renderDocumentFromDataUrl(dataUrl);
+    }
+
+    setPill(docStatus, "ok", "Documento: OK");
   }
 
-  $("p_delete").addEventListener("click", ()=>{
-    deleteField(f.id);
-  });
-  $("p_dup").addEventListener("click", ()=>{
-    duplicateField(f.id);
-  });
-}
+  function renderDocumentFromDataUrl(dataUrl){
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = function(){
+        state.document.loaded = true;
+        state.document.dataUrl = dataUrl;
+        state.document.width = img.width;
+        state.document.height = img.height;
 
-function deleteField(id){
-  const i = state.fields.findIndex(x=>x.id===id);
-  if(i>=0) state.fields.splice(i,1);
-  state.selectedFieldId = null;
-  drawFields();
-  renderProps();
-  toast("Campo apagado");
-}
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-function duplicateField(id){
-  const f = getFieldById(id);
-  if(!f) return;
-  const nf = { ...f, id: (f.id + "_copy").slice(0,60), x: clamp(f.x + 0.01, 0, 1 - f.w), y: clamp(f.y + 0.01, 0, 1 - f.h) };
-  // ensure unique
-  let base = nf.id;
-  let n=1;
-  while(state.fields.some(x=>x.id===nf.id)) nf.id = base + "_" + (n++);
-  state.fields.push(nf);
-  selectField(nf.id);
-  toast("Campo duplicado");
-}
+        canvasContainer.style.width = img.width + "px";
+        canvasContainer.style.height = img.height + "px";
 
-/* =========================
-   ADD FIELD MODE
-========================= */
-function setTool(mode){
-  state.modeAdd = mode;
-  [...els.tools.querySelectorAll(".tool")].forEach(t=>{
-    t.classList.toggle("active", t.dataset.add === mode);
-  });
-  if(mode){
-    toast("Modo de inserção ativo", `Clique no formulário para adicionar: ${mode}`);
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img, 0, 0);
+
+        placeholder.style.display = "none";
+
+        recomputeScale();
+        if(state.currentTemplate){
+          renderForm();     // só overlays
+          updateDocument(); // só textos no preview
+        }
+
+        fitToWidth();
+        resolve();
+      };
+      img.src = dataUrl;
+    });
   }
-}
 
-els.tools.addEventListener("click", (e)=>{
-  const tool = e.target.closest(".tool");
-  if(!tool) return;
-  const mode = tool.dataset.add;
-  setTool(state.modeAdd === mode ? null : mode);
-});
-
-document.addEventListener("keydown", (e)=>{
-  if(e.key==="Escape"){
-    setTool(null);
+  /********************************************************************
+   * Template JSON via URL
+   ********************************************************************/
+  function normalizeTemplate(raw){
+    const t = { ...raw };
+    t.name = t.name || t.templateName || "Template sem nome";
+    t.fields = Array.isArray(t.fields) ? t.fields : [];
+    t.originalSize = t.originalSize || t.original_size || null;
+    t.id = t.id || (Date.now() + Math.random());
+    return t;
   }
-  if((e.key==="Delete" || e.key==="Backspace") && state.selectedFieldId){
-    // avoid deleting while typing in inputs
-    const tag = (document.activeElement && document.activeElement.tagName) || "";
-    if(["INPUT","TEXTAREA","SELECT"].includes(tag)) return;
-    deleteField(state.selectedFieldId);
-  }
-});
 
-els.overlay.addEventListener("pointerdown", (e)=>{
-  // click empty area => deselect
-  if(e.target === els.overlay){
+  async function loadTemplateFromUrl(url){
+    setPill(tplStatus, "warn", "Template: carregando...");
+    const abs = resolveUrl(url);
+
+    const resp = await fetch(abs, { cache:"no-store" });
+    if(!resp.ok) throw new Error(`JSON HTTP ${resp.status}`);
+
+    const raw = await resp.json();
+    const t = normalizeTemplate(raw);
+
+    state.currentTemplate = t;
+    state.formData = {};
+    state.fieldOverrides = {};
+    state.editingFieldId = null;
     state.selectedFieldId = null;
-    drawFields();
-    renderProps();
-    els.selPill.textContent = "Nenhum";
+
+    recomputeScale();
+    renderForm();
+    updateDocument();
+
+    setPill(tplStatus, "ok", `Template: OK (${t.fields.length})`);
   }
-});
 
-// click to place new field
-els.pagewrap.addEventListener("click", (e)=>{
-  if(!state.modeAdd) return;
-  if(!state.asset.type) return;
+  /********************************************************************
+   * Seleção do item (carrega doc + json)
+   ********************************************************************/
+  async function selectCatalogItem(id){
+    const item = state.catalog.find(x => x.id === id);
+    if(!item) return;
 
-  // if clicked on existing field, ignore
-  if(e.target.closest(".fbox")) return;
+    setActiveCatalogCard(id);
 
-  const rect = els.overlay.getBoundingClientRect();
-  const cx = e.clientX - rect.left;
-  const cy = e.clientY - rect.top;
+    btnValidate.disabled = true;
+    btnDownload.disabled = true;
+    btnPrint.disabled = true;
+    btnClear.disabled = true;
 
-  const nx = clamp(cx / state.render.cssW, 0, 1);
-  const ny = clamp(cy / state.render.cssH, 0, 1);
+    setPill(docStatus, "warn", "Documento: carregando...");
+    setPill(tplStatus, "warn", "Template: carregando...");
 
-  const def = defaultFieldForMode(state.modeAdd);
-  const f = {
-    id: def.id,
-    label: def.label,
-    type: def.type,
-    page: (state.asset.type==="pdf") ? state.pdf.page : 1,
-    x: clamp(nx - def.w/2, 0, 1 - def.w),
-    y: clamp(ny - def.h/2, 0, 1 - def.h),
-    w: def.w,
-    h: def.h,
-    required: "no",
-    boxesCount: def.boxesCount,
-    maxLen: def.maxLen,
-    numOnly: def.numOnly
-  };
+    try{
+      await Promise.all([
+        loadTemplateFromUrl(item.jsonUrl),
+        loadDocumentFromUrl(item.docUrl)
+      ]);
 
-  // ensure unique id
-  let base = f.id;
-  let n=1;
-  while(state.fields.some(x=>x.id===f.id)) f.id = base + "_" + (n++);
-
-  state.fields.push(f);
-  selectField(f.id);
-
-  // keep tool on for rapid insertion
-});
-
-function defaultFieldForMode(mode){
-  if(mode==="boxes"){
-    return { id:"campo_caixas", label:"Caixinhas", type:"boxes", w:0.32, h:0.06, boxesCount: 8, numOnly:"no" };
+      // habilita ações após carregar
+      btnValidate.disabled = false;
+      btnClear.disabled = false;
+      btnPrint.disabled = false; // pode imprimir mesmo sem validar, se quiser
+    } catch(err){
+      console.error(err);
+      setPill(docStatus, "bad", "Documento: erro");
+      setPill(tplStatus, "bad", "Template: erro");
+      alert("Erro ao carregar doc/template:\n\n" + err.message);
+    }
   }
-  if(mode==="checkbox"){
-    return { id:"campo_check", label:"Check", type:"checkbox", w:0.05, h:0.06 };
+
+  /********************************************************************
+   * Escala template -> doc
+   ********************************************************************/
+  function recomputeScale(){
+    state.renderScale = { x: 1, y: 1 };
+    if(!state.currentTemplate) return;
+
+    const t = state.currentTemplate;
+    if(t.originalSize && t.originalSize.width && t.originalSize.height && state.document.loaded){
+      state.renderScale.x = canvas.width / t.originalSize.width;
+      state.renderScale.y = canvas.height / t.originalSize.height;
+    }
   }
-  if(mode==="textarea"){
-    return { id:"campo_area", label:"Área", type:"textarea", w:0.58, h:0.12, maxLen: 500 };
+
+  function getScaledRect(field){
+    return {
+      x: field.x * state.renderScale.x,
+      y: field.y * state.renderScale.y,
+      w: field.width * state.renderScale.x,
+      h: field.height * state.renderScale.y
+    };
   }
-  return { id:"campo_texto", label:"Texto", type:"text", w:0.45, h:0.06, maxLen: 80 };
-}
 
-/* =========================
-   LOAD FILE
-========================= */
-els.fileInput.addEventListener("change", async ()=>{
-  const file = els.fileInput.files && els.fileInput.files[0];
-  if(!file) return;
+  function getFieldById(fieldId){
+    const fields = (state.currentTemplate?.fields || []);
+    return fields.find(f => String(f.id) === String(fieldId)) || null;
+  }
 
-  // create new template id if none
-  if(!state.currentTemplateId) state.currentTemplateId = uid();
+  function getFieldMask(field){
+    if (field.mask) return field.mask;
+    switch(field.type){
+      case "cpf": return "000.000.000-00";
+      case "cnpj": return "00.000.000/0000-00";
+      case "date": return "00/00/0000";
+      default: return null;
+    }
+  }
 
-  // store asset in IndexedDB
-  try{
-    const rec = await dbPutAsset(state.currentTemplateId, file);
-    state.asset.mime = rec.mime;
-    state.asset.fileName = rec.fileName;
-    state.asset.byteLength = rec.byteLength;
-    state.asset.type = file.type === "application/pdf" ? "pdf" : "image";
+  function applyMask(value, mask){
+    if(!mask) return value;
+    let result = "";
+    let valueIndex = 0;
+    for(let i=0; i<mask.length && valueIndex<value.length; i++){
+      const m = mask[i];
+      const c = value[valueIndex];
+      if(m==="0"){
+        if(/\d/.test(c)){ result+=c; valueIndex++; }
+        else { valueIndex++; i--; }
+      } else if(m==="A"){
+        if(/[a-zA-Z]/.test(c)){ result+=c; valueIndex++; }
+        else { valueIndex++; i--; }
+      } else if(m==="*"){
+        result+=c; valueIndex++;
+      } else {
+        result+=m;
+        if(c===m) valueIndex++;
+      }
+    }
+    return result;
+  }
 
-    els.fileTitle.textContent = `${state.asset.fileName} • ${Math.round((state.asset.byteLength||0)/1024)} KB`;
+  /********************************************************************
+   * Alinhamento (vem do JSON por campo) — VERSÃO ROBUSTA
+   * (resolve o "sempre topo-esquerda" quando o JSON usa chaves/formatos diferentes)
+   ********************************************************************/
+  function normalizeAlignString(s){
+    let str = String(s ?? "").trim();
+    // camelCase -> kebab
+    str = str.replace(/([a-z])([A-Z])/g, "$1-$2");
+    str = str.toLowerCase();
+    // espaços/underscores -> hífen
+    str = str.replace(/[\s_]+/g, "-");
+    return str;
+  }
 
-    if(state.asset.type==="pdf"){
-      state.pdf.arrayBuffer = rec.data;
-      state.pdf.doc = await pdfjsLib.getDocument({ data: rec.data }).promise;
-      state.pdf.pages = state.pdf.doc.numPages;
-      state.pdf.page = 1;
-      els.pdfNav.style.display = "block";
-      await renderCurrent();
-    }else{
-      // image
-      const url = blobUrlFromRecord(rec);
-      state.image.objectUrl = url;
-      await renderCurrent();
+  function pickFirst(obj, keys){
+    if(!obj) return null;
+    for(const k of keys){
+      if(Object.prototype.hasOwnProperty.call(obj, k)){
+        const v = obj[k];
+        if(v !== null && v !== undefined && String(v).trim() !== "") return v;
+      }
+    }
+    return null;
+  }
+
+  function deepPick(field, keys){
+    // procura no field e em sub-objetos comuns
+    const pools = [
+      field,
+      field?.style,
+      field?.text,
+      field?.options,
+      field?.meta,
+      field?.config,
+      field?.props
+    ];
+    for(const p of pools){
+      const v = pickFirst(p, keys);
+      if(v !== null) return v;
+    }
+    return null;
+  }
+
+  function mapGridIndex(idx){
+    // 0..8 => TL, TC, TR, ML, MC, MR, BL, BC, BR
+    const map = [
+      {h:"left",  v:"top"},
+      {h:"center",v:"top"},
+      {h:"right", v:"top"},
+      {h:"left",  v:"middle"},
+      {h:"center",v:"middle"},
+      {h:"right", v:"middle"},
+      {h:"left",  v:"bottom"},
+      {h:"center",v:"bottom"},
+      {h:"right", v:"bottom"},
+    ];
+    return map[idx] || {h:"left", v:"middle"};
+  }
+
+  function map01ToAlign(x, y){
+    const h = (x <= 0.34) ? "left" : (x >= 0.67 ? "right" : "center");
+    const v = (y <= 0.34) ? "top"  : (y >= 0.67 ? "bottom" : "middle");
+    return { h, v };
+  }
+
+  function parseAlignToken(str){
+    const s = normalizeAlignString(str);
+
+    // abreviações tipo tl/mc/br
+    if(/^(tl|lt)$/.test(s)) return {h:"left", v:"top"};
+    if(/^(tc|ct)$/.test(s)) return {h:"center", v:"top"};
+    if(/^(tr|rt)$/.test(s)) return {h:"right", v:"top"};
+    if(/^(ml|lm)$/.test(s)) return {h:"left", v:"middle"};
+    if(/^(mc|cm|center)$/.test(s)) return {h:"center", v:"middle"};
+    if(/^(mr|rm)$/.test(s)) return {h:"right", v:"middle"};
+    if(/^(bl|lb)$/.test(s)) return {h:"left", v:"bottom"};
+    if(/^(bc|cb)$/.test(s)) return {h:"center", v:"bottom"};
+    if(/^(br|rb)$/.test(s)) return {h:"right", v:"bottom"};
+
+    const hasTop = /(top|upper|north|start)/.test(s);
+    const hasBottom = /(bottom|lower|south|end)/.test(s);
+    const hasMiddle = /(middle|mid)/.test(s);
+    const hasCenter = /(center|centre)/.test(s);
+
+    const hasLeft = /(left|west)/.test(s);
+    const hasRight = /(right|east)/.test(s);
+
+    const v = hasTop ? "top" : (hasBottom ? "bottom" : ((hasMiddle || hasCenter) ? "middle" : "middle"));
+    const h = hasRight ? "right" : (hasLeft ? "left" : (hasCenter ? "center" : "left"));
+
+    return { h, v };
+  }
+
+  function getFieldAlignment(field){
+    // possíveis chaves do Gizom
+    const H_KEYS = [
+      "align","alignment","textAlign","text_align","hAlign","halign","horizontalAlign","horizontal_alignment",
+      "anchor","gravity","justify","justification","placement","position"
+    ];
+    const V_KEYS = [
+      "valign","vAlign","verticalAlign","vertical_align","v_alignment","yAlign","yalign"
+    ];
+
+    const raw = deepPick(field, H_KEYS);
+    const vraw = deepPick(field, V_KEYS);
+
+    // (1) número 0..8 (grid) ou 0..2 (hAlign)
+    const n = (typeof raw === "number") ? raw : (String(raw||"").match(/^\d+$/) ? parseInt(raw,10) : NaN);
+    if(Number.isFinite(n)){
+      if(n >= 0 && n <= 8) return mapGridIndex(n);
+      if(n >= 0 && n <= 2){
+        const h = n===0 ? "left" : (n===2 ? "right" : "center");
+        const vv = vraw != null ? parseAlignToken(vraw).v : "middle";
+        return { h, v: vv };
+      }
     }
 
-    toast("Arquivo carregado", "Agora você pode inserir os campos roxos.");
-  }catch(err){
-    console.error(err);
-    toast("Falha ao salvar arquivo no navegador", "Verifique permissões/armazenamento do browser.");
-  }
-});
+    // (2) objeto {h,v} / {horizontal,vertical} / {x,y}
+    if(raw && typeof raw === "object" && !Array.isArray(raw)){
+      if(raw.h != null || raw.v != null || raw.horizontal != null || raw.vertical != null){
+        const hh = raw.h ?? raw.horizontal ?? raw.x ?? "left";
+        const vv = raw.v ?? raw.vertical ?? raw.y ?? "middle";
+        return parseAlignToken(`${hh}-${vv}`);
+      }
 
-/* =========================
-   PDF NAV
-========================= */
-els.btnPrev.addEventListener("click", async ()=>{
-  if(!state.pdf.doc) return;
-  state.pdf.page = Math.max(1, state.pdf.page - 1);
-  await renderCurrent();
-});
-els.btnNext.addEventListener("click", async ()=>{
-  if(!state.pdf.doc) return;
-  state.pdf.page = Math.min(state.pdf.pages, state.pdf.page + 1);
-  await renderCurrent();
-});
+      const ax = raw.anchorX ?? raw.alignX ?? raw.x;
+      const ay = raw.anchorY ?? raw.alignY ?? raw.y;
+      if(typeof ax === "number" && typeof ay === "number" && ax>=0 && ax<=1 && ay>=0 && ay<=1){
+        return map01ToAlign(ax, ay);
+      }
+    }
 
-/* =========================
-   TEMPLATE SAVE / PUBLISH
-========================= */
-els.tplName.addEventListener("input", ()=>{
-  state.name = els.tplName.value;
-});
+    // (3) array [h,v] ou [x,y]
+    if(Array.isArray(raw) && raw.length >= 2){
+      const a0 = raw[0], a1 = raw[1];
+      if(typeof a0 === "number" && typeof a1 === "number" && a0>=0 && a0<=1 && a1>=0 && a1<=1){
+        return map01ToAlign(a0, a1);
+      }
+      return parseAlignToken(`${a0}-${a1}`);
+    }
 
-function buildTemplateMeta(published=false){
-  return {
-    id: state.currentTemplateId || uid(),
-    name: (els.tplName.value || "").trim() || "Sem nome",
-    assetType: state.asset.type,
-    assetFileName: state.asset.fileName,
-    assetMime: state.asset.mime,
-    pdfPages: state.asset.type==="pdf" ? state.pdf.pages : 1,
-    fields: state.fields,
-    published: published,
-    updatedAt: nowISO(),
-    createdAt: null
-  };
-}
+    // (4) anchors separados no field
+    const ax = deepPick(field, ["anchorX","alignX","xAlign","x_anchor"]);
+    const ay = deepPick(field, ["anchorY","alignY","yAlign","y_anchor"]);
+    if(typeof ax === "number" && typeof ay === "number" && ax>=0 && ax<=1 && ay>=0 && ay<=1){
+      return map01ToAlign(ax, ay);
+    }
 
-function upsertTemplate(meta){
-  const list = loadTemplates();
-  const i = list.findIndex(t=>t.id===meta.id);
-  if(i>=0){
-    meta.createdAt = list[i].createdAt || meta.updatedAt;
-    list[i] = meta;
-  }else{
-    meta.createdAt = meta.updatedAt;
-    list.push(meta);
-  }
-  saveTemplates(list);
-}
+    // (5) string + vertical separado
+    const s = normalizeAlignString(raw);
+    const sv = normalizeAlignString(vraw);
+    if(s){
+      const combined = sv ? `${s}-${sv}` : s;
+      return parseAlignToken(combined);
+    }
 
-els.btnSave.addEventListener("click", ()=>{
-  if(!state.asset.type){
-    return toast("Nada para salvar", "Faça upload do PDF/imagem primeiro.");
-  }
-  if(!state.currentTemplateId) state.currentTemplateId = uid();
-  const meta = buildTemplateMeta(false);
-  upsertTemplate(meta);
-  toast("Salvo (rascunho)", "Ficou no navegador (localStorage + IndexedDB).");
-});
-
-els.btnPublish.addEventListener("click", ()=>{
-  if(!state.asset.type){
-    return toast("Nada para publicar", "Faça upload do PDF/imagem primeiro.");
-  }
-  if(!state.currentTemplateId) state.currentTemplateId = uid();
-  const meta = buildTemplateMeta(true);
-  upsertTemplate(meta);
-  toast("Publicado ✅", "Vai aparecer no /solicitacoes (quando criarmos).");
-});
-
-els.btnNew.addEventListener("click", ()=>{
-  resetEditor(true);
-  toast("Novo template", "Pronto para criar do zero.");
-});
-
-function resetEditor(keepStorage=false){
-  state.currentTemplateId = null;
-  state.name = "";
-  state.asset = { type:null, fileName:null, mime:null, byteLength:0 };
-  state.modeAdd = null;
-  state.pdf = { doc:null, page:1, pages:1, arrayBuffer:null };
-  if(state.image.objectUrl) URL.revokeObjectURL(state.image.objectUrl);
-  state.image = { objectUrl:null, naturalW:0, naturalH:0 };
-  state.render = { cssW:0, cssH:0 };
-  state.fields = [];
-  state.selectedFieldId = null;
-
-  els.tplName.value = "";
-  els.fileInput.value = "";
-  els.fileTitle.textContent = "Nenhum arquivo carregado";
-  els.pagewrap.style.display = "none";
-  els.emptyMsg.style.display = "block";
-  els.pdfNav.style.display = "none";
-  setTool(null);
-  drawFields();
-  renderProps();
-}
-
-/* =========================
-   CLEAR FIELDS
-========================= */
-els.btnClearFields.addEventListener("click", ()=>{
-  if(!state.asset.type) return;
-  if(!confirm("Tem certeza que quer remover TODOS os campos deste template?")) return;
-  state.fields = [];
-  state.selectedFieldId = null;
-  drawFields();
-  renderProps();
-  toast("Campos removidos");
-});
-
-/* =========================
-   TEMPLATES MODAL
-========================= */
-els.btnTemplates.addEventListener("click", ()=>{
-  renderTemplateList();
-  els.modal.classList.add("show");
-});
-els.btnCloseModal.addEventListener("click", ()=>{
-  els.modal.classList.remove("show");
-});
-els.modal.addEventListener("click", (e)=>{
-  if(e.target === els.modal) els.modal.classList.remove("show");
-});
-els.searchTpl.addEventListener("input", renderTemplateList);
-
-function renderTemplateList(){
-  const q = (els.searchTpl.value||"").trim().toLowerCase();
-  const list = loadTemplates()
-    .filter(t=> !q || (t.name||"").toLowerCase().includes(q) || (t.assetFileName||"").toLowerCase().includes(q))
-    .sort((a,b)=> (b.updatedAt||"").localeCompare(a.updatedAt||""));
-
-  if(!list.length){
-    els.tplList.innerHTML = `<div style="color:var(--muted);font-weight:900">Nenhum template salvo.</div>`;
-    return;
+    return { h:"left", v:"middle" };
   }
 
-  els.tplList.innerHTML = list.map(t=>{
-    const isPub = !!t.published;
-    const badge = isPub ? `<span class="badge pub">publicado</span>` : `<span class="badge draft">rascunho</span>`;
-    const type = `<span class="badge">${t.assetType || "—"}</span>`;
-    const pages = t.assetType==="pdf" ? `<span class="badge">${t.pdfPages||1} pág.</span>` : `<span class="badge">imagem</span>`;
-    const upd = new Date(t.updatedAt).toLocaleString();
-    const fields = `<span class="badge">${(t.fields||[]).length} campos</span>`;
+  function applyFlexAlign(box, align){
+    // robusto: eixo principal vertical
+    box.style.display = "flex";
+    box.style.flexDirection = "column";
 
-    return `
-      <div class="listItem">
-        <div class="info">
-          <strong title="${escapeHtml(t.name)}">${escapeHtml(t.name)}</strong>
-          <span>${escapeHtml(t.assetFileName||"")} • atualizado: ${escapeHtml(upd)}</span>
-        </div>
-        <div class="badges">${badge}${type}${pages}${fields}</div>
-        <div class="ops">
-          <button class="btn small" onclick="tplOpen('${t.id}')">Abrir</button>
-          <button class="btn small" onclick="tplDuplicate('${t.id}')">Duplicar</button>
-          <button class="btn small" onclick="tplTogglePub('${t.id}')">${isPub?"Despublicar":"Publicar"}</button>
-          <button class="btn small" onclick="tplExport('${t.id}')">Exportar</button>
-          <button class="btn small bad" onclick="tplDelete('${t.id}')">Apagar</button>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
+    // vertical
+    box.style.justifyContent =
+      align.v === "top" ? "flex-start" :
+      align.v === "bottom" ? "flex-end" : "center";
 
-window.tplOpen = async function(id){
-  const t = loadTemplates().find(x=>x.id===id);
-  if(!t) return toast("Template não encontrado");
-  resetEditor(false);
-
-  state.currentTemplateId = t.id;
-  state.fields = t.fields || [];
-  state.name = t.name || "";
-  els.tplName.value = state.name;
-
-  // load asset from IDB
-  const rec = await dbGetAsset(t.id);
-  if(!rec){
-    toast("Arquivo não encontrado no navegador", "Esse template existe, mas o PDF/imagem não está no IndexedDB.");
-    els.modal.classList.remove("show");
-    return;
+    // horizontal (texto)
+    box.style.alignItems = "stretch";
+    box.style.textAlign = align.h;
   }
 
-  state.asset.type = t.assetType || (rec.mime==="application/pdf"?"pdf":"image");
-  state.asset.mime = rec.mime;
-  state.asset.fileName = rec.fileName || t.assetFileName || "arquivo";
-  state.asset.byteLength = rec.byteLength || (rec.data ? rec.data.byteLength : 0);
-
-  els.fileTitle.textContent = `${state.asset.fileName} • ${Math.round((state.asset.byteLength||0)/1024)} KB`;
-
-  if(state.asset.type==="pdf"){
-    state.pdf.arrayBuffer = rec.data;
-    state.pdf.doc = await pdfjsLib.getDocument({ data: rec.data }).promise;
-    state.pdf.pages = state.pdf.doc.numPages;
-    state.pdf.page = 1;
-  }else{
-    state.image.objectUrl = blobUrlFromRecord(rec);
+  function isWrapEnabled(field){
+    const f = field || {};
+    const raw = f.wrap ?? f.textWrap ?? f.multiline ?? f.multiLine ?? f.lineBreak ?? null;
+    if(typeof raw === "boolean") return raw;
+    if(typeof raw === "string"){
+      const s = normalizeAlignString(raw);
+      if(s === "true" || s === "yes" || s === "1") return true;
+      if(s === "false" || s === "no" || s === "0") return false;
+    }
+    return !!state.textSettings.wrap;
   }
 
-  await renderCurrent();
-  els.modal.classList.remove("show");
-  toast("Template carregado");
-};
-
-window.tplDuplicate = async function(id){
-  const list = loadTemplates();
-  const t = list.find(x=>x.id===id);
-  if(!t) return;
-
-  const newId = uid();
-  // duplicate metadata with new id
-  const nt = JSON.parse(JSON.stringify(t));
-  nt.id = newId;
-  nt.name = (t.name || "Template") + " (cópia)";
-  nt.published = false;
-  nt.updatedAt = nowISO();
-  nt.createdAt = nowISO();
-
-  // duplicate asset in IDB
-  const rec = await dbGetAsset(id);
-  if(rec){
-    const blob = new Blob([rec.data], {type: rec.mime});
-    const file = new File([blob], rec.fileName || "arquivo", {type: rec.mime});
-    await dbPutAsset(newId, file);
+  /********************************************************************
+   * Fonte: base única + auto-redução se não couber
+   ********************************************************************/
+  function getBaseFontSizeForField(field){
+    const ov = state.fieldOverrides[String(field.id)]?.fontSize;
+    const base = Number.isFinite(ov) ? ov : (Number(state.textSettings.fontSize) || 14);
+    return clamp(base, 6, 72);
   }
 
-  list.push(nt);
-  saveTemplates(list);
-  renderTemplateList();
-  toast("Template duplicado");
-};
-
-window.tplTogglePub = function(id){
-  const list = loadTemplates();
-  const i = list.findIndex(x=>x.id===id);
-  if(i<0) return;
-  list[i].published = !list[i].published;
-  list[i].updatedAt = nowISO();
-  saveTemplates(list);
-  renderTemplateList();
-  toast(list[i].published ? "Publicado ✅" : "Despublicado");
-};
-
-window.tplDelete = async function(id){
-  if(!confirm("Apagar este template? (isso remove também o arquivo do navegador)")) return;
-  const list = loadTemplates().filter(x=>x.id!==id);
-  saveTemplates(list);
-  await dbDeleteAsset(id);
-  renderTemplateList();
-  toast("Template apagado");
-};
-
-function makeExportPayload(t, includeAsset=false){
-  // payload sem asset (padrão). Asset fica no IndexedDB.
-  return {
-    format: "UJ_SOLIC_TEMPLATE_V1",
-    template: t,
-    includeAsset: false
-  };
-}
-
-window.tplExport = function(id){
-  const t = loadTemplates().find(x=>x.id===id);
-  if(!t) return;
-  const payload = makeExportPayload(t, false);
-  downloadJson(payload, `usojaleco_template_${sanitizeFileName(t.name||t.id)}.json`);
-  toast("Exportado", "Arquivo JSON baixado (sem o PDF/imagem).");
-};
-
-function downloadJson(obj, filename){
-  const blob = new Blob([JSON.stringify(obj,null,2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function sanitizeFileName(s){
-  return String(s).toLowerCase().replace(/[^a-z0-9\-_]+/g,"_").slice(0,60);
-}
-
-/* =========================
-   IMPORT / EXPORT (editor buttons)
-========================= */
-els.btnExport.addEventListener("click", ()=>{
-  if(!state.asset.type || !state.currentTemplateId){
-    return toast("Nada para exportar", "Abra ou crie um template primeiro.");
+  function setMeasureFont(px){
+    mctx.font = `${state.textSettings.fontWeight} ${px}px ${state.textSettings.fontFamily}`;
   }
-  const meta = buildTemplateMeta(false);
-  const payload = { format:"UJ_SOLIC_TEMPLATE_V1", template: meta, includeAsset:false };
-  downloadJson(payload, `usojaleco_template_${sanitizeFileName(meta.name||meta.id)}.json`);
-  toast("Exportado", "JSON baixado (sem asset).");
-});
 
-els.btnImport.addEventListener("click", ()=>{
-  els.importFile.click();
-});
+  function wrapLinesFit(context, text, maxWidth, maxLines){
+    const words = String(text||"").split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = "";
+    let truncated = false;
 
-els.importFile.addEventListener("change", async ()=>{
-  const f = els.importFile.files && els.importFile.files[0];
-  if(!f) return;
-  try{
-    const txt = await f.text();
-    const obj = JSON.parse(txt);
-    if(!obj || obj.format !== "UJ_SOLIC_TEMPLATE_V1" || !obj.template) throw new Error("Formato inválido");
+    for(let i=0;i<words.length;i++){
+      const test = line ? (line+" "+words[i]) : words[i];
+      if(context.measureText(test).width <= maxWidth){
+        line = test;
+      } else {
+        if(line) lines.push(line);
+        line = words[i];
+        if(lines.length >= maxLines - 1){
+          truncated = (i < words.length - 1) || (context.measureText(line).width > maxWidth);
+          break;
+        }
+      }
+    }
 
-    // import template meta ONLY
-    const t = obj.template;
-    if(!t.id) t.id = uid();
-    t.updatedAt = nowISO();
-    t.createdAt = nowISO();
-    t.published = false;
+    if(line && lines.length < maxLines){
+      if(context.measureText(line).width > maxWidth){
+        let s = line;
+        while(context.measureText(s).width > maxWidth && s.length > 1) s = s.slice(0,-1);
+        lines.push(s);
+        truncated = true;
+      } else {
+        lines.push(line);
+      }
+    }
 
-    const list = loadTemplates();
-    // avoid collision
-    if(list.some(x=>x.id===t.id)) t.id = uid();
-    list.push(t);
-    saveTemplates(list);
+    if(lines.length===0 && text){
+      let s = String(text);
+      while(context.measureText(s).width > maxWidth && s.length>1) s = s.slice(0,-1);
+      lines.push(s);
+      truncated = (s.length < String(text).length);
+    }
 
-    toast("Importado", "Template importado. Agora associe o arquivo base abrindo e fazendo upload novamente.");
-    renderTemplateList();
-  }catch(err){
-    console.error(err);
-    toast("Erro ao importar", "Arquivo JSON inválido.");
-  }finally{
-    els.importFile.value = "";
+    return { lines, truncated };
   }
-});
 
-/* =========================
-   UTIL
-========================= */
-function escapeHtml(s){
-  return String(s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-}
+  function computeFitFontSize(field, rect, text){
+    const base = getBaseFontSizeForField(field);
+    if(!state.textSettings.autoSize) return base;
 
-/* =========================
-   INIT
-========================= */
-updateStoragePill();
-renderProps();
+    const min = 6;
+    const padX = state.textSettings.paddingX;
+    const availW = Math.max(1, rect.w - padX*2);
+    const t = String(text || "");
 
-// re-render on resize
-let rT = null;
-window.addEventListener("resize", ()=>{
-  if(!state.asset.type) return;
-  clearTimeout(rT);
-  rT = setTimeout(()=> renderCurrent(), 140);
-});
+    if(!t.trim()) return base;
+
+    const wrap = isWrapEnabled(field);
+
+    for(let size = base; size >= min; size--){
+      setMeasureFont(size);
+      const lineH = size * 1.15;
+      if(lineH > rect.h + 0.1) continue;
+
+      if(!wrap){
+        const w = mctx.measureText(t).width;
+        if(w <= availW + 0.5) return size;
+      } else {
+        const maxLines = Math.max(1, Math.floor(rect.h / lineH));
+        const res = wrapLinesFit(mctx, t, availW, maxLines);
+        if(!res.truncated) return size;
+      }
+    }
+
+    return min;
+  }
+
+  function getEffectiveFontSize(field, rect, value){
+    if(field.type === "check"){
+      return clamp(Math.min(getBaseFontSizeForField(field), rect.h * 0.85), 6, 72);
+    }
+
+    if(field.comb && field.combCells && field.combCells >= 2){
+      const base = getBaseFontSizeForField(field);
+      const maxByHeight = rect.h * 0.80;
+      return clamp(Math.min(base, maxByHeight), 8, 72);
+    }
+
+    return computeFitFontSize(field, rect, value);
+  }
+
+  /********************************************************************
+   * Zoom
+   ********************************************************************/
+  function applyViewScale(){
+    state.viewScale = clamp(state.viewScale, 0.1, 5);
+    zoomWrapper.style.zoom = state.viewScale;
+    zoomLevel.textContent = Math.round(state.viewScale * 100) + "%";
+  }
+  function setViewScale(v){ state.viewScale = v; applyViewScale(); }
+
+  function fitToWidth(){
+    if(!state.document.loaded) return;
+    const avail = viewerScroll.clientWidth - 36;
+    const s = avail / canvas.width;
+    setViewScale(clamp(s, 0.1, 5));
+  }
+  function fitToPage(){
+    if(!state.document.loaded) return;
+    const availW = viewerScroll.clientWidth - 36;
+    const availH = viewerScroll.clientHeight - 36;
+    const s = Math.min(availW / canvas.width, availH / canvas.height);
+    setViewScale(clamp(s, 0.1, 5));
+  }
+
+  btnZoomIn.addEventListener("click", ()=> setViewScale(state.viewScale + 0.1));
+  btnZoomOut.addEventListener("click", ()=> setViewScale(state.viewScale - 0.1));
+  btnZoomReset.addEventListener("click", ()=> setViewScale(1));
+  btnFitWidth.addEventListener("click", fitToWidth);
+  btnFitPage.addEventListener("click", fitToPage);
+  window.addEventListener("resize", () => { if(state.document.loaded) fitToWidth(); });
+
+  /********************************************************************
+   * Overlays
+   ********************************************************************/
+  function clearOverlaysAndTexts(){
+    document.querySelectorAll(".field-overlay").forEach(el => el.remove());
+    document.querySelectorAll(".filled-text").forEach(el => el.remove());
+    removeInlineEditor(false);
+  }
+
+  function ensureViewerClickBound(){
+    if(state._viewerClickBound) return;
+    state._viewerClickBound = true;
+
+    viewerScroll.addEventListener("click", (e) => {
+      if(e.target.closest(".field-overlay")) return;
+      removeInlineEditor(true);
+      selectOverlay(null);
+    });
+  }
+
+  function renderForm(){
+    clearOverlaysAndTexts();
+    ensureViewerClickBound();
+
+    if(!state.currentTemplate) return;
+    const fields = state.currentTemplate.fields || [];
+
+    fields.forEach((field) => {
+      const overlay = document.createElement("div");
+      overlay.className = "field-overlay";
+      overlay.dataset.fieldId = String(field.id);
+
+      const r = getScaledRect(field);
+      overlay.style.left = r.x + "px";
+      overlay.style.top = r.y + "px";
+      overlay.style.width = r.w + "px";
+      overlay.style.height = r.h + "px";
+
+      if(field.comb && field.combCells && field.combCells >= 2){
+        overlay.classList.add("comb");
+        overlay.style.setProperty("--comb-step", (r.w / field.combCells) + "px");
+      }
+
+      overlay.addEventListener("click", (e) => {
+        e.stopPropagation();
+        selectOverlay(field.id);
+        startInlineEdit(field, { fromTab:false });
+      });
+
+      canvasContainer.appendChild(overlay);
+    });
+
+    updateDocument();
+  }
+
+  function selectOverlay(fieldId){
+    state.selectedFieldId = (fieldId == null ? null : String(fieldId));
+    document.querySelectorAll(".field-overlay").forEach(o => o.classList.remove("selected"));
+    if(fieldId == null) return;
+    const o = document.querySelector(`.field-overlay[data-field-id="${fieldId}"]`);
+    if(o) o.classList.add("selected");
+  }
+
+  function scrollOverlayIntoView(fieldId){
+    const overlay = document.querySelector(`.field-overlay[data-field-id="${fieldId}"]`);
+    if(!overlay) return;
+    overlay.scrollIntoView({ block:"nearest", inline:"nearest" });
+  }
+
+  /********************************************************************
+   * TAB inteligente
+   ********************************************************************/
+  function getNextFieldId(currentId, forward=true){
+    const fields = (state.currentTemplate?.fields || []).filter(f => f.type !== "check");
+    if(fields.length === 0) return null;
+
+    const cur = fields.find(f => String(f.id) === String(currentId));
+    if(!cur){
+      const first = [...fields].sort((a,b)=> (a.y-b.y) || (a.x-b.x))[0];
+      return first?.id ?? null;
+    }
+
+    const curCY = cur.y + cur.height/2;
+    const rowTol = Math.max(6, cur.height * 0.60);
+
+    const sameRow = fields.filter(f => Math.abs((f.y + f.height/2) - curCY) <= rowTol);
+
+    if(forward){
+      const rights = sameRow.filter(f => f.x > cur.x + 0.5).sort((a,b)=> a.x - b.x);
+      if(rights[0]) return rights[0].id;
+
+      const below = fields.filter(f => (f.y + f.height/2) > (curCY + rowTol))
+                          .sort((a,b)=> (a.y-b.y) || (a.x-b.x));
+      if(below[0]){
+        const targetY = below[0].y + below[0].height/2;
+        const row = below.filter(f => Math.abs((f.y+f.height/2) - targetY) <= rowTol)
+                         .sort((a,b)=> a.x - b.x);
+        return (row[0] || below[0]).id;
+      }
+
+      const first = [...fields].sort((a,b)=> (a.y-b.y) || (a.x-b.x))[0];
+      return first?.id ?? null;
+
+    } else {
+      const lefts = sameRow.filter(f => f.x < cur.x - 0.5).sort((a,b)=> b.x - a.x);
+      if(lefts[0]) return lefts[0].id;
+
+      const above = fields.filter(f => (f.y + f.height/2) < (curCY - rowTol))
+                          .sort((a,b)=> (b.y-a.y) || (b.x-a.x));
+      if(above[0]){
+        const targetY = above[0].y + above[0].height/2;
+        const row = above.filter(f => Math.abs((f.y+f.height/2) - targetY) <= rowTol)
+                         .sort((a,b)=> b.x - a.x);
+        return (row[0] || above[0]).id;
+      }
+
+      const last = [...fields].sort((a,b)=> (b.y-a.y) || (b.x-a.x))[0];
+      return last?.id ?? null;
+    }
+  }
+
+  function focusField(fieldId, opts={ fromTab:true }){
+    const f = getFieldById(fieldId);
+    if(!f) return;
+    selectOverlay(f.id);
+    scrollOverlayIntoView(f.id);
+    startInlineEdit(f, { fromTab: !!opts.fromTab });
+  }
+
+  /********************************************************************
+   * Editor inline
+   ********************************************************************/
+  function removeInlineEditor(commit){
+    const existing = document.getElementById("inline-editor");
+    if(existing){
+      if(commit) existing.blur();
+      else existing.remove();
+    }
+    state.editingFieldId = null;
+  }
+
+  function applyFieldFontOverride(fieldId, delta){
+    const id = String(fieldId);
+    const cur = state.fieldOverrides[id]?.fontSize;
+    const base = Number.isFinite(cur) ? cur : (Number(state.textSettings.fontSize) || 14);
+    const next = clamp(base + delta, 6, 72);
+    state.fieldOverrides[id] = { ...(state.fieldOverrides[id]||{}), fontSize: next };
+  }
+
+  function startInlineEdit(field, opts={ fromTab:false }){
+    if(!state.document.loaded){
+      alert("Documento ainda não carregou.");
+      return;
+    }
+
+    const old = document.getElementById("inline-editor");
+    if(old) old.remove();
+
+    if(field.type === "check"){
+      if(opts.fromTab) return;
+      const cur = !!state.formData[field.name];
+      state.formData[field.name] = !cur;
+      updateDocument();
+      return;
+    }
+
+    state.editingFieldId = field.id;
+
+    const overlay = document.querySelector(`.field-overlay[data-field-id="${field.id}"]`);
+    if(!overlay) return;
+
+    const mask = getFieldMask(field);
+    const r = getScaledRect(field);
+
+    const isComb = !!(field.comb && field.combCells && field.combCells >= 2);
+    const useTextarea = (!isComb && isWrapEnabled(field));
+
+    const editor = document.createElement(useTextarea ? "textarea" : "input");
+    editor.id = "inline-editor";
+    editor.className = "inline-editor" + (r.h < 28 ? " smallpad" : "");
+    if(!useTextarea) editor.type = "text";
+
+    if(isComb) editor.classList.add("comb-ghost");
+
+    editor.style.fontFamily = state.textSettings.fontFamily;
+    editor.style.fontWeight = state.textSettings.fontWeight;
+
+    const initialValue = state.formData[field.name] || "";
+    const initialSize = getEffectiveFontSize(field, r, initialValue);
+
+    const align = getFieldAlignment(field);
+    editor.style.fontSize = initialSize + "px";
+    editor.style.lineHeight = (initialSize * 1.15) + "px";
+    editor.style.color = isComb ? "transparent" : state.textSettings.color;
+    editor.style.textAlign = isComb ? "left" : align.h;
+
+    editor.value = initialValue;
+
+    overlay.appendChild(editor);
+    editor.focus();
+    editor.select?.();
+
+    function refreshEditorFont(){
+      const val = editor.value || "";
+      const size = getEffectiveFontSize(field, r, val);
+      editor.style.fontSize = size + "px";
+      editor.style.lineHeight = (size * 1.15) + "px";
+    }
+
+    editor.addEventListener("input", () => {
+      let value = editor.value || "";
+
+      if(isComb){
+        const clean = removeMask(value);
+        if(clean !== value){
+          editor.value = clean;
+          value = clean;
+        }
+      } else if(mask){
+        value = applyMask(removeMask(value), mask);
+        editor.value = value;
+      } else if(field.type === "number"){
+        const only = removeMask(value).replace(/[^\d]/g,"");
+        if(only !== value){
+          editor.value = only;
+          value = only;
+        }
+      }
+
+      state.formData[field.name] = editor.value;
+
+      refreshEditorFont();
+      updateDocument();
+    });
+
+    editor.addEventListener("keydown", (ev) => {
+      if(ev.key === "Tab"){
+        ev.preventDefault();
+        const forward = !ev.shiftKey;
+        editor.blur();
+        setTimeout(() => {
+          const nextId = getNextFieldId(field.id, forward);
+          if(nextId != null) focusField(nextId, { fromTab:true });
+        }, 0);
+        return;
+      }
+
+      if(ev.ctrlKey && (ev.key === "=" || ev.key === "+" || ev.key === "ArrowUp")){
+        ev.preventDefault();
+        applyFieldFontOverride(field.id, +1);
+        refreshEditorFont();
+        updateDocument();
+        return;
+      }
+      if(ev.ctrlKey && (ev.key === "-" || ev.key === "_" || ev.key === "ArrowDown")){
+        ev.preventDefault();
+        applyFieldFontOverride(field.id, -1);
+        refreshEditorFont();
+        updateDocument();
+        return;
+      }
+
+      if(ev.key === "Escape"){
+        ev.preventDefault();
+        editor.remove();
+        state.editingFieldId = null;
+        updateDocument();
+        return;
+      }
+
+      if(!useTextarea && ev.key === "Enter"){
+        ev.preventDefault();
+        editor.blur();
+      }
+      if(useTextarea && ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)){
+        ev.preventDefault();
+        editor.blur();
+      }
+    });
+
+    editor.addEventListener("blur", () => {
+      if(!isComb && mask){
+        const v = applyMask(removeMask(editor.value || ""), mask);
+        editor.value = v;
+        state.formData[field.name] = v;
+      } else {
+        state.formData[field.name] = editor.value || "";
+      }
+      editor.remove();
+      state.editingFieldId = null;
+      updateDocument();
+    });
+  }
+
+  /********************************************************************
+   * Texto no preview (alinhamento por campo)
+   ********************************************************************/
+  function updateDocument(){
+    document.querySelectorAll(".filled-text").forEach(el => el.remove());
+    if(!state.currentTemplate || !state.document.loaded) return;
+
+    document.querySelectorAll(".field-overlay").forEach(o => o.classList.remove("filled"));
+
+    const fields = state.currentTemplate.fields || [];
+
+    fields.forEach((field) => {
+      const v = state.formData[field.name];
+      const hasValue = (field.type === "check") ? !!v : !!String(v || "").trim();
+      if(!hasValue) return;
+
+      const overlay = document.querySelector(`.field-overlay[data-field-id="${field.id}"]`);
+      if(overlay) overlay.classList.add("filled");
+
+      const isComb = !!(field.comb && field.combCells && field.combCells >= 2);
+      if(state.editingFieldId === field.id && !isComb) return;
+
+      const r = getScaledRect(field);
+      const fontSize = getEffectiveFontSize(field, r, v);
+      const wrap = isWrapEnabled(field);
+
+      const textEl = document.createElement("div");
+      textEl.className = "filled-text";
+      textEl.style.left = r.x + "px";
+      textEl.style.top = r.y + "px";
+      textEl.style.width = r.w + "px";
+      textEl.style.height = r.h + "px";
+      textEl.style.fontFamily = state.textSettings.fontFamily;
+      textEl.style.fontWeight = state.textSettings.fontWeight;
+      textEl.style.color = state.textSettings.color;
+      textEl.style.fontSize = fontSize + "px";
+      textEl.style.lineHeight = (fontSize * 1.15) + "px";
+
+      const box = document.createElement("div");
+      box.className = "filled-box";
+
+      // ✅ padding completo (X e Y)
+      box.style.paddingLeft = state.textSettings.paddingX + "px";
+      box.style.paddingRight = state.textSettings.paddingX + "px";
+      box.style.paddingTop = state.textSettings.paddingY + "px";
+      box.style.paddingBottom = state.textSettings.paddingY + "px";
+
+      if(field.type === "check"){
+        const c = document.createElement("div");
+        c.className = "filled-content";
+        c.textContent = "X";
+        applyFlexAlign(box, { h:"center", v:"middle" });
+        box.appendChild(c);
+        textEl.appendChild(box);
+        canvasContainer.appendChild(textEl);
+        return;
+      }
+
+      if(isComb){
+        const cells = parseInt(field.combCells, 10);
+        const clean = removeMask(String(v || ""));
+        const chars = clean.split("").slice(0, cells);
+
+        const grid = document.createElement("div");
+        grid.className = "comb-text";
+        grid.style.gridTemplateColumns = `repeat(${cells}, 1fr)`;
+
+        for(let i=0; i<cells; i++){
+          const sp = document.createElement("span");
+          sp.textContent = chars[i] || "";
+          grid.appendChild(sp);
+        }
+
+        applyFlexAlign(box, { h:"center", v:"middle" });
+        box.appendChild(grid);
+        textEl.appendChild(box);
+        canvasContainer.appendChild(textEl);
+        return;
+      }
+
+      const align = getFieldAlignment(field);
+      applyFlexAlign(box, align);
+
+      const content = document.createElement("div");
+      content.className = "filled-content";
+      if(wrap) content.classList.add("wrap");
+      content.textContent = String(v || "");
+
+      box.appendChild(content);
+      textEl.appendChild(box);
+      canvasContainer.appendChild(textEl);
+    });
+  }
+
+  /********************************************************************
+   * Export (PNG) + Print/PDF (alinhamento por campo)
+   ********************************************************************/
+  function wrapLines(context, text, maxWidth, maxLines){
+    return wrapLinesFit(context, text, maxWidth, maxLines).lines;
+  }
+
+  function drawFilledOnContext(tctx, baseImg){
+    tctx.drawImage(baseImg, 0, 0);
+
+    (state.currentTemplate.fields||[]).forEach(field => {
+      const v = state.formData[field.name];
+      const hasValue = (field.type==="check") ? !!v : !!String(v||"").trim();
+      if(!hasValue) return;
+
+      const r = getScaledRect(field);
+      const isComb = !!(field.comb && field.combCells && field.combCells>=2);
+      const fontSize = getEffectiveFontSize(field, r, v);
+      const wrap = isWrapEnabled(field);
+
+      tctx.fillStyle = state.textSettings.color;
+      tctx.font = `${state.textSettings.fontWeight} ${fontSize}px ${state.textSettings.fontFamily}`;
+
+      const padX = state.textSettings.paddingX;
+      const padY = state.textSettings.paddingY;
+
+      const lineH = fontSize * 1.15;
+
+      if(field.type==="check"){
+        tctx.textAlign = "center";
+        tctx.textBaseline = "middle";
+        tctx.fillText("X", r.x + r.w/2, r.y + r.h/2);
+        return;
+      }
+
+      if(isComb){
+        const cells = parseInt(field.combCells,10);
+        const clean = removeMask(String(v||""));
+        const chars = clean.split("").slice(0, cells);
+        const cellW = r.w / cells;
+
+        tctx.textAlign = "center";
+        tctx.textBaseline = "middle";
+        for(let i=0;i<cells;i++){
+          const cx = r.x + (i+0.5)*cellW;
+          const ch = chars[i] || "";
+          if(ch) tctx.fillText(ch, cx, r.y + r.h/2);
+        }
+        return;
+      }
+
+      const align = getFieldAlignment(field);
+
+      // X
+      const xLeft = r.x + padX;
+      const xCenter = r.x + r.w/2;
+      const xRight = r.x + r.w - padX;
+
+      tctx.textAlign = (align.h === "center") ? "center" : (align.h === "right" ? "right" : "left");
+
+      // baseline top facilita multiline (a gente calcula Y)
+      tctx.textBaseline = "top";
+
+      const text = String(v||"");
+
+      if(!wrap){
+        let y;
+        if(align.v === "top"){
+          y = r.y + padY;
+        } else if(align.v === "bottom"){
+          y = r.y + r.h - padY - lineH;
+        } else {
+          y = r.y + (r.h - lineH)/2;
+        }
+
+        const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
+        tctx.fillText(text, x, y);
+
+      } else {
+        const maxW = Math.max(10, r.w - padX*2);
+        const maxLines = Math.max(1, Math.floor(r.h / lineH));
+        const lines = wrapLines(tctx, text, maxW, maxLines);
+        const totalH = lines.length * lineH;
+
+        let startY;
+        if(align.v === "top"){
+          startY = r.y + padY;
+        } else if(align.v === "bottom"){
+          startY = r.y + r.h - padY - totalH;
+        } else {
+          startY = r.y + (r.h - totalH)/2;
+        }
+
+        const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
+        for(let i=0;i<lines.length;i++){
+          tctx.fillText(lines[i], x, startY + i*lineH);
+        }
+      }
+    });
+  }
+
+  function buildFilledCanvas(){
+    return new Promise((resolve, reject) => {
+      if(!state.currentTemplate || !state.document.loaded) return reject(new Error("Sem template ou documento."));
+      const temp = document.createElement("canvas");
+      temp.width = canvas.width;
+      temp.height = canvas.height;
+      const tctx = temp.getContext("2d");
+
+      const img = new Image();
+      img.onload = function(){
+        drawFilledOnContext(tctx, img);
+        resolve(temp);
+      };
+      img.onerror = () => reject(new Error("Erro ao carregar imagem base."));
+      img.src = state.document.dataUrl;
+    });
+  }
+
+  async function downloadDocument(){
+    try{
+      const temp = await buildFilledCanvas();
+      temp.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const name = (state.currentTemplate.name || "documento").replace(/[^\w\-]+/g,"_");
+        a.href = url;
+        a.download = `${name}_preenchido.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, "image/png");
+    } catch(err){
+      alert("Erro ao gerar PNG: " + err.message);
+    }
+  }
+
+  async function printDocument(){
+    try{
+      const temp = await buildFilledCanvas();
+      const dataUrl = temp.toDataURL("image/png");
+
+      const w = window.open("", "_blank");
+      if(!w){
+        alert("Pop-up bloqueado. Permita pop-ups para imprimir/salvar em PDF.");
+        return;
+      }
+
+      w.document.open();
+      w.document.write(`
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8"/>
+          <title>Imprimir</title>
+          <style>
+            @page { margin: 0; }
+            html, body { margin: 0; padding: 0; }
+            img { width: 100%; height: auto; display: block; }
+          </style>
+        </head>
+        <body>
+          <img id="img" src="${dataUrl}" />
+          <script>
+            const img = document.getElementById('img');
+            img.onload = () => setTimeout(() => window.print(), 50);
+          <\/script>
+        </body>
+        </html>
+      `);
+      w.document.close();
+    } catch(err){
+      alert("Erro ao imprimir: " + err.message);
+    }
+  }
+
+  function clearForm(){
+    if(!state.currentTemplate) return;
+    if(confirm("Deseja realmente limpar todos os campos?")){
+      state.formData = {};
+      btnDownload.disabled = true;
+      updateDocument();
+    }
+  }
+
+  /********************************************************************
+   * Validar
+   ********************************************************************/
+  function validateForm(){
+    if(!state.currentTemplate){ alert("Selecione um formulário."); return; }
+    if(!state.document.loaded){ alert("Documento ainda não carregou."); return; }
+
+    alert("✓ Ok.");
+    btnDownload.disabled = false;
+    btnPrint.disabled = false;
+  }
+
+  /********************************************************************
+   * Eventos
+   ********************************************************************/
+  catalogSearch.addEventListener("input", renderCatalog);
+  btnReloadCatalog.addEventListener("click", loadCatalog);
+
+  btnValidate.addEventListener("click", validateForm);
+  btnDownload.addEventListener("click", downloadDocument);
+  btnPrint.addEventListener("click", printDocument);
+  btnClear.addEventListener("click", clearForm);
+
+  /********************************************************************
+   * Init
+   ********************************************************************/
+  setPill(sheetStatus, "warn", "Planilha: —");
+  setPill(docStatus, "warn", "Documento: —");
+  setPill(tplStatus, "warn", "Template: —");
+  applyViewScale();
+  loadCatalog();
 </script>
 </body>
 </html>
