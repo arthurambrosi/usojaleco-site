@@ -282,6 +282,57 @@
     }
 
     /* =========================
+       Toolbar de texto
+       ========================= */
+    .tool-label{
+      font-size:11px;
+      font-weight:900;
+      color:#475569;
+      margin-right:-4px;
+      user-select:none;
+    }
+    .tool-select,
+    .tool-input{
+      height:34px;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      background:#ffffff;
+      padding:0 10px;
+      font-size:12px;
+      font-weight:900;
+      color:#0f172a;
+      outline:none;
+      transition:.15s;
+    }
+    .tool-select:focus,
+    .tool-input:focus{
+      border-color:rgba(17,153,142,.65);
+      box-shadow:0 0 0 2px rgba(17,153,142,.10);
+    }
+    .tool-input.num{ width:74px; }
+    .tool-color{
+      width:38px;
+      height:34px;
+      padding:0;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      cursor:pointer;
+    }
+    .tool-hint{
+      font-size:11px;
+      color:#64748b;
+      font-weight:800;
+      user-select:none;
+    }
+    .tool-divider{
+      width:1px;
+      height:26px;
+      background:#e5e7eb;
+      margin:0 2px;
+    }
+
+    /* =========================
        Overlays + texto
        ========================= */
     .field-overlay{
@@ -422,7 +473,8 @@
         <strong>Como preencher:</strong><br>
         • Clique em um campo no documento e digite.<br>
         • <strong>TAB</strong> vai para o próximo campo (Shift+TAB volta).<br>
-        • <strong>Ctrl +</strong> / <strong>Ctrl -</strong> ajusta fonte só daquele campo.
+        • <strong>Ctrl +</strong> / <strong>Ctrl -</strong> ajusta fonte só daquele campo.<br>
+        • Barra superior: se <strong>não</strong> houver campo selecionado, muda o documento todo; se houver, muda só o campo selecionado.
       </div>
     </div>
 
@@ -436,6 +488,44 @@
           <button class="zbtn wide" id="fit-width" title="Ajustar na largura">Fit largura</button>
           <button class="zbtn wide" id="fit-page" title="Ajustar na tela">Fit tela</button>
           <button class="zbtn wide" id="zoom-reset" title="100%">100%</button>
+        </div>
+
+        <!-- ✅ CONTROLES DE TEXTO (global ou do campo selecionado) -->
+        <div class="toolbar-group">
+          <span class="tool-hint" id="scope-hint">Escopo: Documento</span>
+          <span class="tool-divider"></span>
+
+          <span class="tool-label">Fonte</span>
+          <select id="font-family" class="tool-select" title="Fonte">
+            <option value='"Courier New", monospace'>Courier New</option>
+            <option value='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'>Segoe UI</option>
+            <option value='Arial, Helvetica, sans-serif'>Arial</option>
+            <option value='"Times New Roman", Times, serif'>Times</option>
+            <option value='Georgia, serif'>Georgia</option>
+          </select>
+
+          <span class="tool-label">Peso</span>
+          <select id="font-weight" class="tool-select" title="Peso">
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
+          </select>
+
+          <span class="tool-label">Tamanho</span>
+          <input id="font-size" class="tool-input num" type="number" min="6" max="72" step="1" title="Tamanho base (autoajusta se estiver ligado)" />
+
+          <span class="tool-label">Cor</span>
+          <input id="font-color" class="tool-color" type="color" title="Cor do texto" />
+
+          <span class="tool-hint" title="Se o campo permitir, quebra linha no preview e no export">
+            <label style="display:flex;align-items:center;gap:6px;font-weight:900;font-size:11px;color:#475569;user-select:none;">
+              <input id="wrap-toggle" type="checkbox" style="transform:translateY(1px)" />
+              Quebrar linha
+            </label>
+          </span>
         </div>
 
         <div class="toolbar-group">
@@ -467,6 +557,9 @@
    ********************************************************************/
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTZOA79LT875AhL4fXYQLo49KLWzKC2sMVmZKX6gbbRJE23Pf3Tzu7DZ29UQPV6WUW2a6HqbOITp0-/pub?output=csv"; // <-- OBRIGATÓRIO
 
+  // ✅ NOVO: evita “carregando eternamente”
+  const CATALOG_TIMEOUT_MS = 20000; // 20s
+
   /********************************************************************
    * Estado
    ********************************************************************/
@@ -487,20 +580,23 @@
     editingFieldId: null,
     selectedFieldId: null,
 
-    // OBS: alinhamento NÃO é mais global. Vem do JSON (por campo).
     textSettings: {
       fontFamily: '"Courier New", monospace',
       fontWeight: '600',
       fontSize: 14,
       autoSize: true,
       color: '#000000',
-      wrap: false,      // se você quiser forçar wrap global, troque para true
+      wrap: false,
       paddingX: 5,
       paddingY: 3
     },
 
     _viewerClickBound: false
   };
+
+  // ✅ NOVO: sequência para evitar corrida em “recarregar”
+  let catalogLoadSeq = 0;
+  let catalogAbortCtrl = null;
 
   /********************************************************************
    * DOM
@@ -532,8 +628,16 @@
   const btnPrint = document.getElementById("print-btn");
   const btnClear = document.getElementById("clear-btn");
 
+  // Texto toolbar
+  const scopeHint = document.getElementById("scope-hint");
+  const inpFontFamily = document.getElementById("font-family");
+  const inpFontWeight = document.getElementById("font-weight");
+  const inpFontSize = document.getElementById("font-size");
+  const inpFontColor = document.getElementById("font-color");
+  const inpWrapToggle = document.getElementById("wrap-toggle");
+
   /********************************************************************
-   * Measure ctx (para medir texto e ajustar fonte)
+   * Measure ctx
    ********************************************************************/
   const measureCanvas = document.createElement("canvas");
   const mctx = measureCanvas.getContext("2d");
@@ -564,6 +668,154 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
+
+  // ✅ NOVO: cache buster para evitar cache/redirect travado
+  function withCacheBuster(url){
+    const u = resolveUrl(url);
+    const hasQ = u.includes("?");
+    return u + (hasQ ? "&" : "?") + "t=" + Date.now();
+  }
+
+  // ✅ NOVO: fetch com timeout (não fica pendurado)
+  async function fetchWithTimeout(url, opts={}){
+    const timeoutMs = opts.timeoutMs ?? CATALOG_TIMEOUT_MS;
+
+    if(catalogAbortCtrl){
+      try{ catalogAbortCtrl.abort(); }catch(_){}
+    }
+    const ctrl = new AbortController();
+    catalogAbortCtrl = ctrl;
+
+    const timer = setTimeout(() => {
+      try{ ctrl.abort(); }catch(_){}
+    }, timeoutMs);
+
+    try{
+      const resp = await fetch(url, {
+        cache: "no-store",
+        signal: ctrl.signal,
+        headers: {
+          "Accept": "text/csv,text/plain;q=0.9,*/*;q=0.8"
+        }
+      });
+      return resp;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function looksLikeHtml(text){
+    const head = String(text || "").slice(0, 400).toLowerCase();
+    return head.includes("<!doctype") || head.includes("<html") || head.includes("<head") || head.includes("<body");
+  }
+
+  /********************************************************************
+   * Estilo efetivo (global + override por campo)
+   ********************************************************************/
+  function getOverride(fieldId){
+    return state.fieldOverrides[String(fieldId)] || null;
+  }
+
+  function getEffectiveFontFamily(field){
+    const ov = getOverride(field.id);
+    return (ov && ov.fontFamily) ? ov.fontFamily : state.textSettings.fontFamily;
+  }
+
+  function getEffectiveFontWeight(field){
+    const ov = getOverride(field.id);
+    return (ov && ov.fontWeight) ? String(ov.fontWeight) : String(state.textSettings.fontWeight);
+  }
+
+  function getEffectiveColor(field){
+    const ov = getOverride(field.id);
+    return (ov && ov.color) ? ov.color : state.textSettings.color;
+  }
+
+  function getEffectiveWrapFallback(field){
+    const ov = getOverride(field.id);
+    if(ov && typeof ov.wrap === "boolean") return ov.wrap;
+    return !!state.textSettings.wrap;
+  }
+
+  /********************************************************************
+   * Toolbar de texto
+   ********************************************************************/
+  function refreshScopeHint(){
+    scopeHint.textContent = state.selectedFieldId ? "Escopo: Campo selecionado" : "Escopo: Documento";
+  }
+
+  function refreshTextToolbar(){
+    refreshScopeHint();
+
+    const f = state.selectedFieldId ? getFieldById(state.selectedFieldId) : null;
+
+    if(!f){
+      inpFontFamily.value = state.textSettings.fontFamily;
+      inpFontWeight.value = String(state.textSettings.fontWeight);
+      inpFontSize.value = String(state.textSettings.fontSize);
+      inpFontColor.value = String(state.textSettings.color || "#000000");
+      inpWrapToggle.checked = !!state.textSettings.wrap;
+      return;
+    }
+
+    const ov = getOverride(f.id) || {};
+    inpFontFamily.value = ov.fontFamily ?? state.textSettings.fontFamily;
+    inpFontWeight.value = String(ov.fontWeight ?? state.textSettings.fontWeight);
+    inpFontSize.value = String(ov.fontSize ?? state.textSettings.fontSize);
+    inpFontColor.value = String(ov.color ?? state.textSettings.color || "#000000");
+    inpWrapToggle.checked = (typeof ov.wrap === "boolean") ? ov.wrap : !!state.textSettings.wrap;
+  }
+
+  function applyTextChange(partial){
+    const sid = state.selectedFieldId;
+
+    if(sid){
+      const id = String(sid);
+      state.fieldOverrides[id] = { ...(state.fieldOverrides[id]||{}), ...partial };
+    } else {
+      Object.assign(state.textSettings, partial);
+    }
+
+    syncInlineEditorStyle();
+    updateDocument();
+    refreshTextToolbar();
+  }
+
+  function syncInlineEditorStyle(){
+    const ed = document.getElementById("inline-editor");
+    if(!ed) return;
+    if(!state.editingFieldId) return;
+
+    const field = getFieldById(state.editingFieldId);
+    if(!field) return;
+
+    const r = getScaledRect(field);
+    const align = getFieldAlignment(field);
+    const color = getEffectiveColor(field);
+    const fam = getEffectiveFontFamily(field);
+    const weight = getEffectiveFontWeight(field);
+
+    ed.style.fontFamily = fam;
+    ed.style.fontWeight = weight;
+
+    const isComb = !!(field.comb && field.combCells && field.combCells >= 2);
+    ed.style.textAlign = isComb ? "left" : align.h;
+    ed.style.color = isComb ? "transparent" : color;
+
+    const val = ed.value || "";
+    const size = getEffectiveFontSize(field, r, val);
+    ed.style.fontSize = size + "px";
+    ed.style.lineHeight = (size * 1.15) + "px";
+  }
+
+  inpFontFamily.addEventListener("change", () => applyTextChange({ fontFamily: inpFontFamily.value }));
+  inpFontWeight.addEventListener("change", () => applyTextChange({ fontWeight: inpFontWeight.value }));
+  inpFontSize.addEventListener("change", () => {
+    const n = clamp(parseInt(inpFontSize.value || "14", 10), 6, 72);
+    applyTextChange({ fontSize: n });
+  });
+  inpFontColor.addEventListener("input", () => applyTextChange({ color: inpFontColor.value }));
+  inpWrapToggle.addEventListener("change", () => applyTextChange({ wrap: !!inpWrapToggle.checked }));
 
   /********************************************************************
    * CSV parser (com aspas)
@@ -639,6 +891,8 @@
   }
 
   async function loadCatalog(){
+    const seq = ++catalogLoadSeq;
+
     if(!SHEET_CSV_URL){
       setPill(sheetStatus, "bad", "Planilha: defina SHEET_CSV_URL");
       catalogList.innerHTML = `<div class="catalog-empty">Defina <strong>SHEET_CSV_URL</strong> no código.</div>`;
@@ -649,9 +903,30 @@
     catalogList.innerHTML = `<div class="catalog-empty">Carregando lista...</div>`;
 
     try{
-      const resp = await fetch(resolveUrl(SHEET_CSV_URL), { cache:"no-store" });
+      // ✅ tenta com cache-buster
+      const url = withCacheBuster(SHEET_CSV_URL);
+
+      const resp = await fetchWithTimeout(url, { timeoutMs: CATALOG_TIMEOUT_MS });
+
+      // se outra tentativa começou, ignora essa
+      if(seq !== catalogLoadSeq) return;
+
       if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      // alguns navegadores podem ficar “pendurados” em resp.text() se a conexão travar;
+      // por isso a parte de timeout já aborta o fetch.
+      const ct = String(resp.headers.get("content-type") || "").toLowerCase();
+      catalogList.innerHTML = `<div class="catalog-empty">Processando CSV...</div>`;
+      await new Promise(r => setTimeout(r, 0)); // dá chance da UI pintar
+
       const text = await resp.text();
+
+      if(seq !== catalogLoadSeq) return;
+
+      // ✅ se por algum motivo o Google devolveu HTML (publicação quebrada), avisa
+      if(ct.includes("text/html") || looksLikeHtml(text)){
+        throw new Error("A URL retornou HTML (não CSV). Refaça 'Publicar na web' como CSV e use o link de CSV.");
+      }
 
       const rows = parseCSV(text);
       state.catalog = normalizeCatalogRows(rows);
@@ -661,9 +936,27 @@
       renderCatalog();
 
     } catch(err){
+      if(seq !== catalogLoadSeq) return;
+
       console.error(err);
+
+      let msg = err?.name === "AbortError"
+        ? `Tempo excedido (${Math.round(CATALOG_TIMEOUT_MS/1000)}s). O Google pode estar lento ou bloqueando a requisição.`
+        : (err?.message || "Erro desconhecido");
+
       setPill(sheetStatus, "bad", "Planilha: erro");
-      catalogList.innerHTML = `<div class="catalog-empty">Erro ao carregar a planilha.<br><span style="color:#9a3412;font-size:12px">${escapeHtml(err.message)}</span></div>`;
+      catalogList.innerHTML = `
+        <div class="catalog-empty">
+          Erro ao carregar a planilha.<br>
+          <span style="color:#9a3412;font-size:12px">${escapeHtml(msg)}</span>
+          <div style="margin-top:10px;font-size:12px;color:#475569;line-height:1.35">
+            Dicas rápidas:<br>
+            • Abra o link de CSV no navegador e veja se baixa o arquivo.<br>
+            • Em Planilhas Google: Arquivo → Compartilhar/Exportar → <b>Publicar na Web</b> → CSV.<br>
+            • Se a planilha tiver várias abas, publique a aba correta e use o link gerado.
+          </div>
+        </div>
+      `;
     }
   }
 
@@ -764,8 +1057,8 @@
 
         recomputeScale();
         if(state.currentTemplate){
-          renderForm();     // só overlays
-          updateDocument(); // só textos no preview
+          renderForm();
+          updateDocument();
         }
 
         fitToWidth();
@@ -807,11 +1100,13 @@
     renderForm();
     updateDocument();
 
+    refreshTextToolbar();
+
     setPill(tplStatus, "ok", `Template: OK (${t.fields.length})`);
   }
 
   /********************************************************************
-   * Seleção do item (carrega doc + json)
+   * Seleção do item
    ********************************************************************/
   async function selectCatalogItem(id){
     const item = state.catalog.find(x => x.id === id);
@@ -833,10 +1128,9 @@
         loadDocumentFromUrl(item.docUrl)
       ]);
 
-      // habilita ações após carregar
       btnValidate.disabled = false;
       btnClear.disabled = false;
-      btnPrint.disabled = false; // pode imprimir mesmo sem validar, se quiser
+      btnPrint.disabled = false;
     } catch(err){
       console.error(err);
       setPill(docStatus, "bad", "Documento: erro");
@@ -907,15 +1201,12 @@
   }
 
   /********************************************************************
-   * Alinhamento (vem do JSON por campo) — VERSÃO ROBUSTA
-   * (resolve o "sempre topo-esquerda" quando o JSON usa chaves/formatos diferentes)
+   * Alinhamento (vem do JSON por campo)
    ********************************************************************/
   function normalizeAlignString(s){
     let str = String(s ?? "").trim();
-    // camelCase -> kebab
     str = str.replace(/([a-z])([A-Z])/g, "$1-$2");
     str = str.toLowerCase();
-    // espaços/underscores -> hífen
     str = str.replace(/[\s_]+/g, "-");
     return str;
   }
@@ -932,7 +1223,6 @@
   }
 
   function deepPick(field, keys){
-    // procura no field e em sub-objetos comuns
     const pools = [
       field,
       field?.style,
@@ -950,7 +1240,6 @@
   }
 
   function mapGridIndex(idx){
-    // 0..8 => TL, TC, TR, ML, MC, MR, BL, BC, BR
     const map = [
       {h:"left",  v:"top"},
       {h:"center",v:"top"},
@@ -974,7 +1263,6 @@
   function parseAlignToken(str){
     const s = normalizeAlignString(str);
 
-    // abreviações tipo tl/mc/br
     if(/^(tl|lt)$/.test(s)) return {h:"left", v:"top"};
     if(/^(tc|ct)$/.test(s)) return {h:"center", v:"top"};
     if(/^(tr|rt)$/.test(s)) return {h:"right", v:"top"};
@@ -1000,19 +1288,19 @@
   }
 
   function getFieldAlignment(field){
-    // possíveis chaves do Gizom
     const H_KEYS = [
+      "textHAlign","text_h_align",
       "align","alignment","textAlign","text_align","hAlign","halign","horizontalAlign","horizontal_alignment",
       "anchor","gravity","justify","justification","placement","position"
     ];
     const V_KEYS = [
+      "textVAlign","text_v_align",
       "valign","vAlign","verticalAlign","vertical_align","v_alignment","yAlign","yalign"
     ];
 
     const raw = deepPick(field, H_KEYS);
     const vraw = deepPick(field, V_KEYS);
 
-    // (1) número 0..8 (grid) ou 0..2 (hAlign)
     const n = (typeof raw === "number") ? raw : (String(raw||"").match(/^\d+$/) ? parseInt(raw,10) : NaN);
     if(Number.isFinite(n)){
       if(n >= 0 && n <= 8) return mapGridIndex(n);
@@ -1023,7 +1311,6 @@
       }
     }
 
-    // (2) objeto {h,v} / {horizontal,vertical} / {x,y}
     if(raw && typeof raw === "object" && !Array.isArray(raw)){
       if(raw.h != null || raw.v != null || raw.horizontal != null || raw.vertical != null){
         const hh = raw.h ?? raw.horizontal ?? raw.x ?? "left";
@@ -1038,7 +1325,6 @@
       }
     }
 
-    // (3) array [h,v] ou [x,y]
     if(Array.isArray(raw) && raw.length >= 2){
       const a0 = raw[0], a1 = raw[1];
       if(typeof a0 === "number" && typeof a1 === "number" && a0>=0 && a0<=1 && a1>=0 && a1<=1){
@@ -1047,18 +1333,16 @@
       return parseAlignToken(`${a0}-${a1}`);
     }
 
-    // (4) anchors separados no field
     const ax = deepPick(field, ["anchorX","alignX","xAlign","x_anchor"]);
     const ay = deepPick(field, ["anchorY","alignY","yAlign","y_anchor"]);
     if(typeof ax === "number" && typeof ay === "number" && ax>=0 && ax<=1 && ay>=0 && ay<=1){
       return map01ToAlign(ax, ay);
     }
 
-    // (5) string + vertical separado
     const s = normalizeAlignString(raw);
     const sv = normalizeAlignString(vraw);
-    if(s){
-      const combined = sv ? `${s}-${sv}` : s;
+    if(s || sv){
+      const combined = (s && sv) ? `${s}-${sv}` : (s || sv);
       return parseAlignToken(combined);
     }
 
@@ -1066,16 +1350,13 @@
   }
 
   function applyFlexAlign(box, align){
-    // robusto: eixo principal vertical
     box.style.display = "flex";
     box.style.flexDirection = "column";
 
-    // vertical
     box.style.justifyContent =
       align.v === "top" ? "flex-start" :
       align.v === "bottom" ? "flex-end" : "center";
 
-    // horizontal (texto)
     box.style.alignItems = "stretch";
     box.style.textAlign = align.h;
   }
@@ -1089,20 +1370,22 @@
       if(s === "true" || s === "yes" || s === "1") return true;
       if(s === "false" || s === "no" || s === "0") return false;
     }
-    return !!state.textSettings.wrap;
+    return getEffectiveWrapFallback(field);
   }
 
   /********************************************************************
-   * Fonte: base única + auto-redução se não couber
+   * Fonte
    ********************************************************************/
   function getBaseFontSizeForField(field){
-    const ov = state.fieldOverrides[String(field.id)]?.fontSize;
-    const base = Number.isFinite(ov) ? ov : (Number(state.textSettings.fontSize) || 14);
+    const ov = getOverride(field.id);
+    const base = Number.isFinite(ov?.fontSize) ? ov.fontSize : (Number(state.textSettings.fontSize) || 14);
     return clamp(base, 6, 72);
   }
 
-  function setMeasureFont(px){
-    mctx.font = `${state.textSettings.fontWeight} ${px}px ${state.textSettings.fontFamily}`;
+  function setMeasureFont(px, field){
+    const fam = getEffectiveFontFamily(field);
+    const weight = getEffectiveFontWeight(field);
+    mctx.font = `${weight} ${px}px ${fam}`;
   }
 
   function wrapLinesFit(context, text, maxWidth, maxLines){
@@ -1160,7 +1443,7 @@
     const wrap = isWrapEnabled(field);
 
     for(let size = base; size >= min; size--){
-      setMeasureFont(size);
+      setMeasureFont(size, field);
       const lineH = size * 1.15;
       if(lineH > rect.h + 0.1) continue;
 
@@ -1280,9 +1563,13 @@
   function selectOverlay(fieldId){
     state.selectedFieldId = (fieldId == null ? null : String(fieldId));
     document.querySelectorAll(".field-overlay").forEach(o => o.classList.remove("selected"));
-    if(fieldId == null) return;
+    if(fieldId == null){
+      refreshTextToolbar();
+      return;
+    }
     const o = document.querySelector(`.field-overlay[data-field-id="${fieldId}"]`);
     if(o) o.classList.add("selected");
+    refreshTextToolbar();
   }
 
   function scrollOverlayIntoView(fieldId){
@@ -1369,6 +1656,7 @@
     const base = Number.isFinite(cur) ? cur : (Number(state.textSettings.fontSize) || 14);
     const next = clamp(base + delta, 6, 72);
     state.fieldOverrides[id] = { ...(state.fieldOverrides[id]||{}), fontSize: next };
+    refreshTextToolbar();
   }
 
   function startInlineEdit(field, opts={ fromTab:false }){
@@ -1406,8 +1694,12 @@
 
     if(isComb) editor.classList.add("comb-ghost");
 
-    editor.style.fontFamily = state.textSettings.fontFamily;
-    editor.style.fontWeight = state.textSettings.fontWeight;
+    const fam = getEffectiveFontFamily(field);
+    const weight = getEffectiveFontWeight(field);
+    const color = getEffectiveColor(field);
+
+    editor.style.fontFamily = fam;
+    editor.style.fontWeight = weight;
 
     const initialValue = state.formData[field.name] || "";
     const initialSize = getEffectiveFontSize(field, r, initialValue);
@@ -1415,7 +1707,7 @@
     const align = getFieldAlignment(field);
     editor.style.fontSize = initialSize + "px";
     editor.style.lineHeight = (initialSize * 1.15) + "px";
-    editor.style.color = isComb ? "transparent" : state.textSettings.color;
+    editor.style.color = isComb ? "transparent" : color;
     editor.style.textAlign = isComb ? "left" : align.h;
 
     editor.value = initialValue;
@@ -1517,7 +1809,7 @@
   }
 
   /********************************************************************
-   * Texto no preview (alinhamento por campo)
+   * Texto no preview
    ********************************************************************/
   function updateDocument(){
     document.querySelectorAll(".filled-text").forEach(el => el.remove());
@@ -1542,22 +1834,25 @@
       const fontSize = getEffectiveFontSize(field, r, v);
       const wrap = isWrapEnabled(field);
 
+      const fam = getEffectiveFontFamily(field);
+      const weight = getEffectiveFontWeight(field);
+      const color = getEffectiveColor(field);
+
       const textEl = document.createElement("div");
       textEl.className = "filled-text";
       textEl.style.left = r.x + "px";
       textEl.style.top = r.y + "px";
       textEl.style.width = r.w + "px";
       textEl.style.height = r.h + "px";
-      textEl.style.fontFamily = state.textSettings.fontFamily;
-      textEl.style.fontWeight = state.textSettings.fontWeight;
-      textEl.style.color = state.textSettings.color;
+      textEl.style.fontFamily = fam;
+      textEl.style.fontWeight = weight;
+      textEl.style.color = color;
       textEl.style.fontSize = fontSize + "px";
       textEl.style.lineHeight = (fontSize * 1.15) + "px";
 
       const box = document.createElement("div");
       box.className = "filled-box";
 
-      // ✅ padding completo (X e Y)
       box.style.paddingLeft = state.textSettings.paddingX + "px";
       box.style.paddingRight = state.textSettings.paddingX + "px";
       box.style.paddingTop = state.textSettings.paddingY + "px";
@@ -1611,7 +1906,7 @@
   }
 
   /********************************************************************
-   * Export (PNG) + Print/PDF (alinhamento por campo)
+   * Export + Print
    ********************************************************************/
   function wrapLines(context, text, maxWidth, maxLines){
     return wrapLinesFit(context, text, maxWidth, maxLines).lines;
@@ -1630,8 +1925,12 @@
       const fontSize = getEffectiveFontSize(field, r, v);
       const wrap = isWrapEnabled(field);
 
-      tctx.fillStyle = state.textSettings.color;
-      tctx.font = `${state.textSettings.fontWeight} ${fontSize}px ${state.textSettings.fontFamily}`;
+      const fam = getEffectiveFontFamily(field);
+      const weight = getEffectiveFontWeight(field);
+      const color = getEffectiveColor(field);
+
+      tctx.fillStyle = color;
+      tctx.font = `${weight} ${fontSize}px ${fam}`;
 
       const padX = state.textSettings.paddingX;
       const padY = state.textSettings.paddingY;
@@ -1663,14 +1962,11 @@
 
       const align = getFieldAlignment(field);
 
-      // X
       const xLeft = r.x + padX;
       const xCenter = r.x + r.w/2;
       const xRight = r.x + r.w - padX;
 
       tctx.textAlign = (align.h === "center") ? "center" : (align.h === "right" ? "right" : "left");
-
-      // baseline top facilita multiline (a gente calcula Y)
       tctx.textBaseline = "top";
 
       const text = String(v||"");
@@ -1824,6 +2120,7 @@
   setPill(docStatus, "warn", "Documento: —");
   setPill(tplStatus, "warn", "Template: —");
   applyViewScale();
+  refreshTextToolbar();
   loadCatalog();
 </script>
 </body>
