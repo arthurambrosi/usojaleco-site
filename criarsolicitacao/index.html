@@ -996,6 +996,11 @@
    ********************************************************************/
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTZOA79LT875AhL4fXYQLo49KLWzKC2sMVmZKX6gbbRJE23Pf3Tzu7DZ29UQPV6WUW2a6HqbOITp0-/pub?output=csv"; // <-- OBRIGATÓRIO
 
+  // ✅ PDF hi-res (preview rápido + export nítido)
+  const PDF_VIEW_SCALE = 2.0;     // preview (rápido)
+  const PDF_EXPORT_SCALE = 4.0;   // export/print (nítido)
+  const PDF_MAX_DIM = 12000;      // proteção contra canvas gigante (evita travar)
+
   /********************************************************************
    * Estado
    ********************************************************************/
@@ -1008,7 +1013,17 @@
     formData: {},
     fieldOverrides: {},
 
-    document: { loaded:false, dataUrl:null, width:0, height:0 },
+    document: {
+      loaded:false,
+      dataUrl:null,
+      width:0,
+      height:0,
+
+      // ✅ para PDF hi-res export/print
+      isPdf:false,
+      pdfDocPromise:null,
+      pdfPage: 1
+    },
 
     renderScale: { x:1, y:1 },
     viewScale: 1,
@@ -1244,6 +1259,34 @@
     });
   }
 
+  // ✅ helpers PDF hi-res
+  async function renderPdfPageToCanvas(targetCanvas, desiredScale){
+    const pdf = await state.document.pdfDocPromise;
+    const page = await pdf.getPage(state.document.pdfPage || 1);
+
+    // viewport base (scale 1) para calcular limite
+    const vp1 = page.getViewport({ scale: 1 });
+    const maxScale = Math.min(PDF_MAX_DIM / vp1.width, PDF_MAX_DIM / vp1.height);
+    const scale = Math.max(0.1, Math.min(desiredScale, maxScale));
+
+    const viewport = page.getViewport({ scale });
+
+    targetCanvas.width = Math.floor(viewport.width);
+    targetCanvas.height = Math.floor(viewport.height);
+
+    const tctx = targetCanvas.getContext("2d", { alpha:false });
+    tctx.imageSmoothingEnabled = true;
+
+    await page.render({ canvasContext: tctx, viewport }).promise;
+    return scale;
+  }
+
+  async function renderPdfPageToDataUrl(desiredScale){
+    const temp = document.createElement("canvas");
+    await renderPdfPageToCanvas(temp, desiredScale);
+    return temp.toDataURL("image/png");
+  }
+
   async function loadDocumentFromUrl(url){
     setPill(docStatus, "warn", "Documento: carregando...");
     const abs = resolveUrl(url);
@@ -1256,22 +1299,20 @@
 
     if(isPdf){
       const buf = await resp.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-      const page = await pdf.getPage(1);
 
-      const scale = 2.0;
-      const viewport = page.getViewport({ scale });
+      state.document.isPdf = true;
+      state.document.pdfPage = 1;
+      state.document.pdfDocPromise = pdfjsLib.getDocument({ data: buf }).promise;
 
-      const temp = document.createElement("canvas");
-      temp.width = viewport.width;
-      temp.height = viewport.height;
-      const tctx = temp.getContext("2d");
-
-      await page.render({ canvasContext: tctx, viewport }).promise;
-
-      const dataUrl = temp.toDataURL("image/png");
+      // preview em escala leve
+      const dataUrl = await renderPdfPageToDataUrl(PDF_VIEW_SCALE);
       await renderDocumentFromDataUrl(dataUrl);
+
     } else {
+      state.document.isPdf = false;
+      state.document.pdfDocPromise = null;
+      state.document.pdfPage = 1;
+
       const blob = await resp.blob();
       const dataUrl = await blobToDataUrl(blob);
       await renderDocumentFromDataUrl(dataUrl);
@@ -2375,29 +2416,39 @@
     return wrapLinesFit(context, text, maxWidth, maxLines).lines;
   }
 
-  function drawFilledOnContext(tctx, baseImg){
-    tctx.drawImage(baseImg, 0, 0);
+  // ✅ Substituída: agora aceita factor (preview -> export) + baseAlreadyDrawn
+  function drawFilledOnContext(tctx, baseImg, factor=1, baseAlreadyDrawn=false){
+    if(!baseAlreadyDrawn){
+      // desenha base ocupando o canvas de saída
+      tctx.drawImage(baseImg, 0, 0, tctx.canvas.width, tctx.canvas.height);
+    }
 
     (state.currentTemplate.fields||[]).forEach(field => {
       const v = state.formData[field.name];
       const hasValue = (field.type==="check") ? !!v : !!String(v||"").trim();
       if(!hasValue) return;
 
-      const r = getScaledRect(field);
+      // retângulo e fonte calculados no "mundo do preview"
+      const r0 = getScaledRect(field);
       const isComb = !!(field.comb && field.combCells && field.combCells>=2);
-      const fontSize = getEffectiveFontSize(field, r, v);
       const wrap = isWrapEnabled(field);
 
       const st = getStyleForFieldId(field.id);
 
-      const padX = state.textSettings.paddingX;
-      const padY = state.textSettings.paddingY;
+      // escala tudo pro "mundo do export"
+      const r = { x:r0.x*factor, y:r0.y*factor, w:r0.w*factor, h:r0.h*factor };
+
+      const fontSize0 = getEffectiveFontSize(field, r0, v);
+      const fontSize  = fontSize0 * factor;
+
+      const padX = state.textSettings.paddingX * factor;
+      const padY = state.textSettings.paddingY * factor;
       const lineH = fontSize * 1.15;
 
-      if(field.type==="check"){
-        tctx.fillStyle = st.color;
-        tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
+      tctx.fillStyle = st.color;
+      tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
 
+      if(field.type==="check"){
         const align = getFieldAlignment(field);
 
         const xLeft = r.x + padX;
@@ -2418,9 +2469,6 @@
       }
 
       if(isComb){
-        tctx.fillStyle = st.color;
-        tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
-
         const cells = parseInt(field.combCells,10);
         const clean = removeMask(String(v||""));
         const chars = clean.split("").slice(0, cells);
@@ -2436,9 +2484,6 @@
         return;
       }
 
-      tctx.fillStyle = st.color;
-      tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
-
       const align = getFieldAlignment(field);
 
       const xLeft = r.x + padX;
@@ -2452,17 +2497,12 @@
 
       if(!wrap){
         let y;
-        if(align.v === "top"){
-          y = r.y + padY;
-        } else if(align.v === "bottom"){
-          y = r.y + r.h - padY - lineH;
-        } else {
-          y = r.y + (r.h - lineH)/2;
-        }
+        if(align.v === "top") y = r.y + padY;
+        else if(align.v === "bottom") y = r.y + r.h - padY - lineH;
+        else y = r.y + (r.h - lineH)/2;
 
         const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
         tctx.fillText(text, x, y);
-
       } else {
         const maxW = Math.max(10, r.w - padX*2);
         const maxLines = Math.max(1, Math.floor(r.h / lineH));
@@ -2470,13 +2510,9 @@
         const totalH = lines.length * lineH;
 
         let startY;
-        if(align.v === "top"){
-          startY = r.y + padY;
-        } else if(align.v === "bottom"){
-          startY = r.y + r.h - padY - totalH;
-        } else {
-          startY = r.y + (r.h - totalH)/2;
-        }
+        if(align.v === "top") startY = r.y + padY;
+        else if(align.v === "bottom") startY = r.y + r.h - padY - totalH;
+        else startY = r.y + (r.h - totalH)/2;
 
         const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
         for(let i=0;i<lines.length;i++){
@@ -2486,27 +2522,49 @@
     });
   }
 
-  function buildFilledCanvas(){
-    return new Promise((resolve, reject) => {
-      if(!state.currentTemplate || !state.document.loaded) return reject(new Error("Sem template ou documento."));
-      const temp = document.createElement("canvas");
-      temp.width = canvas.width;
-      temp.height = canvas.height;
-      const tctx = temp.getContext("2d");
+  // ✅ Substituída: agora suporta hiRes para PDF
+  async function buildFilledCanvas({ hiRes=false } = {}){
+    if(!state.currentTemplate || !state.document.loaded) throw new Error("Sem template ou documento.");
 
-      const img = new Image();
-      img.onload = function(){
-        drawFilledOnContext(tctx, img);
-        resolve(temp);
-      };
+    const temp = document.createElement("canvas");
+    let factor = 1;
+
+    // ✅ Caso PDF: re-renderiza em alta só no export/print
+    if(hiRes && state.document.isPdf && state.document.pdfDocPromise){
+      await renderPdfPageToCanvas(temp, PDF_EXPORT_SCALE);
+
+      // fator = (tamanho export) / (tamanho preview)
+      factor = temp.width / canvas.width;
+
+      const tctx = temp.getContext("2d", { alpha:false });
+      tctx.imageSmoothingEnabled = true;
+
+      // base já está desenhada pelo PDF.js; só carimba os textos escalados
+      drawFilledOnContext(tctx, null, factor, true);
+      return temp;
+    }
+
+    // Caso normal (imagem ou PDF em baixa): usa o dataUrl atual
+    temp.width = canvas.width;
+    temp.height = canvas.height;
+    const tctx = temp.getContext("2d", { alpha:false });
+    tctx.imageSmoothingEnabled = true;
+
+    const img = new Image();
+    img.src = state.document.dataUrl;
+
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
       img.onerror = () => reject(new Error("Erro ao carregar imagem base."));
-      img.src = state.document.dataUrl;
     });
+
+    drawFilledOnContext(tctx, img, 1, false);
+    return temp;
   }
 
   async function downloadDocument(){
     try{
-      const temp = await buildFilledCanvas();
+      const temp = await buildFilledCanvas({ hiRes:true });
       temp.toBlob((blob) => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -2523,7 +2581,7 @@
 
   async function printDocument(){
     try{
-      const temp = await buildFilledCanvas();
+      const temp = await buildFilledCanvas({ hiRes:true });
       const dataUrl = temp.toDataURL("image/png");
 
       const w = window.open("", "_blank");
