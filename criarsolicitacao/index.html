@@ -1,0 +1,1661 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UsoJaleco | Criar Solicitação</title>
+
+  <!-- PDF.js (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --panel:#11131a;
+      --panel2:#0f1117;
+      --card:#141824;
+      --line:#23283a;
+      --text:#e9ecf5;
+      --muted:#a6afc3;
+
+      --purple:#a855f7;
+      --purple2:#7c3aed;
+
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+
+      --shadow: 0 14px 35px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --ui: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--ui);
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 12% 8%, rgba(168,85,247,.18), transparent 60%),
+        radial-gradient(700px 420px at 86% 18%, rgba(124,58,237,.13), transparent 60%),
+        linear-gradient(180deg, #070810, #0b0c10 30%, #070810);
+      overflow:hidden;
+    }
+
+    .topbar{
+      height:62px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:rgba(10,12,16,.78);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:260px;
+    }
+    .dot{
+      width:12px;height:12px;border-radius:50%;
+      background:linear-gradient(135deg, var(--purple), #ff7a18);
+      box-shadow:0 0 0 4px rgba(168,85,247,.12);
+    }
+    .brand h1{font-size:15px;margin:0;font-weight:800;letter-spacing:.2px}
+    .brand .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+      transition:.15s ease;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(168,85,247,.35)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(168,85,247,.22), rgba(124,58,237,.14));
+      border-color: rgba(168,85,247,.35);
+    }
+    .btn.good{
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.08));
+      border-color: rgba(34,197,94,.35);
+    }
+    .btn.bad{
+      background: linear-gradient(135deg, rgba(239,68,68,.18), rgba(239,68,68,.08));
+      border-color: rgba(239,68,68,.35);
+    }
+    .btn.small{padding:7px 10px;border-radius:10px}
+    .pill{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .layout{
+      height:calc(100% - 62px);
+      display:grid;
+      grid-template-columns: 320px 1fr 340px;
+      gap:12px;
+      padding:12px;
+    }
+    .panel{
+      background:rgba(17,19,26,.70);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .panel header{
+      padding:12px 12px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .panel header h2{margin:0;font-size:13px;font-weight:900}
+    .panel header .hint{font-size:12px;color:var(--muted)}
+    .panel .content{padding:12px; overflow:auto; min-height:0}
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:12px;
+    }
+    label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    input[type="text"], input[type="number"], select, textarea{
+      width:100%;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 11px;
+      outline:none;
+      font-weight:700;
+      font-size:13px;
+    }
+    textarea{min-height:90px; resize:vertical; font-weight:600}
+    input[type="file"]{
+      width:100%;
+      background:rgba(255,255,255,.04);
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:12px;
+      padding:10px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .row{display:flex; gap:10px}
+    .row > *{flex:1}
+    .tools{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:6px;
+    }
+    .tool{
+      padding:10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+      transition:.15s ease;
+    }
+    .tool:hover{border-color: rgba(168,85,247,.35); transform:translateY(-1px)}
+    .tool strong{display:block; font-size:12px}
+    .tool span{display:block; font-size:11px; color:var(--muted); margin-top:4px; line-height:1.2}
+    .tool.active{
+      border-color: rgba(168,85,247,.55);
+      box-shadow: 0 0 0 4px rgba(168,85,247,.10);
+      background: rgba(168,85,247,.08);
+    }
+
+    /* Viewer */
+    .viewer{
+      background: rgba(10,12,16,.55);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      position:relative;
+    }
+    .viewer .vtop{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background:rgba(15,17,23,.55);
+      backdrop-filter: blur(10px);
+    }
+    .vtop .left, .vtop .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .vtop .title{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      max-width:540px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .viewer .stage{
+      flex:1;
+      min-height:0;
+      overflow:auto;
+      padding:16px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+    .pagewrap{
+      position:relative;
+      border-radius: 16px;
+      overflow:hidden;
+      background: #0b0c10;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+    }
+    canvas#pdfCanvas, img#imgCanvas{
+      display:block;
+      max-width: 100%;
+      height:auto;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    img#imgCanvas{display:none}
+    canvas#pdfCanvas{display:none}
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none; /* fields will re-enable */
+    }
+    .fbox{
+      position:absolute;
+      border:2px solid rgba(168,85,247,.78);
+      border-radius: 10px;
+      background: rgba(168,85,247,.12);
+      box-shadow: 0 0 0 4px rgba(168,85,247,.08);
+      pointer-events:auto;
+      cursor:move;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+      padding:6px 8px;
+      gap:6px;
+      overflow:hidden;
+      min-width:24px;
+      min-height:18px;
+    }
+    .fbox.selected{
+      border-color: rgba(168,85,247,1);
+      box-shadow: 0 0 0 4px rgba(168,85,247,.12), 0 14px 34px rgba(168,85,247,.10);
+      background: rgba(168,85,247,.16);
+    }
+    .fbox .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      font-weight:900;
+      color: rgba(233,236,245,.95);
+      background: rgba(15,17,23,.55);
+      border:1px solid rgba(255,255,255,.10);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .fbox .meta{
+      font-size:11px;
+      color: rgba(233,236,245,.85);
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 100%;
+      align-self:center;
+    }
+    .fbox[data-type="checkbox"]{
+      align-items:center;
+      justify-content:center;
+      padding:0;
+    }
+    .fbox[data-type="checkbox"]::after{
+      content:"";
+      width: 14px; height: 14px;
+      border: 2px solid rgba(233,236,245,.90);
+      border-radius: 4px;
+      background: rgba(255,255,255,.06);
+    }
+    .fbox[data-type="boxes"]{
+      padding:6px 8px;
+    }
+    .fbox[data-type="boxes"] .meta{display:none}
+    .fbox[data-type="boxes"]::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius: 8px;
+      opacity:.95;
+      pointer-events:none;
+      background-image:
+        repeating-linear-gradient(
+          to right,
+          transparent 0,
+          transparent calc((100%/var(--n)) - 1px),
+          rgba(168,85,247,.70) calc((100%/var(--n)) - 1px),
+          rgba(168,85,247,.70) calc(100%/var(--n))
+        );
+      mix-blend-mode: screen;
+    }
+
+    .handle{
+      position:absolute;
+      width:12px;height:12px;
+      border-radius:4px;
+      background: rgba(168,85,247,.95);
+      border:1px solid rgba(255,255,255,.65);
+      box-shadow: 0 8px 18px rgba(0,0,0,.45);
+      pointer-events:auto;
+      cursor:nwse-resize;
+      display:none;
+    }
+    .fbox.selected .handle{display:block}
+    .handle.nw{left:-6px; top:-6px; cursor:nwse-resize}
+    .handle.ne{right:-6px; top:-6px; cursor:nesw-resize}
+    .handle.sw{left:-6px; bottom:-6px; cursor:nesw-resize}
+    .handle.se{right:-6px; bottom:-6px; cursor:nwse-resize}
+
+    .empty{
+      margin:26px auto 0;
+      max-width: 860px;
+      padding:18px;
+      border-radius: 18px;
+      border:1px dashed rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-weight:800;
+      line-height:1.35;
+    }
+    .empty strong{color:var(--text)}
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding:2px 7px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+      color: rgba(233,236,245,.92);
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:999;
+    }
+    .modal.show{display:flex}
+    .modal .box{
+      width:min(980px, 100%);
+      max-height: min(82vh, 740px);
+      background: rgba(17,19,26,.92);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.60);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .modal .box header{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modal .box header h3{margin:0;font-size:13px;font-weight:950}
+    .modal .box .body{padding:12px; overflow:auto; min-height:0}
+    .listItem{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      margin-bottom:10px;
+    }
+    .listItem .info{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .listItem .info strong{
+      font-size:13px;
+      font-weight:950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 520px;
+    }
+    .listItem .info span{
+      font-size:12px;
+      color: var(--muted);
+      font-weight:800;
+    }
+    .badges{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .badge{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding:4px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(233,236,245,.90);
+    }
+    .badge.pub{border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.10)}
+    .badge.draft{border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.10)}
+    .listItem .ops{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+
+    .toast{
+      position:fixed;
+      left:12px;
+      bottom:12px;
+      background: rgba(17,19,26,.92);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding:10px 12px;
+      font-weight:900;
+      color: var(--text);
+      box-shadow: 0 18px 50px rgba(0,0,0,.55);
+      display:none;
+      z-index:1000;
+      max-width: 560px;
+    }
+    .toast.show{display:block}
+    .toast small{display:block; color: var(--muted); font-weight:800; margin-top:3px; line-height:1.2}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <h1>Criar Solicitação</h1>
+        <div class="sub">Editor visual de formulários (PDF/Imagem) — campos roxos clicáveis</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span class="pill" id="storagePill">Templates: 0 • Publicados: 0</span>
+      <button class="btn small" id="btnTemplates">📚 Templates</button>
+      <button class="btn small" id="btnNew">🧾 Novo</button>
+      <button class="btn small" id="btnSave">💾 Salvar</button>
+      <button class="btn small good" id="btnPublish">✅ Publicar</button>
+      <button class="btn small" id="btnExport">⬇️ Exportar</button>
+      <button class="btn small" id="btnImport">⬆️ Importar</button>
+      <input type="file" id="importFile" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT -->
+    <section class="panel">
+      <header>
+        <div>
+          <h2>Configuração</h2>
+          <div class="hint">Upload + nome do pedido</div>
+        </div>
+      </header>
+      <div class="content">
+        <div class="field">
+          <label>Nome do Pedido / Formulário</label>
+          <input id="tplName" type="text" placeholder="Ex: APAC • Laudo/Procedimento" />
+        </div>
+
+        <div class="field">
+          <label>Arquivo base (PDF ou imagem)</label>
+          <input id="fileInput" type="file" accept="application/pdf,image/*" />
+          <div style="margin-top:8px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.25">
+            Dica: se o PDF for enorme, ainda funciona (vai para IndexedDB). Tudo fica no navegador.
+          </div>
+        </div>
+
+        <div class="field" id="pdfNav" style="display:none">
+          <label>Navegação do PDF</label>
+          <div class="row">
+            <button class="btn" id="btnPrev">⬅️ Página</button>
+            <div class="pill" id="pageInfo" style="display:flex;align-items:center;justify-content:center;flex:1">1 / 1</div>
+            <button class="btn" id="btnNext">Página ➡️</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Ferramentas de campo (clique e depois clique na página)</label>
+          <div class="tools" id="tools">
+            <div class="tool" data-add="text">
+              <strong>Texto</strong>
+              <span>Uma linha (nome, CNS, etc.)</span>
+            </div>
+            <div class="tool" data-add="boxes">
+              <strong>Caixinhas</strong>
+              <span>1 char por quadrinho (CNES, CEP...)</span>
+            </div>
+            <div class="tool" data-add="checkbox">
+              <strong>Checkbox</strong>
+              <span>Marcar opção</span>
+            </div>
+            <div class="tool" data-add="textarea">
+              <strong>Área grande</strong>
+              <span>Justificativa / anamnese</span>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;color:var(--muted);font-size:12px;font-weight:800;line-height:1.25">
+            Atalhos: <span class="kbd">DEL</span> remover campo • <span class="kbd">ESC</span> cancelar ferramenta
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTER VIEWER -->
+    <section class="viewer">
+      <div class="vtop">
+        <div class="left">
+          <div class="title" id="fileTitle">Nenhum arquivo carregado</div>
+        </div>
+        <div class="right">
+          <span class="pill" id="fieldCount">Campos: 0</span>
+          <button class="btn small bad" id="btnClearFields">🧹 Limpar campos</button>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="empty" id="emptyMsg">
+          <strong>Comece fazendo upload</strong> de um PDF ou imagem. Depois selecione uma ferramenta (Texto, Caixinhas, etc.)
+          e clique no lugar certo do formulário.<br><br>
+          Você pode <strong>arrastar</strong> e <strong>redimensionar</strong> os campos roxos. Em seguida, <strong>Salvar</strong> ou <strong>Publicar</strong>.
+        </div>
+
+        <div class="pagewrap" id="pagewrap" style="display:none">
+          <canvas id="pdfCanvas"></canvas>
+          <img id="imgCanvas" alt="form" />
+          <div class="overlay" id="overlay"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT -->
+    <section class="panel">
+      <header>
+        <div>
+          <h2>Propriedades</h2>
+          <div class="hint">Campo selecionado</div>
+        </div>
+        <div class="pill" id="selPill">Nenhum</div>
+      </header>
+      <div class="content" id="props">
+        <div style="color:var(--muted);font-weight:800;line-height:1.3">
+          Selecione um campo roxo para editar tipo, id, label, quantidade de caixinhas, etc.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Templates modal -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <header>
+        <h3>Templates salvos</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <input id="searchTpl" type="text" placeholder="Buscar..." style="width:260px" />
+          <button class="btn small" id="btnCloseModal">Fechar</button>
+        </div>
+      </header>
+      <div class="body" id="tplList"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* =========================
+   STORAGE KEYS
+========================= */
+const LS_KEY = "UJ_SOLIC_TEMPLATES_V1"; // metadata + fields
+const DB_NAME = "uj_solic_assets_v1";
+const DB_STORE = "assets";
+
+/* =========================
+   STATE
+========================= */
+let state = {
+  currentTemplateId: null,
+  name: "",
+  asset: { type:null, fileName:null, mime:null, byteLength:0 }, // stored in IndexedDB
+  modeAdd: null, // 'text' | 'boxes' | 'checkbox' | 'textarea'
+  pdf: { doc:null, page:1, pages:1, arrayBuffer:null },
+  image: { objectUrl:null, naturalW:0, naturalH:0 },
+  render: { cssW:0, cssH:0 },
+  fields: [], // {id,label,type,page,x,y,w,h,required,boxesCount,maxLen}
+  selectedFieldId: null
+};
+
+const els = {
+  tplName: document.getElementById("tplName"),
+  fileInput: document.getElementById("fileInput"),
+  fileTitle: document.getElementById("fileTitle"),
+  pagewrap: document.getElementById("pagewrap"),
+  overlay: document.getElementById("overlay"),
+  emptyMsg: document.getElementById("emptyMsg"),
+  pdfCanvas: document.getElementById("pdfCanvas"),
+  imgCanvas: document.getElementById("imgCanvas"),
+  pdfNav: document.getElementById("pdfNav"),
+  pageInfo: document.getElementById("pageInfo"),
+  btnPrev: document.getElementById("btnPrev"),
+  btnNext: document.getElementById("btnNext"),
+  tools: document.getElementById("tools"),
+  fieldCount: document.getElementById("fieldCount"),
+  btnClearFields: document.getElementById("btnClearFields"),
+  props: document.getElementById("props"),
+  selPill: document.getElementById("selPill"),
+  storagePill: document.getElementById("storagePill"),
+  btnTemplates: document.getElementById("btnTemplates"),
+  modal: document.getElementById("modal"),
+  btnCloseModal: document.getElementById("btnCloseModal"),
+  tplList: document.getElementById("tplList"),
+  searchTpl: document.getElementById("searchTpl"),
+  btnNew: document.getElementById("btnNew"),
+  btnSave: document.getElementById("btnSave"),
+  btnPublish: document.getElementById("btnPublish"),
+  btnExport: document.getElementById("btnExport"),
+  btnImport: document.getElementById("btnImport"),
+  importFile: document.getElementById("importFile"),
+  toast: document.getElementById("toast"),
+};
+
+function toast(msg, sub=""){
+  els.toast.innerHTML = `${msg}${sub?`<small>${sub}</small>`:""}`;
+  els.toast.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> els.toast.classList.remove("show"), 2600);
+}
+
+function nowISO(){ return new Date().toISOString(); }
+function uid(){
+  if (crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now();
+}
+
+/* =========================
+   INDEXEDDB
+========================= */
+function openDB(){
+  return new Promise((resolve, reject)=>{
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = (e)=>{
+      const db = req.result;
+      if(!db.objectStoreNames.contains(DB_STORE)){
+        db.createObjectStore(DB_STORE, { keyPath: "id" });
+      }
+    };
+    req.onsuccess = ()=> resolve(req.result);
+    req.onerror = ()=> reject(req.error);
+  });
+}
+
+async function dbPutAsset(id, file){
+  const ab = await file.arrayBuffer();
+  const rec = { id, mime: file.type || "application/octet-stream", fileName: file.name || "arquivo", data: ab, byteLength: ab.byteLength };
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE, "readwrite");
+    tx.objectStore(DB_STORE).put(rec);
+    tx.oncomplete = ()=> resolve(rec);
+    tx.onerror = ()=> reject(tx.error);
+  });
+}
+
+async function dbGetAsset(id){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE, "readonly");
+    const req = tx.objectStore(DB_STORE).get(id);
+    req.onsuccess = ()=> resolve(req.result || null);
+    req.onerror = ()=> reject(req.error);
+  });
+}
+
+async function dbDeleteAsset(id){
+  const db = await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(DB_STORE, "readwrite");
+    tx.objectStore(DB_STORE).delete(id);
+    tx.oncomplete = ()=> resolve(true);
+    tx.onerror = ()=> reject(tx.error);
+  });
+}
+
+function blobUrlFromRecord(rec){
+  const blob = new Blob([rec.data], {type: rec.mime});
+  return URL.createObjectURL(blob);
+}
+
+/* =========================
+   LOCALSTORAGE TEMPLATES
+========================= */
+function loadTemplates(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    console.warn(e);
+    return [];
+  }
+}
+function saveTemplates(list){
+  localStorage.setItem(LS_KEY, JSON.stringify(list));
+  updateStoragePill();
+}
+function updateStoragePill(){
+  const list = loadTemplates();
+  const pub = list.filter(t=>t.published).length;
+  els.storagePill.textContent = `Templates: ${list.length} • Publicados: ${pub}`;
+}
+
+/* =========================
+   PDF.JS SETUP
+========================= */
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.worker.min.js";
+
+/* =========================
+   RENDERING
+========================= */
+async function renderCurrent(){
+  if(!state.asset.type) return;
+
+  els.emptyMsg.style.display = "none";
+  els.pagewrap.style.display = "block";
+
+  // decide desired width based on stage width
+  const stageRect = document.getElementById("stage").getBoundingClientRect();
+  const desiredW = Math.max(520, Math.min(980, stageRect.width - 32));
+
+  if(state.asset.type === "pdf"){
+    els.imgCanvas.style.display = "none";
+    els.pdfCanvas.style.display = "block";
+    els.pdfNav.style.display = "block";
+
+    const page = await state.pdf.doc.getPage(state.pdf.page);
+    const vp1 = page.getViewport({ scale: 1 });
+    const scale = desiredW / vp1.width;
+
+    const viewport = page.getViewport({ scale });
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    const canvas = els.pdfCanvas;
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = Math.floor(viewport.width * dpr);
+    canvas.height = Math.floor(viewport.height * dpr);
+    canvas.style.width = `${Math.floor(viewport.width)}px`;
+    canvas.style.height = `${Math.floor(viewport.height)}px`;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0,0,viewport.width,viewport.height);
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    state.render.cssW = Math.floor(viewport.width);
+    state.render.cssH = Math.floor(viewport.height);
+
+    els.pageInfo.textContent = `${state.pdf.page} / ${state.pdf.pages}`;
+    setOverlaySize();
+    drawFields();
+  } else {
+    els.pdfCanvas.style.display = "none";
+    els.imgCanvas.style.display = "block";
+    els.pdfNav.style.display = "none";
+
+    // load image to get natural ratio
+    const img = els.imgCanvas;
+    img.style.width = desiredW + "px";
+    img.onload = ()=>{
+      const rect = img.getBoundingClientRect();
+      state.render.cssW = Math.floor(rect.width);
+      state.render.cssH = Math.floor(rect.height);
+      setOverlaySize();
+      drawFields();
+    };
+    img.src = state.image.objectUrl;
+  }
+}
+
+function setOverlaySize(){
+  els.overlay.style.width = state.render.cssW + "px";
+  els.overlay.style.height = state.render.cssH + "px";
+  els.overlay.style.pointerEvents = "none";
+  // ensure wrapper fits overlay
+  els.pagewrap.style.width = state.render.cssW + "px";
+}
+
+/* =========================
+   FIELD DRAW / INTERACTION
+========================= */
+function getFieldById(id){ return state.fields.find(f=>f.id===id) || null; }
+
+function drawFields(){
+  els.overlay.innerHTML = "";
+  const page = (state.asset.type==="pdf") ? state.pdf.page : 1;
+  const fields = state.fields.filter(f=> (f.page||1) === page);
+
+  for(const f of fields){
+    const el = document.createElement("div");
+    el.className = "fbox" + (f.id===state.selectedFieldId ? " selected":"");
+    el.dataset.id = f.id;
+    el.dataset.type = f.type;
+
+    // position in px from normalized
+    const x = Math.round(f.x * state.render.cssW);
+    const y = Math.round(f.y * state.render.cssH);
+    const w = Math.round(f.w * state.render.cssW);
+    const h = Math.round(f.h * state.render.cssH);
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.style.width = Math.max(18,w) + "px";
+    el.style.height = Math.max(14,h) + "px";
+
+    if(f.type==="boxes"){
+      const n = Math.max(2, parseInt(f.boxesCount||8,10));
+      el.style.setProperty("--n", n);
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = (f.label || "Caixinhas") + ` (${n})`;
+      el.appendChild(tag);
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = f.id;
+      el.appendChild(meta);
+    }else if(f.type==="checkbox"){
+      // no inner
+    }else{
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = f.label || (f.type==="textarea" ? "Área" : "Texto");
+      el.appendChild(tag);
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = f.id;
+      el.appendChild(meta);
+    }
+
+    // handles
+    ["nw","ne","sw","se"].forEach(pos=>{
+      const hEl = document.createElement("div");
+      hEl.className = "handle " + pos;
+      hEl.dataset.handle = pos;
+      el.appendChild(hEl);
+    });
+
+    // interactions
+    el.addEventListener("pointerdown", onFieldPointerDown);
+
+    els.overlay.appendChild(el);
+  }
+
+  // overlay should allow interactions now
+  els.overlay.style.pointerEvents = "auto";
+
+  els.fieldCount.textContent = `Campos: ${state.fields.length}`;
+}
+
+let drag = null;
+
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+function onFieldPointerDown(e){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const box = e.currentTarget;
+  const id = box.dataset.id;
+  selectField(id);
+
+  const f = getFieldById(id);
+  if(!f) return;
+
+  const rect = els.overlay.getBoundingClientRect();
+  const startX = e.clientX;
+  const startY = e.clientY;
+
+  const handle = e.target && e.target.dataset ? e.target.dataset.handle : null;
+
+  drag = {
+    id,
+    handle, // null => move
+    startX, startY,
+    rect,
+    f0: { ...f }
+  };
+
+  box.setPointerCapture(e.pointerId);
+  box.addEventListener("pointermove", onFieldPointerMove);
+  box.addEventListener("pointerup", onFieldPointerUp, { once:true });
+  box.addEventListener("pointercancel", onFieldPointerUp, { once:true });
+}
+
+function onFieldPointerMove(e){
+  if(!drag) return;
+  const f = getFieldById(drag.id);
+  if(!f) return;
+
+  const dx = (e.clientX - drag.startX) / state.render.cssW;
+  const dy = (e.clientY - drag.startY) / state.render.cssH;
+
+  const minW = 18 / state.render.cssW;
+  const minH = 14 / state.render.cssH;
+
+  if(!drag.handle){
+    // move
+    f.x = clamp(drag.f0.x + dx, 0, 1 - f.w);
+    f.y = clamp(drag.f0.y + dy, 0, 1 - f.h);
+  } else {
+    // resize
+    let x = drag.f0.x, y = drag.f0.y, w = drag.f0.w, h = drag.f0.h;
+
+    if(drag.handle.includes("e")) w = clamp(drag.f0.w + dx, minW, 1 - x);
+    if(drag.handle.includes("s")) h = clamp(drag.f0.h + dy, minH, 1 - y);
+
+    if(drag.handle.includes("w")){
+      const newX = clamp(drag.f0.x + dx, 0, drag.f0.x + drag.f0.w - minW);
+      w = clamp(drag.f0.w + (drag.f0.x - newX), minW, 1 - newX);
+      x = newX;
+    }
+    if(drag.handle.includes("n")){
+      const newY = clamp(drag.f0.y + dy, 0, drag.f0.y + drag.f0.h - minH);
+      h = clamp(drag.f0.h + (drag.f0.y - newY), minH, 1 - newY);
+      y = newY;
+    }
+
+    f.x=x; f.y=y; f.w=w; f.h=h;
+  }
+
+  drawFields();
+  renderProps();
+}
+
+function onFieldPointerUp(e){
+  const box = e.currentTarget;
+  box.removeEventListener("pointermove", onFieldPointerMove);
+  drag = null;
+}
+
+/* =========================
+   SELECT / PROPS
+========================= */
+function selectField(id){
+  state.selectedFieldId = id;
+  const f = getFieldById(id);
+  els.selPill.textContent = f ? f.id : "Nenhum";
+  drawFields();
+  renderProps();
+}
+
+function renderProps(){
+  const f = getFieldById(state.selectedFieldId);
+  if(!f){
+    els.props.innerHTML = `
+      <div style="color:var(--muted);font-weight:800;line-height:1.3">
+        Selecione um campo roxo para editar tipo, id, label, quantidade de caixinhas, etc.
+      </div>`;
+    return;
+  }
+
+  const page = (state.asset.type==="pdf") ? state.pdf.page : 1;
+  const posTxt = `${Math.round(f.x*100)}% / ${Math.round(f.y*100)}% • ${Math.round(f.w*100)}% × ${Math.round(f.h*100)}%`;
+
+  els.props.innerHTML = `
+    <div class="field">
+      <label>ID do campo (único)</label>
+      <input type="text" id="p_id" value="${escapeHtml(f.id)}" />
+    </div>
+
+    <div class="field">
+      <label>Label (aparece no roxo)</label>
+      <input type="text" id="p_label" value="${escapeHtml(f.label||"")}" placeholder="Ex: CNS do paciente" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Tipo</label>
+        <select id="p_type">
+          ${["text","boxes","checkbox","textarea"].map(t=>`<option value="${t}" ${f.type===t?"selected":""}>${t}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field">
+        <label>Página</label>
+        <input type="number" id="p_page" min="1" max="${state.asset.type==="pdf"?state.pdf.pages:1}" value="${f.page||1}" />
+      </div>
+    </div>
+
+    <div class="row" id="boxesRow" style="display:${f.type==="boxes"?"flex":"none"}">
+      <div class="field">
+        <label>Qtd. caixinhas</label>
+        <input type="number" id="p_boxes" min="2" max="40" value="${parseInt(f.boxesCount||8,10)}" />
+      </div>
+      <div class="field">
+        <label>Somente números?</label>
+        <select id="p_numOnly">
+          <option value="no" ${(f.numOnly!=="yes")?"selected":""}>não</option>
+          <option value="yes" ${(f.numOnly==="yes")?"selected":""}>sim</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="lenRow" style="display:${(f.type==="text"||f.type==="textarea")?"flex":"none"}">
+      <div class="field">
+        <label>Máx. caracteres</label>
+        <input type="number" id="p_max" min="1" max="4000" value="${parseInt(f.maxLen|| (f.type==="textarea"?500:80),10)}" />
+      </div>
+      <div class="field">
+        <label>Obrigatório?</label>
+        <select id="p_req">
+          <option value="no" ${(f.required!=="yes")?"selected":""}>não</option>
+          <option value="yes" ${(f.required==="yes")?"selected":""}>sim</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Posição/Tamanho (auto)</label>
+      <div class="pill">${posTxt} • visualizando página ${page}</div>
+    </div>
+
+    <div class="row">
+      <button class="btn bad" id="p_delete">🗑️ Apagar campo</button>
+      <button class="btn" id="p_dup">📌 Duplicar</button>
+    </div>
+  `;
+
+  // wire
+  const $ = (id)=> document.getElementById(id);
+
+  $("p_id").addEventListener("change", ()=>{
+    const v = $("p_id").value.trim();
+    if(!v) return toast("ID inválido", "O campo precisa de um ID.");
+    if(state.fields.some(x=>x.id===v && x!==f)) return toast("ID já existe", "Use um ID diferente.");
+    f.id = v;
+    els.selPill.textContent = f.id;
+    drawFields();
+  });
+
+  $("p_label").addEventListener("input", ()=>{
+    f.label = $("p_label").value;
+    drawFields();
+  });
+
+  $("p_type").addEventListener("change", ()=>{
+    f.type = $("p_type").value;
+    if(f.type==="boxes"){ f.boxesCount = f.boxesCount || 8; }
+    if(f.type==="text"||f.type==="textarea"){ f.maxLen = f.maxLen || (f.type==="textarea"?500:80); }
+    drawFields();
+    renderProps();
+  });
+
+  $("p_page").addEventListener("change", ()=>{
+    const p = parseInt($("p_page").value,10) || 1;
+    f.page = clamp(p, 1, state.asset.type==="pdf"?state.pdf.pages:1);
+    drawFields();
+  });
+
+  const boxes = $("p_boxes");
+  if(boxes){
+    boxes.addEventListener("input", ()=>{
+      f.boxesCount = clamp(parseInt(boxes.value,10)||8, 2, 40);
+      drawFields();
+    });
+  }
+  const numOnly = $("p_numOnly");
+  if(numOnly){
+    numOnly.addEventListener("change", ()=>{
+      f.numOnly = numOnly.value;
+    });
+  }
+
+  const maxLen = $("p_max");
+  if(maxLen){
+    maxLen.addEventListener("change", ()=>{
+      f.maxLen = clamp(parseInt(maxLen.value,10)||80, 1, 4000);
+    });
+  }
+  const req = $("p_req");
+  if(req){
+    req.addEventListener("change", ()=> f.required = req.value);
+  }
+
+  $("p_delete").addEventListener("click", ()=>{
+    deleteField(f.id);
+  });
+  $("p_dup").addEventListener("click", ()=>{
+    duplicateField(f.id);
+  });
+}
+
+function deleteField(id){
+  const i = state.fields.findIndex(x=>x.id===id);
+  if(i>=0) state.fields.splice(i,1);
+  state.selectedFieldId = null;
+  drawFields();
+  renderProps();
+  toast("Campo apagado");
+}
+
+function duplicateField(id){
+  const f = getFieldById(id);
+  if(!f) return;
+  const nf = { ...f, id: (f.id + "_copy").slice(0,60), x: clamp(f.x + 0.01, 0, 1 - f.w), y: clamp(f.y + 0.01, 0, 1 - f.h) };
+  // ensure unique
+  let base = nf.id;
+  let n=1;
+  while(state.fields.some(x=>x.id===nf.id)) nf.id = base + "_" + (n++);
+  state.fields.push(nf);
+  selectField(nf.id);
+  toast("Campo duplicado");
+}
+
+/* =========================
+   ADD FIELD MODE
+========================= */
+function setTool(mode){
+  state.modeAdd = mode;
+  [...els.tools.querySelectorAll(".tool")].forEach(t=>{
+    t.classList.toggle("active", t.dataset.add === mode);
+  });
+  if(mode){
+    toast("Modo de inserção ativo", `Clique no formulário para adicionar: ${mode}`);
+  }
+}
+
+els.tools.addEventListener("click", (e)=>{
+  const tool = e.target.closest(".tool");
+  if(!tool) return;
+  const mode = tool.dataset.add;
+  setTool(state.modeAdd === mode ? null : mode);
+});
+
+document.addEventListener("keydown", (e)=>{
+  if(e.key==="Escape"){
+    setTool(null);
+  }
+  if((e.key==="Delete" || e.key==="Backspace") && state.selectedFieldId){
+    // avoid deleting while typing in inputs
+    const tag = (document.activeElement && document.activeElement.tagName) || "";
+    if(["INPUT","TEXTAREA","SELECT"].includes(tag)) return;
+    deleteField(state.selectedFieldId);
+  }
+});
+
+els.overlay.addEventListener("pointerdown", (e)=>{
+  // click empty area => deselect
+  if(e.target === els.overlay){
+    state.selectedFieldId = null;
+    drawFields();
+    renderProps();
+    els.selPill.textContent = "Nenhum";
+  }
+});
+
+// click to place new field
+els.pagewrap.addEventListener("click", (e)=>{
+  if(!state.modeAdd) return;
+  if(!state.asset.type) return;
+
+  // if clicked on existing field, ignore
+  if(e.target.closest(".fbox")) return;
+
+  const rect = els.overlay.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+
+  const nx = clamp(cx / state.render.cssW, 0, 1);
+  const ny = clamp(cy / state.render.cssH, 0, 1);
+
+  const def = defaultFieldForMode(state.modeAdd);
+  const f = {
+    id: def.id,
+    label: def.label,
+    type: def.type,
+    page: (state.asset.type==="pdf") ? state.pdf.page : 1,
+    x: clamp(nx - def.w/2, 0, 1 - def.w),
+    y: clamp(ny - def.h/2, 0, 1 - def.h),
+    w: def.w,
+    h: def.h,
+    required: "no",
+    boxesCount: def.boxesCount,
+    maxLen: def.maxLen,
+    numOnly: def.numOnly
+  };
+
+  // ensure unique id
+  let base = f.id;
+  let n=1;
+  while(state.fields.some(x=>x.id===f.id)) f.id = base + "_" + (n++);
+
+  state.fields.push(f);
+  selectField(f.id);
+
+  // keep tool on for rapid insertion
+});
+
+function defaultFieldForMode(mode){
+  if(mode==="boxes"){
+    return { id:"campo_caixas", label:"Caixinhas", type:"boxes", w:0.32, h:0.06, boxesCount: 8, numOnly:"no" };
+  }
+  if(mode==="checkbox"){
+    return { id:"campo_check", label:"Check", type:"checkbox", w:0.05, h:0.06 };
+  }
+  if(mode==="textarea"){
+    return { id:"campo_area", label:"Área", type:"textarea", w:0.58, h:0.12, maxLen: 500 };
+  }
+  return { id:"campo_texto", label:"Texto", type:"text", w:0.45, h:0.06, maxLen: 80 };
+}
+
+/* =========================
+   LOAD FILE
+========================= */
+els.fileInput.addEventListener("change", async ()=>{
+  const file = els.fileInput.files && els.fileInput.files[0];
+  if(!file) return;
+
+  // create new template id if none
+  if(!state.currentTemplateId) state.currentTemplateId = uid();
+
+  // store asset in IndexedDB
+  try{
+    const rec = await dbPutAsset(state.currentTemplateId, file);
+    state.asset.mime = rec.mime;
+    state.asset.fileName = rec.fileName;
+    state.asset.byteLength = rec.byteLength;
+    state.asset.type = file.type === "application/pdf" ? "pdf" : "image";
+
+    els.fileTitle.textContent = `${state.asset.fileName} • ${Math.round((state.asset.byteLength||0)/1024)} KB`;
+
+    if(state.asset.type==="pdf"){
+      state.pdf.arrayBuffer = rec.data;
+      state.pdf.doc = await pdfjsLib.getDocument({ data: rec.data }).promise;
+      state.pdf.pages = state.pdf.doc.numPages;
+      state.pdf.page = 1;
+      els.pdfNav.style.display = "block";
+      await renderCurrent();
+    }else{
+      // image
+      const url = blobUrlFromRecord(rec);
+      state.image.objectUrl = url;
+      await renderCurrent();
+    }
+
+    toast("Arquivo carregado", "Agora você pode inserir os campos roxos.");
+  }catch(err){
+    console.error(err);
+    toast("Falha ao salvar arquivo no navegador", "Verifique permissões/armazenamento do browser.");
+  }
+});
+
+/* =========================
+   PDF NAV
+========================= */
+els.btnPrev.addEventListener("click", async ()=>{
+  if(!state.pdf.doc) return;
+  state.pdf.page = Math.max(1, state.pdf.page - 1);
+  await renderCurrent();
+});
+els.btnNext.addEventListener("click", async ()=>{
+  if(!state.pdf.doc) return;
+  state.pdf.page = Math.min(state.pdf.pages, state.pdf.page + 1);
+  await renderCurrent();
+});
+
+/* =========================
+   TEMPLATE SAVE / PUBLISH
+========================= */
+els.tplName.addEventListener("input", ()=>{
+  state.name = els.tplName.value;
+});
+
+function buildTemplateMeta(published=false){
+  return {
+    id: state.currentTemplateId || uid(),
+    name: (els.tplName.value || "").trim() || "Sem nome",
+    assetType: state.asset.type,
+    assetFileName: state.asset.fileName,
+    assetMime: state.asset.mime,
+    pdfPages: state.asset.type==="pdf" ? state.pdf.pages : 1,
+    fields: state.fields,
+    published: published,
+    updatedAt: nowISO(),
+    createdAt: null
+  };
+}
+
+function upsertTemplate(meta){
+  const list = loadTemplates();
+  const i = list.findIndex(t=>t.id===meta.id);
+  if(i>=0){
+    meta.createdAt = list[i].createdAt || meta.updatedAt;
+    list[i] = meta;
+  }else{
+    meta.createdAt = meta.updatedAt;
+    list.push(meta);
+  }
+  saveTemplates(list);
+}
+
+els.btnSave.addEventListener("click", ()=>{
+  if(!state.asset.type){
+    return toast("Nada para salvar", "Faça upload do PDF/imagem primeiro.");
+  }
+  if(!state.currentTemplateId) state.currentTemplateId = uid();
+  const meta = buildTemplateMeta(false);
+  upsertTemplate(meta);
+  toast("Salvo (rascunho)", "Ficou no navegador (localStorage + IndexedDB).");
+});
+
+els.btnPublish.addEventListener("click", ()=>{
+  if(!state.asset.type){
+    return toast("Nada para publicar", "Faça upload do PDF/imagem primeiro.");
+  }
+  if(!state.currentTemplateId) state.currentTemplateId = uid();
+  const meta = buildTemplateMeta(true);
+  upsertTemplate(meta);
+  toast("Publicado ✅", "Vai aparecer no /solicitacoes (quando criarmos).");
+});
+
+els.btnNew.addEventListener("click", ()=>{
+  resetEditor(true);
+  toast("Novo template", "Pronto para criar do zero.");
+});
+
+function resetEditor(keepStorage=false){
+  state.currentTemplateId = null;
+  state.name = "";
+  state.asset = { type:null, fileName:null, mime:null, byteLength:0 };
+  state.modeAdd = null;
+  state.pdf = { doc:null, page:1, pages:1, arrayBuffer:null };
+  if(state.image.objectUrl) URL.revokeObjectURL(state.image.objectUrl);
+  state.image = { objectUrl:null, naturalW:0, naturalH:0 };
+  state.render = { cssW:0, cssH:0 };
+  state.fields = [];
+  state.selectedFieldId = null;
+
+  els.tplName.value = "";
+  els.fileInput.value = "";
+  els.fileTitle.textContent = "Nenhum arquivo carregado";
+  els.pagewrap.style.display = "none";
+  els.emptyMsg.style.display = "block";
+  els.pdfNav.style.display = "none";
+  setTool(null);
+  drawFields();
+  renderProps();
+}
+
+/* =========================
+   CLEAR FIELDS
+========================= */
+els.btnClearFields.addEventListener("click", ()=>{
+  if(!state.asset.type) return;
+  if(!confirm("Tem certeza que quer remover TODOS os campos deste template?")) return;
+  state.fields = [];
+  state.selectedFieldId = null;
+  drawFields();
+  renderProps();
+  toast("Campos removidos");
+});
+
+/* =========================
+   TEMPLATES MODAL
+========================= */
+els.btnTemplates.addEventListener("click", ()=>{
+  renderTemplateList();
+  els.modal.classList.add("show");
+});
+els.btnCloseModal.addEventListener("click", ()=>{
+  els.modal.classList.remove("show");
+});
+els.modal.addEventListener("click", (e)=>{
+  if(e.target === els.modal) els.modal.classList.remove("show");
+});
+els.searchTpl.addEventListener("input", renderTemplateList);
+
+function renderTemplateList(){
+  const q = (els.searchTpl.value||"").trim().toLowerCase();
+  const list = loadTemplates()
+    .filter(t=> !q || (t.name||"").toLowerCase().includes(q) || (t.assetFileName||"").toLowerCase().includes(q))
+    .sort((a,b)=> (b.updatedAt||"").localeCompare(a.updatedAt||""));
+
+  if(!list.length){
+    els.tplList.innerHTML = `<div style="color:var(--muted);font-weight:900">Nenhum template salvo.</div>`;
+    return;
+  }
+
+  els.tplList.innerHTML = list.map(t=>{
+    const isPub = !!t.published;
+    const badge = isPub ? `<span class="badge pub">publicado</span>` : `<span class="badge draft">rascunho</span>`;
+    const type = `<span class="badge">${t.assetType || "—"}</span>`;
+    const pages = t.assetType==="pdf" ? `<span class="badge">${t.pdfPages||1} pág.</span>` : `<span class="badge">imagem</span>`;
+    const upd = new Date(t.updatedAt).toLocaleString();
+    const fields = `<span class="badge">${(t.fields||[]).length} campos</span>`;
+
+    return `
+      <div class="listItem">
+        <div class="info">
+          <strong title="${escapeHtml(t.name)}">${escapeHtml(t.name)}</strong>
+          <span>${escapeHtml(t.assetFileName||"")} • atualizado: ${escapeHtml(upd)}</span>
+        </div>
+        <div class="badges">${badge}${type}${pages}${fields}</div>
+        <div class="ops">
+          <button class="btn small" onclick="tplOpen('${t.id}')">Abrir</button>
+          <button class="btn small" onclick="tplDuplicate('${t.id}')">Duplicar</button>
+          <button class="btn small" onclick="tplTogglePub('${t.id}')">${isPub?"Despublicar":"Publicar"}</button>
+          <button class="btn small" onclick="tplExport('${t.id}')">Exportar</button>
+          <button class="btn small bad" onclick="tplDelete('${t.id}')">Apagar</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+window.tplOpen = async function(id){
+  const t = loadTemplates().find(x=>x.id===id);
+  if(!t) return toast("Template não encontrado");
+  resetEditor(false);
+
+  state.currentTemplateId = t.id;
+  state.fields = t.fields || [];
+  state.name = t.name || "";
+  els.tplName.value = state.name;
+
+  // load asset from IDB
+  const rec = await dbGetAsset(t.id);
+  if(!rec){
+    toast("Arquivo não encontrado no navegador", "Esse template existe, mas o PDF/imagem não está no IndexedDB.");
+    els.modal.classList.remove("show");
+    return;
+  }
+
+  state.asset.type = t.assetType || (rec.mime==="application/pdf"?"pdf":"image");
+  state.asset.mime = rec.mime;
+  state.asset.fileName = rec.fileName || t.assetFileName || "arquivo";
+  state.asset.byteLength = rec.byteLength || (rec.data ? rec.data.byteLength : 0);
+
+  els.fileTitle.textContent = `${state.asset.fileName} • ${Math.round((state.asset.byteLength||0)/1024)} KB`;
+
+  if(state.asset.type==="pdf"){
+    state.pdf.arrayBuffer = rec.data;
+    state.pdf.doc = await pdfjsLib.getDocument({ data: rec.data }).promise;
+    state.pdf.pages = state.pdf.doc.numPages;
+    state.pdf.page = 1;
+  }else{
+    state.image.objectUrl = blobUrlFromRecord(rec);
+  }
+
+  await renderCurrent();
+  els.modal.classList.remove("show");
+  toast("Template carregado");
+};
+
+window.tplDuplicate = async function(id){
+  const list = loadTemplates();
+  const t = list.find(x=>x.id===id);
+  if(!t) return;
+
+  const newId = uid();
+  // duplicate metadata with new id
+  const nt = JSON.parse(JSON.stringify(t));
+  nt.id = newId;
+  nt.name = (t.name || "Template") + " (cópia)";
+  nt.published = false;
+  nt.updatedAt = nowISO();
+  nt.createdAt = nowISO();
+
+  // duplicate asset in IDB
+  const rec = await dbGetAsset(id);
+  if(rec){
+    const blob = new Blob([rec.data], {type: rec.mime});
+    const file = new File([blob], rec.fileName || "arquivo", {type: rec.mime});
+    await dbPutAsset(newId, file);
+  }
+
+  list.push(nt);
+  saveTemplates(list);
+  renderTemplateList();
+  toast("Template duplicado");
+};
+
+window.tplTogglePub = function(id){
+  const list = loadTemplates();
+  const i = list.findIndex(x=>x.id===id);
+  if(i<0) return;
+  list[i].published = !list[i].published;
+  list[i].updatedAt = nowISO();
+  saveTemplates(list);
+  renderTemplateList();
+  toast(list[i].published ? "Publicado ✅" : "Despublicado");
+};
+
+window.tplDelete = async function(id){
+  if(!confirm("Apagar este template? (isso remove também o arquivo do navegador)")) return;
+  const list = loadTemplates().filter(x=>x.id!==id);
+  saveTemplates(list);
+  await dbDeleteAsset(id);
+  renderTemplateList();
+  toast("Template apagado");
+};
+
+function makeExportPayload(t, includeAsset=false){
+  // payload sem asset (padrão). Asset fica no IndexedDB.
+  return {
+    format: "UJ_SOLIC_TEMPLATE_V1",
+    template: t,
+    includeAsset: false
+  };
+}
+
+window.tplExport = function(id){
+  const t = loadTemplates().find(x=>x.id===id);
+  if(!t) return;
+  const payload = makeExportPayload(t, false);
+  downloadJson(payload, `usojaleco_template_${sanitizeFileName(t.name||t.id)}.json`);
+  toast("Exportado", "Arquivo JSON baixado (sem o PDF/imagem).");
+};
+
+function downloadJson(obj, filename){
+  const blob = new Blob([JSON.stringify(obj,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function sanitizeFileName(s){
+  return String(s).toLowerCase().replace(/[^a-z0-9\-_]+/g,"_").slice(0,60);
+}
+
+/* =========================
+   IMPORT / EXPORT (editor buttons)
+========================= */
+els.btnExport.addEventListener("click", ()=>{
+  if(!state.asset.type || !state.currentTemplateId){
+    return toast("Nada para exportar", "Abra ou crie um template primeiro.");
+  }
+  const meta = buildTemplateMeta(false);
+  const payload = { format:"UJ_SOLIC_TEMPLATE_V1", template: meta, includeAsset:false };
+  downloadJson(payload, `usojaleco_template_${sanitizeFileName(meta.name||meta.id)}.json`);
+  toast("Exportado", "JSON baixado (sem asset).");
+});
+
+els.btnImport.addEventListener("click", ()=>{
+  els.importFile.click();
+});
+
+els.importFile.addEventListener("change", async ()=>{
+  const f = els.importFile.files && els.importFile.files[0];
+  if(!f) return;
+  try{
+    const txt = await f.text();
+    const obj = JSON.parse(txt);
+    if(!obj || obj.format !== "UJ_SOLIC_TEMPLATE_V1" || !obj.template) throw new Error("Formato inválido");
+
+    // import template meta ONLY
+    const t = obj.template;
+    if(!t.id) t.id = uid();
+    t.updatedAt = nowISO();
+    t.createdAt = nowISO();
+    t.published = false;
+
+    const list = loadTemplates();
+    // avoid collision
+    if(list.some(x=>x.id===t.id)) t.id = uid();
+    list.push(t);
+    saveTemplates(list);
+
+    toast("Importado", "Template importado. Agora associe o arquivo base abrindo e fazendo upload novamente.");
+    renderTemplateList();
+  }catch(err){
+    console.error(err);
+    toast("Erro ao importar", "Arquivo JSON inválido.");
+  }finally{
+    els.importFile.value = "";
+  }
+});
+
+/* =========================
+   UTIL
+========================= */
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+}
+
+/* =========================
+   INIT
+========================= */
+updateStoragePill();
+renderProps();
+
+// re-render on resize
+let rT = null;
+window.addEventListener("resize", ()=>{
+  if(!state.asset.type) return;
+  clearTimeout(rT);
+  rT = setTimeout(()=> renderCurrent(), 140);
+});
+</script>
+</body>
+</html>
