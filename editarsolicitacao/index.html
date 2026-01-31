@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
+<html lang="pt-BR"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Templates - PDF & Zoom</title>
+    <title>Editor de Templates - PDF &amp; Zoom</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -410,7 +408,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body cz-shortcut-listen="true">
     <div class="container">
         <div class="header">
             <h1>📝 Editor de Templates Pro</h1>
@@ -440,7 +438,7 @@
                     <h3>Tipo de Campo</h3>
                     <div class="grid-buttons">
                         <button class="field-type-btn" data-type="text">Texto</button>
-                        <button class="field-type-btn" data-type="number">Número</button>
+                        <button class="field-type-btn active" data-type="number">Número</button>
                         <button class="field-type-btn" data-type="date">Data</button>
                         <button class="field-type-btn" data-type="cpf">CPF</button>
                         <button class="field-type-btn" data-type="cnpj">CNPJ</button>
@@ -488,18 +486,18 @@
 
                     <div class="form-group">
                         <label>Nome da Variável (JSON key):</label>
-                        <input type="text" id="field-name" placeholder="campo_x">
+                        <input type="text" id="field-name" placeholder="— (múltiplos selecionados)">
                     </div>
 
                     <div class="form-group">
                         <label>Rótulo Visível:</label>
-                        <input type="text" id="field-label" placeholder="Campo X">
+                        <input type="text" id="field-label" placeholder="— (múltiplos selecionados)">
                     </div>
 
                     <div class="form-group">
                         <label>Obrigatório?</label>
                         <select id="field-required">
-                            <option value="__mixed__" disabled>(misto)</option>
+                            <option value="__mixed__" disabled="">(misto)</option>
                             <option value="false">Não</option>
                             <option value="true">Sim</option>
                         </select>
@@ -514,10 +512,10 @@
                         <div class="hint">Ative para desenhar divisões verticais automáticas dentro da caixa.</div>
                     </div>
 
-                    <div class="form-group" id="comb-cells-group" style="display:none;">
+                    <div class="form-group" id="comb-cells-group" style="display: block;">
                         <label>Quantidade de células:</label>
                         <input type="number" id="field-comb-cells" min="2" step="1" value="10">
-                        <div class="hint" id="comb-cellwidth">Largura por célula: —</div>
+                        <div class="hint" id="comb-cellwidth">Largura por célula: 31.39 px (Total: 62.78 px)</div>
                     </div>
 
                     <!-- ✅ NOVO: POSIÇÃO DO TEXTO -->
@@ -530,7 +528,7 @@
                         <div class="form-group">
                             <label>Direção do texto:</label>
                             <select id="text-dir">
-                                <option value="__mixed__" disabled>(misto)</option>
+                                <option value="__mixed__" disabled="">(misto)</option>
                                 <option value="ltr">Esquerda → Direita (LTR)</option>
                                 <option value="rtl">Direita → Esquerda (RTL)</option>
                             </select>
@@ -540,7 +538,7 @@
                             <div class="form-group" style="margin-bottom:0;">
                                 <label>Alinhamento horizontal:</label>
                                 <select id="text-halign">
-                                    <option value="__mixed__" disabled>(misto)</option>
+                                    <option value="__mixed__" disabled="">(misto)</option>
                                     <option value="left">Esquerda</option>
                                     <option value="center">Centro</option>
                                     <option value="right">Direita</option>
@@ -549,7 +547,7 @@
                             <div class="form-group" style="margin-bottom:0;">
                                 <label>Alinhamento vertical:</label>
                                 <select id="text-valign">
-                                    <option value="__mixed__" disabled>(misto)</option>
+                                    <option value="__mixed__" disabled="">(misto)</option>
                                     <option value="top">Topo</option>
                                     <option value="middle">Meio</option>
                                     <option value="bottom">Base</option>
@@ -562,17 +560,17 @@
                         </div>
 
                         <div class="anchor-grid" id="anchor-grid">
-                            <button class="anchor-btn" data-h="left"   data-v="top"    title="Topo à esquerda">↖</button>
-                            <button class="anchor-btn" data-h="center" data-v="top"    title="Topo centralizado">↑</button>
-                            <button class="anchor-btn" data-h="right"  data-v="top"    title="Topo à direita">↗</button>
+                            <button class="anchor-btn" data-h="left" data-v="top" title="Topo à esquerda">↖</button>
+                            <button class="anchor-btn" data-h="center" data-v="top" title="Topo centralizado">↑</button>
+                            <button class="anchor-btn" data-h="right" data-v="top" title="Topo à direita">↗</button>
 
-                            <button class="anchor-btn" data-h="left"   data-v="middle" title="Meio à esquerda">←</button>
-                            <button class="anchor-btn" data-h="center" data-v="middle" title="Meio centralizado">•</button>
-                            <button class="anchor-btn" data-h="right"  data-v="middle" title="Meio à direita">→</button>
+                            <button class="anchor-btn" data-h="left" data-v="middle" title="Meio à esquerda">←</button>
+                            <button class="anchor-btn active" data-h="center" data-v="middle" title="Meio centralizado">•</button>
+                            <button class="anchor-btn" data-h="right" data-v="middle" title="Meio à direita">→</button>
 
-                            <button class="anchor-btn" data-h="left"   data-v="bottom" title="Base à esquerda">↙</button>
+                            <button class="anchor-btn" data-h="left" data-v="bottom" title="Base à esquerda">↙</button>
                             <button class="anchor-btn" data-h="center" data-v="bottom" title="Base centralizado">↓</button>
-                            <button class="anchor-btn" data-h="right"  data-v="bottom" title="Base à direita">↘</button>
+                            <button class="anchor-btn" data-h="right" data-v="bottom" title="Base à direita">↘</button>
                         </div>
 
                         <div class="hint" style="margin-top:8px;">
@@ -584,7 +582,7 @@
                 <div class="actions-area">
                     <div class="grid-buttons" style="margin-bottom:8px;">
                         <button class="button btn-secondary" id="undo-btn">↩️ Voltar</button>
-                        <button class="button btn-secondary" id="redo-btn">↪️ Refazer</button>
+                        <button class="button btn-secondary" id="redo-btn" disabled="">↪️ Refazer</button>
                     </div>
 
                     <button class="button btn-primary" id="save-json">💾 Baixar JSON</button>
@@ -597,15 +595,15 @@
             <div class="canvas-area">
                 <div class="zoom-toolbar">
                     <button class="zoom-btn" id="zoom-out" title="Diminuir">-</button>
-                    <span class="zoom-display" id="zoom-level">100%</span>
+                    <span class="zoom-display" id="zoom-level">180%</span>
                     <button class="zoom-btn" id="zoom-in" title="Aumentar">+</button>
                     <button class="zoom-btn" id="zoom-reset" title="Tamanho Original" style="width: auto; padding: 0 10px; font-size: 12px;">Reset</button>
                 </div>
 
                 <div class="canvas-scroll-container">
-                    <div id="zoom-wrapper">
-                        <canvas id="document-canvas"></canvas>
-                        <div id="overlays-container"></div>
+                    <div id="zoom-wrapper" style="width: 1190px; height: 1684px; transform: scale(1.8);">
+                        <canvas id="document-canvas" width="1190" height="1684"></canvas>
+                        <div id="overlays-container"><div class="field-overlay " style="left: 71.5px; top: 184px; width: 812px; height: 25px;"><div class="field-label">campo_1 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 891.905px; top: 182.929px; width: 200px; height: 27.1429px; --comb-step: 28.571428571428555px;"><div class="field-label">campo_2 [7] • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 928.095px; top: 261.905px; width: 159.048px; height: 27.619px;"><div class="field-label">campo_3 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 70.3571px; top: 260.357px; width: 843.571px; height: 30.7143px;"><div class="field-label">campo_4 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 814.643px; top: 309px; width: 23.5714px; height: 22.1429px;"><div class="field-label">campo_5 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 928.214px; top: 310.714px; width: 20.7143px; height: 22.1429px;"><div class="field-label">campo_6 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 71.0714px; top: 1237.86px; width: 507.143px; height: 27.1429px;"><div class="field-label">campo_7 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 101.071px; top: 1285px; width: 20px; height: 22.8571px;"><div class="field-label">campo_8 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 200.357px; top: 1287.14px; width: 20px; height: 22.8571px;"><div class="field-label">campo_9 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 284.643px; top: 1284.29px; width: 455.714px; height: 29.2857px; --comb-step: 30.380952380952376px;"><div class="field-label">campo_10 [15] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 588.929px; top: 1235.71px; width: 37.8571px; height: 31.4286px;"><div class="field-label">campo_11 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 636.071px; top: 1236.43px; width: 36.4286px; height: 31.4286px;"><div class="field-label">campo_12 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 678.214px; top: 1235.71px; width: 63.5714px; height: 31.4286px;"><div class="field-label">campo_13 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 74.6429px; top: 1094.29px; width: 1017.86px; height: 85.7143px;"><div class="field-label">campo_14 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 76.4286px; top: 983.571px; width: 1014.29px; height: 83.5714px;"><div class="field-label">campo_15 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 76.0714px; top: 863.571px; width: 1015px; height: 89.2857px;"><div class="field-label">campo_16 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 71.7857px; top: 798.214px; width: 580.714px; height: 36.4286px;"><div class="field-label">campo_17 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 658.214px; top: 799.643px; width: 114.286px; height: 36.4286px;"><div class="field-label">campo_18 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 777.5px; top: 798.571px; width: 128.571px; height: 36.4286px;"><div class="field-label">campo_19 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 911.071px; top: 798.571px; width: 177.857px; height: 36.4286px;"><div class="field-label">campo_20 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 423.929px; top: 572.5px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_21 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.143px; top: 628.214px; width: 100px; height: 35.7143px;"><div class="field-label">campo_22 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.143px; top: 687.857px; width: 100px; height: 35.7143px;"><div class="field-label">campo_23 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.5px; top: 571.429px; width: 99.2857px; height: 35.7143px;"><div class="field-label">campo_24 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 422.5px; top: 628.214px; width: 537.143px; height: 32.1429px;"><div class="field-label">campo_25 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 423.929px; top: 692.214px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_26 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 63.9286px; top: 687.857px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_27 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 61.7857px; top: 627.143px; width: 350px; height: 36.4286px; --comb-step: 34.999999999999986px;"><div class="field-label">campo_28 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 66.0714px; top: 570.357px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_29 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.357px; top: 492.857px; width: 67.1429px; height: 30.7143px; --comb-step: 33.571428571428555px;"><div class="field-label">campo_30 [2] • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 911.071px; top: 490.714px; width: 180px; height: 34.2857px; --comb-step: 22.499999999999986px;"><div class="field-label">campo_31 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 693.214px; top: 495px; width: 150px; height: 27.1429px;"><div class="field-label">campo_32 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 68.2143px; top: 494.286px; width: 620px; height: 27.8571px;"><div class="field-label">campo_33 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 69.6429px; top: 445.714px; width: 1018.57px; height: 27.1429px;"><div class="field-label">campo_34 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 67.5px; top: 402.143px; width: 708.571px; height: 29.2857px;"><div class="field-label">campo_35 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 69.6429px; top: 354.286px; width: 704.286px; height: 27.8571px;"><div class="field-label">campo_36 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 65.3571px; top: 306.429px; width: 515px; height: 31.4286px; --comb-step: 34.33333333333332px;"><div class="field-label">campo_37 [15] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.643px; top: 411.429px; width: 244px; height: 25px; --comb-step: 30.499999999999986px;"><div class="field-label">campo_38 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.421px; top: 361.627px; width: 244.651px; height: 25px; --comb-step: 30.581349206349202px;"><div class="field-label">campo_39 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 971.786px; top: 304.286px; width: 117.857px; height: 32.1429px;"><div class="field-label">campo_40 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 596.786px; top: 310px; width: 43.5714px; height: 29.2857px;"><div class="field-label">campo_41 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 648.214px; top: 309.286px; width: 36.4286px; height: 29.2857px;"><div class="field-label">campo_42 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 692.5px; top: 307.857px; width: 74.2857px; height: 29.2857px;"><div class="field-label">campo_43 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 784.167px; top: 411.667px; width: 62.7778px; height: 25px; --comb-step: 31.388888888888914px;"><div class="field-label">campo_44 [2] • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 783.056px; top: 360.556px; width: 65px; height: 25px; --comb-step: 32.49999999999994px;"><div class="field-label">campo_45 [2] • MC-LTR</div><div class="field-delete">×</div></div></div>
                     </div>
                 </div>
             </div>
@@ -1746,5 +1744,6 @@
         // Roda ao iniciar
         init();
     </script>
-</body>
-</html>
+
+
+</body></html>
