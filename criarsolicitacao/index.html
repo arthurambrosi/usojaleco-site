@@ -1,1750 +1,2606 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Templates - PDF & Zoom</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UsoJaleco | Preenchimento de Documentos</title>
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-            height: 100vh;
-            overflow: hidden;
-        }
+  <!-- =========================
+       UJ DESIGN KIT (HEAD)
+       Fontes + Tokens + CSS base
+       ========================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts (base) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Outfit (brand only) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* ===== TOKENS (white) ===== */
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface2:#f8fafc;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+      --accent:#f97316;
 
-        .container {
-            max-width: 100%;
-            height: calc(100vh - 40px);
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+      /* ===== Layout controls ===== */
+      --edgeL: 24px;
+      --edgeR: 24px;
+      --deskGap: 18px;
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            flex-shrink: 0;
-        }
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
 
-        .header h1 { font-size: 24px; margin-bottom: 5px; }
-        .header p { opacity: 0.9; font-size: 14px; }
+      --t: .18s ease;
+      --topH: 44px;
+    }
+    @media (max-width: 720px){
+      :root{
+        --edgeL: 16px;
+        --edgeR: 16px;
+        --deskGap: 14px;
+      }
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%),
+        radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
+      overflow-x:hidden;
+      color-scheme: light;
+    }
+    a{ color:inherit; text-decoration:none }
+    button, input, textarea, select{ font:inherit }
+    ::selection{ background:rgba(249,115,22,.18) }
 
-        .content {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            flex: 1;
-            overflow: hidden;
-        }
+    /* ===== HEADER ===== */
+    .topbarWrap{
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar{
+      width: 100%;
+      padding: 16px var(--edgeR);
+      padding-left: var(--edgeL);
+      margin: 0;
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 190px;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .brand img{
+      height: 28px;
+      width: auto;
+      display:block;
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
+    }
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap: 0;
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color:#475569;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      pointer-events:none;
+    }
+    .brandName b{ font-weight: 800; color:#334155; }
+    .headRight{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+    .headBtn{
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid #e7ebf2;
+      background: #fff;
+      color:#334155;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background var(--t), filter var(--t), transform var(--t);
+      white-space: nowrap;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height: 1;
+    }
+    .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
+    .headBtn:active{ transform: translateY(0px); }
+    .headBtnPrimary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+    }
+    .headBtnPrimary:hover{
+      background: var(--accent);
+      border-color: var(--accent);
+      filter: brightness(.92);
+    }
+    .iconBtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: #f97316;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconBtn:hover{
+      background:#fff7ed;
+      border-color:#fed7aa;
+      transform: translateY(-1px);
+    }
+    .iconBtn:active{ transform: translateY(0px); }
+    @media (max-width: 720px){
+      .topbar{ padding-top: 14px; padding-bottom: 14px; }
+      .brand{ min-width: auto; }
+      .headRight{ gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+      .headBtn{ height: 36px; padding: 0 12px; font-size: 13px; }
+    }
 
-        /* SIDEBAR */
-        .sidebar {
-            background: #f8f9fa;
-            padding: 20px;
-            border-right: 1px solid #e0e0e0;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    /* ===== Account dropdown ===== */
+    .acctWrap{ position: fixed; top: 74px; right: 18px; z-index: 60; display:none; }
+    .acctCard{
+      width: min(360px, 92vw);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow2);
+      padding: 12px;
+    }
+    .acctRow{ display:flex; align-items:center; gap: 10px; margin-bottom: 10px; min-width: 0; }
+    .acctRow img{
+      width: 40px; height: 40px; border-radius: 999px; object-fit: cover;
+      border: 1px solid var(--line); background: var(--surface2); flex: 0 0 auto;
+    }
+    .acctInfo{ min-width: 0; display:flex; flex-direction: column; gap: 2px; }
+    .acctInfo b{
+      font-size: 13.5px; font-weight: 900;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 30ch;
+      line-height: 1.1;
+    }
+    .acctInfo small{
+      color: var(--muted); font-size: 12.3px; font-weight: 800;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 34ch;
+      line-height: 1.1;
+    }
+    .acctBtns{ display:flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 
-        .instructions {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #856404;
-        }
+    /* ===== App wrap ===== */
+    .wrap{
+      width:100%;
+      margin:0;
+      padding: 18px var(--edgeR) 30px;
+      padding-left: var(--edgeL);
+    }
 
-        .upload-area {
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-        .upload-area:hover { background: #f0f4ff; border-color: #764ba2; }
-        .upload-area p { font-size: 12px; color: #666; }
-        .upload-icon { font-size: 32px; margin-bottom: 5px; }
+    /* ===== Cards ===== */
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--rBig);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+      min-width: 0;
+    }
 
-        .field-types h3 { font-size: 14px; margin-bottom: 10px; color: #333; }
-        
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
+    /* ===== Campos ===== */
+    .label{
+      display:block;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: .2px;
+    }
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 11px 12px;
+      outline:none;
+      transition: border-color var(--t), background var(--t), box-shadow var(--t);
+    }
+    .field:focus, .select:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+      background: #fff;
+    }
 
-        .field-type-btn {
-            background: white;
-            border: 1px solid #667eea;
-            color: #667eea;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .field-type-btn:hover, .field-type-btn.active {
-            background: #667eea;
-            color: white;
-        }
+    /* ===== Botões (genéricos) ===== */
+    .btn{
+      cursor:pointer;
+      border-radius: var(--rBtn);
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      height: var(--topH);
+      font-weight: 900;
+      font-size: 13.5px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      white-space: nowrap;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btnPrimary{
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(249,115,22,.18);
+    }
+    .btnPrimary:hover{
+      filter: brightness(.97);
+      box-shadow: 0 12px 22px rgba(249,115,22,.22);
+      border-color: rgba(249,115,22,.92);
+      background: rgba(249,115,22,.98);
+    }
+    .btnGhost{ background: #fff; border-color: var(--line); color: var(--text); }
 
-        .field-config {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            display: none;
-        }
-        .field-config.active { display: block; animation: fadeIn 0.3s; }
+    /* ===== Texto utilitário ===== */
+    .mutedNote{
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12.6px;
+      line-height: 1.35;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12.5px;
+      line-height: 1.35;
+      color:#0f172a;
+    }
 
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .form-group input:disabled{
-            background:#f2f4f7;
-            color:#6b7280;
-            cursor:not-allowed;
-        }
-        .form-group .inline-check {
-            display:flex; align-items:center; gap:8px;
-            font-size: 12px;
-            color:#333;
-            font-weight:600;
-        }
-        .form-group .inline-check input{
-            width:auto; padding:0; margin:0;
-        }
-        .hint {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-            line-height: 1.25;
-        }
+    /* ===== Modal (genérico) ===== */
+    .modalMask{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 90;
+    }
+    .modal{
+      width: min(760px, 96vw);
+      border-radius: 22px;
+      border:1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      background: linear-gradient(180deg, rgba(15,23,42,.03), transparent);
+    }
+    .modalHead b{ font-size: 14px; letter-spacing:.2px; }
+    .modalBody{ padding: 14px; }
+    .modalFoot{
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .modalCard{
+      border:1px solid var(--line);
+      background: #fff;
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+    }
+  </style>
 
-        .actions-area { margin-top: auto; padding-top: 20px; border-top: 1px solid #ddd; }
-        .button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px; 
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-        .btn-primary { background: #667eea; color: white; }
-        .btn-primary:hover { background: #764ba2; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn-secondary:hover { background: #5a6268; }
+  <!-- =========================
+       PAGE CSS (adaptação do seu app)
+       ========================= -->
+  <style>
+    /* Hero */
+    .hero{
+      padding: 16px 16px;
+      border-radius: var(--rBig);
+      background:
+        radial-gradient(900px 420px at 10% 20%, rgba(249,115,22,.12), transparent 55%),
+        linear-gradient(180deg, rgba(15,23,42,.03), transparent);
+    }
+    .heroRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .heroTitle{
+      font-family: "DM Serif Display", serif;
+      font-size: 26px;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .heroSub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.35;
+      max-width: 82ch;
+    }
+    .heroActions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        .button:disabled{
-            opacity: .5;
-            cursor: not-allowed;
-        }
+    /* Layout */
+    .pageGrid{
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap: var(--deskGap);
+      margin-top: var(--deskGap);
+      align-items: start;
+    }
+    @media (max-width: 980px){
+      .pageGrid{ grid-template-columns: 1fr; }
+    }
 
-        /* MULTI ACTIONS */
-        .multi-actions {
-            background: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 12px;
-            display: none;
-        }
-        .multi-actions.active { display: block; animation: fadeIn 0.25s; }
-        .multi-actions h4{
-            font-size: 13px;
-            margin-bottom: 8px;
-            color: #333;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap: 10px;
-        }
-        .multi-actions .count-pill{
-            font-size: 11px;
-            background: #eef2ff;
-            color: #3b4fd8;
-            border: 1px solid #c7d2fe;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .multi-actions .grid-buttons{
-            grid-template-columns: 1fr 1fr;
-        }
-        .mini-btn{
-            background: white;
-            border: 1px solid #667eea;
-            color: #667eea;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-            transition: all 0.2s;
-        }
-        .mini-btn:hover{
-            background: #667eea;
-            color: white;
-        }
-        .mini-btn.danger{
-            border-color: #dc3545;
-            color: #dc3545;
-        }
-        .mini-btn.danger:hover{
-            background: #dc3545;
-            color: white;
-        }
+    /* Sidebar */
+    .sidebarCard{ padding: 14px; }
+    .block-title{
+      font-size: 14px;
+      margin: 0 0 10px;
+      color: #0f172a;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    .status-row{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 11.5px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--surface2);
+      color:#334155;
+      border: 1px solid var(--line);
+      user-select:none;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .status-pill.ok{
+      background: rgba(34,197,94,.10);
+      border-color: rgba(34,197,94,.25);
+      color: #14532d;
+    }
+    .status-pill.warn{
+      background: rgba(249,115,22,.10);
+      border-color: rgba(249,115,22,.22);
+      color: #9a3412;
+    }
+    .status-pill.bad{
+      background: rgba(239,68,68,.10);
+      border-color: rgba(239,68,68,.22);
+      color:#7f1d1d;
+    }
 
-        /* TEXT ANCHOR GRID (9 posições) */
-        .anchor-block{
-            border: 1px solid #e5e7eb;
-            background:#fafafa;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 8px;
-        }
-        .anchor-title{
-            font-size: 11px;
-            font-weight: 800;
-            color: #374151;
-            margin-bottom: 8px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap: 10px;
-        }
-        .anchor-grid{
-            display:grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
-        .anchor-btn{
-            height: 34px;
-            border-radius: 6px;
-            border: 1px solid #c7d2fe;
-            background: #ffffff;
-            cursor:pointer;
-            font-size: 13px;
-            font-weight: 800;
-            color:#4f46e5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            transition: all .15s;
-        }
-        .anchor-btn:hover{
-            background:#eef2ff;
-        }
-        .anchor-btn.active{
-            background:#667eea;
-            border-color:#667eea;
-            color:#ffffff;
-        }
+    .catalog-search{
+      display:flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items:center;
+    }
+    .catalog-search input{
+      flex: 1;
+      min-width: 0;
+    }
+    .mini-btn{
+      border: 1px solid var(--line);
+      background: #fff;
+      height: 44px;
+      width: 44px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      transition: transform var(--t), background var(--t), border-color var(--t);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#334155;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mini-btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
+    .mini-btn:active{ transform: translateY(0px) scale(.99); }
 
-        /* CANVAS AREA */
-        .canvas-area {
-            position: relative;
-            background: #525659;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+    .catalog-list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .catalog-card{
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 12px;
+      cursor:pointer;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      box-shadow: 0 10px 18px rgba(17,24,39,.05);
+    }
+    .catalog-card:hover{
+      border-color: rgba(249,115,22,.35);
+      background: rgba(249,115,22,.06);
+      transform: translateY(-1px);
+    }
+    .catalog-card.active{
+      border-color: rgba(249,115,22,.65);
+      background: rgba(249,115,22,.10);
+      box-shadow: 0 12px 22px rgba(249,115,22,.10);
+    }
+    .catalog-card h4{
+      font-size: 13px;
+      margin: 0 0 4px;
+      color: #0f172a;
+      font-weight: 900;
+    }
+    .catalog-card .sub{
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    .catalog-empty{
+      font-size: 13px;
+      color: #64748b;
+      text-align:center;
+      padding: 14px 10px;
+      border: 1px dashed rgba(15,23,42,.18);
+      border-radius: 18px;
+      background: #fff;
+      font-weight: 800;
+    }
 
-        .zoom-toolbar {
-            height: 50px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding: 0 20px;
-            z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+    .hint{
+      font-size: 12.3px;
+      color: #475569;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 12px;
+      line-height: 1.45;
+      box-shadow: 0 10px 18px rgba(17,24,39,.05);
+      font-weight: 800;
+    }
+    .hint strong{ color:#0f172a; }
 
-        .zoom-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: all 0.2s;
-        }
-        .zoom-btn:hover { background: #e2e6ea; border-color: #bbb; }
-        .zoom-display { font-size: 14px; font-weight: bold; min-width: 60px; text-align: center; }
+    /* Viewer */
+    .viewerCard{
+      padding: 0;
+      overflow: hidden;
+    }
+    .viewer-toolbar{
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      flex-wrap: wrap;
+    }
+    .toolbar-group{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
 
-        .canvas-scroll-container {
-            flex: 1;
-            overflow: auto;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 40px;
-            position: relative;
-        }
+    .zbtn{
+      height: 38px;
+      min-width: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 14px;
+      font-weight: 900;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t), filter var(--t);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      color:#0f172a;
+      white-space: nowrap;
+    }
+    .zbtn:hover{
+      transform: translateY(-1px);
+      background: #fff;
+      border-color: rgba(15,23,42,.14);
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+    }
+    .zbtn:active{ transform: translateY(0px) scale(.99); }
 
-        #zoom-wrapper {
-            position: relative;
-            transform-origin: top center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            background: white;
-            transition: transform 0.1s ease-out;
-        }
+    .zbtn.wide{ min-width: auto; padding: 0 12px; }
 
-        #document-canvas {
-            display: block;
-            cursor: crosshair;
-        }
+    .zoom-display{
+      font-size: 13px;
+      font-weight: 900;
+      min-width: 64px;
+      text-align:center;
+      color:#0f172a;
+      padding: 0 10px;
+      height: 38px;
+      display:grid;
+      place-items:center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+    }
 
-        /* OVERLAYS */
-        .field-overlay {
-            position: absolute;
-            border: 2px solid #667eea;
-            background: rgba(102, 126, 234, 0.2);
-            cursor: move;
-            z-index: 10;
-        }
-        .field-overlay.selected {
-            border-color: #764ba2;
-            background: rgba(118, 75, 162, 0.3);
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
-        }
+    .mini-select, .mini-input{
+      height: 38px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 0 10px;
+      font-weight: 900;
+      font-size: 12.5px;
+      outline:none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .mini-select:focus, .mini-input:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+    }
+    .mini-input{ width: 84px; }
 
-        /* ✅ Campo Segmentado (Comb): linhas verticais internas */
-        .field-overlay.comb {
-            background-image: repeating-linear-gradient(
-                to right,
-                transparent 0px,
-                transparent calc(var(--comb-step) - 1px),
-                rgba(255, 0, 0, 0.85) calc(var(--comb-step) - 1px),
-                rgba(255, 0, 0, 0.85) var(--comb-step)
-            );
-            background-clip: padding-box;
-        }
+    .toggle-btn{
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .toggle-btn.active{
+      background: var(--accent);
+      border-color: rgba(249,115,22,.80);
+      color:#fff;
+      box-shadow: 0 10px 18px rgba(249,115,22,.16);
+    }
 
-        .field-label {
-            position: absolute;
-            top: -22px;
-            left: -2px;
-            background: #667eea;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px 3px 3px 0;
-            font-size: 10px;
-            font-weight: bold;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        
-        .field-delete {
-            position: absolute;
-            top: -22px;
-            right: -2px;
-            background: #dc3545;
-            color: white;
-            width: 18px;
-            height: 18px;
-            border: none;
-            border-radius: 0 3px 0 3px;
-            cursor: pointer;
-            font-size: 14px;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .color-input{
+      width: 46px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background:#fff;
+      cursor:pointer;
+    }
 
-        /* ✅ Handles de resize (aparecem só quando selecionado) */
-        .resize-handle{
-            position:absolute;
-            width:10px; height:10px;
-            background:#ffffff;
-            border:1px solid #764ba2;
-            border-radius:2px;
-            z-index: 30;
-            display:none;
-        }
-        .field-overlay.selected .resize-handle{ display:block; }
+    .viewer-scroll{
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(15,23,42,.02), transparent);
+      overflow:auto;
+      min-width:0;
+      max-height: calc(100vh - 220px);
+    }
+    @media (max-width: 980px){
+      .viewer-scroll{ max-height: none; }
+    }
 
-        .resize-handle[data-dir="n"]  { top:0; left:50%; transform:translate(-50%,-50%); cursor: ns-resize; }
-        .resize-handle[data-dir="s"]  { top:100%; left:50%; transform:translate(-50%,-50%); cursor: ns-resize; }
-        .resize-handle[data-dir="e"]  { top:50%; left:100%; transform:translate(-50%,-50%); cursor: ew-resize; }
-        .resize-handle[data-dir="w"]  { top:50%; left:0; transform:translate(-50%,-50%); cursor: ew-resize; }
-        .resize-handle[data-dir="nw"] { top:0; left:0; transform:translate(-50%,-50%); cursor: nwse-resize; }
-        .resize-handle[data-dir="ne"] { top:0; left:100%; transform:translate(-50%,-50%); cursor: nesw-resize; }
-        .resize-handle[data-dir="sw"] { top:100%; left:0; transform:translate(-50%,-50%); cursor: nesw-resize; }
-        .resize-handle[data-dir="se"] { top:100%; left:100%; transform:translate(-50%,-50%); cursor: nwse-resize; }
+    #zoom-wrapper{
+      position:relative;
+      transform-origin: top left;
+      display:inline-block;
+    }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    #canvas-container{
+      position:relative;
+      display:inline-block;
+      background:#fff;
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 18px;
+      box-shadow: 0 14px 28px rgba(17,24,39,.10);
+      overflow: hidden;
+    }
+    #document-canvas{ display:block; background:#fff; }
+
+    .placeholder-canvas{
+      padding: 14px;
+      color: #64748b;
+      font-size: 13px;
+      text-align:center;
+      border: 1px dashed rgba(15,23,42,.18);
+      border-radius: 18px;
+      background: #fff;
+      max-width: 560px;
+      margin: 12px auto 0;
+      font-weight: 800;
+    }
+
+    /* Overlays */
+    .field-overlay{
+      position:absolute;
+      border:2px solid rgba(249,115,22,0);
+      background:transparent;
+      pointer-events:auto;
+      cursor:text;
+      transition:all .12s;
+      border-radius:6px;
+    }
+    .field-overlay:hover{
+      border-color: rgba(249,115,22,.35);
+      background: rgba(249,115,22,.07);
+    }
+    .field-overlay.filled{
+      background: rgba(249,115,22,.10);
+      border-color: rgba(249,115,22,.25);
+    }
+    .field-overlay.selected{
+      border-color: rgba(249,115,22,.75);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.75);
+    }
+
+    /* Comb */
+    .field-overlay.comb{
+      border-color: rgba(249,115,22,.22);
+      background-image: repeating-linear-gradient(
+        to right,
+        transparent 0px,
+        transparent calc(var(--comb-step) - 1px),
+        rgba(249,115,22,.70) calc(var(--comb-step) - 1px),
+        rgba(249,115,22,.70) var(--comb-step)
+      );
+      background-clip:padding-box;
+    }
+    .field-overlay.comb.filled{ background-color: rgba(249,115,22,.10); }
+
+    .filled-text{
+      position:absolute;
+      pointer-events:none;
+      user-select:none;
+      color:#000;
+      z-index:5;
+    }
+
+    .filled-box{
+      width:100%;
+      height:100%;
+      display:flex;
+      gap:6px;
+    }
+
+    .filled-content{
+      width:100%;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    /* ⚠️ Renomeado para não colidir com .wrap do design kit */
+    .filled-content.wraptext{
+      white-space:normal;
+      word-break:break-word;
+      overflow:hidden;
+    }
+
+    .comb-text{
+      width:100%;
+      height:100%;
+      display:grid;
+      align-items:center;
+      justify-items:center;
+    }
+    .comb-text span{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Editor inline */
+    .inline-editor{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:2px solid rgba(249,115,22,.85);
+      border-radius:6px;
+      background: rgba(255,255,255,.92);
+      outline:none;
+      padding: 6px;
+      z-index:50;
+      box-shadow: 0 0 0 3px rgba(249,115,22,.16);
+    }
+    .inline-editor.smallpad{ padding:4px; }
+
+    /* Comb: editor fantasma */
+    .inline-editor.comb-ghost{
+      background:transparent;
+      border:none;
+      padding:0;
+      color:transparent;
+      caret-color: var(--accent);
+      text-shadow:none;
+      box-shadow: none;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📝 Editor de Templates Pro</h1>
-            <p>Mapeamento com suporte a PDF e Zoom de Alta Precisão</p>
+  <!-- =========================
+       UJ DESIGN KIT (HEADER)
+       Topbar + Brand + Actions
+       ========================= -->
+  <div class="topbarWrap">
+    <header class="topbar">
+      <div class="brand" aria-label="UsoJaleco">
+        <img
+          alt="Logo UsoJaleco"
+          src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+          draggable="false"
+        />
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
+      </div>
+
+      <div class="headRight">
+        <!-- ✅ SLOT: botões variáveis por página -->
+        <button class="headBtn headBtnPrimary" id="btnLogin" type="button">Entrar com Google</button>
+        <button class="headBtn" id="btnAction1" type="button">Ajuda</button>
+        <button class="headBtn" id="btnAction2" type="button">Atalhos</button>
+
+        <!-- ✅ Botão conta (ícone) -->
+        <button class="iconBtn" id="btnAcct" type="button" aria-label="Conta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M4.5 20.1a8.6 8.6 0 0 1 15 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+  </div>
+
+  <!-- =========================
+       UJ DESIGN KIT (ACCOUNT DROPDOWN)
+       ========================= -->
+  <div class="acctWrap" id="acctWrap" aria-hidden="true">
+    <div class="acctCard">
+      <div class="acctRow">
+        <img alt="" src="" />
+        <div class="acctInfo">
+          <b>—</b>
+          <small>—</small>
+        </div>
+      </div>
+      <div class="acctBtns">
+        <button class="headBtn" id="btnAccountAction1" type="button">Configurações</button>
+        <button class="headBtn" id="btnLogout" type="button">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       UJ DESIGN KIT (PAGE WRAP)
+       Seu esqueleto entra aqui
+       ========================= -->
+  <div class="wrap" id="appWrap">
+    <div class="card hero">
+      <div class="heroRow">
+        <div>
+          <h1 class="heroTitle">✍️ Preenchimento de Documentos</h1>
+          <p class="heroSub">
+            Selecione o formulário na lista (planilha) e preencha clicando direto na prévia. (O alinhamento vem do JSON.)
+          </p>
         </div>
 
-        <div class="content">
-            <div class="sidebar">
-                <div class="upload-area" id="upload-area">
-                    <div class="upload-icon">📄</div>
-                    <p><strong>Arraste PDF ou Imagem</strong><br>ou clique para selecionar</p>
-                    <input type="file" id="file-input" accept="image/*,application/pdf" style="display: none;">
-                </div>
-
-                <div class="instructions">
-                    <strong>Seleção múltipla:</strong><br>
-                    Use <b>Ctrl + clique</b> para selecionar mais de uma caixa.
-                    <br><br>
-                    <strong>Posição do texto:</strong><br>
-                    Configure a direção (LTR/RTL), alinhamento e o “ponto de início” (9 posições).
-                    <br><br>
-                    <strong>Undo/Redo:</strong><br>
-                    <b>Ctrl+Z</b> (voltar) • <b>Ctrl+Y</b> ou <b>Ctrl+Shift+Z</b> (refazer)
-                </div>
-
-                <div class="field-types">
-                    <h3>Tipo de Campo</h3>
-                    <div class="grid-buttons">
-                        <button class="field-type-btn" data-type="text">Texto</button>
-                        <button class="field-type-btn" data-type="number">Número</button>
-                        <button class="field-type-btn" data-type="date">Data</button>
-                        <button class="field-type-btn" data-type="cpf">CPF</button>
-                        <button class="field-type-btn" data-type="cnpj">CNPJ</button>
-                        <button class="field-type-btn" data-type="money">Monetário</button>
-                        <button class="field-type-btn" data-type="check">Checkbox</button>
-                        <button class="field-type-btn" data-type="custom">Custom</button>
-                    </div>
-                </div>
-
-                <!-- MULTI SELECT TOOLS -->
-                <div class="multi-actions" id="multi-actions">
-                    <h4>
-                        🔧 Edição em lote
-                        <span class="count-pill" id="multi-count">Selecionadas: 0</span>
-                    </h4>
-                    <div class="grid-buttons">
-                        <button class="mini-btn" id="btn-same-width">Mesma largura</button>
-                        <button class="mini-btn" id="btn-same-height">Mesma altura</button>
-
-                        <button class="mini-btn" id="btn-align-left">Alinhar à esquerda</button>
-                        <button class="mini-btn" id="btn-align-right">Alinhar à direita</button>
-
-                        <button class="mini-btn" id="btn-align-vertical">Alinhar vertical</button>
-                        <button class="mini-btn" id="btn-align-horizontal">Alinhar horizontal</button>
-
-                        <button class="mini-btn danger" id="btn-delete-multi">Remover selecionadas</button>
-                        <button class="mini-btn" id="btn-clear-selection">Limpar seleção</button>
-                    </div>
-                    <div class="hint" style="margin-top:8px;">
-                        * “Mesma largura/altura” e “Alinhar vertical/horizontal” usam como referência a <b>última caixa clicada</b> (âncora).
-                    </div>
-                </div>
-
-                <!-- CONFIG (agora aparece com 1 OU mais selecionadas) -->
-                <div class="field-config" id="field-config">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <h4>Configuração</h4>
-                        <button id="btn-delete-selected" style="border:none; background:none; color:#dc3545; cursor:pointer;">🗑️</button>
-                    </div>
-
-                    <div class="hint" style="margin-bottom:10px;">
-                        ✅ Em seleção múltipla: <b>Obrigatório</b>, <b>Comb</b> e <b>Posição do texto</b> aplicam a todas. <br>
-                        ✳️ <b>Nome</b> e <b>Rótulo</b> só editam quando houver <b>1</b> caixa selecionada.
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nome da Variável (JSON key):</label>
-                        <input type="text" id="field-name" placeholder="campo_x">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Rótulo Visível:</label>
-                        <input type="text" id="field-label" placeholder="Campo X">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Obrigatório?</label>
-                        <select id="field-required">
-                            <option value="__mixed__" disabled>(misto)</option>
-                            <option value="false">Não</option>
-                            <option value="true">Sim</option>
-                        </select>
-                    </div>
-
-                    <!-- ✅ Campo Segmentado (Comb) -->
-                    <div class="form-group">
-                        <label class="inline-check">
-                            <input type="checkbox" id="field-comb">
-                            É campo segmentado (Comb)?
-                        </label>
-                        <div class="hint">Ative para desenhar divisões verticais automáticas dentro da caixa.</div>
-                    </div>
-
-                    <div class="form-group" id="comb-cells-group" style="display:none;">
-                        <label>Quantidade de células:</label>
-                        <input type="number" id="field-comb-cells" min="2" step="1" value="10">
-                        <div class="hint" id="comb-cellwidth">Largura por célula: —</div>
-                    </div>
-
-                    <!-- ✅ NOVO: POSIÇÃO DO TEXTO -->
-                    <div class="anchor-block">
-                        <div class="anchor-title">
-                            🅰️ Posição do texto (preenchimento)
-                            <span style="font-weight:700;color:#6b7280;">padrão: topo + esquerda + LTR</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Direção do texto:</label>
-                            <select id="text-dir">
-                                <option value="__mixed__" disabled>(misto)</option>
-                                <option value="ltr">Esquerda → Direita (LTR)</option>
-                                <option value="rtl">Direita → Esquerda (RTL)</option>
-                            </select>
-                        </div>
-
-                        <div class="grid-buttons">
-                            <div class="form-group" style="margin-bottom:0;">
-                                <label>Alinhamento horizontal:</label>
-                                <select id="text-halign">
-                                    <option value="__mixed__" disabled>(misto)</option>
-                                    <option value="left">Esquerda</option>
-                                    <option value="center">Centro</option>
-                                    <option value="right">Direita</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="margin-bottom:0;">
-                                <label>Alinhamento vertical:</label>
-                                <select id="text-valign">
-                                    <option value="__mixed__" disabled>(misto)</option>
-                                    <option value="top">Topo</option>
-                                    <option value="middle">Meio</option>
-                                    <option value="bottom">Base</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="hint" style="margin-top:8px;">
-                            Se preferir, escolha direto o “ponto de início” (9 posições):
-                        </div>
-
-                        <div class="anchor-grid" id="anchor-grid">
-                            <button class="anchor-btn" data-h="left"   data-v="top"    title="Topo à esquerda">↖</button>
-                            <button class="anchor-btn" data-h="center" data-v="top"    title="Topo centralizado">↑</button>
-                            <button class="anchor-btn" data-h="right"  data-v="top"    title="Topo à direita">↗</button>
-
-                            <button class="anchor-btn" data-h="left"   data-v="middle" title="Meio à esquerda">←</button>
-                            <button class="anchor-btn" data-h="center" data-v="middle" title="Meio centralizado">•</button>
-                            <button class="anchor-btn" data-h="right"  data-v="middle" title="Meio à direita">→</button>
-
-                            <button class="anchor-btn" data-h="left"   data-v="bottom" title="Base à esquerda">↙</button>
-                            <button class="anchor-btn" data-h="center" data-v="bottom" title="Base centralizado">↓</button>
-                            <button class="anchor-btn" data-h="right"  data-v="bottom" title="Base à direita">↘</button>
-                        </div>
-
-                        <div class="hint" style="margin-top:8px;">
-                            * Essas opções são salvas no JSON do campo (para seu motor de preenchimento usar depois).
-                        </div>
-                    </div>
-                </div>
-
-                <div class="actions-area">
-                    <div class="grid-buttons" style="margin-bottom:8px;">
-                        <button class="button btn-secondary" id="undo-btn">↩️ Voltar</button>
-                        <button class="button btn-secondary" id="redo-btn">↪️ Refazer</button>
-                    </div>
-
-                    <button class="button btn-primary" id="save-json">💾 Baixar JSON</button>
-                    <button class="button btn-secondary" id="copy-json">📋 Copiar JSON</button>
-                    <button class="button btn-secondary" id="load-json-btn">📂 Carregar JSON</button>
-                    <input type="file" id="json-input" accept=".json" style="display:none">
-                </div>
-            </div>
-
-            <div class="canvas-area">
-                <div class="zoom-toolbar">
-                    <button class="zoom-btn" id="zoom-out" title="Diminuir">-</button>
-                    <span class="zoom-display" id="zoom-level">100%</span>
-                    <button class="zoom-btn" id="zoom-in" title="Aumentar">+</button>
-                    <button class="zoom-btn" id="zoom-reset" title="Tamanho Original" style="width: auto; padding: 0 10px; font-size: 12px;">Reset</button>
-                </div>
-
-                <div class="canvas-scroll-container">
-                    <div id="zoom-wrapper">
-                        <canvas id="document-canvas"></canvas>
-                        <div id="overlays-container"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="heroActions">
+          <button class="btn btnGhost" type="button" onclick="document.getElementById('reload-catalog')?.click()">Recarregar lista</button>
+          <button class="btn btnPrimary" type="button" onclick="document.getElementById('validate-btn')?.click()">Validar</button>
         </div>
+      </div>
     </div>
 
-    <script>
-        // Estado da aplicação
-        const state = {
-            currentFieldType: null,
-            fields: [], // {id, type, x, y, width, height, name, label, required, comb, combCells, textDir, textHAlign, textVAlign}
+    <div class="pageGrid">
+      <!-- SIDEBAR -->
+      <aside class="card sidebarCard">
+        <div class="block-title">Formulários (Planilha)</div>
 
-            // seleção
-            selectedIds: new Set(),
-            anchorId: null, // última caixa clicada (referência)
+        <div class="status-row">
+          <div id="sheet-status" class="status-pill warn">Planilha: —</div>
+          <div id="doc-status" class="status-pill warn">Documento: —</div>
+          <div id="tpl-status" class="status-pill warn">Template: —</div>
+        </div>
 
-            // ações do mouse
-            action: null, // 'draw' | 'move' | 'resize' | null
-            startX: 0,
-            startY: 0,
-            dragStartMouse: { x: 0, y: 0 },
-            dragStartFields: null, // [{id, x, y, width, height}]
-            dragStartGroup: null,  // {minX, minY, maxX, maxY}
-            resizeDir: null,
+        <div class="catalog-search">
+          <input id="catalog-search" class="field" type="text" placeholder="Pesquisar (ex: PAC, alta, etc.)" />
+          <button class="mini-btn" id="reload-catalog" title="Recarregar" type="button">↻</button>
+        </div>
 
-            // zoom / imagem
-            scale: 1.0,
-            imgOriginalWidth: 0,
-            imgOriginalHeight: 0,
+        <div id="catalog-list" class="catalog-list">
+          <div class="catalog-empty">Carregando lista...</div>
+        </div>
 
-            // histórico (undo/redo)
-            history: {
-                stack: [],
-                index: -1,
-                max: 80
-            }
-        };
+        <div class="hint">
+          <strong>Como preencher:</strong><br>
+          • Clique em um campo no documento e digite.<br>
+          • <strong>TAB</strong> vai para o próximo campo (Shift+TAB volta).<br>
+          • <strong>Ctrl +</strong> / <strong>Ctrl -</strong> ajusta fonte só daquele campo.<br>
+          • <strong>Ctrl + clique</strong> seleciona múltiplos campos (barra de estilo aplica nos selecionados).
+        </div>
+      </aside>
 
-        // Elementos DOM
-        const canvas = document.getElementById('document-canvas');
-        const ctx = canvas.getContext('2d');
-        const zoomWrapper = document.getElementById('zoom-wrapper');
-        const overlaysContainer = document.getElementById('overlays-container');
-        const fieldConfig = document.getElementById('field-config');
+      <!-- VIEWER -->
+      <section class="card viewerCard">
+        <div class="viewer-toolbar">
+          <div class="toolbar-group">
+            <button class="zbtn" id="zoom-out" title="Diminuir" type="button">−</button>
+            <span class="zoom-display" id="zoom-level">100%</span>
+            <button class="zbtn" id="zoom-in" title="Aumentar" type="button">+</button>
+            <button class="zbtn wide" id="fit-width" title="Ajustar na largura" type="button">Fit largura</button>
+            <button class="zbtn wide" id="fit-page" title="Ajustar na tela" type="button">Fit tela</button>
+            <button class="zbtn wide" id="zoom-reset" title="100%" type="button">100%</button>
+          </div>
 
-        const multiActionsEl = document.getElementById('multi-actions');
-        const multiCountEl = document.getElementById('multi-count');
+          <!-- STYLE GROUP (Global / Selecionados) -->
+          <div class="toolbar-group">
+            <div id="style-target" class="status-pill">Estilo: Global</div>
 
-        // Inputs de configuração
-        const inpName = document.getElementById('field-name');
-        const inpLabel = document.getElementById('field-label');
-        const inpRequired = document.getElementById('field-required');
+            <select id="font-family" class="mini-select" title="Fonte">
+              <option value='"Courier New", monospace'>Courier New</option>
+              <option value='"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'>Segoe UI</option>
+              <option value='Arial, sans-serif'>Arial</option>
+              <option value='"Times New Roman", serif'>Times New Roman</option>
+            </select>
 
-        // Comb
-        const inpComb = document.getElementById('field-comb');
-        const inpCombCells = document.getElementById('field-comb-cells');
-        const combCellsGroup = document.getElementById('comb-cells-group');
-        const combCellWidthEl = document.getElementById('comb-cellwidth');
+            <input id="font-size" class="mini-input" type="number" min="6" max="72" step="1" title="Tamanho"/>
 
-        // Texto (novo)
-        const inpTextDir = document.getElementById('text-dir');
-        const inpTextHAlign = document.getElementById('text-halign');
-        const inpTextVAlign = document.getElementById('text-valign');
-        const anchorGrid = document.getElementById('anchor-grid');
+            <button class="toggle-btn" id="font-bold" title="Negrito" type="button"><b>B</b></button>
+            <button class="toggle-btn" id="font-italic" title="Itálico" type="button"><i>I</i></button>
 
-        const undoBtn = document.getElementById('undo-btn');
-        const redoBtn = document.getElementById('redo-btn');
+            <input id="font-color" class="color-input" type="color" title="Cor"/>
+          </div>
 
-        // Helpers
-        function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
-        function isCtrlMulti(e){ return !!(e && (e.ctrlKey || e.metaKey)); }
+          <div class="toolbar-group">
+            <button class="zbtn wide" id="validate-btn" disabled type="button">✓ Validar</button>
+            <button class="zbtn wide" id="download-btn" disabled type="button">⬇ Baixar PNG</button>
+            <button class="zbtn wide" id="print-btn" disabled type="button">🖨 Imprimir / PDF</button>
+            <button class="zbtn wide" id="clear-btn" disabled type="button">🗑 Limpar</button>
+          </div>
+        </div>
 
-        function getSelectedFields(){
-            return state.fields.filter(f => state.selectedIds.has(f.id));
+        <div class="viewer-scroll" id="viewer-scroll">
+          <div id="zoom-wrapper">
+            <div id="canvas-container">
+              <canvas id="document-canvas"></canvas>
+            </div>
+
+            <div id="canvas-placeholder" class="placeholder-canvas">
+              <strong>Selecione um formulário</strong> na lista da esquerda para carregar o documento e o template.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- =========================
+       UJ DESIGN KIT (MODAL) (opcional)
+       ========================= -->
+  <div class="modalMask" id="modalMask" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modalHead">
+        <b>Título do modal</b>
+        <button class="iconBtn" id="btnCloseModal" type="button" aria-label="Fechar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modalBody">
+        <div class="modalCard">
+          <label class="label">Campo</label>
+          <input class="field" placeholder="Digite..." />
+          <div class="mutedNote" style="margin-top:10px;">Texto auxiliar no estilo padrão.</div>
+        </div>
+      </div>
+      <div class="modalFoot">
+        <button class="btn btnGhost" type="button">Cancelar</button>
+        <button class="btn btnPrimary" type="button">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /********************************************************************
+   * CONFIG
+   ********************************************************************/
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTZOA79LT875AhL4fXYQLo49KLWzKC2sMVmZKX6gbbRJE23Pf3Tzu7DZ29UQPV6WUW2a6HqbOITp0-/pub?output=csv"; // <-- OBRIGATÓRIO
+
+  /********************************************************************
+   * Estado
+   ********************************************************************/
+  const state = {
+    catalog: [],
+    catalogLoaded: false,
+    activeCatalogId: null,
+
+    currentTemplate: null,
+    formData: {},
+    fieldOverrides: {},
+
+    document: { loaded:false, dataUrl:null, width:0, height:0 },
+
+    renderScale: { x:1, y:1 },
+    viewScale: 1,
+
+    editingFieldId: null,
+    selectedFieldIds: new Set(),
+
+    // OBS: alinhamento NÃO é mais global. Vem do JSON (por campo).
+    textSettings: {
+      fontFamily: '"Courier New", monospace',
+      fontWeight: '600',
+      fontStyle: 'normal',
+      fontSize: 14,
+      autoSize: true,
+      color: '#000000',
+      wrap: false,      // se você quiser forçar wrap global, troque para true
+      paddingX: 5,
+      paddingY: 3
+    },
+
+    _viewerClickBound: false
+  };
+
+  /********************************************************************
+   * DOM
+   ********************************************************************/
+  const canvas = document.getElementById("document-canvas");
+  const ctx = canvas.getContext("2d");
+  const canvasContainer = document.getElementById("canvas-container");
+  const placeholder = document.getElementById("canvas-placeholder");
+  const zoomWrapper = document.getElementById("zoom-wrapper");
+  const viewerScroll = document.getElementById("viewer-scroll");
+
+  const sheetStatus = document.getElementById("sheet-status");
+  const docStatus = document.getElementById("doc-status");
+  const tplStatus = document.getElementById("tpl-status");
+
+  const catalogList = document.getElementById("catalog-list");
+  const catalogSearch = document.getElementById("catalog-search");
+  const btnReloadCatalog = document.getElementById("reload-catalog");
+
+  const zoomLevel = document.getElementById("zoom-level");
+  const btnZoomIn = document.getElementById("zoom-in");
+  const btnZoomOut = document.getElementById("zoom-out");
+  const btnZoomReset = document.getElementById("zoom-reset");
+  const btnFitWidth = document.getElementById("fit-width");
+  const btnFitPage = document.getElementById("fit-page");
+
+  const btnValidate = document.getElementById("validate-btn");
+  const btnDownload = document.getElementById("download-btn");
+  const btnPrint = document.getElementById("print-btn");
+  const btnClear = document.getElementById("clear-btn");
+
+  // STYLE TOOLBAR refs
+  const styleTarget = document.getElementById("style-target");
+  const selFontFamily = document.getElementById("font-family");
+  const inpFontSize = document.getElementById("font-size");
+  const btnBold = document.getElementById("font-bold");
+  const btnItalic = document.getElementById("font-italic");
+  const inpFontColor = document.getElementById("font-color");
+
+  /********************************************************************
+   * Measure ctx (para medir texto e ajustar fonte)
+   ********************************************************************/
+  const measureCanvas = document.createElement("canvas");
+  const mctx = measureCanvas.getContext("2d");
+
+  /********************************************************************
+   * Helpers UI
+   ********************************************************************/
+  function setPill(el, type, text){
+    el.textContent = text;
+    el.classList.remove("ok","warn","bad");
+    el.classList.add(type);
+  }
+
+  function clamp(v,min,max){ return Math.min(Math.max(v,min),max); }
+
+  function resolveUrl(u){
+    try { return new URL(u, window.location.href).toString(); }
+    catch(_) { return String(u || ""); }
+  }
+
+  function removeMask(value){ return (value || "").replace(/[^\w]/g, ""); }
+
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  /********************************************************************
+   * CSV parser (com aspas)
+   ********************************************************************/
+  function parseCSV(text){
+    const rows = [];
+    let row = [];
+    let field = "";
+    let inQuotes = false;
+
+    for(let i=0;i<text.length;i++){
+      const c = text[i];
+
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i+1] === '"'){ field += '"'; i++; }
+          else inQuotes = false;
+        } else {
+          field += c;
         }
-        function getPrimarySelectedId(){
-            if (state.selectedIds.size !== 1) return null;
-            return Array.from(state.selectedIds)[0];
-        }
-        function ensureAnchor(){
-            if (state.anchorId && state.selectedIds.has(state.anchorId)) return state.anchorId;
-            const any = getPrimarySelectedId();
-            if (any) { state.anchorId = any; return any; }
-            const arr = Array.from(state.selectedIds);
-            state.anchorId = arr.length ? arr[arr.length-1] : null;
-            return state.anchorId;
-        }
+      } else {
+        if(c === '"') inQuotes = true;
+        else if(c === ","){ row.push(field); field=""; }
+        else if(c === "\n"){ row.push(field); rows.push(row); row=[]; field=""; }
+        else if(c === "\r"){ /* ignore */ }
+        else field += c;
+      }
+    }
+    row.push(field);
+    rows.push(row);
 
-        function getCommonValue(fields, key){
-            if (!fields.length) return null;
-            const first = fields[0][key];
-            for (let i=1;i<fields.length;i++){
-                if (fields[i][key] !== first) return null;
-            }
-            return first;
-        }
+    return rows.filter(r => r.some(x => String(x).trim() !== ""));
+  }
 
-        function setSelectValueWithMixed(selectEl, valueOrNull){
-            if (valueOrNull === null || typeof valueOrNull === "undefined"){
-                selectEl.value = "__mixed__";
-            } else {
-                selectEl.value = String(valueOrNull);
-            }
-        }
+  function normalizeCatalogRows(rows){
+    if(!rows || rows.length === 0) return [];
 
-        // =========================
-        // HISTORY (UNDO/REDO)
-        // =========================
-        function snapshot(){
-            return {
-                fields: state.fields.map(f => ({...f})),
-                selectedIds: Array.from(state.selectedIds),
-                anchorId: state.anchorId
-            };
-        }
+    const h = rows[0].map(s => String(s||"").trim().toLowerCase());
+    const hasHeader = h.some(x => x.includes("nome")) || h.some(x => x.includes("alias")) || h.some(x => x.includes("doc")) || h.some(x => x.includes("json"));
 
-        function sameSnapshot(a,b){
-            if (!a || !b) return false;
-            if (a.anchorId !== b.anchorId) return false;
-            if (a.selectedIds.length !== b.selectedIds.length) return false;
-            for (let i=0;i<a.selectedIds.length;i++){
-                if (a.selectedIds[i] !== b.selectedIds[i]) return false;
-            }
-            if (a.fields.length !== b.fields.length) return false;
-            for (let i=0;i<a.fields.length;i++){
-                const x = a.fields[i], y = b.fields[i];
-                const keys = ["id","type","x","y","width","height","name","label","required","comb","combCells","textDir","textHAlign","textVAlign"];
-                for (const k of keys){
-                    if (x[k] !== y[k]) return false;
-                }
-            }
-            return true;
-        }
+    const start = hasHeader ? 1 : 0;
+    const out = [];
 
-        function saveHistory(){
-            const h = state.history;
-            const snap = snapshot();
+    for(let i=start;i<rows.length;i++){
+      const r = rows[i] || [];
+      const fullName = String(r[0] || "").trim();
+      const aliasCell = String(r[1] || "").trim();
+      const docUrl = String(r[2] || "").trim();
+      const jsonUrl = String(r[3] || "").trim();
 
-            if (h.index < h.stack.length - 1){
-                h.stack = h.stack.slice(0, h.index + 1);
-            }
+      if(!fullName && !aliasCell) continue;
+      if(!docUrl || !jsonUrl) continue;
 
-            const last = h.stack[h.stack.length - 1];
-            if (sameSnapshot(last, snap)) {
-                updateUndoRedoButtons();
-                return;
-            }
+      const aliases = aliasCell
+        .split(";")
+        .map(s => s.trim())
+        .filter(Boolean);
 
-            h.stack.push(snap);
+      const display = aliases[0] || fullName || `Formulário ${i}`;
 
-            if (h.stack.length > h.max){
-                h.stack.shift();
-            }
+      out.push({
+        id: `row-${i}`,
+        fullName,
+        display,
+        aliases,
+        docUrl,
+        jsonUrl,
+        _search: (fullName + " " + aliases.join(" ")).toLowerCase()
+      });
+    }
 
-            h.index = h.stack.length - 1;
-            updateUndoRedoButtons();
-        }
+    return out;
+  }
 
-        function restoreHistory(index){
-            const h = state.history;
-            if (index < 0 || index >= h.stack.length) return;
+  async function loadCatalog(){
+    if(!SHEET_CSV_URL){
+      setPill(sheetStatus, "bad", "Planilha: defina SHEET_CSV_URL");
+      catalogList.innerHTML = `<div class="catalog-empty">Defina <strong>SHEET_CSV_URL</strong> no código.</div>`;
+      return;
+    }
 
-            const snap = h.stack[index];
-            state.fields = snap.fields.map(f => ({...f}));
-            state.selectedIds = new Set(snap.selectedIds);
-            state.anchorId = snap.anchorId ?? null;
+    setPill(sheetStatus, "warn", "Planilha: carregando...");
+    catalogList.innerHTML = `<div class="catalog-empty">Carregando lista...</div>`;
 
-            h.index = index;
+    try{
+      const resp = await fetch(resolveUrl(SHEET_CSV_URL), { cache:"no-store" });
+      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const text = await resp.text();
 
-            refreshSelectionUI();
-            updateUndoRedoButtons();
-        }
+      const rows = parseCSV(text);
+      state.catalog = normalizeCatalogRows(rows);
+      state.catalogLoaded = true;
 
-        function undo(){
-            const h = state.history;
-            if (h.index <= 0) return;
-            restoreHistory(h.index - 1);
-        }
+      setPill(sheetStatus, "ok", `Planilha: OK (${state.catalog.length})`);
+      renderCatalog();
 
-        function redo(){
-            const h = state.history;
-            if (h.index >= h.stack.length - 1) return;
-            restoreHistory(h.index + 1);
-        }
+    } catch(err){
+      console.error(err);
+      setPill(sheetStatus, "bad", "Planilha: erro");
+      catalogList.innerHTML = `<div class="catalog-empty">Erro ao carregar a planilha.<br><span style="color:#9a3412;font-size:12px">${escapeHtml(err.message)}</span></div>`;
+    }
+  }
 
-        function updateUndoRedoButtons(){
-            const h = state.history;
-            undoBtn.disabled = !(h.index > 0);
-            redoBtn.disabled = !(h.index < h.stack.length - 1);
-        }
+  function renderCatalog(){
+    const q = (catalogSearch.value || "").trim().toLowerCase();
+    const items = state.catalog.filter(it => !q || it._search.includes(q));
 
-        let historyDebounce = null;
-        function scheduleHistorySave(){
-            clearTimeout(historyDebounce);
-            historyDebounce = setTimeout(() => saveHistory(), 350);
-        }
+    catalogList.innerHTML = "";
+    if(items.length === 0){
+      catalogList.innerHTML = `<div class="catalog-empty">Nada encontrado.</div>`;
+      return;
+    }
 
-        // =========================
-        // INIT
-        // =========================
-        function init() {
-            // Upload
-            document.getElementById('upload-area').addEventListener('click', () => document.getElementById('file-input').click());
-            document.getElementById('file-input').addEventListener('change', handleFileSelect);
-            
-            // Drag and Drop
-            const dropZone = document.getElementById('upload-area');
-            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.background = '#eef'; });
-            dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.style.background = 'white'; });
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.style.background = 'white';
-                if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
-            });
+    items.forEach(it => {
+      const card = document.createElement("div");
+      card.className = "catalog-card" + (state.activeCatalogId === it.id ? " active" : "");
+      card.innerHTML = `
+        <h4>${escapeHtml(it.display)}</h4>
+        <div class="sub">${escapeHtml(it.fullName || "")}</div>
+      `;
+      card.addEventListener("click", () => selectCatalogItem(it.id));
+      catalogList.appendChild(card);
+    });
+  }
 
-            // Seleção de Tipo
-            document.querySelectorAll('.field-type-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.field-type-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    state.currentFieldType = e.target.dataset.type;
-                });
-            });
+  function setActiveCatalogCard(id){
+    state.activeCatalogId = id;
+    renderCatalog();
+  }
 
-            // Eventos do Canvas (Desenho)
-            zoomWrapper.addEventListener('mousedown', startDrawing);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
+  /********************************************************************
+   * Documento (PDF/Imagem) via URL
+   ********************************************************************/
+  function blobToDataUrl(blob){
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = () => reject(fr.error || new Error("Erro FileReader"));
+      fr.readAsDataURL(blob);
+    });
+  }
 
-            // Zoom
-            document.getElementById('zoom-in').addEventListener('click', () => updateZoom(0.1));
-            document.getElementById('zoom-out').addEventListener('click', () => updateZoom(-0.1));
-            document.getElementById('zoom-reset').addEventListener('click', () => setZoom(1.0));
+  async function loadDocumentFromUrl(url){
+    setPill(docStatus, "warn", "Documento: carregando...");
+    const abs = resolveUrl(url);
 
-            // Configuração dos campos
-            inpName.addEventListener('input', updateFieldData);
-            inpLabel.addEventListener('input', updateFieldData);
-            inpRequired.addEventListener('change', updateFieldData);
+    const resp = await fetch(abs, { cache:"no-store" });
+    if(!resp.ok) throw new Error(`Doc HTTP ${resp.status}`);
 
-            inpComb.addEventListener('change', updateFieldData);
-            inpCombCells.addEventListener('input', updateFieldData);
+    const ct = (resp.headers.get("content-type") || "").toLowerCase();
+    const isPdf = ct.includes("pdf") || abs.toLowerCase().includes(".pdf");
 
-            // Texto
-            inpTextDir.addEventListener('change', updateFieldData);
-            inpTextHAlign.addEventListener('change', () => {
-                syncAnchorGridFromSelects();
-                updateFieldData();
-            });
-            inpTextVAlign.addEventListener('change', () => {
-                syncAnchorGridFromSelects();
-                updateFieldData();
-            });
+    if(isPdf){
+      const buf = await resp.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      const page = await pdf.getPage(1);
 
-            // Anchor grid click
-            anchorGrid.querySelectorAll('.anchor-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const h = btn.dataset.h;
-                    const v = btn.dataset.v;
-                    inpTextHAlign.value = h;
-                    inpTextVAlign.value = v;
-                    setAnchorActive(h, v);
-                    updateFieldData();
-                });
-            });
+      const scale = 2.0;
+      const viewport = page.getViewport({ scale });
 
-            document.getElementById('btn-delete-selected').addEventListener('click', () => {
-                if(state.selectedIds.size) deleteSelected();
-            });
+      const temp = document.createElement("canvas");
+      temp.width = viewport.width;
+      temp.height = viewport.height;
+      const tctx = temp.getContext("2d");
 
-            // JSON Load/Save/Copy
-            document.getElementById('save-json').addEventListener('click', downloadJSON);
-            document.getElementById('copy-json').addEventListener('click', copyJSON);
-            document.getElementById('load-json-btn').addEventListener('click', () => document.getElementById('json-input').click());
-            document.getElementById('json-input').addEventListener('change', loadJSON);
+      await page.render({ canvasContext: tctx, viewport }).promise;
 
-            // Multi-actions
-            document.getElementById('btn-same-width').addEventListener('click', () => applySameSize('width'));
-            document.getElementById('btn-same-height').addEventListener('click', () => applySameSize('height'));
-            document.getElementById('btn-align-left').addEventListener('click', () => alignSelected('left'));
-            document.getElementById('btn-align-right').addEventListener('click', () => alignSelected('right'));
-            document.getElementById('btn-align-vertical').addEventListener('click', () => alignSelected('vertical'));
-            document.getElementById('btn-align-horizontal').addEventListener('click', () => alignSelected('horizontal'));
-            document.getElementById('btn-delete-multi').addEventListener('click', () => deleteSelected());
-            document.getElementById('btn-clear-selection').addEventListener('click', () => clearSelection());
+      const dataUrl = temp.toDataURL("image/png");
+      await renderDocumentFromDataUrl(dataUrl);
+    } else {
+      const blob = await resp.blob();
+      const dataUrl = await blobToDataUrl(blob);
+      await renderDocumentFromDataUrl(dataUrl);
+    }
 
-            // Undo/Redo botões
-            undoBtn.addEventListener('click', undo);
-            redoBtn.addEventListener('click', redo);
+    setPill(docStatus, "ok", "Documento: OK");
+  }
 
-            // Undo/Redo atalhos
-            window.addEventListener('keydown', (e) => {
-                const k = (e.key || '').toLowerCase();
-                const ctrl = e.ctrlKey || e.metaKey;
-                if (!ctrl) return;
+  function renderDocumentFromDataUrl(dataUrl){
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = function(){
+        state.document.loaded = true;
+        state.document.dataUrl = dataUrl;
+        state.document.width = img.width;
+        state.document.height = img.height;
 
-                if (k === 'z' && !e.shiftKey){
-                    e.preventDefault();
-                    undo();
-                    return;
-                }
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-                if (k === 'y' || (k === 'z' && e.shiftKey)){
-                    e.preventDefault();
-                    redo();
-                    return;
-                }
-            });
+        canvasContainer.style.width = img.width + "px";
+        canvasContainer.style.height = img.height + "px";
 
-            refreshSelectionUI();
-            saveHistory(); // estado inicial
-        }
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img, 0, 0);
 
-        // =========================
-        // FILES (PDF & IMAGE)
-        // =========================
-        function handleFileSelect(e) {
-            if (e.target.files.length > 0) loadFile(e.target.files[0]);
-        }
+        placeholder.style.display = "none";
 
-        function loadFile(file) {
-            if (file.type === 'application/pdf') loadPDF(file);
-            else if (file.type.startsWith('image/')) loadImage(file);
-            else alert('Formato não suportado. Use PDF ou Imagem.');
-        }
-
-        function loadImage(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => renderImageToCanvas(e.target.result);
-            reader.readAsDataURL(file);
-        }
-
-        async function loadPDF(file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-            
-            try {
-                const pdf = await loadingTask.promise;
-                const page = await pdf.getPage(1);
-                
-                const scale = 2.0; 
-                const viewport = page.getViewport({ scale: scale });
-
-                const tempCanvas = document.createElement('canvas');
-                const tempCtx = tempCanvas.getContext('2d');
-                tempCanvas.height = viewport.height;
-                tempCanvas.width = viewport.width;
-
-                const renderContext = { canvasContext: tempCtx, viewport: viewport };
-                await page.render(renderContext).promise;
-                renderImageToCanvas(tempCanvas.toDataURL());
-
-            } catch (error) {
-                console.error('Erro ao ler PDF:', error);
-                alert('Erro ao processar o PDF.');
-            }
-        }
-
-        function renderImageToCanvas(dataUrl) {
-            const img = new Image();
-            img.onload = function() {
-                state.imgOriginalWidth = img.width;
-                state.imgOriginalHeight = img.height;
-                
-                canvas.width = img.width;
-                canvas.height = img.height;
-                
-                ctx.drawImage(img, 0, 0);
-                
-                zoomWrapper.style.width = img.width + 'px';
-                zoomWrapper.style.height = img.height + 'px';
-                
-                state.fields = [];
-                clearSelection(true);
-                renderOverlays();
-                setZoom(calculateFitZoom(img.width));
-
-                saveHistory();
-            };
-            img.src = dataUrl;
-        }
-
-        // =========================
-        // ZOOM
-        // =========================
-        function updateZoom(delta) { setZoom(state.scale + delta); }
-
-        function setZoom(value) {
-            state.scale = Math.min(Math.max(0.1, value), 5.0);
-            zoomWrapper.style.transform = `scale(${state.scale})`;
-            document.getElementById('zoom-level').textContent = Math.round(state.scale * 100) + '%';
-        }
-
-        function calculateFitZoom(imgWidth) {
-            const containerWidth = document.querySelector('.canvas-scroll-container').clientWidth;
-            const availableWidth = containerWidth - 80;
-            if (imgWidth > availableWidth) return availableWidth / imgWidth;
-            return 1.0;
-        }
-
-        // =========================
-        // COORDS
-        // =========================
-        function getMousePos(evt) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: (evt.clientX - rect.left) / state.scale,
-                y: (evt.clientY - rect.top) / state.scale
-            };
-        }
-
-        // =========================
-        // SELECTION
-        // =========================
-        function clearSelection(skipRender=false){
-            state.selectedIds.clear();
-            state.anchorId = null;
-            if (!skipRender){
-                refreshSelectionUI();
-            } else {
-                fieldConfig.classList.remove('active');
-                multiActionsEl.classList.remove('active');
-            }
-        }
-
-        function setSelection(ids, anchorId=null){
-            state.selectedIds = new Set(ids);
-            state.anchorId = anchorId ?? (ids.length ? ids[ids.length-1] : null);
-            refreshSelectionUI();
-        }
-
-        function toggleSelection(id){
-            if (state.selectedIds.has(id)) {
-                state.selectedIds.delete(id);
-                if (state.anchorId === id) state.anchorId = null;
-            } else {
-                state.selectedIds.add(id);
-                state.anchorId = id;
-            }
-            ensureAnchor();
-            refreshSelectionUI();
+        recomputeScale();
+        if(state.currentTemplate){
+          renderForm();     // só overlays
+          updateDocument(); // só textos no preview
         }
 
-        function refreshSelectionUI(){
-            renderOverlays();
+        fitToWidth();
+        resolve();
+      };
+      img.src = dataUrl;
+    });
+  }
 
-            const selected = getSelectedFields();
-            const count = selected.length;
+  /********************************************************************
+   * Template JSON via URL
+   ********************************************************************/
+  function normalizeTemplate(raw){
+    const t = { ...raw };
+    t.name = t.name || t.templateName || "Template sem nome";
+    t.fields = Array.isArray(t.fields) ? t.fields : [];
+    t.originalSize = t.originalSize || t.original_size || null;
+    t.id = t.id || (Date.now() + Math.random());
+    return t;
+  }
 
-            // Multi-actions
-            if (count >= 2){
-                multiActionsEl.classList.add('active');
-                multiCountEl.textContent = `Selecionadas: ${count}`;
-            } else {
-                multiActionsEl.classList.remove('active');
-                multiCountEl.textContent = `Selecionadas: ${count}`;
-            }
+  async function loadTemplateFromUrl(url){
+    setPill(tplStatus, "warn", "Template: carregando...");
+    const abs = resolveUrl(url);
 
-            // Config
-            if (count >= 1){
-                fieldConfig.classList.add('active');
+    const resp = await fetch(abs, { cache:"no-store" });
+    if(!resp.ok) throw new Error(`JSON HTTP ${resp.status}`);
 
-                // Nome/Label só com 1 selecionada
-                const single = (count === 1);
-                inpName.disabled = !single;
-                inpLabel.disabled = !single;
+    const raw = await resp.json();
+    const t = normalizeTemplate(raw);
 
-                if (single){
-                    inpName.value = selected[0].name || '';
-                    inpLabel.value = selected[0].label || '';
-                } else {
-                    inpName.value = '';
-                    inpLabel.value = '';
-                    inpName.placeholder = '— (múltiplos selecionados)';
-                    inpLabel.placeholder = '— (múltiplos selecionados)';
-                }
+    state.currentTemplate = t;
+    state.formData = {};
+    state.fieldOverrides = {};
+    state.editingFieldId = null;
+    state.selectedFieldIds = new Set();
 
-                // Required (misto/igual)
-                const commonReq = getCommonValue(selected, 'required');
-                setSelectValueWithMixed(inpRequired, commonReq === null ? null : (!!commonReq).toString());
+    recomputeScale();
+    renderForm();
+    updateDocument();
+    updateStyleToolbar();
 
-                // Comb (checkbox com indeterminate)
-                const commonComb = getCommonValue(selected, 'comb');
-                inpComb.indeterminate = (commonComb === null);
-                inpComb.checked = (commonComb === null) ? !!(selected[0].comb) : !!commonComb;
+    setPill(tplStatus, "ok", `Template: OK (${t.fields.length})`);
+  }
 
-                // Comb cells: usa âncora/primeiro (se quiser, muda e aplica a todos)
-                const anchorId = ensureAnchor();
-                const anchor = state.fields.find(f => f.id === anchorId) || selected[0];
-                const anyComb = !!(anchor.comb);
-                combCellsGroup.style.display = anyComb ? 'block' : 'none';
-                inpCombCells.value = (anchor.combCells && anchor.combCells >= 2) ? anchor.combCells : 10;
+  /********************************************************************
+   * Seleção do item (carrega doc + json)
+   ********************************************************************/
+  async function selectCatalogItem(id){
+    const item = state.catalog.find(x => x.id === id);
+    if(!item) return;
 
-                // Texto (misto/igual)
-                const commonDir = getCommonValue(selected, 'textDir');
-                const commonH = getCommonValue(selected, 'textHAlign');
-                const commonV = getCommonValue(selected, 'textVAlign');
-                setSelectValueWithMixed(inpTextDir, commonDir === null ? null : commonDir);
-                setSelectValueWithMixed(inpTextHAlign, commonH === null ? null : commonH);
-                setSelectValueWithMixed(inpTextVAlign, commonV === null ? null : commonV);
+    setActiveCatalogCard(id);
 
-                // Grid 9 posições: só marca se não estiver misto
-                if (commonH !== null && commonV !== null){
-                    setAnchorActive(commonH, commonV);
-                } else {
-                    clearAnchorActive();
-                }
+    btnValidate.disabled = true;
+    btnDownload.disabled = true;
+    btnPrint.disabled = true;
+    btnClear.disabled = true;
 
-                // Hint de comb com base na âncora
-                syncCombUI(anchor);
-            } else {
-                fieldConfig.classList.remove('active');
-            }
+    setPill(docStatus, "warn", "Documento: carregando...");
+    setPill(tplStatus, "warn", "Template: carregando...");
+
+    try{
+      await Promise.all([
+        loadTemplateFromUrl(item.jsonUrl),
+        loadDocumentFromUrl(item.docUrl)
+      ]);
+
+      // habilita ações após carregar
+      btnValidate.disabled = false;
+      btnClear.disabled = false;
+      btnPrint.disabled = false; // pode imprimir mesmo sem validar, se quiser
+    } catch(err){
+      console.error(err);
+      setPill(docStatus, "bad", "Documento: erro");
+      setPill(tplStatus, "bad", "Template: erro");
+      alert("Erro ao carregar doc/template:\n\n" + err.message);
+    }
+  }
+
+  /********************************************************************
+   * Escala template -> doc
+   ********************************************************************/
+  function recomputeScale(){
+    state.renderScale = { x: 1, y: 1 };
+    if(!state.currentTemplate) return;
+
+    const t = state.currentTemplate;
+    if(t.originalSize && t.originalSize.width && t.originalSize.height && state.document.loaded){
+      state.renderScale.x = canvas.width / t.originalSize.width;
+      state.renderScale.y = canvas.height / t.originalSize.height;
+    }
+  }
+
+  function getScaledRect(field){
+    return {
+      x: field.x * state.renderScale.x,
+      y: field.y * state.renderScale.y,
+      w: field.width * state.renderScale.x,
+      h: field.height * state.renderScale.y
+    };
+  }
+
+  function getFieldById(fieldId){
+    const fields = (state.currentTemplate?.fields || []);
+    return fields.find(f => String(f.id) === String(fieldId)) || null;
+  }
+
+  function getFieldMask(field){
+    if (field.mask) return field.mask;
+    switch(field.type){
+      case "cpf": return "000.000.000-00";
+      case "cnpj": return "00.000.000/0000-00";
+      case "date": return "00/00/0000";
+      default: return null;
+    }
+  }
+
+  function applyMask(value, mask){
+    if(!mask) return value;
+    let result = "";
+    let valueIndex = 0;
+    for(let i=0; i<mask.length && valueIndex<value.length; i++){
+      const m = mask[i];
+      const c = value[valueIndex];
+      if(m==="0"){
+        if(/\d/.test(c)){ result+=c; valueIndex++; }
+        else { valueIndex++; i--; }
+      } else if(m==="A"){
+        if(/[a-zA-Z]/.test(c)){ result+=c; valueIndex++; }
+        else { valueIndex++; i--; }
+      } else if(m==="*"){
+        result+=c; valueIndex++;
+      } else {
+        result+=m;
+        if(c===m) valueIndex++;
+      }
+    }
+    return result;
+  }
+
+  /********************************************************************
+   * Alinhamento (vem do JSON por campo) — helpers
+   ********************************************************************/
+  function normalizeAlignString(s){
+    let str = String(s ?? "").trim();
+    // camelCase -> kebab
+    str = str.replace(/([a-z])([A-Z])/g, "$1-$2");
+    str = str.toLowerCase();
+    // espaços/underscores -> hífen
+    str = str.replace(/[\s_]+/g, "-");
+    return str;
+  }
+
+  function pickFirst(obj, keys){
+    if(!obj) return null;
+    for(const k of keys){
+      if(Object.prototype.hasOwnProperty.call(obj, k)){
+        const v = obj[k];
+        if(v !== null && v !== undefined && String(v).trim() !== "") return v;
+      }
+    }
+    return null;
+  }
+
+  function deepPick(field, keys){
+    // procura no field e em sub-objetos comuns
+    const pools = [
+      field,
+      field?.style,
+      field?.text,
+      field?.options,
+      field?.meta,
+      field?.config,
+      field?.props
+    ];
+    for(const p of pools){
+      const v = pickFirst(p, keys);
+      if(v !== null) return v;
+    }
+    return null;
+  }
+
+  function mapGridIndex(idx){
+    // 0..8 => TL, TC, TR, ML, MC, MR, BL, BC, BR
+    const map = [
+      {h:"left",  v:"top"},
+      {h:"center",v:"top"},
+      {h:"right", v:"top"},
+      {h:"left",  v:"middle"},
+      {h:"center",v:"middle"},
+      {h:"right", v:"middle"},
+      {h:"left",  v:"bottom"},
+      {h:"center",v:"bottom"},
+      {h:"right", v:"bottom"},
+    ];
+    return map[idx] || {h:"left", v:"middle"};
+  }
+
+  function map01ToAlign(x, y){
+    const h = (x <= 0.34) ? "left" : (x >= 0.67 ? "right" : "center");
+    const v = (y <= 0.34) ? "top"  : (y >= 0.67 ? "bottom" : "middle");
+    return { h, v };
+  }
+
+  function parseAlignToken(str){
+    const s = normalizeAlignString(str);
+
+    // abreviações tipo tl/mc/br
+    if(/^(tl|lt)$/.test(s)) return {h:"left", v:"top"};
+    if(/^(tc|ct)$/.test(s)) return {h:"center", v:"top"};
+    if(/^(tr|rt)$/.test(s)) return {h:"right", v:"top"};
+    if(/^(ml|lm)$/.test(s)) return {h:"left", v:"middle"};
+    if(/^(mc|cm|center)$/.test(s)) return {h:"center", v:"middle"};
+    if(/^(mr|rm)$/.test(s)) return {h:"right", v:"middle"};
+    if(/^(bl|lb)$/.test(s)) return {h:"left", v:"bottom"};
+    if(/^(bc|cb)$/.test(s)) return {h:"center", v:"bottom"};
+    if(/^(br|rb)$/.test(s)) return {h:"right", v:"bottom"};
+
+    const hasTop = /(top|upper|north|start)/.test(s);
+    const hasBottom = /(bottom|lower|south|end)/.test(s);
+    const hasMiddle = /(middle|mid)/.test(s);
+    const hasCenter = /(center|centre)/.test(s);
+
+    const hasLeft = /(left|west)/.test(s);
+    const hasRight = /(right|east)/.test(s);
+
+    const v = hasTop ? "top" : (hasBottom ? "bottom" : ((hasMiddle || hasCenter) ? "middle" : "middle"));
+    const h = hasRight ? "right" : (hasLeft ? "left" : (hasCenter ? "center" : "left"));
+
+    return { h, v };
+  }
+
+  // ✅ SUBSTITUÍDA: agora prioriza textHAlign/textVAlign
+  function getFieldAlignment(field){
+    // 1) PRIORIDADE TOTAL: textHAlign/textVAlign do seu JSON
+    const hExp = deepPick(field, ["textHAlign","text_h_align","text-h-align","texthalign"]);
+    const vExp = deepPick(field, ["textVAlign","text_v_align","text-v-align","textvalign"]);
+
+    if(hExp != null || vExp != null){
+      const hh = (hExp ?? "left");
+      const vv = (vExp ?? "middle");
+      return parseAlignToken(`${hh}-${vv}`);
+    }
+
+    // 2) fallback (se algum template vier com outras chaves)
+    const H_KEYS = [
+      "align","alignment","textAlign","text_align","hAlign","halign","horizontalAlign","horizontal_alignment",
+      "anchor","gravity","justify","justification","placement","position"
+    ];
+    const V_KEYS = [
+      "valign","vAlign","verticalAlign","vertical_align","v_alignment","yAlign","yalign"
+    ];
+
+    const raw = deepPick(field, H_KEYS);
+    const vraw = deepPick(field, V_KEYS);
+
+    const n = (typeof raw === "number") ? raw : (String(raw||"").match(/^\d+$/) ? parseInt(raw,10) : NaN);
+    if(Number.isFinite(n)){
+      if(n >= 0 && n <= 8) return mapGridIndex(n);
+      if(n >= 0 && n <= 2){
+        const h = n===0 ? "left" : (n===2 ? "right" : "center");
+        const vv = vraw != null ? parseAlignToken(vraw).v : "middle";
+        return { h, v: vv };
+      }
+    }
+
+    if(raw && typeof raw === "object" && !Array.isArray(raw)){
+      if(raw.h != null || raw.v != null || raw.horizontal != null || raw.vertical != null){
+        const hh = raw.h ?? raw.horizontal ?? raw.x ?? "left";
+        const vv = raw.v ?? raw.vertical ?? raw.y ?? "middle";
+        return parseAlignToken(`${hh}-${vv}`);
+      }
+
+      const ax = raw.anchorX ?? raw.alignX ?? raw.x;
+      const ay = raw.anchorY ?? raw.alignY ?? raw.y;
+      if(typeof ax === "number" && typeof ay === "number" && ax>=0 && ax<=1 && ay>=0 && ay<=1){
+        return map01ToAlign(ax, ay);
+      }
+    }
+
+    if(Array.isArray(raw) && raw.length >= 2){
+      const a0 = raw[0], a1 = raw[1];
+      if(typeof a0 === "number" && typeof a1 === "number" && a0>=0 && a0<=1 && a1>=0 && a1<=1){
+        return map01ToAlign(a0, a1);
+      }
+      return parseAlignToken(`${a0}-${a1}`);
+    }
+
+    const ax = deepPick(field, ["anchorX","alignX","xAlign","x_anchor"]);
+    const ay = deepPick(field, ["anchorY","alignY","yAlign","y_anchor"]);
+    if(typeof ax === "number" && typeof ay === "number" && ax>=0 && ax<=1 && ay>=0 && ay<=1){
+      return map01ToAlign(ax, ay);
+    }
+
+    const s = normalizeAlignString(raw);
+    const sv = normalizeAlignString(vraw);
+    if(s){
+      const combined = sv ? `${s}-${sv}` : s;
+      return parseAlignToken(combined);
+    }
+
+    return { h:"left", v:"middle" };
+  }
+
+  function applyFlexAlign(box, align){
+    // robusto: eixo principal vertical
+    box.style.display = "flex";
+    box.style.flexDirection = "column";
+
+    // vertical
+    box.style.justifyContent =
+      align.v === "top" ? "flex-start" :
+      align.v === "bottom" ? "flex-end" : "center";
+
+    // horizontal (texto)
+    box.style.alignItems = "stretch";
+    box.style.textAlign = align.h;
+  }
+
+  function isWrapEnabled(field){
+    const f = field || {};
+    const raw = f.wrap ?? f.textWrap ?? f.multiline ?? f.multiLine ?? f.lineBreak ?? null;
+    if(typeof raw === "boolean") return raw;
+    if(typeof raw === "string"){
+      const s = normalizeAlignString(raw);
+      if(s === "true" || s === "yes" || s === "1") return true;
+      if(s === "false" || s === "no" || s === "0") return false;
+    }
+    return !!state.textSettings.wrap;
+  }
+
+  /********************************************************************
+   * Estilos por campo + barra de estilo (global / selecionados)
+   ********************************************************************/
+  function getStyleForFieldId(fieldId){
+    const id = String(fieldId);
+    const ov = state.fieldOverrides[id] || {};
+    const baseSize = Number(state.textSettings.fontSize) || 14;
+
+    return {
+      fontFamily: ov.fontFamily ?? state.textSettings.fontFamily,
+      fontWeight: ov.fontWeight ?? state.textSettings.fontWeight,
+      fontStyle: ov.fontStyle ?? state.textSettings.fontStyle,
+      fontSize: Number.isFinite(Number(ov.fontSize)) ? Number(ov.fontSize) : baseSize,
+      color: ov.color ?? state.textSettings.color
+    };
+  }
+
+  function getTargetFieldIds(){
+    if(state.selectedFieldIds.size > 0) return [...state.selectedFieldIds];
+    const fields = state.currentTemplate?.fields || [];
+    return fields.map(f => String(f.id));
+  }
+
+  function refreshInlineEditorStyle(){
+    const ed = document.getElementById("inline-editor");
+    if(!ed || state.editingFieldId == null) return;
+
+    const f = getFieldById(state.editingFieldId);
+    if(!f) return;
+
+    const st = getStyleForFieldId(state.editingFieldId);
+    ed.style.fontFamily = st.fontFamily;
+    ed.style.fontWeight = st.fontWeight;
+    ed.style.fontStyle = st.fontStyle;
+
+    if(!ed.classList.contains("comb-ghost")){
+      ed.style.color = st.color;
+    }
+
+    // também atualiza tamanho/line-height imediatamente
+    const r = getScaledRect(f);
+    const val = ed.value || "";
+    const size = getEffectiveFontSize(f, r, val);
+    ed.style.fontSize = size + "px";
+    ed.style.lineHeight = (size * 1.15) + "px";
+
+    // padding vertical em textarea (top/middle/bottom)
+    const align = getFieldAlignment(f);
+    if(ed.tagName.toLowerCase() === "textarea"){
+      ed.style.paddingLeft = state.textSettings.paddingX + "px";
+      ed.style.paddingRight = state.textSettings.paddingX + "px";
+
+      const basePadY = state.textSettings.paddingY;
+      const lineH = size * 1.15;
+
+      let topPad = basePadY;
+      if(align.v === "middle"){
+        topPad = Math.max(basePadY, (r.h - lineH)/2);
+      } else if(align.v === "bottom"){
+        topPad = Math.max(basePadY, r.h - lineH - basePadY);
+      }
+
+      ed.style.paddingTop = topPad + "px";
+      ed.style.paddingBottom = basePadY + "px";
+      ed.style.boxSizing = "border-box";
+      ed.style.resize = "none";
+    }
+  }
+
+  function applyStylePatch(patch){
+    const hasSel = state.selectedFieldIds.size > 0;
+
+    // sem seleção => aplica em TODAS
+    if(!hasSel){
+      Object.assign(state.textSettings, patch);
+    }
+
+    const ids = getTargetFieldIds();
+    if(ids.length === 0){
+      updateStyleToolbar();
+      updateDocument();
+      refreshInlineEditorStyle();
+      return;
+    }
+
+    ids.forEach(id => {
+      state.fieldOverrides[id] = { ...(state.fieldOverrides[id]||{}), ...patch };
+    });
+
+    updateStyleToolbar();
+    updateDocument();
+    refreshInlineEditorStyle();
+  }
+
+  function updateStyleToolbar(){
+    const count = state.selectedFieldIds.size;
+    if(count === 0) styleTarget.textContent = "Estilo: Global";
+    else if(count === 1) styleTarget.textContent = "Estilo: 1 selecionado";
+    else styleTarget.textContent = `Estilo: ${count} selecionados`;
+
+    const baseId = count > 0 ? [...state.selectedFieldIds][0] : null;
+    const st = baseId ? getStyleForFieldId(baseId) : {
+      fontFamily: state.textSettings.fontFamily,
+      fontWeight: state.textSettings.fontWeight,
+      fontStyle: state.textSettings.fontStyle,
+      fontSize: state.textSettings.fontSize,
+      color: state.textSettings.color
+    };
+
+    selFontFamily.value = st.fontFamily;
+    inpFontSize.value = Math.round(Number(st.fontSize) || 14);
+    inpFontColor.value = st.color || "#000000";
+
+    const isBold = String(st.fontWeight) !== "400" && String(st.fontWeight).toLowerCase() !== "normal";
+    btnBold.classList.toggle("active", isBold);
+    btnItalic.classList.toggle("active", String(st.fontStyle) === "italic");
+  }
+
+  // eventos da barra de estilo
+  selFontFamily.addEventListener("change", () => {
+    applyStylePatch({ fontFamily: selFontFamily.value });
+  });
+
+  inpFontSize.addEventListener("change", () => {
+    const n = clamp(parseInt(inpFontSize.value, 10) || 14, 6, 72);
+    applyStylePatch({ fontSize: n });
+  });
+
+  inpFontColor.addEventListener("input", () => {
+    applyStylePatch({ color: inpFontColor.value });
+  });
+
+  btnBold.addEventListener("click", () => {
+    const baseId = state.selectedFieldIds.size ? [...state.selectedFieldIds][0] : null;
+    const st = baseId ? getStyleForFieldId(baseId) : state.textSettings;
+    const isBold = String(st.fontWeight) !== "400" && String(st.fontWeight).toLowerCase() !== "normal";
+    applyStylePatch({ fontWeight: isBold ? "400" : "700" });
+  });
+
+  btnItalic.addEventListener("click", () => {
+    const baseId = state.selectedFieldIds.size ? [...state.selectedFieldIds][0] : null;
+    const st = baseId ? getStyleForFieldId(baseId) : state.textSettings;
+    const isIt = String(st.fontStyle) === "italic";
+    applyStylePatch({ fontStyle: isIt ? "normal" : "italic" });
+  });
+
+  /********************************************************************
+   * Fonte: base única + auto-redução se não couber
+   ********************************************************************/
+  function getBaseFontSizeForField(field){
+    const ov = state.fieldOverrides[String(field.id)]?.fontSize;
+    const base = Number.isFinite(Number(ov)) ? Number(ov) : (Number(state.textSettings.fontSize) || 14);
+    return clamp(base, 6, 72);
+  }
+
+  function setMeasureFont(px, st){
+    const ss = st || state.textSettings;
+    mctx.font = `${ss.fontStyle || "normal"} ${ss.fontWeight || "400"} ${px}px ${ss.fontFamily || "sans-serif"}`;
+  }
+
+  function wrapLinesFit(context, text, maxWidth, maxLines){
+    const words = String(text||"").split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = "";
+    let truncated = false;
+
+    for(let i=0;i<words.length;i++){
+      const test = line ? (line+" "+words[i]) : words[i];
+      if(context.measureText(test).width <= maxWidth){
+        line = test;
+      } else {
+        if(line) lines.push(line);
+        line = words[i];
+        if(lines.length >= maxLines - 1){
+          truncated = (i < words.length - 1) || (context.measureText(line).width > maxWidth);
+          break;
+        }
+      }
+    }
+
+    if(line && lines.length < maxLines){
+      if(context.measureText(line).width > maxWidth){
+        let s = line;
+        while(context.measureText(s).width > maxWidth && s.length > 1) s = s.slice(0,-1);
+        lines.push(s);
+        truncated = true;
+      } else {
+        lines.push(line);
+      }
+    }
+
+    if(lines.length===0 && text){
+      let s = String(text);
+      while(context.measureText(s).width > maxWidth && s.length>1) s = s.slice(0,-1);
+      lines.push(s);
+      truncated = (s.length < String(text).length);
+    }
+
+    return { lines, truncated };
+  }
+
+  function computeFitFontSize(field, rect, text){
+    const base = getBaseFontSizeForField(field);
+    if(!state.textSettings.autoSize) return base;
+
+    const min = 6;
+    const padX = state.textSettings.paddingX;
+    const availW = Math.max(1, rect.w - padX*2);
+    const t = String(text || "");
+
+    if(!t.trim()) return base;
+
+    const wrap = isWrapEnabled(field);
+    const st = getStyleForFieldId(field.id);
+
+    for(let size = base; size >= min; size--){
+      setMeasureFont(size, st);
+      const lineH = size * 1.15;
+      if(lineH > rect.h + 0.1) continue;
+
+      if(!wrap){
+        const w = mctx.measureText(t).width;
+        if(w <= availW + 0.5) return size;
+      } else {
+        const maxLines = Math.max(1, Math.floor(rect.h / lineH));
+        const res = wrapLinesFit(mctx, t, availW, maxLines);
+        if(!res.truncated) return size;
+      }
+    }
+
+    return min;
+  }
+
+  function getEffectiveFontSize(field, rect, value){
+    if(field.type === "check"){
+      return clamp(Math.min(getBaseFontSizeForField(field), rect.h * 0.85), 6, 72);
+    }
+
+    if(field.comb && field.combCells && field.combCells >= 2){
+      const base = getBaseFontSizeForField(field);
+      const maxByHeight = rect.h * 0.80;
+      return clamp(Math.min(base, maxByHeight), 8, 72);
+    }
+
+    return computeFitFontSize(field, rect, value);
+  }
+
+  /********************************************************************
+   * Zoom
+   ********************************************************************/
+  function applyViewScale(){
+    state.viewScale = clamp(state.viewScale, 0.1, 5);
+    zoomWrapper.style.zoom = state.viewScale;
+    zoomLevel.textContent = Math.round(state.viewScale * 100) + "%";
+  }
+  function setViewScale(v){ state.viewScale = v; applyViewScale(); }
+
+  function fitToWidth(){
+    if(!state.document.loaded) return;
+    const avail = viewerScroll.clientWidth - 36;
+    const s = avail / canvas.width;
+    setViewScale(clamp(s, 0.1, 5));
+  }
+  function fitToPage(){
+    if(!state.document.loaded) return;
+    const availW = viewerScroll.clientWidth - 36;
+    const availH = viewerScroll.clientHeight - 36;
+    const s = Math.min(availW / canvas.width, availH / canvas.height);
+    setViewScale(clamp(s, 0.1, 5));
+  }
+
+  btnZoomIn.addEventListener("click", ()=> setViewScale(state.viewScale + 0.1));
+  btnZoomOut.addEventListener("click", ()=> setViewScale(state.viewScale - 0.1));
+  btnZoomReset.addEventListener("click", ()=> setViewScale(1));
+  btnFitWidth.addEventListener("click", fitToWidth);
+  btnFitPage.addEventListener("click", fitToPage);
+  window.addEventListener("resize", () => { if(state.document.loaded) fitToWidth(); });
+
+  /********************************************************************
+   * Seleção (1 clique / Ctrl+clique / global)
+   ********************************************************************/
+  function clearSelection(){
+    state.selectedFieldIds.clear();
+    syncSelectionUI();
+  }
+
+  function setSingleSelection(fieldId){
+    state.selectedFieldIds.clear();
+    if(fieldId != null) state.selectedFieldIds.add(String(fieldId));
+    syncSelectionUI();
+  }
+
+  function toggleSelection(fieldId){
+    const id = String(fieldId);
+    if(state.selectedFieldIds.has(id)) state.selectedFieldIds.delete(id);
+    else state.selectedFieldIds.add(id);
+    syncSelectionUI();
+  }
+
+  function syncSelectionUI(){
+    document.querySelectorAll(".field-overlay").forEach(o => o.classList.remove("selected"));
+    state.selectedFieldIds.forEach(id => {
+      const o = document.querySelector(`.field-overlay[data-field-id="${id}"]`);
+      if(o) o.classList.add("selected");
+    });
+    updateStyleToolbar();
+  }
+
+  /********************************************************************
+   * Overlays
+   ********************************************************************/
+  function clearOverlaysAndTexts(){
+    document.querySelectorAll(".field-overlay").forEach(el => el.remove());
+    document.querySelectorAll(".filled-text").forEach(el => el.remove());
+    removeInlineEditor(false);
+  }
+
+  function ensureViewerClickBound(){
+    if(state._viewerClickBound) return;
+    state._viewerClickBound = true;
+
+    viewerScroll.addEventListener("click", (e) => {
+      if(e.target.closest(".field-overlay")) return;
+      removeInlineEditor(true);
+      clearSelection(); // sem seleção = edita todas (regra)
+    });
+  }
+
+  function renderForm(){
+    clearOverlaysAndTexts();
+    ensureViewerClickBound();
+
+    if(!state.currentTemplate) return;
+    const fields = state.currentTemplate.fields || [];
+
+    fields.forEach((field) => {
+      const overlay = document.createElement("div");
+      overlay.className = "field-overlay";
+      overlay.dataset.fieldId = String(field.id);
+
+      const r = getScaledRect(field);
+      overlay.style.left = r.x + "px";
+      overlay.style.top = r.y + "px";
+      overlay.style.width = r.w + "px";
+      overlay.style.height = r.h + "px";
+
+      if(field.comb && field.combCells && field.combCells >= 2){
+        overlay.classList.add("comb");
+        overlay.style.setProperty("--comb-step", (r.w / field.combCells) + "px");
+      }
+
+      overlay.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const multi = e.ctrlKey || e.metaKey;
+        if(multi){
+          toggleSelection(field.id); // ctrl+clique só seleciona (não abre editor)
+          return;
         }
 
-        // =========================
-        // DRAW / MOVE / RESIZE
-        // =========================
-        function startDrawing(e) {
-            if (e.button !== 0) return;
+        setSingleSelection(field.id);
+        startInlineEdit(field, { fromTab:false });
+      });
 
-            // Se clicou em overlay existente, ele vai tratar no handler do overlay
-            if (e.target.closest('.field-overlay')) return;
+      canvasContainer.appendChild(overlay);
+    });
 
-            // clique vazio sem tipo: só limpa seleção
-            if (!state.currentFieldType) {
-                if (!isCtrlMulti(e)) clearSelection();
-                return;
-            }
+    updateDocument();
+    syncSelectionUI();
+  }
 
-            // Desenhar nova caixa
-            state.action = 'draw';
-            const pos = getMousePos(e);
-            state.startX = pos.x;
-            state.startY = pos.y;
+  function scrollOverlayIntoView(fieldId){
+    const overlay = document.querySelector(`.field-overlay[data-field-id="${fieldId}"]`);
+    if(!overlay) return;
+    overlay.scrollIntoView({ block:"nearest", inline:"nearest" });
+  }
 
-            if (!isCtrlMulti(e)) clearSelection();
+  /********************************************************************
+   * TAB inteligente
+   ********************************************************************/
+  function getNextFieldId(currentId, forward=true){
+    const fields = (state.currentTemplate?.fields || []).filter(f => f.type !== "check");
+    if(fields.length === 0) return null;
+
+    const cur = fields.find(f => String(f.id) === String(currentId));
+    if(!cur){
+      const first = [...fields].sort((a,b)=> (a.y-b.y) || (a.x-b.x))[0];
+      return first?.id ?? null;
+    }
+
+    const curCY = cur.y + cur.height/2;
+    const rowTol = Math.max(6, cur.height * 0.60);
+
+    const sameRow = fields.filter(f => Math.abs((f.y + f.height/2) - curCY) <= rowTol);
+
+    if(forward){
+      const rights = sameRow.filter(f => f.x > cur.x + 0.5).sort((a,b)=> a.x - b.x);
+      if(rights[0]) return rights[0].id;
+
+      const below = fields.filter(f => (f.y + f.height/2) > (curCY + rowTol))
+                          .sort((a,b)=> (a.y-b.y) || (a.x-b.x));
+      if(below[0]){
+        const targetY = below[0].y + below[0].height/2;
+        const row = below.filter(f => Math.abs((f.y+f.height/2) - targetY) <= rowTol)
+                         .sort((a,b)=> a.x - b.x);
+        return (row[0] || below[0]).id;
+      }
+
+      const first = [...fields].sort((a,b)=> (a.y-b.y) || (a.x-b.x))[0];
+      return first?.id ?? null;
+
+    } else {
+      const lefts = sameRow.filter(f => f.x < cur.x - 0.5).sort((a,b)=> b.x - a.x);
+      if(lefts[0]) return lefts[0].id;
+
+      const above = fields.filter(f => (f.y + f.height/2) < (curCY - rowTol))
+                          .sort((a,b)=> (b.y-a.y) || (b.x-a.x));
+      if(above[0]){
+        const targetY = above[0].y + above[0].height/2;
+        const row = above.filter(f => Math.abs((f.y+f.height/2) - targetY) <= rowTol)
+                         .sort((a,b)=> b.x - a.x);
+        return (row[0] || above[0]).id;
+      }
+
+      const last = [...fields].sort((a,b)=> (b.y-a.y) || (b.x-a.x))[0];
+      return last?.id ?? null;
+    }
+  }
+
+  function focusField(fieldId, opts={ fromTab:true }){
+    const f = getFieldById(fieldId);
+    if(!f) return;
+    setSingleSelection(f.id);
+    scrollOverlayIntoView(f.id);
+    startInlineEdit(f, { fromTab: !!opts.fromTab });
+  }
+
+  /********************************************************************
+   * Editor inline
+   ********************************************************************/
+  function removeInlineEditor(commit){
+    const existing = document.getElementById("inline-editor");
+    if(existing){
+      if(commit) existing.blur();
+      else existing.remove();
+    }
+    state.editingFieldId = null;
+  }
+
+  function applyFieldFontOverride(fieldId, delta){
+    const id = String(fieldId);
+    const cur = state.fieldOverrides[id]?.fontSize;
+    const base = Number.isFinite(Number(cur)) ? Number(cur) : (Number(state.textSettings.fontSize) || 14);
+    const next = clamp(base + delta, 6, 72);
+    state.fieldOverrides[id] = { ...(state.fieldOverrides[id]||{}), fontSize: next };
+    updateStyleToolbar();
+  }
+
+  function startInlineEdit(field, opts={ fromTab:false }){
+    if(!state.document.loaded){
+      alert("Documento ainda não carregou.");
+      return;
+    }
+
+    const old = document.getElementById("inline-editor");
+    if(old) old.remove();
+
+    if(field.type === "check"){
+      if(opts.fromTab) return;
+      const cur = !!state.formData[field.name];
+      state.formData[field.name] = !cur;
+      updateDocument();
+      return;
+    }
+
+    state.editingFieldId = field.id;
+
+    const overlay = document.querySelector(`.field-overlay[data-field-id="${field.id}"]`);
+    if(!overlay) return;
+
+    const mask = getFieldMask(field);
+    const r = getScaledRect(field);
+
+    const isComb = !!(field.comb && field.combCells && field.combCells >= 2);
+
+    const align = getFieldAlignment(field); // (8.1) pega alinhamento antes
+    const useTextarea = (!isComb && (isWrapEnabled(field) || align.v !== "middle"));
+
+    const editor = document.createElement(useTextarea ? "textarea" : "input");
+    editor.id = "inline-editor";
+    editor.className = "inline-editor" + (r.h < 28 ? " smallpad" : "");
+    if(!useTextarea) editor.type = "text";
+
+    if(isComb) editor.classList.add("comb-ghost");
+
+    // (8.2) usa estilo por campo
+    const st = getStyleForFieldId(field.id);
+    editor.style.fontFamily = st.fontFamily;
+    editor.style.fontWeight = st.fontWeight;
+    editor.style.fontStyle  = st.fontStyle;
+
+    const initialValue = state.formData[field.name] || "";
+    const initialSize = getEffectiveFontSize(field, r, initialValue);
+
+    editor.style.fontSize = initialSize + "px";
+    editor.style.lineHeight = (initialSize * 1.15) + "px";
+    editor.style.color = isComb ? "transparent" : st.color;
+    editor.style.textAlign = isComb ? "left" : align.h;
+
+    editor.value = initialValue;
+
+    overlay.appendChild(editor);
+
+    // (8.3) textarea: padding vertical conforme top/middle/bottom
+    function applyEditorVAlignPadding(){
+      if(editor.tagName.toLowerCase() !== "textarea") return;
+
+      // zera padding padrão do .inline-editor (pra ficar determinístico)
+      editor.style.paddingLeft = state.textSettings.paddingX + "px";
+      editor.style.paddingRight = state.textSettings.paddingX + "px";
+
+      const basePadY = state.textSettings.paddingY;
+      const size = parseFloat(editor.style.fontSize) || 14;
+      const lineH = size * 1.15;
+
+      let topPad = basePadY;
+      if(align.v === "middle"){
+        topPad = Math.max(basePadY, (r.h - lineH)/2);
+      } else if(align.v === "bottom"){
+        topPad = Math.max(basePadY, r.h - lineH - basePadY);
+      }
+
+      editor.style.paddingTop = topPad + "px";
+      editor.style.paddingBottom = basePadY + "px";
+      editor.style.boxSizing = "border-box";
+      editor.style.resize = "none";
+    }
+    applyEditorVAlignPadding();
+
+    editor.focus();
+    editor.select?.();
+
+    function refreshEditorFont(){
+      const val = editor.value || "";
+      const size = getEffectiveFontSize(field, r, val);
+      editor.style.fontSize = size + "px";
+      editor.style.lineHeight = (size * 1.15) + "px";
+      applyEditorVAlignPadding();
+    }
+
+    editor.addEventListener("input", () => {
+      let value = editor.value || "";
+
+      if(isComb){
+        const clean = removeMask(value);
+        if(clean !== value){
+          editor.value = clean;
+          value = clean;
+        }
+      } else if(mask){
+        value = applyMask(removeMask(value), mask);
+        editor.value = value;
+      } else if(field.type === "number"){
+        const only = removeMask(value).replace(/[^\d]/g,"");
+        if(only !== value){
+          editor.value = only;
+          value = only;
+        }
+      }
+
+      state.formData[field.name] = editor.value;
+
+      refreshEditorFont();
+      updateDocument();
+    });
+
+    editor.addEventListener("keydown", (ev) => {
+      if(ev.key === "Tab"){
+        ev.preventDefault();
+        const forward = !ev.shiftKey;
+        editor.blur();
+        setTimeout(() => {
+          const nextId = getNextFieldId(field.id, forward);
+          if(nextId != null) focusField(nextId, { fromTab:true });
+        }, 0);
+        return;
+      }
+
+      if(ev.ctrlKey && (ev.key === "=" || ev.key === "+" || ev.key === "ArrowUp")){
+        ev.preventDefault();
+        applyFieldFontOverride(field.id, +1);
+        refreshEditorFont();
+        updateDocument();
+        return;
+      }
+      if(ev.ctrlKey && (ev.key === "-" || ev.key === "_" || ev.key === "ArrowDown")){
+        ev.preventDefault();
+        applyFieldFontOverride(field.id, -1);
+        refreshEditorFont();
+        updateDocument();
+        return;
+      }
+
+      if(ev.key === "Escape"){
+        ev.preventDefault();
+        editor.remove();
+        state.editingFieldId = null;
+        updateDocument();
+        return;
+      }
+
+      if(!useTextarea && ev.key === "Enter"){
+        ev.preventDefault();
+        editor.blur();
+      }
+      if(useTextarea && ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)){
+        ev.preventDefault();
+        editor.blur();
+      }
+    });
+
+    editor.addEventListener("blur", () => {
+      if(!isComb && mask){
+        const v = applyMask(removeMask(editor.value || ""), mask);
+        editor.value = v;
+        state.formData[field.name] = v;
+      } else {
+        state.formData[field.name] = editor.value || "";
+      }
+      editor.remove();
+      state.editingFieldId = null;
+      updateDocument();
+    });
+  }
+
+  /********************************************************************
+   * Texto no preview (alinhamento por campo + estilo por campo)
+   ********************************************************************/
+  function updateDocument(){
+    document.querySelectorAll(".filled-text").forEach(el => el.remove());
+    if(!state.currentTemplate || !state.document.loaded) return;
+
+    document.querySelectorAll(".field-overlay").forEach(o => o.classList.remove("filled"));
+
+    const fields = state.currentTemplate.fields || [];
+
+    fields.forEach((field) => {
+      const v = state.formData[field.name];
+      const hasValue = (field.type === "check") ? !!v : !!String(v || "").trim();
+      if(!hasValue) return;
+
+      const overlay = document.querySelector(`.field-overlay[data-field-id="${field.id}"]`);
+      if(overlay) overlay.classList.add("filled");
+
+      const isComb = !!(field.comb && field.combCells && field.combCells >= 2);
+      if(state.editingFieldId === field.id && !isComb) return;
+
+      const r = getScaledRect(field);
+      const fontSize = getEffectiveFontSize(field, r, v);
+      const wrap = isWrapEnabled(field);
+      const st = getStyleForFieldId(field.id);
+
+      const textEl = document.createElement("div");
+      textEl.className = "filled-text";
+      textEl.style.left = r.x + "px";
+      textEl.style.top = r.y + "px";
+      textEl.style.width = r.w + "px";
+      textEl.style.height = r.h + "px";
+      textEl.style.fontFamily = st.fontFamily;
+      textEl.style.fontWeight = st.fontWeight;
+      textEl.style.fontStyle  = st.fontStyle;
+      textEl.style.color = st.color;
+      textEl.style.fontSize = fontSize + "px";
+      textEl.style.lineHeight = (fontSize * 1.15) + "px";
+
+      const box = document.createElement("div");
+      box.className = "filled-box";
+
+      // ✅ padding completo (X e Y)
+      box.style.paddingLeft = state.textSettings.paddingX + "px";
+      box.style.paddingRight = state.textSettings.paddingX + "px";
+      box.style.paddingTop = state.textSettings.paddingY + "px";
+      box.style.paddingBottom = state.textSettings.paddingY + "px";
+
+      if(field.type === "check"){
+        const c = document.createElement("div");
+        c.className = "filled-content";
+        c.textContent = "X";
+        const align = getFieldAlignment(field);
+        applyFlexAlign(box, align);
+        box.appendChild(c);
+        textEl.appendChild(box);
+        canvasContainer.appendChild(textEl);
+        return;
+      }
+
+      if(isComb){
+        const cells = parseInt(field.combCells, 10);
+        const clean = removeMask(String(v || ""));
+        const chars = clean.split("").slice(0, cells);
+
+        const grid = document.createElement("div");
+        grid.className = "comb-text";
+        grid.style.gridTemplateColumns = `repeat(${cells}, 1fr)`;
+
+        for(let i=0; i<cells; i++){
+          const sp = document.createElement("span");
+          sp.textContent = chars[i] || "";
+          grid.appendChild(sp);
         }
 
-        function onMouseMove(e) {
-            if (!state.action) return;
+        applyFlexAlign(box, { h:"center", v:"middle" });
+        box.appendChild(grid);
+        textEl.appendChild(box);
+        canvasContainer.appendChild(textEl);
+        return;
+      }
 
-            if (state.action === 'draw') {
-                drawTempBox(e);
-            } else if (state.action === 'move') {
-                dragMove(e);
-            } else if (state.action === 'resize') {
-                dragResize(e);
-            }
+      const align = getFieldAlignment(field);
+      applyFlexAlign(box, align);
+
+      const content = document.createElement("div");
+      content.className = "filled-content";
+      if(wrap) content.classList.add("wraptext"); // ⚠️ renomeado
+      content.textContent = String(v || "");
+
+      box.appendChild(content);
+      textEl.appendChild(box);
+      canvasContainer.appendChild(textEl);
+    });
+  }
+
+  /********************************************************************
+   * Export (PNG) + Print/PDF (alinhamento por campo + estilo por campo)
+   ********************************************************************/
+  function wrapLines(context, text, maxWidth, maxLines){
+    return wrapLinesFit(context, text, maxWidth, maxLines).lines;
+  }
+
+  function drawFilledOnContext(tctx, baseImg){
+    tctx.drawImage(baseImg, 0, 0);
+
+    (state.currentTemplate.fields||[]).forEach(field => {
+      const v = state.formData[field.name];
+      const hasValue = (field.type==="check") ? !!v : !!String(v||"").trim();
+      if(!hasValue) return;
+
+      const r = getScaledRect(field);
+      const isComb = !!(field.comb && field.combCells && field.combCells>=2);
+      const fontSize = getEffectiveFontSize(field, r, v);
+      const wrap = isWrapEnabled(field);
+
+      const st = getStyleForFieldId(field.id);
+
+      const padX = state.textSettings.paddingX;
+      const padY = state.textSettings.paddingY;
+      const lineH = fontSize * 1.15;
+
+      if(field.type==="check"){
+        tctx.fillStyle = st.color;
+        tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
+
+        const align = getFieldAlignment(field);
+
+        const xLeft = r.x + padX;
+        const xCenter = r.x + r.w/2;
+        const xRight = r.x + r.w - padX;
+
+        tctx.textAlign = (align.h === "center") ? "center" : (align.h === "right" ? "right" : "left");
+        tctx.textBaseline = "top";
+
+        let y;
+        if(align.v === "top") y = r.y + padY;
+        else if(align.v === "bottom") y = r.y + r.h - padY - lineH;
+        else y = r.y + (r.h - lineH)/2;
+
+        const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
+        tctx.fillText("X", x, y);
+        return;
+      }
+
+      if(isComb){
+        tctx.fillStyle = st.color;
+        tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
+
+        const cells = parseInt(field.combCells,10);
+        const clean = removeMask(String(v||""));
+        const chars = clean.split("").slice(0, cells);
+        const cellW = r.w / cells;
+
+        tctx.textAlign = "center";
+        tctx.textBaseline = "middle";
+        for(let i=0;i<cells;i++){
+          const cx = r.x + (i+0.5)*cellW;
+          const ch = chars[i] || "";
+          if(ch) tctx.fillText(ch, cx, r.y + r.h/2);
+        }
+        return;
+      }
+
+      tctx.fillStyle = st.color;
+      tctx.font = `${st.fontStyle || "normal"} ${st.fontWeight || "400"} ${fontSize}px ${st.fontFamily || "sans-serif"}`;
+
+      const align = getFieldAlignment(field);
+
+      const xLeft = r.x + padX;
+      const xCenter = r.x + r.w/2;
+      const xRight = r.x + r.w - padX;
+
+      tctx.textAlign = (align.h === "center") ? "center" : (align.h === "right" ? "right" : "left");
+      tctx.textBaseline = "top";
+
+      const text = String(v||"");
+
+      if(!wrap){
+        let y;
+        if(align.v === "top"){
+          y = r.y + padY;
+        } else if(align.v === "bottom"){
+          y = r.y + r.h - padY - lineH;
+        } else {
+          y = r.y + (r.h - lineH)/2;
         }
 
-        function onMouseUp(e) {
-            if (!state.action) return;
+        const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
+        tctx.fillText(text, x, y);
 
-            if (state.action === 'draw') {
-                finishDrawing(e);
-            } else if (state.action === 'move' || state.action === 'resize') {
-                state.action = null;
-                state.dragStartFields = null;
-                state.dragStartGroup = null;
-                state.resizeDir = null;
+      } else {
+        const maxW = Math.max(10, r.w - padX*2);
+        const maxLines = Math.max(1, Math.floor(r.h / lineH));
+        const lines = wrapLines(tctx, text, maxW, maxLines);
+        const totalH = lines.length * lineH;
 
-                saveHistory();
-            }
+        let startY;
+        if(align.v === "top"){
+          startY = r.y + padY;
+        } else if(align.v === "bottom"){
+          startY = r.y + r.h - padY - totalH;
+        } else {
+          startY = r.y + (r.h - totalH)/2;
         }
 
-        function drawTempBox(e) {
-            const pos = getMousePos(e);
-            const width = pos.x - state.startX;
-            const height = pos.y - state.startY;
-
-            let tempBox = document.getElementById('temp-draw-box');
-            if (!tempBox) {
-                tempBox = document.createElement('div');
-                tempBox.id = 'temp-draw-box';
-                tempBox.style.border = '2px dashed #667eea';
-                tempBox.style.position = 'absolute';
-                tempBox.style.zIndex = '100';
-                overlaysContainer.appendChild(tempBox);
-            }
-
-            tempBox.style.left = (width > 0 ? state.startX : pos.x) + 'px';
-            tempBox.style.top = (height > 0 ? state.startY : pos.y) + 'px';
-            tempBox.style.width = Math.abs(width) + 'px';
-            tempBox.style.height = Math.abs(height) + 'px';
+        const x = (align.h === "center") ? xCenter : (align.h === "right" ? xRight : xLeft);
+        for(let i=0;i<lines.length;i++){
+          tctx.fillText(lines[i], x, startY + i*lineH);
         }
-
-        function finishDrawing(e) {
-            const tempBox = document.getElementById('temp-draw-box');
-            if (tempBox) tempBox.remove();
-
-            const pos = getMousePos(e);
-
-            const x = Math.min(state.startX, pos.x);
-            const y = Math.min(state.startY, pos.y);
-            const w = Math.abs(pos.x - state.startX);
-            const h = Math.abs(pos.y - state.startY);
-
-            state.action = null;
-
-            if (w < 10 || h < 10) return;
-
-            const newField = {
-                id: Date.now() + Math.floor(Math.random()*1000),
-                type: state.currentFieldType,
-                x: clamp(x, 0, canvas.width - 10),
-                y: clamp(y, 0, canvas.height - 10),
-                width: clamp(w, 10, canvas.width),
-                height: clamp(h, 10, canvas.height),
-                name: `campo_${state.fields.length + 1}`,
-                label: `Campo ${state.fields.length + 1}`,
-                required: false,
-
-                comb: false,
-                combCells: 0,
-
-                // ✅ NOVO: texto (padrão topo + esquerda + LTR)
-                textDir: "ltr",
-                textHAlign: "left",
-                textVAlign: "top"
-            };
-
-            if (newField.x + newField.width > canvas.width) newField.width = canvas.width - newField.x;
-            if (newField.y + newField.height > canvas.height) newField.height = canvas.height - newField.y;
-
-            state.fields.push(newField);
-            setSelection([newField.id], newField.id);
-
-            saveHistory();
-        }
-
-        function startMoveGroup(e) {
-            const selected = getSelectedFields();
-            if (!selected.length) return;
-
-            state.action = 'move';
-            state.dragStartMouse = getMousePos(e);
-
-            state.dragStartFields = selected.map(f => ({
-                id: f.id,
-                x: f.x, y: f.y,
-                width: f.width, height: f.height
-            }));
-
-            const minX = Math.min(...selected.map(f => f.x));
-            const minY = Math.min(...selected.map(f => f.y));
-            const maxX = Math.max(...selected.map(f => f.x + f.width));
-            const maxY = Math.max(...selected.map(f => f.y + f.height));
-
-            state.dragStartGroup = { minX, minY, maxX, maxY };
-        }
-
-        function dragMove(e) {
-            if (!state.dragStartFields || !state.dragStartGroup) return;
-
-            const pos = getMousePos(e);
-            let dx = pos.x - state.dragStartMouse.x;
-            let dy = pos.y - state.dragStartMouse.y;
-
-            const g = state.dragStartGroup;
-            dx = clamp(dx, -g.minX, canvas.width - g.maxX);
-            dy = clamp(dy, -g.minY, canvas.height - g.maxY);
-
-            for (const s of state.dragStartFields) {
-                const field = state.fields.find(f => f.id === s.id);
-                if (!field) continue;
-                field.x = s.x + dx;
-                field.y = s.y + dy;
-            }
-
-            renderOverlays();
-
-            const anchorId = ensureAnchor();
-            const anchor = state.fields.find(f => f.id === anchorId) || getSelectedFields()[0];
-            syncCombUI(anchor);
-        }
-
-        function startResize(fieldId, dir, e) {
-            const field = state.fields.find(f => f.id === fieldId);
-            if (!field) return;
-
-            state.action = 'resize';
-            state.resizeDir = dir;
-            state.dragStartMouse = getMousePos(e);
-            state.dragStartFields = [{
-                id: field.id,
-                x: field.x, y: field.y,
-                width: field.width, height: field.height
-            }];
-        }
-
-        function dragResize(e) {
-            const primary = getPrimarySelectedId();
-            if (!primary || !state.dragStartFields || !state.resizeDir) return;
-
-            const field = state.fields.find(f => f.id === primary);
-            if (!field) return;
-
-            const start = state.dragStartFields[0];
-            const pos = getMousePos(e);
-            const dx = pos.x - state.dragStartMouse.x;
-            const dy = pos.y - state.dragStartMouse.y;
-
-            let nx = start.x;
-            let ny = start.y;
-            let nw = start.width;
-            let nh = start.height;
-
-            const dir = state.resizeDir;
-
-            if (dir.includes('e')) nw = start.width + dx;
-            if (dir.includes('s')) nh = start.height + dy;
-            if (dir.includes('w')) { nx = start.x + dx; nw = start.width - dx; }
-            if (dir.includes('n')) { ny = start.y + dy; nh = start.height - dy; }
-
-            nw = Math.max(10, nw);
-            nh = Math.max(10, nh);
-
-            nx = clamp(nx, 0, canvas.width - 10);
-            ny = clamp(ny, 0, canvas.height - 10);
-
-            if (nx + nw > canvas.width) nw = canvas.width - nx;
-            if (ny + nh > canvas.height) nh = canvas.height - ny;
-
-            if (dir.includes('w')) {
-                const right = start.x + start.width;
-                if (nx < 0) nx = 0;
-                nw = Math.max(10, right - nx);
-                if (nx + nw > canvas.width) nw = canvas.width - nx;
-            }
-            if (dir.includes('n')) {
-                const bottom = start.y + start.height;
-                if (ny < 0) ny = 0;
-                nh = Math.max(10, bottom - ny);
-                if (ny + nh > canvas.height) nh = canvas.height - ny;
-            }
-
-            field.x = nx; field.y = ny; field.width = nw; field.height = nh;
-
-            renderOverlays();
-            syncCombUI(field);
-        }
-
-        // =========================
-        // RENDER
-        // =========================
-        function renderOverlays() {
-            overlaysContainer.innerHTML = '';
-
-            const primary = getPrimarySelectedId();
-            const allowResize = (primary !== null);
-
-            state.fields.forEach(field => {
-                const isSelected = state.selectedIds.has(field.id);
-
-                const el = document.createElement('div');
-                el.className = `field-overlay ${isSelected ? 'selected' : ''}`;
-
-                el.style.left = field.x + 'px';
-                el.style.top = field.y + 'px';
-                el.style.width = field.width + 'px';
-                el.style.height = field.height + 'px';
-
-                // Comb: linhas internas
-                if (field.comb && Number.isFinite(field.combCells) && field.combCells >= 2) {
-                    const step = field.width / field.combCells;
-                    el.classList.add('comb');
-                    el.style.setProperty('--comb-step', step + 'px');
-                }
-
-                // Label (inclui um mini-indicador de âncora do texto)
-                const lbl = document.createElement('div');
-                lbl.className = 'field-label';
-                const h = field.textHAlign || 'left';
-                const v = field.textVAlign || 'top';
-                const dir = field.textDir || 'ltr';
-                const anchorTag = `${v[0].toUpperCase()}${h[0].toUpperCase()}-${dir.toUpperCase()}`;
-                lbl.textContent = (field.name || field.type) + (field.comb && field.combCells >= 2 ? ` [${field.combCells}]` : '') + ` • ${anchorTag}`;
-                el.appendChild(lbl);
-
-                // Botão Delete
-                const btnDel = document.createElement('div');
-                btnDel.className = 'field-delete';
-                btnDel.innerHTML = '×';
-                btnDel.onclick = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    state.fields = state.fields.filter(f => f.id !== field.id);
-                    state.selectedIds.delete(field.id);
-                    if (state.anchorId === field.id) state.anchorId = null;
-
-                    refreshSelectionUI();
-                    saveHistory();
-                };
-                el.appendChild(btnDel);
-
-                // Resize handles (apenas se selecionado E seleção única)
-                if (allowResize && primary === field.id) {
-                    const dirs = ["n","s","e","w","nw","ne","sw","se"];
-                    dirs.forEach(d => {
-                        const h = document.createElement('div');
-                        h.className = 'resize-handle';
-                        h.dataset.dir = d;
-                        h.addEventListener('mousedown', (e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            startResize(field.id, d, e);
-                        });
-                        el.appendChild(h);
-                    });
-                }
-
-                // Selecionar + mover (Ctrl = multi)
-                el.addEventListener('mousedown', (e) => {
-                    if (e.target.classList.contains('field-delete')) return;
-                    if (e.target.classList.contains('resize-handle')) return;
-
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    if (isCtrlMulti(e)) {
-                        toggleSelection(field.id);
-                        return;
-                    }
-
-                    if (!state.selectedIds.has(field.id)) {
-                        setSelection([field.id], field.id);
-                    } else {
-                        state.anchorId = field.id; // ancora = último clique
-                        refreshSelectionUI();
-                    }
-
-                    startMoveGroup(e);
-                });
-
-                overlaysContainer.appendChild(el);
-            });
-        }
-
-        // =========================
-        // COMB UI
-        // =========================
-        function syncCombUI(field){
-            if (!field) return;
-
-            const anySelected = getSelectedFields().length > 0;
-            if (!anySelected) {
-                combCellWidthEl.textContent = 'Largura por célula: —';
-                return;
-            }
-
-            // Se o checkbox está indeterminate, não forçamos display do grupo aqui.
-            const activeComb = inpComb.checked && !inpComb.indeterminate;
-
-            if (activeComb) {
-                const cells = parseInt(inpCombCells.value, 10);
-                if (Number.isFinite(cells) && cells >= 2 && field.width) {
-                    const cellW = field.width / cells;
-                    combCellWidthEl.textContent = `Largura por célula: ${cellW.toFixed(2)} px (Total: ${field.width.toFixed(2)} px)`;
-                } else {
-                    combCellWidthEl.textContent = 'Largura por célula: —';
-                }
-            } else {
-                // se comb estiver desativado ou misto, mantém neutro
-                combCellWidthEl.textContent = 'Largura por célula: —';
-            }
-        }
-
-        // =========================
-        // TEXT ANCHOR UI
-        // =========================
-        function clearAnchorActive(){
-            anchorGrid.querySelectorAll('.anchor-btn').forEach(b => b.classList.remove('active'));
-        }
-
-        function setAnchorActive(h, v){
-            clearAnchorActive();
-            const btn = anchorGrid.querySelector(`.anchor-btn[data-h="${h}"][data-v="${v}"]`);
-            if (btn) btn.classList.add('active');
-        }
-
-        function syncAnchorGridFromSelects(){
-            const h = inpTextHAlign.value;
-            const v = inpTextVAlign.value;
-            if (h === "__mixed__" || v === "__mixed__"){
-                clearAnchorActive();
-                return;
-            }
-            setAnchorActive(h, v);
-        }
-
-        // =========================
-        // UPDATE FIELD DATA (aplica em lote quando múltiplas)
-        // =========================
-        function updateFieldData() {
-            const selected = getSelectedFields();
-            if (!selected.length) return;
-
-            const single = (selected.length === 1);
-
-            // Nome/Label só se seleção única
-            if (single) {
-                selected[0].name = inpName.value;
-                selected[0].label = inpLabel.value;
-            }
-
-            // Required: aplica a todas se não estiver em "misto"
-            if (inpRequired.value !== "__mixed__") {
-                const req = (inpRequired.value === "true");
-                selected.forEach(f => f.required = req);
-            }
-
-            // Comb: se estava misto e usuário clicou, o indeterminate vira false (naturalmente),
-            // então aplicamos o estado atual do checkbox.
-            // Observação: ao marcar comb=true, também aplicamos combCells.
-            const combChecked = !!inpComb.checked;
-            const combInd = !!inpComb.indeterminate;
-
-            // Se estiver indeterminate e o usuário não mexeu, não aplicamos (evita sobrescrever estados diferentes sem intenção).
-            // Como o evento 'change' do checkbox só dispara quando mexe, aqui o indeterminate já vai estar false.
-            // Mesmo assim, mantemos uma proteção.
-            if (!combInd) {
-                selected.forEach(f => f.comb = combChecked);
-
-                if (combChecked) {
-                    let cells = parseInt(inpCombCells.value, 10);
-                    if (!Number.isFinite(cells) || cells < 2) cells = 2;
-                    selected.forEach(f => f.combCells = cells);
-                    combCellsGroup.style.display = 'block';
-                } else {
-                    selected.forEach(f => f.combCells = 0);
-                    combCellsGroup.style.display = 'none';
-                }
-            }
-
-            // Texto: aplica em lote quando não estiver "misto"
-            if (inpTextDir.value !== "__mixed__") {
-                selected.forEach(f => f.textDir = inpTextDir.value);
-            }
-            if (inpTextHAlign.value !== "__mixed__") {
-                selected.forEach(f => f.textHAlign = inpTextHAlign.value);
-            }
-            if (inpTextVAlign.value !== "__mixed__") {
-                selected.forEach(f => f.textVAlign = inpTextVAlign.value);
-            }
-
-            renderOverlays();
-
-            const anchorId = ensureAnchor();
-            const anchor = state.fields.find(f => f.id === anchorId) || selected[0];
-            syncCombUI(anchor);
-
-            scheduleHistorySave();
-        }
-
-        // =========================
-        // BULK BOX ALIGN/SIZE
-        // =========================
-        function applySameSize(mode){
-            const selected = getSelectedFields();
-            if (selected.length < 2) return;
-
-            const anchorId = ensureAnchor();
-            const anchor = state.fields.find(f => f.id === anchorId) || selected[0];
-            if (!anchor) return;
-
-            if (mode === 'width'){
-                const targetW = clamp(anchor.width, 10, canvas.width);
-                selected.forEach(f => {
-                    f.width = targetW;
-                    f.x = clamp(f.x, 0, canvas.width - f.width);
-                });
-            } else if (mode === 'height'){
-                const targetH = clamp(anchor.height, 10, canvas.height);
-                selected.forEach(f => {
-                    f.height = targetH;
-                    f.y = clamp(f.y, 0, canvas.height - f.height);
-                });
-            }
-
-            renderOverlays();
-            saveHistory();
-        }
-
-        function alignSelected(mode){
-            const selected = getSelectedFields();
-            if (selected.length < 2) return;
-
-            const anchorId = ensureAnchor();
-            const anchor = state.fields.find(f => f.id === anchorId) || selected[selected.length-1];
-            if (!anchor) return;
-
-            if (mode === 'left'){
-                const minX = Math.min(...selected.map(f => f.x));
-                selected.forEach(f => f.x = clamp(minX, 0, canvas.width - f.width));
-            } 
-            else if (mode === 'right'){
-                const maxR = Math.max(...selected.map(f => f.x + f.width));
-                selected.forEach(f => {
-                    const nx = maxR - f.width;
-                    f.x = clamp(nx, 0, canvas.width - f.width);
-                });
-            }
-            else if (mode === 'vertical'){
-                // mesma linha vertical (mesmo centro X) usando âncora
-                const targetCx = anchor.x + anchor.width / 2;
-                selected.forEach(f => {
-                    const nx = targetCx - f.width / 2;
-                    f.x = clamp(nx, 0, canvas.width - f.width);
-                });
-            }
-            else if (mode === 'horizontal'){
-                // mesma linha horizontal (mesmo centro Y) usando âncora
-                const targetCy = anchor.y + anchor.height / 2;
-                selected.forEach(f => {
-                    const ny = targetCy - f.height / 2;
-                    f.y = clamp(ny, 0, canvas.height - f.height);
-                });
-            }
-
-            renderOverlays();
-            saveHistory();
-        }
-
-        function deleteSelected(){
-            const count = state.selectedIds.size;
-            if (!count) return;
-
-            const msg = count === 1 ? 'Remover este campo?' : `Remover ${count} campos selecionados?`;
-            if (!confirm(msg)) return;
-
-            state.fields = state.fields.filter(f => !state.selectedIds.has(f.id));
-            clearSelection();
-            renderOverlays();
-
-            saveHistory();
-        }
-
-        // =========================
-        // EXPORT / IMPORT
-        // =========================
-        function buildExportData(){
-            return {
-                templateName: "Template Exportado",
-                originalSize: { width: state.imgOriginalWidth, height: state.imgOriginalHeight },
-                fields: state.fields
-            };
-        }
-
-        function downloadJSON() {
-            if (state.fields.length === 0) {
-                alert('Nenhum campo mapeado.');
-                return;
-            }
-            const data = buildExportData();
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'template_map.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        async function copyJSON(){
-            if (state.fields.length === 0) {
-                alert('Nenhum campo mapeado.');
-                return;
-            }
-            const data = buildExportData();
-            const text = JSON.stringify(data, null, 2);
-
-            try{
-                if (navigator.clipboard && navigator.clipboard.writeText){
-                    await navigator.clipboard.writeText(text);
-                } else {
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    ta.style.position = 'fixed';
-                    ta.style.left = '-9999px';
-                    ta.style.top = '0';
-                    document.body.appendChild(ta);
-                    ta.focus();
-                    ta.select();
-                    document.execCommand('copy');
-                    ta.remove();
-                }
-                alert('JSON copiado para a área de transferência ✅');
-            } catch(err){
-                console.error(err);
-                alert('Não foi possível copiar automaticamente. (Seu navegador bloqueou a cópia.)');
-            }
-        }
-
-        function loadJSON(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (evt) => {
-                try {
-                    const data = JSON.parse(evt.target.result);
-                    if (Array.isArray(data.fields)) {
-                        state.fields = data.fields.map(f => ({
-                            id: f.id ?? (Date.now() + Math.random()),
-                            type: f.type ?? 'text',
-                            x: Number(f.x) || 0,
-                            y: Number(f.y) || 0,
-                            width: Math.max(10, Number(f.width) || 10),
-                            height: Math.max(10, Number(f.height) || 10),
-                            name: f.name ?? 'campo',
-                            label: f.label ?? '',
-                            required: !!f.required,
-                            comb: !!f.comb,
-                            combCells: (Number.isFinite(parseInt(f.combCells,10)) ? parseInt(f.combCells,10) : 0),
-
-                            // ✅ NOVO: texto (defaults para JSON antigo)
-                            textDir: f.textDir ?? "ltr",
-                            textHAlign: f.textHAlign ?? "left",
-                            textVAlign: f.textVAlign ?? "top"
-                        }));
-
-                        clearSelection(true);
-                        renderOverlays();
-                        refreshSelectionUI();
-                        saveHistory();
-                        alert('Campos carregados com sucesso!');
-                    } else {
-                        alert('JSON inválido: "fields" não encontrado.');
-                    }
-                } catch(err) {
-                    alert('Erro ao ler JSON.');
-                }
-            };
-            reader.readAsText(file);
-            e.target.value = '';
-        }
-
-        // Roda ao iniciar
-        init();
-    </script>
+      }
+    });
+  }
+
+  function buildFilledCanvas(){
+    return new Promise((resolve, reject) => {
+      if(!state.currentTemplate || !state.document.loaded) return reject(new Error("Sem template ou documento."));
+      const temp = document.createElement("canvas");
+      temp.width = canvas.width;
+      temp.height = canvas.height;
+      const tctx = temp.getContext("2d");
+
+      const img = new Image();
+      img.onload = function(){
+        drawFilledOnContext(tctx, img);
+        resolve(temp);
+      };
+      img.onerror = () => reject(new Error("Erro ao carregar imagem base."));
+      img.src = state.document.dataUrl;
+    });
+  }
+
+  async function downloadDocument(){
+    try{
+      const temp = await buildFilledCanvas();
+      temp.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const name = (state.currentTemplate.name || "documento").replace(/[^\w\-]+/g,"_");
+        a.href = url;
+        a.download = `${name}_preenchido.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, "image/png");
+    } catch(err){
+      alert("Erro ao gerar PNG: " + err.message);
+    }
+  }
+
+  async function printDocument(){
+    try{
+      const temp = await buildFilledCanvas();
+      const dataUrl = temp.toDataURL("image/png");
+
+      const w = window.open("", "_blank");
+      if(!w){
+        alert("Pop-up bloqueado. Permita pop-ups para imprimir/salvar em PDF.");
+        return;
+      }
+
+      w.document.open();
+      w.document.write(`
+        <!doctype html>
+        <html>
+        <head>
+          <meta charset="utf-8"/>
+          <title>Imprimir</title>
+          <style>
+            @page { margin: 0; }
+            html, body { margin: 0; padding: 0; }
+            img { width: 100%; height: auto; display: block; }
+          </style>
+        </head>
+        <body>
+          <img id="img" src="${dataUrl}" />
+          <script>
+            const img = document.getElementById('img');
+            img.onload = () => setTimeout(() => window.print(), 50);
+          <\/script>
+        </body>
+        </html>
+      `);
+      w.document.close();
+    } catch(err){
+      alert("Erro ao imprimir: " + err.message);
+    }
+  }
+
+  function clearForm(){
+    if(!state.currentTemplate) return;
+    if(confirm("Deseja realmente limpar todos os campos?")){
+      state.formData = {};
+      btnDownload.disabled = true;
+      updateDocument();
+    }
+  }
+
+  /********************************************************************
+   * Validar
+   ********************************************************************/
+  function validateForm(){
+    if(!state.currentTemplate){ alert("Selecione um formulário."); return; }
+    if(!state.document.loaded){ alert("Documento ainda não carregou."); return; }
+
+    alert("✓ Ok.");
+    btnDownload.disabled = false;
+    btnPrint.disabled = false;
+  }
+
+  /********************************************************************
+   * Eventos
+   ********************************************************************/
+  catalogSearch.addEventListener("input", renderCatalog);
+  btnReloadCatalog.addEventListener("click", loadCatalog);
+
+  btnValidate.addEventListener("click", validateForm);
+  btnDownload.addEventListener("click", downloadDocument);
+  btnPrint.addEventListener("click", printDocument);
+  btnClear.addEventListener("click", clearForm);
+
+  /********************************************************************
+   * Init
+   ********************************************************************/
+  setPill(sheetStatus, "warn", "Planilha: —");
+  setPill(docStatus, "warn", "Documento: —");
+  setPill(tplStatus, "warn", "Template: —");
+  applyViewScale();
+  updateStyleToolbar();
+  loadCatalog();
+</script>
 </body>
 </html>
