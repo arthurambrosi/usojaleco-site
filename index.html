@@ -1,25 +1,44 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>UsoJaleco | Menu</title>
 
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#0a0b0f;
-      --text:#e6e9ef;
-      --muted:#9aa4b2;
+      /* Base (dark) */
+      --bg:#0b0c10;
+      --surface:#121319;
+      --surface2:#1a1b22;
+      --text:#f8fafc;
+      --muted:#a1a1aa;
+      --hairline: rgba(255,255,255,.08);
 
-      --orange1:#ff7a18;
-      --orange2:#ffb703;
+      /* Brand */
+      --brand1:#ff7a18;
+      --brand2:#ffb703;
 
-      --icoShadow: 0 10px 22px rgba(0,0,0,.45);
+      /* Shadows */
+      --shadow1: 0 18px 45px rgba(0,0,0,.45);
+      --shadow2: 0 10px 22px rgba(0,0,0,.35);
+      --shadow3: 0 2px 10px rgba(0,0,0,.30);
+
+      /* Radius */
+      --r1: 14px;
+      --r2: 18px;
+      --r3: 24px;
+
+      /* Motion */
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
 
     html, body{
       height: auto;
@@ -28,315 +47,464 @@
 
     body{
       margin:0;
-      font-family:'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg);
-      color:var(--text);
-      padding:18px;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(900px 360px at 80% 0%, rgba(255,122,24,.08), transparent 60%),
+        linear-gradient(180deg, #0b0c10 0%, #17181f 45%, #0b0c10 100%);
+      color: var(--text);
+      padding: 22px;
       -webkit-overflow-scrolling: touch;
     }
 
-    .menuItem{ touch-action: manipulation; }
-
+    /* Layout */
     .home{
-      min-height:100%;
+      min-height: 100%;
       display:flex;
       justify-content:center;
       align-items:flex-start;
-      padding-top:32px;
+      padding-top: 32px;
+      padding-bottom: 32px;
     }
 
     .homeMenu{
-      width:min(780px,100%);
-      border-radius:22px;
-      background: rgba(18,20,27,.55);
-      border:1px solid rgba(255,255,255,.10);
+      width: min(820px, 100%);
+      border-radius: var(--r3);
+      background: rgba(12,13,18,.72);
+      border: 1px solid var(--hairline);
+      box-shadow: var(--shadow1);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 25px 70px rgba(0,0,0,.55);
       overflow:hidden;
+      position: relative;
     }
 
+    .homeMenu::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 260px at 30% 0%, rgba(255,122,24,.10), transparent 60%),
+        radial-gradient(700px 260px at 95% 10%, rgba(255,183,3,.08), transparent 55%);
+      opacity: .9;
+    }
+
+    /* Top */
     .homeTop{
-      padding:36px 18px 22px;
+      position: relative;
+      padding: 30px 18px 22px;
       text-align:center;
-      background: linear-gradient(180deg, rgba(255,122,24,.95), rgba(255,183,3,.92));
+      color: #fff;
+      background:
+        linear-gradient(135deg, #1b1c22 0%, #2a2d34 45%, #ff7a18 100%);
+    }
+
+    .homeTop::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-1px;
+      height: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(12,13,18,.65));
+      pointer-events:none;
     }
 
     .homeLogoRing{
-      width:92px;height:92px;
-      border-radius:999px;
-      margin:0 auto 12px;
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      margin: 0 auto 12px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background: rgba(0,0,0,.35);
-      border:2px solid rgba(255,255,255,.45);
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.35);
+      box-shadow: 0 14px 34px rgba(0,0,0,.40);
     }
 
     .homeLogo{
-      width:76px;height:76px;
-      border-radius:999px;
+      width: 76px;
+      height: 76px;
+      border-radius: 999px;
       overflow:hidden;
+      border: 2px solid rgba(255,255,255,.55);
+      background:#fff;
     }
 
-    .homeLogo img{ width:100%; height:100%; object-fit:cover; }
+    .homeLogo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
 
     .homeTitle{
-      font-family:'Pacifico', cursive;
-      font-size:34px;
-      font-weight:400;
-      margin:0 0 4px;
-      color:#fff;
-      letter-spacing:.5px;
-      text-shadow:
-        0 2px 6px rgba(0,0,0,.35),
-        0 6px 18px rgba(0,0,0,.35);
+      font-family: "Montserrat", sans-serif;
+      font-size: 34px;
+      font-weight: 500;
+      margin: 0 0 4px;
+      letter-spacing: .2px;
+      text-shadow: 0 2px 3px rgba(0,0,0,.45);
+    }
+
+    .homeTitle .bold{
+      font-weight: 900;
     }
 
     .homeSub{
-      margin:0;
-      font-size:13px;
-      font-weight:600;
-      color:rgba(255,255,255,.95);
-      text-shadow: 0 2px 6px rgba(0,0,0,.35);
+      margin: 0 auto;
+      font-family: "Montserrat", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .2px;
+      opacity: .95;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0,0,0,.35);
+      max-width: 32ch;
+      text-wrap: balance;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .homeBody{ padding:22px 16px 22px; }
+    /* Body */
+    .homeBody{
+      position: relative;
+      padding: 22px 16px 20px;
+      background: transparent;
+    }
 
     .menuList{
-      list-style:none;
-      padding:0;
-      margin:0;
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display:flex;
-      flex-direction:column;
-      gap:12px;
+      flex-direction: column;
+      gap: 12px;
     }
 
+    /* Items */
     .menuItem{
       display:flex;
       align-items:center;
-      gap:14px;
-      padding:14px 16px;
-      border-radius:18px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      text-decoration:none;
-      color:var(--text);
-      transition:.2s ease;
-      cursor:pointer;
-      user-select:none;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--r2);
+      background: rgba(18,19,26,.92);
+      border: 1px solid rgba(255,255,255,.06);
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: var(--shadow3);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
     }
 
     .menuItem:hover{
       transform: translateY(-2px);
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,122,24,.55);
+      background: rgba(22,24,32,.98);
+      border-color: rgba(255,122,24,.35);
+      box-shadow: var(--shadow2);
+    }
+
+    .menuItem:active{
+      transform: translateY(0px) scale(.995);
     }
 
     .menuIco{
-      width:48px;height:48px;
-      border-radius:16px;
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
       display:flex;
       align-items:center;
       justify-content:center;
-      flex-shrink:0;
-      box-shadow: var(--icoShadow);
+      flex-shrink: 0;
+      background: #0f1116;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow:
+        6px 8px 14px rgba(0,0,0,.45),
+        0 2px 6px rgba(0,0,0,.25);
     }
 
     .menuIco img{
-      width:24px;
-      height:24px;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
     }
 
-    .menuIco.curriculo{
-      background: linear-gradient(135deg,var(--orange1),var(--orange2));
+    .menuIco.brand{
+      background: linear-gradient(135deg, var(--brand1), var(--brand2));
+      border-color: rgba(255,255,255,.25);
     }
 
-    /* ✅ CURRÍCULO: manter cor original do PNG (sem inverter) e maior */
-    .menuIco.curriculo img{
-      width:34px;      /* maior */
-      height:34px;     /* maior */
-      filter:none;     /* remove o branco/invertido */
+    /* aumentar somente a logo dentro do degradê */
+    .menuIco.brand img{
+      width: 38px;
+      height: 38px;
+      filter: none;
     }
 
-    .menuIco.notion{ background:#ffffff; }
-    .menuIco.powerpoint{ background: transparent; }
-    .menuIco.templates{ background: transparent; }
+    /* retângulo da logo do manual em branco */
+    .menuIco.notion{
+      background: #ffffff;
+      border-color: rgba(15,23,42,.12);
+      box-shadow:
+        6px 8px 14px rgba(0,0,0,.30),
+        0 2px 6px rgba(0,0,0,.18);
+    }
+
+    .menuIco.transparent{
+      background: rgba(15,17,22,.9);
+    }
 
     .menuTxt{
       display:flex;
-      flex-direction:column;
-      gap:3px;
-      flex:1;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      min-width: 0;
     }
 
     .menuT{
-      font-size:16px;
-      font-weight:800;
-      margin:0;
+      margin: 0;
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .menuD{
-      font-size:12px;
-      color:rgba(230,233,239,.75);
-      margin:0;
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* ===== Subopções (dropdown) do Currículo ===== */
+    /* Toggle (Currículo) */
+    .toggleBtn{
+      width: 100%;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+    }
+
+    .chev{
+      margin-left: auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: transform .18s var(--ease), background .18s var(--ease);
+    }
+
+    .chev svg{
+      width: 16px;
+      height: 16px;
+      stroke: #e5e7eb;
+      stroke-width: 2.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .chev.open{
+      transform: rotate(180deg);
+      background: rgba(255,122,24,.18);
+      border-color: rgba(255,122,24,.24);
+    }
+
+    /* Subopções */
     .subWrap{
       display:none;
-      flex-direction:column;
-      gap:10px;
-      padding-left:14px;
-      margin-top:10px;
+      flex-direction: column;
+      gap: 10px;
+      padding-left: 10px;
+      margin-top: 10px;
     }
     .subWrap.open{ display:flex; }
 
     .subItem{
-      padding:12px 14px;
-      border-radius:16px;
-      background: rgba(255,255,255,.045);
-      border:1px solid rgba(255,255,255,.09);
+      background: rgba(18,19,26,.85);
+      border: 1px solid rgba(255,255,255,.06);
     }
+
     .subItem:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.075);
-      border-color: rgba(255,183,3,.55);
+      border-color: rgba(255,183,3,.35);
     }
 
     .subIco{
-      width:42px;height:42px;
-      border-radius:14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.20);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: none;
     }
 
-    .chev{
-      margin-left:auto;
-      opacity:.8;
-      font-weight:900;
-      font-size:18px;
-      line-height:1;
-      transform: translateY(-1px);
+    .subDot{
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,122,24,.98), rgba(255,183,3,.95));
+      box-shadow: 0 3px 8px rgba(255,122,24,.35);
     }
-    .chev.open{ transform: translateY(-1px) rotate(180deg); }
+
+    /* Focus */
+    .menuItem:focus-visible,
+    .toggleBtn:focus-visible{
+      outline: 3px solid rgba(255,122,24,.28);
+      outline-offset: 3px;
+      border-radius: calc(var(--r2) + 4px);
+    }
+
+    /* Small screens */
+    @media (max-width: 420px){
+      body{ padding: 18px; }
+      .home{ padding-top: 28px; padding-bottom: 28px; }
+      .homeTitle{ font-size: 32px; }
+      .menuItem{ padding: 13px 14px; }
+      .menuIco{ width: 48px; height: 48px; }
+      .subIco{ width: 36px; height: 36px; }
+      .subDot{ width: 16px; height: 16px; }
+    }
   </style>
 </head>
 
 <body>
-<div class="home">
-  <div class="homeMenu">
-
-    <div class="homeTop">
-      <div class="homeLogoRing">
-        <div class="homeLogo">
-          <img src="https://i.imgur.com/KKtsmb6.jpeg" alt="UsoJaleco">
+  <div class="home">
+    <div class="homeMenu">
+      <div class="homeTop">
+        <div class="homeLogoRing">
+          <div class="homeLogo">
+            <img src="https://i.imgur.com/KKtsmb6.jpeg" alt="UsoJaleco">
+          </div>
         </div>
+        <h1 class="homeTitle">uso<span class="bold">jaleco</span></h1>
+        <p class="homeSub">Ajudo estudantes e profissionais a economizar tempo!</p>
       </div>
-      <h1 class="homeTitle">UsoJaleco</h1>
-      <div class="homeSub">Ajudo estudantes e profissionais a economizar tempo!</div>
-    </div>
 
-    <div class="homeBody">
-      <ul class="menuList">
+      <div class="homeBody">
+        <ul class="menuList">
 
-        <li>
-          <div class="menuItem" id="curriculoToggle" aria-expanded="false">
-            <div class="menuIco curriculo">
-              <img src="https://i.imgur.com/G9lTfbc.png" alt="Currículo">
+          <li>
+            <button class="toggleBtn" id="curriculoToggle" aria-expanded="false" type="button">
+              <div class="menuItem">
+                <div class="menuIco brand">
+                  <img src="https://i.imgur.com/G9lTfbc.png" alt="Currículo">
+                </div>
+                <div class="menuTxt">
+                  <p class="menuT">Currículo</p>
+                  <p class="menuD">Escolha uma opção abaixo.</p>
+                </div>
+                <div class="chev" id="curriculoChev" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 9l6 6 6-6"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+
+            <div class="subWrap" id="curriculoSub">
+              <a class="menuItem subItem"
+                 onclick="window.open('https://api.whatsapp.com/send/?phone=5571981577908&text&type=phone_number&app_absent=0', '_blank')">
+                <div class="menuIco subIco">
+                  <span class="subDot" aria-hidden="true"></span>
+                </div>
+                <div class="menuTxt">
+                  <p class="menuT">Produzir currículo</p>
+                  <p class="menuD">Entre em contato conosco.</p>
+                </div>
+              </a>
+
+              <a class="menuItem subItem"
+                 onclick="window.open('https://www.usojaleco.com.br/duvidas-curriculo', '_blank')">
+                <div class="menuIco subIco">
+                  <span class="subDot" aria-hidden="true"></span>
+                </div>
+                <div class="menuTxt">
+                  <p class="menuT">Tirar dúvidas</p>
+                  <p class="menuD">Informações, preços, processo e exemplos.</p>
+                </div>
+              </a>
             </div>
-            <div class="menuTxt">
-              <p class="menuT">Currículo</p>
-              <p class="menuD">Escolha uma opção abaixo.</p>
-            </div>
-            <div class="chev" id="curriculoChev">⌄</div>
-          </div>
+          </li>
 
-          <div class="subWrap" id="curriculoSub">
-            <a class="menuItem subItem"
-               onclick="window.open('https://www.usojaleco.com.br/duvidas-curriculo', '_blank')">
-              <div class="menuIco curriculo subIco">
-                <img src="https://i.imgur.com/G9lTfbc.png" alt="Tirar dúvidas">
+          <li>
+            <a class="menuItem"
+               onclick="window.open('https://www.notion.so/arthurambrosii/ATENDIMENTO-SIMPLIFICADO-2d75beae6fe1801d9852d83c43b93a25?source=copy_link', '_blank')">
+              <div class="menuIco notion">
+                <img src="https://i.imgur.com/MMHIRSM.png" alt="Manual de Atendimento">
               </div>
               <div class="menuTxt">
-                <p class="menuT">Tirar dúvidas</p>
-                <p class="menuD">Informações, preços, processo e exemplos.</p>
+                <p class="menuT">Manual de Atendimento</p>
+                <p class="menuD">Clique para acessar as prescrições!</p>
               </div>
             </a>
+          </li>
 
-            <a class="menuItem subItem"
-               onclick="window.open('https://www.usojaleco.com.br/curriculo', '_blank')">
-              <div class="menuIco curriculo subIco">
-                <img src="https://i.imgur.com/G9lTfbc.png" alt="Produzir currículo">
+          <li>
+            <a class="menuItem"
+               onclick="window.open('https://www.usojaleco.com.br/powerpoint', '_blank')">
+              <div class="menuIco transparent">
+                <img src="https://i.imgur.com/EXKmJM1.png" alt="PowerPoint">
               </div>
               <div class="menuTxt">
-                <p class="menuT">Produzir currículo</p>
-                <p class="menuD">Acessar a página para solicitar a produção.</p>
+                <p class="menuT">PowerPoint</p>
+                <p class="menuD">Clique para acessar os serviços!</p>
               </div>
             </a>
-          </div>
-        </li>
+          </li>
 
-        <li>
-          <a class="menuItem"
-             onclick="window.open('https://www.notion.so/arthurambrosii/ATENDIMENTO-SIMPLIFICADO-2d75beae6fe1801d9852d83c43b93a25?source=copy_link', '_blank')">
-            <div class="menuIco notion">
-              <img src="https://i.imgur.com/MMHIRSM.png" alt="Manual de Atendimento">
-            </div>
-            <div class="menuTxt">
-              <p class="menuT">Manual de Atendimento</p>
-              <p class="menuD">Clique para acessar nossas prescrições!</p>
-            </div>
-          </a>
-        </li>
+          <li>
+            <a class="menuItem"
+               onclick="window.open('https://www.usojaleco.com.br/templates', '_blank')">
+              <div class="menuIco transparent">
+                <img src="https://i.imgur.com/EXKmJM1.png" alt="Templates">
+              </div>
+              <div class="menuTxt">
+                <p class="menuT">Templates</p>
+                <p class="menuD">Veja os templates disponíveis!</p>
+              </div>
+            </a>
+          </li>
 
-        <li>
-          <a class="menuItem"
-             onclick="window.open('https://www.usojaleco.com.br/powerpoint', '_blank')">
-            <div class="menuIco powerpoint">
-              <img src="https://i.imgur.com/EXKmJM1.png" alt="PowerPoint">
-            </div>
-            <div class="menuTxt">
-              <p class="menuT">PowerPoint</p>
-              <p class="menuD">Clique para acessar nossos serviços!</p>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a class="menuItem"
-             onclick="window.open('https://www.usojaleco.com.br/templates', '_blank')">
-            <div class="menuIco templates">
-              <img src="https://i.imgur.com/EXKmJM1.png" alt="Templates">
-            </div>
-            <div class="menuTxt">
-              <p class="menuT">Templates</p>
-              <p class="menuD">Veja nossos templates disponíveis!</p>
-            </div>
-          </a>
-        </li>
-
-      </ul>
+        </ul>
+      </div>
     </div>
-
   </div>
-</div>
 
-<script>
-  (function(){
-    const toggle = document.getElementById('curriculoToggle');
-    const sub = document.getElementById('curriculoSub');
-    const chev = document.getElementById('curriculoChev');
+  <script>
+    (function(){
+      const toggle = document.getElementById('curriculoToggle');
+      const sub = document.getElementById('curriculoSub');
+      const chev = document.getElementById('curriculoChev');
 
-    function setOpen(open){
-      sub.classList.toggle('open', open);
-      chev.classList.toggle('open', open);
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    }
+      function setOpen(open){
+        sub.classList.toggle('open', open);
+        chev.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
 
-    toggle.addEventListener('click', function(e){
-      e.preventDefault();
-      setOpen(!sub.classList.contains('open'));
-    });
-  })();
-</script>
+      toggle.addEventListener('click', function(){
+        setOpen(!sub.classList.contains('open'));
+      });
+    })();
+  </script>
 </body>
 </html>
