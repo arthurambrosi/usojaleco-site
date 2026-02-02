@@ -802,7 +802,6 @@
               </div>
 
               <div style="display:flex; gap: 10px; flex-wrap: wrap; justify-content:flex-end;">
-                <!-- ✅ removido: Criar usuário na tela inicial -->
                 <button class="btn btnPrimary" id="btnDoLogin" type="button">Entrar</button>
               </div>
 
@@ -899,7 +898,6 @@
               <div class="mgrGrid">
                 <div>
                   <div class="facesGrid">
-                    <!-- ✅ Clique para digitar -->
                     <div class="editFace" id="createFront" contenteditable="true" data-ph="Clique para digitar a FRENTE"></div>
                     <div class="editFace" id="createBack" contenteditable="true" data-ph="Clique para digitar o VERSO"></div>
                   </div>
@@ -1000,7 +998,7 @@
             <div class="studyShell">
               <button class="navArrow" id="btnPrevSide" type="button" aria-label="Anterior">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M15 6 9 12l6 6" considerstroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
 
@@ -1119,42 +1117,16 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzqKlwFt_j1LlYWam9t7sPmdM3K_FCidLs62_m1KpsxnOsdOcFhdkYarFmOMb20mxvwmg/exec";
 
 const CREATE_AREAS = [
-  "Cardiologia",
-  "Cardiologia pediátrica",
-  "Cirurgia",
-  "Dermatologia",
-  "Emergências clínicas",
-  "Emergências ginecológicas",
-  "Emergências obstétricas",
-  "Emergências pediátricas",
-  "Endocrinologia",
-  "Endocrinologia pediátrica",
-  "Gastroenterologia",
-  "Gastrologia pediátrica",
-  "Genética médica",
-  "Ginecologia",
-  "Infectologia",
-  "Hematologia",
-  "Nefrologia",
-  "Nefrologia pediátrica",
-  "Neurologia",
-  "Neurologia pediátrica",
-  "Obstetrícia",
-  "Oncologia",
-  "Oftalmologia",
-  "Ortopedia",
-  "Otorrinolaringologia",
-  "Pediatria",
-  "Pneumologia",
-  "Pneumologia pediátrica",
-  "Psiquiatria",
-  "Reumatologia",
-  "Urologia"
+  "Cardiologia","Cardiologia pediátrica","Cirurgia","Dermatologia",
+  "Emergências clínicas","Emergências ginecológicas","Emergências obstétricas","Emergências pediátricas",
+  "Endocrinologia","Endocrinologia pediátrica","Gastroenterologia","Gastrologia pediátrica","Genética médica",
+  "Ginecologia","Infectologia","Hematologia","Nefrologia","Nefrologia pediátrica","Neurologia","Neurologia pediátrica",
+  "Obstetrícia","Oncologia","Oftalmologia","Ortopedia","Otorrinolaringologia","Pediatria",
+  "Pneumologia","Pneumologia pediátrica","Psiquiatria","Reumatologia","Urologia"
 ];
 
 const LS_SESSION_KEY = "uj_flashcards_session_v4_api";
 const LS_STATS_PREFIX = "uj_flashcards_stats_v3_";
-/* ✅ Flashcards locais (criados/edições) */
 const LS_CUSTOM_PREFIX = "uj_flashcards_custom_v1_";
 
 /** =========================
@@ -1167,14 +1139,18 @@ let viewCards = [];
 let cursor = 0;
 let revealed = false;
 
-// multi selection
 let selAreas = new Set();
 let selAssuntos = new Set();
 let selDecks = new Set();
 
-/* ✅ custom state */
 let customStore = { created: [], edits: {} };
 let editSelectedId = null;
+
+/** =========================
+ *  Progressive hydration state
+ *  ========================= */
+let isHydrating = false;
+let hydrateRunId = 0;
 
 /** =========================
  *  DOM helpers
@@ -1193,6 +1169,21 @@ function setStatus(text){
   $("statusLine").textContent = text || "—";
 }
 
+function setHydrating(on, msg){
+  isHydrating = !!on;
+
+  const bStudy = $("btnStudy");
+  const bManage = $("btnManage");
+  if (bStudy) bStudy.disabled = isHydrating;
+  if (bManage) bManage.disabled = isHydrating;
+
+  if (msg) setStatus(msg);
+}
+
+function delayFrame(){
+  return new Promise(r => requestAnimationFrame(()=>r()));
+}
+
 function toggleAcct(){
   const w = $("acctWrap");
   const on = w.style.display === "block";
@@ -1208,7 +1199,6 @@ function closeAcct(){
  *  Modal Create User
  *  ========================= */
 function openCreateUserModal(){
-  // ✅ só admin
   if (!session || session.role !== "admin"){
     toast("Apenas admin");
     return;
@@ -1246,8 +1236,7 @@ function normalizeKey(s){
 async function apiCall(payload){
   const r = await fetch(API_URL, {
     method: "POST",
-    // ✅ troca aqui para evitar preflight (OPTIONS) que dá "Failed to fetch"
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    headers: { "Content-Type": "text/plain;charset=utf-8" }, // ✅ evita preflight
     body: JSON.stringify(payload),
     cache: "no-store",
     redirect: "follow",
@@ -1311,8 +1300,7 @@ async function loadCardsForUser(){
   const res = await apiCall({ action:"get_cards", token: session.token });
 
   const arr = Array.isArray(res.cards) ? res.cards : [];
-  const raw = arr.map(normalizeCard).filter(c => c.id && (c.frente || c.verso));
-  return raw;
+  return arr.map(normalizeCard).filter(c => c.id && (c.frente || c.verso));
 }
 
 /** =========================
@@ -1368,7 +1356,6 @@ function setLocalCustom(user, store){
 function applyCustom(all){
   if (!session) return all;
 
-  // aplica edits em cards existentes
   const edits = (customStore && customStore.edits) ? customStore.edits : {};
   const mapped = all.map(c=>{
     const e = edits[c.id];
@@ -1384,7 +1371,6 @@ function applyCustom(all){
     };
   });
 
-  // adiciona cards criados
   const created = (customStore && Array.isArray(customStore.created)) ? customStore.created : [];
   const createdNorm = created.map(normalizeCard).filter(x=>x.id && (x.frente || x.verso));
 
@@ -1462,7 +1448,6 @@ function computeAvailableDecks(){
   return uniq(pool.map(c=>c.deck)).sort((a,b)=>a.localeCompare(b,"pt-BR",{numeric:true}));
 }
 
-/* ✅ renderChecklist: tudo clicável (label) */
 function renderChecklist(container, values, selectedSet, onToggle, searchText=""){
   const q = normalizeKey(searchText);
   container.innerHTML = "";
@@ -1502,7 +1487,6 @@ function renderChecklist(container, values, selectedSet, onToggle, searchText=""
   });
 }
 
-/* ✅ Cascata: só mostra Assuntos/Decks após seleção anterior */
 function updateCascadeVisibility(){
   const hasAreas = selAreas.size > 0;
   const hasAss = selAssuntos.size > 0;
@@ -1583,31 +1567,94 @@ function filterBySelection(cards){
   );
 }
 
-function buildViewCards(){
-  const now = new Date();
-  let pool = filterBySelection(allCards);
+/** =========================
+ *  Progressive area priority loading
+ *  ========================= */
+function computeAreaPriority(cards){
+  const m = new Map(); // area -> max last_seen timestamp
+  for (const c of cards){
+    const a = c.area || "";
+    const d = (c.stats && c.stats.last_seen instanceof Date) ? c.stats.last_seen : null;
+    const t = d ? d.getTime() : 0;
+    const prev = m.get(a) || 0;
+    if (!m.has(a) || t > prev) m.set(a, t);
+  }
 
-  pool = pool.map(c=>{
-    const st = c.stats;
-    const lastSeen = st.last_seen instanceof Date ? st.last_seen : null;
-    const nextDue = st.next_due instanceof Date ? st.next_due : null;
-    const pr = calcPriority(now, st.last_result || "skip", st.correct_count||0, st.wrong_count||0, lastSeen, nextDue);
-    return { ...c, stats: { ...st, priority: pr } };
+  const areas = Array.from(new Set(cards.map(c=>c.area).filter(Boolean)));
+  areas.sort((a,b)=>{
+    const ta = m.get(a) || 0;
+    const tb = m.get(b) || 0;
+    if (tb !== ta) return tb - ta;
+    return a.localeCompare(b, "pt-BR");
+  });
+  return areas;
+}
+
+async function hydrateUserDataProgressive(runId){
+  if (!session) throw new Error("Sessão inválida.");
+
+  customStore = getLocalCustom(session.user);
+
+  const rawCards = await loadCardsForUser();
+  if (!session || runId !== hydrateRunId) return;
+
+  const localMap = getLocalStats(session.user);
+  const mergedBase = rawCards.map(c=>{
+    const localSt = localMap[c.id] || null;
+    const merged = mergeStats(c.stats, localSt);
+    return { ...c, stats: merged };
   });
 
-  pool.sort((a,b)=>{
-    const ad = isDue(a, now), bd = isDue(b, now);
-    if (ad !== bd) return bd - ad;
-    const p = (b.stats.priority||0) - (a.stats.priority||0);
-    if (p !== 0) return p;
-    const w = (b.stats.wrong_count||0) - (a.stats.wrong_count||0);
-    if (w !== 0) return w;
-    return String(a.id).localeCompare(String(b.id));
-  });
+  const full = applyCustom(mergedBase);
+  const areaOrder = computeAreaPriority(full);
 
-  viewCards = pool;
-  cursor = 0;
-  revealed = false;
+  allCards = [];
+  selAreas = new Set();
+  selAssuntos.clear();
+  selDecks.clear();
+  refreshFiltersUI();
+
+  const byArea = new Map();
+  for (const c of full){
+    const a = c.area || "—";
+    if (!byArea.has(a)) byArea.set(a, []);
+    byArea.get(a).push(c);
+  }
+
+  let done = 0;
+  const total = full.length || 0;
+
+  for (const area of areaOrder){
+    if (!session || runId !== hydrateRunId) return;
+
+    const chunk = byArea.get(area) || [];
+    if (chunk.length){
+      allCards.push(...chunk);
+      selAreas.add(area);
+      done += chunk.length;
+
+      setStatus(`Carregando cards… ${done}/${total}`);
+      refreshFiltersUI();
+      await delayFrame();
+    }
+  }
+
+  // áreas que não estavam no order (caso raro)
+  for (const [area, chunk] of byArea.entries()){
+    if (!session || runId !== hydrateRunId) return;
+    if (selAreas.has(area)) continue;
+
+    allCards.push(...chunk);
+    selAreas.add(area);
+    done += chunk.length;
+
+    setStatus(`Carregando cards… ${done}/${total}`);
+    refreshFiltersUI();
+    await delayFrame();
+  }
+
+  setStatus(`Conectado como ${session.user}`);
+  refreshPillInfo();
 }
 
 /** =========================
@@ -1629,9 +1676,11 @@ function renderStudy(){
   }
 
   if (!viewCards.length){
-    $("studyFace").textContent = "Nenhum card na sua seleção.";
+    $("studyFace").textContent = isHydrating ? "Carregando cards..." : "Nenhum card na sua seleção.";
     $("studyCounter").textContent = "0/0";
-    $("studyNote").textContent = "Volte e selecione pelo menos uma área/assunto/deck com cards.";
+    $("studyNote").textContent = isHydrating
+      ? "Aguarde o carregamento e então selecione área/assunto/deck."
+      : "Volte e selecione pelo menos uma área/assunto/deck com cards.";
     disableAnswer(true);
     return;
   }
@@ -1750,7 +1799,6 @@ function showManage(){
   $("managePanel").style.display = "block";
   $("btnLoginTop").textContent = "Trocar";
 
-  // default: Create
   setManageTab("create");
   fillCreateAreaOptions();
   buildEditSelectors();
@@ -1769,7 +1817,6 @@ function setManageTab(tab){
  *  Session / Login (API)
  *  ========================= */
 function refreshAdminUI(){
-  // ✅ mostra botão admin no header
   const isAdmin = !!(session && session.role === "admin");
   $("btnAdminCreateTop").style.display = isAdmin ? "inline-flex" : "none";
 }
@@ -1787,6 +1834,9 @@ function setSessionFromLogin(res){
 }
 
 function clearSession(){
+  hydrateRunId++; // cancela carregamento em andamento
+  setHydrating(false, "—");
+
   session = null;
   localStorage.removeItem(LS_SESSION_KEY);
 
@@ -1813,30 +1863,9 @@ function clearSession(){
   $("loginMsg").textContent = "Sessão encerrada.";
 }
 
-async function hydrateUserData(){
-  customStore = getLocalCustom(session.user);
-
-  setStatus("Carregando flashcards...");
-  const rawCards = await loadCardsForUser();
-
-  const localMap = getLocalStats(session.user);
-  const mergedBase = rawCards.map(c=>{
-    const localSt = localMap[c.id] || null;
-    const merged = mergeStats(c.stats, localSt);
-    return { ...c, stats: merged };
-  });
-
-  allCards = applyCustom(mergedBase);
-
-  // padrão: marca todas as áreas
-  selAreas = new Set(computeAvailableAreas());
-  selAssuntos.clear();
-  selDecks.clear();
-
-  refreshFiltersUI();
-  setStatus(`Conectado como ${session.user}`);
-}
-
+/** =========================
+ *  Login: entra primeiro, carrega depois (progressivo por área)
+ *  ========================= */
 async function doLogin(){
   const userTypedRaw = $("inpUser").value;
   const passTyped = String($("inpPass").value || "");
@@ -1848,18 +1877,33 @@ async function doLogin(){
     if (!userTyped) throw new Error("Preencha o usuário.");
     if (!passTyped) throw new Error("Preencha a senha.");
 
+    // 1) Login (rápido)
     const res = await apiCall({ action:"login", user: userTyped, pass: passTyped });
-
     setSessionFromLogin(res);
 
-    // ✅ feedback imediato
-    $("loginMsg").textContent = "Login ok. Carregando cards...";
+    // 2) Entra na tela imediatamente
+    showFilters();
     toast("Login ok");
 
-    await hydrateUserData();
+    // 3) Carrega depois (sem await), progressivo
+    $("loginMsg").textContent = "Login ok. Carregando cards...";
+    hydrateRunId++;
+    const runId = hydrateRunId;
 
-    showFilters();
-    $("loginMsg").textContent = "—";
+    setHydrating(true, "Carregando cards…");
+
+    hydrateUserDataProgressive(runId)
+      .catch(err=>{
+        if (runId !== hydrateRunId) return;
+        toast("Falha ao carregar cards");
+        setStatus(String(err && err.message ? err.message : err));
+      })
+      .finally(()=>{
+        if (runId !== hydrateRunId) return;
+        setHydrating(false, `Conectado como ${session ? session.user : "—"}`);
+        $("loginMsg").textContent = "—";
+      });
+
   }catch(e){
     $("loginMsg").textContent = String(e.message || e);
     toast("Falha no login");
@@ -1903,7 +1947,6 @@ async function createUser(){
     setCreateUserMsg(`OK! Usuário criado: ${res.user} • Aba: ${res.sheet_name}`);
     toast("Usuário criado");
 
-    // opcional: limpar campos
     $("newUser").value = "";
     $("newPass").value = "";
 
@@ -1914,7 +1957,7 @@ async function createUser(){
 }
 
 /** =========================
- *  Resume session
+ *  Resume session: entra primeiro, carrega depois
  *  ========================= */
 async function tryResume(){
   try{
@@ -1934,10 +1977,24 @@ async function tryResume(){
 
     refreshAdminUI();
 
-    await hydrateUserData();
-
     showFilters();
     toast("Sessão restaurada");
+
+    hydrateRunId++;
+    const runId = hydrateRunId;
+
+    setHydrating(true, "Carregando cards…");
+    hydrateUserDataProgressive(runId)
+      .catch(err=>{
+        if (runId !== hydrateRunId) return;
+        toast("Falha ao carregar cards");
+        setStatus(String(err && err.message ? err.message : err));
+      })
+      .finally(()=>{
+        if (runId !== hydrateRunId) return;
+        setHydrating(false, `Conectado como ${session ? session.user : "—"}`);
+      });
+
   }catch(e){
     clearSession();
   }
@@ -1981,8 +2038,7 @@ function clearCreateForm(){
 function createLocalCard(base){
   const now = Date.now();
   const rnd = Math.random().toString(16).slice(2,8);
-  const id = `local_${now}_${rnd}_${base}`;
-  return id;
+  return `local_${now}_${rnd}_${base}`;
 }
 
 function saveCreatedCard(){
@@ -2224,6 +2280,36 @@ function saveEditCard(){
 }
 
 /** =========================
+ *  View build
+ *  ========================= */
+function buildViewCards(){
+  const now = new Date();
+  let pool = filterBySelection(allCards);
+
+  pool = pool.map(c=>{
+    const st = c.stats;
+    const lastSeen = st.last_seen instanceof Date ? st.last_seen : null;
+    const nextDue = st.next_due instanceof Date ? st.next_due : null;
+    const pr = calcPriority(now, st.last_result || "skip", st.correct_count||0, st.wrong_count||0, lastSeen, nextDue);
+    return { ...c, stats: { ...st, priority: pr } };
+  });
+
+  pool.sort((a,b)=>{
+    const ad = isDue(a, now), bd = isDue(b, now);
+    if (ad !== bd) return bd - ad;
+    const p = (b.stats.priority||0) - (a.stats.priority||0);
+    if (p !== 0) return p;
+    const w = (b.stats.wrong_count||0) - (a.stats.wrong_count||0);
+    if (w !== 0) return w;
+    return String(a.id).localeCompare(String(b.id));
+  });
+
+  viewCards = pool;
+  cursor = 0;
+  revealed = false;
+}
+
+/** =========================
  *  EVENTS
  *  ========================= */
 function wire(){
@@ -2282,9 +2368,94 @@ function wire(){
     }
   });
 
-  // ✅ TODO: aqui segue o resto dos seus eventos (filters/study/manage etc.)
-  // Como você já tem todos abaixo, mantenha exatamente como estava.
-  // (Sem repetir aqui para não quebrar o arquivo no meio.)
+  $("searchAreas").addEventListener("input", ()=> refreshFiltersUI());
+  $("searchAss").addEventListener("input", ()=> refreshFiltersUI());
+  $("searchDeck").addEventListener("input", ()=> refreshFiltersUI());
+
+  $("btnAreasAll").onclick = ()=>{ markAll(selAreas, computeAvailableAreas()); refreshFiltersUI(); };
+  $("btnAreasNone").onclick = ()=>{ clearAll(selAreas); refreshFiltersUI(); };
+
+  $("btnAssAll").onclick = ()=>{ markAll(selAssuntos, computeAvailableAssuntos()); refreshFiltersUI(); };
+  $("btnAssNone").onclick = ()=>{ clearAll(selAssuntos); refreshFiltersUI(); };
+
+  $("btnDeckAll").onclick = ()=>{ markAll(selDecks, computeAvailableDecks()); refreshFiltersUI(); };
+  $("btnDeckNone").onclick = ()=>{ clearAll(selDecks); refreshFiltersUI(); };
+
+  $("btnStudy").onclick = ()=>{
+    if (!session){ toast("Faça login"); return; }
+    if (isHydrating){ toast("Carregando cards..."); return; }
+
+    if (selAreas.size === 0){ toast("Marque pelo menos 1 área."); return; }
+    if (selAssuntos.size === 0){ toast("Marque pelo menos 1 assunto."); return; }
+    if (selDecks.size === 0){ toast("Marque pelo menos 1 deck."); return; }
+    buildViewCards();
+    showStudy();
+    renderStudy();
+  };
+
+  $("btnManage").onclick = ()=>{
+    if (!session){ toast("Faça login"); return; }
+    if (isHydrating){ toast("Carregando cards..."); return; }
+    showManage();
+  };
+
+  $("btnMgrBack").onclick = ()=> showFilters();
+  $("tabCreate").onclick = ()=> setManageTab("create");
+  $("tabEdit").onclick = ()=> setManageTab("edit");
+
+  $("btnCreateSave").onclick = saveCreatedCard;
+
+  $("editArea").addEventListener("change", ()=>{ rebuildEditAssuntos(); });
+  $("editAssunto").addEventListener("change", ()=>{ rebuildEditDecks(); });
+  $("editDeck").addEventListener("change", ()=>{ rebuildEditCardsList(); });
+
+  $("btnEditSave").onclick = saveEditCard;
+
+  $("btnBackToFilters").onclick = ()=> showFilters();
+
+  $("btnPrevSide").onclick = goPrev;
+  $("btnNextSide").onclick = goNext;
+  $("btnReveal").onclick = toggleReveal;
+
+  $("btnCorrect").onclick = ()=> answer("correct");
+  $("btnWrong").onclick = ()=> answer("wrong");
+  $("btnSkip").onclick = ()=> answer("skip");
+
+  $("btnPrevMobile").onclick = goPrev;
+  $("btnNextMobile").onclick = goNext;
+
+  document.addEventListener("keydown", (e)=>{
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+    if (tag === "input" || tag === "textarea" || tag === "select") return;
+
+    if (!session) return;
+    if ($("studyPanel").style.display !== "block") return;
+
+    if (e.key === " "){ e.preventDefault(); toggleReveal(); }
+    if (e.key === "ArrowLeft"){ e.preventDefault(); goPrev(); }
+    if (e.key === "ArrowRight"){ e.preventDefault(); goNext(); }
+
+    if (revealed){
+      if (e.key === "1"){ e.preventDefault(); answer("correct"); }
+      if (e.key === "2"){ e.preventDefault(); answer("wrong"); }
+      if (e.key === "3"){ e.preventDefault(); answer("skip"); }
+    }
+  });
+
+  window.addEventListener("resize", ()=>{
+    const isMobile = window.matchMedia("(max-width: 720px)").matches;
+    $("navRowMobile").style.display = ($("studyPanel").style.display === "block" && isMobile) ? "flex" : "none";
+  });
+
+  // ✅ tenta reduzir double-tap zoom no iOS (fallback)
+  let _lastTouchEnd = 0;
+  document.addEventListener("touchend", function(e){
+    const now = Date.now();
+    if (now - _lastTouchEnd <= 300){
+      e.preventDefault();
+    }
+    _lastTouchEnd = now;
+  }, { passive: false });
 }
 
 wire();
