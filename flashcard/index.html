@@ -364,6 +364,8 @@
       max-height: 280px;
       overflow:auto;
     }
+
+    /* ✅ Item: tudo clicável (label) */
     .item{
       display:flex;
       align-items:flex-start;
@@ -375,14 +377,16 @@
       -webkit-tap-highlight-color: transparent;
     }
     .item:hover{ background: rgba(15,23,42,.03); }
-    .item input{ margin-top: 2px; }
+    .item input{ margin-top: 2px; cursor:pointer; }
     .item span{
       font-weight: 900;
       color:#0f172a;
       line-height: 1.25;
       font-size: 13px;
       word-break: break-word;
+      cursor:pointer;
     }
+
     .search{
       height: 38px;
       border-radius: 14px;
@@ -406,9 +410,13 @@
       gap: 12px;
       align-items:center;
     }
+
+    /* ✅ Mobile: esconder setas laterais (fica só a dupla de setas abaixo) */
     @media (max-width: 720px){
       .studyShell{ grid-template-columns: 1fr; }
+      #btnPrevSide, #btnNextSide{ display:none !important; }
     }
+
     .navArrow{
       width: 54px;
       height: 280px;
@@ -427,6 +435,7 @@
     .navArrow:hover{ background: var(--surface2); transform: translateY(-1px); border-color: rgba(15,23,42,.14); }
     .navArrow:active{ transform: translateY(0px); }
     .navArrow svg{ width: 22px; height: 22px; }
+
     @media (max-width: 720px){
       .navArrow{
         width: 100%;
@@ -701,7 +710,7 @@
                     <span class="pill"><span class="pillDot" style="background:#0f172a; box-shadow:0 0 0 3px rgba(15,23,42,.10)"></span> <span id="metaAss">—</span></span>
                     <span class="pill"><span class="pillDot" style="background:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.15)"></span> <span id="metaDeck">—</span></span>
                   </div>
-                  <div class="mutedNote" id="hintKeys">Espaço = revelar • 1/2/3 = ✅/❌/⏭ • ←/→ = navegar</div>
+                  <!-- ✅ removido o texto de atalhos -->
                 </div>
 
                 <div class="sep"></div>
@@ -864,7 +873,6 @@ function guessDelimiter(text){
   const count = (delim)=>{
     let n = 0;
     for (const l of lines){
-      // raw count is OK; delimiter detection is just heuristic
       n += (l.split(delim).length - 1);
     }
     return n;
@@ -874,7 +882,6 @@ function guessDelimiter(text){
   const semi  = count(";");
   const tab   = count("\t");
 
-  // prefer the one with higher count
   if (tab > comma && tab > semi) return "\t";
   if (semi > comma) return ";";
   return ",";
@@ -884,7 +891,6 @@ function parseCSVAuto(text){
   const d0 = guessDelimiter(text);
   let rows = parseDelimited(text, d0);
 
-  // if it looks like single-column, try other delimiters
   const maxCols = Math.max(0, ...rows.map(r=>r.length));
   if (maxCols <= 1){
     const tries = [",",";","\t"].filter(d=>d!==d0);
@@ -916,7 +922,6 @@ function buildObjectsFromRows(rows, headerIndex){
 }
 
 function detectHeaderIndex(rows){
-  // find a row that contains both a user-like header and a pass-like header
   const userHints = ["user","username","login","usuario","email","e-mail","conta"];
   const passHints = ["senha","password","pass","hash"];
 
@@ -965,11 +970,9 @@ async function loadUsers(){
   const parsed = parseCSVAuto(txt);
   const rows = parsed.rows;
 
-  // detect header row even if not on first line
   const headerIndex = detectHeaderIndex(rows);
   const { header, out } = buildObjectsFromRows(rows, headerIndex);
 
-  // flexible header matching
   const userRxs = [
     /^user/, /^username/, /^login/, /^usuario/, /^email/, /^e-?mail/, /^conta/, /^nome/
   ];
@@ -982,16 +985,14 @@ async function loadUsers(){
     const passRaw = pickField(o, passRxs);
 
     const user = normalizeKey(userRaw);
-    const passValue = String(passRaw || "").trim().toLowerCase(); // hash or plaintext
+    const passValue = String(passRaw || "").trim().toLowerCase();
 
     return { user, passValue };
   }).filter(x => x.user && x.passValue);
 
-  // fallback: if headers are weird but there are 2 columns, treat col_1/col_2
   if (!tbl.length){
     const maxCols = Math.max(0, ...rows.map(r=>r.length));
     if (maxCols >= 2){
-      // try: first non-empty row after headerIndex is data
       const dataRows = rows.slice(headerIndex+1).filter(r => r.some(c => String(c||"").trim() !== ""));
       const mapped = dataRows.map(r=>{
         const u = normalizeKey(r[0] ?? "");
@@ -999,11 +1000,7 @@ async function loadUsers(){
         return { user: u, passValue: p };
       }).filter(x => x.user && x.passValue);
 
-      if (mapped.length) {
-        usersTable = mapped;
-      } else {
-        usersTable = tbl;
-      }
+      usersTable = mapped.length ? mapped : tbl;
     } else {
       usersTable = tbl;
     }
@@ -1019,7 +1016,6 @@ async function loadUsers(){
     usersList: usersTable.map(x => x.user).slice(0, 12)
   };
 
-  // write diag to UI (without passwords)
   const list = usersDiag.usersList.length ? usersDiag.usersList.join(", ") : "(nenhum)";
   $("loginMsg").textContent =
     `USERS lido: ${usersDiag.rowCount} linhas • delimitador: ${usersDiag.delimiter} • header: linha ${usersDiag.headerIndex+1} • usuários: ${list}`;
@@ -1075,7 +1071,6 @@ async function loadCardsForUser(user){
   const rows = parsed.rows;
   if (!rows || rows.length < 2) return [];
 
-  // header assumed first row for flashcards sheets
   const header = rows[0].map(h => String(h ?? "").trim());
   const objs = [];
   for (let i=1; i<rows.length; i++){
@@ -1192,6 +1187,7 @@ function computeAvailableDecks(){
   return uniq(pool.map(c=>c.deck)).sort((a,b)=>a.localeCompare(b,"pt-BR",{numeric:true}));
 }
 
+/* ✅ renderChecklist: agora tudo é clicável (label) sem bug de duplo toggle */
 function renderChecklist(container, values, selectedSet, onToggle, searchText=""){
   const q = normalizeKey(searchText);
   container.innerHTML = "";
@@ -1208,6 +1204,7 @@ function renderChecklist(container, values, selectedSet, onToggle, searchText=""
 
   filtered.forEach(v=>{
     const id = "chk_" + Math.random().toString(16).slice(2);
+
     const row = document.createElement("label");
     row.className = "item";
     row.setAttribute("for", id);
@@ -1217,18 +1214,15 @@ function renderChecklist(container, values, selectedSet, onToggle, searchText=""
     chk.id = id;
     chk.checked = selectedSet.has(v);
 
+    chk.addEventListener("change", ()=>{
+      onToggle(v, chk.checked);
+    });
+
     const span = document.createElement("span");
     span.textContent = v;
 
     row.appendChild(chk);
     row.appendChild(span);
-
-    row.addEventListener("click", (e)=>{
-      e.preventDefault();
-      chk.checked = !chk.checked;
-      onToggle(v, chk.checked);
-    });
-
     container.appendChild(row);
   });
 }
@@ -1483,8 +1477,6 @@ function clearSession(){
 async function doLogin(){
   const userTypedRaw = $("inpUser").value;
   const passTyped = String($("inpPass").value || "");
-
-  // normaliza entrada
   const userTyped = normalizeKey(userTypedRaw);
 
   $("loginMsg").textContent = "Lendo USERS...";
@@ -1498,7 +1490,6 @@ async function doLogin(){
       throw new Error("USERS carregou 0 usuários. Verifique a aba USERS (cabeçalho/linhas). " + (d ? `Diag: ${d}` : ""));
     }
 
-    // tenta achar por igualdade ou por inclusão (se você botou e-mail, por exemplo)
     let u = tbl.find(x => x.user === userTyped);
     if (!u){
       u = tbl.find(x => x.user.includes(userTyped) || userTyped.includes(x.user));
@@ -1520,7 +1511,6 @@ async function doLogin(){
       }
     }
 
-    // mapeia para as duas planilhas de flashcards
     const userKey =
       userTyped.includes("valeria") ? "valeria" :
       userTyped.includes("arthur") ? "arthur" :
@@ -1532,7 +1522,6 @@ async function doLogin(){
 
     setSession(userKey);
 
-    // load cards
     setStatus("Carregando flashcards...");
     const rawCards = await loadCardsForUser(userKey);
 
@@ -1543,7 +1532,6 @@ async function doLogin(){
       return { ...c, stats: merged };
     });
 
-    // default selection: all areas
     selAreas = new Set(computeAvailableAreas());
     selAssuntos.clear();
     selDecks.clear();
