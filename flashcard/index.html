@@ -2148,7 +2148,7 @@ function createLocalCard(base){
   return `local_${now}_${rnd}_${base}`;
 }
 
-function saveCreatedCard(){
+async function saveCreatedCard(){
   if (!session) { toast("Faça login"); return; }
 
   const area = String($("createArea").value || "").trim();
@@ -2159,39 +2159,28 @@ function saveCreatedCard(){
   const invert = $("createInvert").checked;
 
   try{
+    if (!API_URL || API_URL.includes("COLE_AQUI")) throw new Error("Configure API_URL no código.");
     if (!area) throw new Error("Selecione uma área.");
     if (!assunto) throw new Error("Preencha o assunto.");
     if (!deck) throw new Error("Preencha o deck.");
     if (!frente) throw new Error("Preencha a frente.");
     if (!verso) throw new Error("Preencha o verso.");
 
-    const id1 = createLocalCard("a");
-    const card1 = {
-      id: id1,
-      area, assunto, deck,
-      frente, verso,
-      tags: "local",
-      seen_count: 0, correct_count: 0, wrong_count: 0
-    };
+    $("createMsg").textContent = "Salvando...";
 
-    customStore.created.push(card1);
+    const res = await apiCall({
+      action: "create_card",
+      token: session.token,
+      card: { area, assunto, deck, frente, verso, tags: "" },
+      invert
+    });
 
-    if (invert){
-      const id2 = createLocalCard("b");
-      const card2 = {
-        id: id2,
-        area, assunto, deck,
-        frente: verso,
-        verso: frente,
-        tags: "local,invertido",
-        seen_count: 0, correct_count: 0, wrong_count: 0
-      };
-      customStore.created.push(card2);
-    }
+    const created = Array.isArray(res.cards) ? res.cards : (res.card ? [res.card] : []);
+    const normalized = created.map(normalizeCard).filter(c => c.id && (c.frente || c.verso));
 
-    setLocalCustom(session.user, customStore);
+    if (!normalized.length) throw new Error("A API não retornou o card criado.");
 
-    allCards = applyCustom(allCards.filter(c=>true));
+    allCards = allCards.concat(normalized);
     refreshFiltersUI();
     buildEditSelectors();
 
