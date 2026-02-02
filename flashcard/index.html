@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ✅ Mobile: tenta reduzir/evitar zoom por toque repetido -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Flashcards • UsoJaleco</title>
 
   <!-- =========================
@@ -50,6 +51,7 @@
     }
     *{ box-sizing:border-box }
     html,body{ height:100% }
+    html{ touch-action: manipulation; }
     body{
       margin:0;
       font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -61,6 +63,8 @@
       background-attachment: fixed, fixed, fixed;
       overflow-x:hidden;
       color-scheme: light;
+      -webkit-text-size-adjust: 100%;
+      touch-action: manipulation;
     }
     a{ color:inherit; text-decoration:none }
     button, input, textarea, select{ font:inherit }
@@ -114,6 +118,8 @@
       white-space: nowrap;
       display:inline-flex; align-items:center; justify-content:center;
       text-align:center; line-height: 1;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
     .headBtn:active{ transform: translateY(0px); }
@@ -133,6 +139,7 @@
       transition: background var(--t), border-color var(--t), transform var(--t);
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .iconBtn:hover{ background:#fff7ed; border-color:#fed7aa; transform: translateY(-1px); }
     .iconBtn:active{ transform: translateY(0px); }
@@ -247,6 +254,8 @@
       display:grid;
       place-items:center;
       transition: background var(--t), border-color var(--t), transform var(--t);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .eyeBtn:hover{ background:#fff7ed; border-color:#fed7aa; transform: translateY(-50%) translateY(-1px); }
     .eyeBtn:active{ transform: translateY(-50%); }
@@ -268,6 +277,7 @@
       white-space: nowrap;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
     .btn:active{ transform: translateY(0px) scale(.99); }
@@ -352,6 +362,8 @@
       font-size: 12px;
       cursor:pointer;
       transition: background var(--t), transform var(--t);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .miniBtn:hover{ background: var(--surface2); transform: translateY(-1px); }
     .miniBtn:active{ transform: translateY(0px); }
@@ -375,6 +387,7 @@
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .item:hover{ background: rgba(15,23,42,.03); }
     .item input{ margin-top: 2px; cursor:pointer; }
@@ -397,6 +410,7 @@
       font-size: 13px;
       outline:none;
       width: 100%;
+      -webkit-tap-highlight-color: transparent;
     }
     .search:focus{
       border-color: rgba(249,115,22,.55);
@@ -431,6 +445,7 @@
       transition: transform var(--t), background var(--t), border-color var(--t);
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .navArrow:hover{ background: var(--surface2); transform: translateY(-1px); border-color: rgba(15,23,42,.14); }
     .navArrow:active{ transform: translateY(0px); }
@@ -501,6 +516,8 @@
       white-space: pre-wrap;
       word-break: break-word;
       min-height: 140px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .actionsRow{
       display:flex;
@@ -535,6 +552,131 @@
       max-width: min(720px, 92vw);
       font-weight: 900;
       font-size: 13px;
+    }
+
+    /* ===== Flashcard Manager ===== */
+    .tabsRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+    }
+    .tabsLeft{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
+    .tabBtn{
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-weight: 950;
+      cursor:pointer;
+      transition: background var(--t), transform var(--t), border-color var(--t);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .tabBtn:hover{ background: var(--surface2); transform: translateY(-1px); }
+    .tabBtnActive{
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color:#9a3412;
+    }
+
+    .mgrGrid{
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap: var(--deskGap);
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .mgrGrid{ grid-template-columns: 1fr; }
+    }
+
+    .facesGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--deskGap);
+    }
+    @media (max-width: 720px){
+      .facesGrid{ grid-template-columns: 1fr; }
+    }
+    .editFace{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+      padding: 16px;
+      min-height: 170px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight: 1000;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+      cursor:text;
+      outline:none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .editFace:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+    }
+    .editFace[contenteditable="true"]:empty:before{
+      content: attr(data-ph);
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .mgrSide{
+      border:1px solid var(--line);
+      border-radius: var(--rMid);
+      background:#fff;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+      padding: 12px;
+    }
+
+    .mgrList{
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface2);
+      padding: 8px;
+      max-height: 260px;
+      overflow:auto;
+    }
+    .mgrCardBtn{
+      width: 100%;
+      text-align:left;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 12px;
+      padding: 10px 10px;
+      cursor:pointer;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .mgrCardBtn:hover{ background: rgba(15,23,42,.03); transform: translateY(-1px); }
+    .mgrCardBtnActive{
+      background:#fff;
+      border-color: var(--line);
+      box-shadow: 0 10px 16px rgba(17,24,39,.06);
+    }
+    .mgrCardBtn b{ display:block; font-size: 13px; font-weight: 1000; }
+    .mgrCardBtn small{ display:block; color: var(--muted); font-weight: 900; font-size: 12px; margin-top: 2px; }
+
+    .hintBox{
+      border:1px dashed #e7ebf2;
+      border-radius: 16px;
+      background: #fff;
+      padding: 10px;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12.4px;
+      line-height: 1.35;
     }
   </style>
 </head>
@@ -623,7 +765,7 @@
             </div>
 
             <div class="filtersGrid">
-              <div class="listCard">
+              <div class="listCard" id="cardAreas">
                 <div class="listTop">
                   <b>Áreas</b>
                   <span class="chip"><span class="chipDot"></span> <span id="countAreasSel">0</span></span>
@@ -638,7 +780,8 @@
                 <div class="listBox" id="boxAreas"></div>
               </div>
 
-              <div class="listCard">
+              <!-- ✅ Só aparece se tiver área marcada -->
+              <div class="listCard" id="cardAssuntos" style="display:none;">
                 <div class="listTop">
                   <b>Assuntos</b>
                   <span class="chip"><span class="chipDot" style="background:#0f172a; box-shadow:0 0 0 3px rgba(15,23,42,.10)"></span> <span id="countAssSel">0</span></span>
@@ -651,13 +794,10 @@
                 </div>
 
                 <div class="listBox" id="boxAss"></div>
-
-                <div class="mutedNote" style="margin-top:10px;">
-                  Os assuntos listados dependem das áreas marcadas.
-                </div>
               </div>
 
-              <div class="listCard">
+              <!-- ✅ Só aparece se tiver assunto marcado -->
+              <div class="listCard" id="cardDecks" style="display:none;">
                 <div class="listTop">
                   <b>Decks</b>
                   <span class="chip"><span class="chipDot" style="background:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.15)"></span> <span id="countDeckSel">0</span></span>
@@ -670,10 +810,6 @@
                 </div>
 
                 <div class="listBox" id="boxDeck"></div>
-
-                <div class="mutedNote" style="margin-top:10px;">
-                  Os decks listados dependem das áreas + assuntos marcados.
-                </div>
               </div>
             </div>
 
@@ -681,12 +817,124 @@
 
             <div style="display:flex; gap: 10px; flex-wrap: wrap; align-items:center; justify-content:space-between;">
               <div class="mutedNote" id="pillInfo">—</div>
-              <button class="btn btnPrimary" id="btnStudy" type="button">Estudar</button>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <button class="btn btnGhost" id="btnManage" type="button">Criar/Editar</button>
+                <button class="btn btnPrimary" id="btnStudy" type="button">Estudar</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- MANAGE PANEL -->
+          <section id="managePanel" style="display:none;">
+            <div class="cardTitle">
+              <span>Flashcards</span>
+              <small id="manageSub">Criar ou editar</small>
             </div>
 
-            <div class="mutedNote" style="margin-top:10px;">
-              Progresso (acertei/errei/pulei) fica salvo localmente neste dispositivo (CSV publicado é somente leitura).
+            <div class="tabsRow">
+              <div class="tabsLeft">
+                <button class="tabBtn tabBtnActive" id="tabCreate" type="button">Criar</button>
+                <button class="tabBtn" id="tabEdit" type="button">Editar</button>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <button class="btn btnGhost" id="btnMgrBack" type="button">Voltar</button>
+              </div>
             </div>
+
+            <!-- CREATE -->
+            <div id="createWrap">
+              <div class="mgrGrid">
+                <div>
+                  <div class="facesGrid">
+                    <!-- ✅ Clique para digitar -->
+                    <div class="editFace" id="createFront" contenteditable="true" data-ph="Clique para digitar a FRENTE"></div>
+                    <div class="editFace" id="createBack" contenteditable="true" data-ph="Clique para digitar o VERSO"></div>
+                  </div>
+
+                  <div class="hintBox" style="margin-top:12px;">
+                    Dica: texto curto na frente e explicação no verso. Para cards “definição”, usar termo → definição. Para “conduta”, usar pergunta → conduta.
+                  </div>
+                </div>
+
+                <div class="mgrSide">
+                  <div style="display:grid; gap: 12px;">
+                    <div>
+                      <label class="label">Área</label>
+                      <select class="select" id="createArea"></select>
+                    </div>
+
+                    <div>
+                      <label class="label">Assunto (nome)</label>
+                      <input class="field" id="createAssunto" placeholder="Ex.: Hemograma" />
+                    </div>
+
+                    <div>
+                      <label class="label">Deck (nome)</label>
+                      <input class="field" id="createDeck" placeholder="Ex.: Revisão rápida" />
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                      <label class="item" style="margin:0; padding: 10px 8px;">
+                        <input type="checkbox" id="createInvert" />
+                        <span style="font-weight: 950;">Criar 2 versões (frente↔verso)</span>
+                      </label>
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                      <button class="btn btnPrimary" id="btnCreateSave" type="button">Salvar card</button>
+                    </div>
+
+                    <div class="mutedNote" id="createMsg">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- EDIT -->
+            <div id="editWrap" style="display:none;">
+              <div class="mgrGrid">
+                <div>
+                  <div class="facesGrid">
+                    <div class="editFace" id="editFront" contenteditable="true" data-ph="Selecione um card para editar a FRENTE"></div>
+                    <div class="editFace" id="editBack" contenteditable="true" data-ph="Selecione um card para editar o VERSO"></div>
+                  </div>
+
+                  <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; margin-top:12px;">
+                    <button class="btn btnPrimary" id="btnEditSave" type="button" disabled>Salvar edição</button>
+                  </div>
+
+                  <div class="mutedNote" id="editMsg" style="margin-top:10px;">—</div>
+                </div>
+
+                <div class="mgrSide">
+                  <div style="display:grid; gap: 12px;">
+                    <div>
+                      <label class="label">Área</label>
+                      <select class="select" id="editArea"></select>
+                    </div>
+
+                    <div id="editAssRow" style="display:none;">
+                      <label class="label">Assunto</label>
+                      <select class="select" id="editAssunto"></select>
+                    </div>
+
+                    <div id="editDeckRow" style="display:none;">
+                      <label class="label">Deck</label>
+                      <select class="select" id="editDeck"></select>
+                    </div>
+
+                    <div class="hr" style="margin:6px 0;"></div>
+
+                    <div>
+                      <label class="label">Flashcards</label>
+                      <div class="mgrList" id="editCardsList"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </section>
 
           <!-- STUDY PANEL -->
@@ -710,7 +958,6 @@
                     <span class="pill"><span class="pillDot" style="background:#0f172a; box-shadow:0 0 0 3px rgba(15,23,42,.10)"></span> <span id="metaAss">—</span></span>
                     <span class="pill"><span class="pillDot" style="background:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.15)"></span> <span id="metaDeck">—</span></span>
                   </div>
-                  <!-- ✅ removido o texto de atalhos -->
                 </div>
 
                 <div class="sep"></div>
@@ -776,13 +1023,16 @@ const USER_TO_CSV = {
 
 const LS_SESSION_KEY = "uj_flashcards_session_v3";
 const LS_STATS_PREFIX = "uj_flashcards_stats_v3_";
+/* ✅ Flashcards locais (criados/edições) */
+const LS_CUSTOM_PREFIX = "uj_flashcards_custom_v1_";
 
 /** =========================
  *  STATE
  *  ========================= */
 let session = null;
-let usersTable = null; // [{user, passValue}]
-let usersDiag = null;  // { delimiter, headerIndex, headerRow, rowCount, userKeyGuess, passKeyGuess, usersList }
+let usersTable = null;
+let usersDiag = null;
+
 let allCards = [];
 let viewCards = [];
 let cursor = 0;
@@ -792,6 +1042,10 @@ let revealed = false;
 let selAreas = new Set();
 let selAssuntos = new Set();
 let selDecks = new Set();
+
+/* ✅ custom state */
+let customStore = { created: [], edits: {} };
+let editSelectedId = null;
 
 /** =========================
  *  DOM helpers
@@ -841,7 +1095,6 @@ function parseDelimited(text, delimiter){
   let cur = "";
   let inQuotes = false;
 
-  // remove BOM if present
   if (text && text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
 
   for (let i=0; i<text.length; i++){
@@ -1117,6 +1370,53 @@ function mergeStats(baseStats, localStats){
 }
 
 /** =========================
+ *  LOCAL CUSTOM (create/edit)
+ *  ========================= */
+function lsKeyCustom(user){ return LS_CUSTOM_PREFIX + user; }
+
+function getLocalCustom(user){
+  try{
+    const raw = localStorage.getItem(lsKeyCustom(user));
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed || typeof parsed !== "object") return { created: [], edits: {} };
+    return {
+      created: Array.isArray(parsed.created) ? parsed.created : [],
+      edits: (parsed.edits && typeof parsed.edits === "object") ? parsed.edits : {}
+    };
+  }catch(e){
+    return { created: [], edits: {} };
+  }
+}
+function setLocalCustom(user, store){
+  localStorage.setItem(lsKeyCustom(user), JSON.stringify(store || { created: [], edits: {} }));
+}
+function applyCustom(all){
+  if (!session) return all;
+
+  // aplica edits em cards existentes
+  const edits = (customStore && customStore.edits) ? customStore.edits : {};
+  const mapped = all.map(c=>{
+    const e = edits[c.id];
+    if (!e) return c;
+    return {
+      ...c,
+      area: (e.area ?? c.area),
+      assunto: (e.assunto ?? c.assunto),
+      deck: (e.deck ?? c.deck),
+      frente: (e.frente ?? c.frente),
+      verso: (e.verso ?? c.verso),
+      tags: (e.tags ?? c.tags),
+    };
+  });
+
+  // adiciona cards criados
+  const created = (customStore && Array.isArray(customStore.created)) ? customStore.created : [];
+  const createdNorm = created.map(normalizeCard).filter(x=>x.id && (x.frente || x.verso));
+
+  return mapped.concat(createdNorm);
+}
+
+/** =========================
  *  PRIORITY + SCHEDULING
  *  ========================= */
 function calcNextDue(now, result, streak){
@@ -1187,7 +1487,7 @@ function computeAvailableDecks(){
   return uniq(pool.map(c=>c.deck)).sort((a,b)=>a.localeCompare(b,"pt-BR",{numeric:true}));
 }
 
-/* ✅ renderChecklist: agora tudo é clicável (label) sem bug de duplo toggle */
+/* ✅ renderChecklist: tudo clicável (label) */
 function renderChecklist(container, values, selectedSet, onToggle, searchText=""){
   const q = normalizeKey(searchText);
   container.innerHTML = "";
@@ -1227,6 +1527,25 @@ function renderChecklist(container, values, selectedSet, onToggle, searchText=""
   });
 }
 
+/* ✅ Cascata: só mostra Assuntos/Decks após seleção anterior */
+function updateCascadeVisibility(){
+  const hasAreas = selAreas.size > 0;
+  const hasAss = selAssuntos.size > 0;
+
+  $("cardAssuntos").style.display = hasAreas ? "block" : "none";
+  $("cardDecks").style.display = (hasAreas && hasAss) ? "block" : "none";
+
+  if (!hasAreas){
+    selAssuntos.clear();
+    selDecks.clear();
+    $("searchAss").value = "";
+    $("searchDeck").value = "";
+  } else if (!hasAss){
+    selDecks.clear();
+    $("searchDeck").value = "";
+  }
+}
+
 function refreshPillInfo(){
   const now = new Date();
   const pool = filterBySelection(allCards);
@@ -1236,6 +1555,8 @@ function refreshPillInfo(){
 }
 
 function refreshFiltersUI(){
+  updateCascadeVisibility();
+
   const areas = computeAvailableAreas();
   const assuntos = computeAvailableAssuntos();
   const decks = computeAvailableDecks();
@@ -1249,18 +1570,27 @@ function refreshFiltersUI(){
     refreshFiltersUI();
   }, $("searchAreas").value);
 
-  renderChecklist($("boxAss"), assuntos, selAssuntos, (v,on)=>{
-    if (on) selAssuntos.add(v); else selAssuntos.delete(v);
-    refreshFiltersUI();
-  }, $("searchAss").value);
+  if (selAreas.size > 0){
+    renderChecklist($("boxAss"), assuntos, selAssuntos, (v,on)=>{
+      if (on) selAssuntos.add(v); else selAssuntos.delete(v);
+      refreshFiltersUI();
+    }, $("searchAss").value);
+  } else {
+    $("boxAss").innerHTML = "";
+  }
 
-  renderChecklist($("boxDeck"), decks, selDecks, (v,on)=>{
-    if (on) selDecks.add(v); else selDecks.delete(v);
-    refreshFiltersUI();
-  }, $("searchDeck").value);
+  if (selAreas.size > 0 && selAssuntos.size > 0){
+    renderChecklist($("boxDeck"), decks, selDecks, (v,on)=>{
+      if (on) selDecks.add(v); else selDecks.delete(v);
+      refreshFiltersUI();
+    }, $("searchDeck").value);
+  } else {
+    $("boxDeck").innerHTML = "";
+  }
 
   setCounts();
   refreshPillInfo();
+  fillCreateAreaOptions();
 }
 
 function markAll(setRef, values){ values.forEach(v => setRef.add(v)); }
@@ -1417,6 +1747,7 @@ function showLogin(){
   $("loginPanel").style.display = "block";
   $("filterPanel").style.display = "none";
   $("studyPanel").style.display = "none";
+  $("managePanel").style.display = "none";
   setStatus("—");
   $("btnLoginTop").textContent = "Entrar";
 }
@@ -1424,16 +1755,39 @@ function showFilters(){
   $("loginPanel").style.display = "none";
   $("filterPanel").style.display = "block";
   $("studyPanel").style.display = "none";
+  $("managePanel").style.display = "none";
   $("btnLoginTop").textContent = "Trocar";
 }
 function showStudy(){
   $("loginPanel").style.display = "none";
   $("filterPanel").style.display = "none";
   $("studyPanel").style.display = "block";
+  $("managePanel").style.display = "none";
   $("btnLoginTop").textContent = "Trocar";
 
   const isMobile = window.matchMedia("(max-width: 720px)").matches;
   $("navRowMobile").style.display = isMobile ? "flex" : "none";
+}
+function showManage(){
+  $("loginPanel").style.display = "none";
+  $("filterPanel").style.display = "none";
+  $("studyPanel").style.display = "none";
+  $("managePanel").style.display = "block";
+  $("btnLoginTop").textContent = "Trocar";
+
+  // default: Create
+  setManageTab("create");
+  fillCreateAreaOptions();
+  buildEditSelectors();
+}
+
+function setManageTab(tab){
+  const isCreate = tab === "create";
+  $("tabCreate").classList.toggle("tabBtnActive", isCreate);
+  $("tabEdit").classList.toggle("tabBtnActive", !isCreate);
+  $("createWrap").style.display = isCreate ? "block" : "none";
+  $("editWrap").style.display = isCreate ? "none" : "block";
+  $("manageSub").textContent = isCreate ? "Criar" : "Editar";
 }
 
 /** =========================
@@ -1465,6 +1819,9 @@ function clearSession(){
   selAssuntos.clear();
   selDecks.clear();
 
+  customStore = { created: [], edits: {} };
+  editSelectedId = null;
+
   $("acctName").textContent = "—";
   $("acctSub").textContent = "—";
   $("acctAvatar").src = "";
@@ -1472,6 +1829,30 @@ function clearSession(){
   showLogin();
   $("studyFace").textContent = "—";
   $("loginMsg").textContent = "Sessão encerrada.";
+}
+
+async function hydrateUserData(userKey){
+  customStore = getLocalCustom(userKey);
+
+  setStatus("Carregando flashcards...");
+  const rawCards = await loadCardsForUser(userKey);
+
+  const localMap = getLocalStats(userKey);
+  const mergedBase = rawCards.map(c=>{
+    const localSt = localMap[c.id] || null;
+    const merged = mergeStats(c.stats, localSt);
+    return { ...c, stats: merged };
+  });
+
+  allCards = applyCustom(mergedBase);
+
+  // padrão: marca todas as áreas
+  selAreas = new Set(computeAvailableAreas());
+  selAssuntos.clear();
+  selDecks.clear();
+
+  refreshFiltersUI();
+  setStatus(`Conectado como ${userKey}`);
 }
 
 async function doLogin(){
@@ -1521,25 +1902,9 @@ async function doLogin(){
     }
 
     setSession(userKey);
+    await hydrateUserData(userKey);
 
-    setStatus("Carregando flashcards...");
-    const rawCards = await loadCardsForUser(userKey);
-
-    const localMap = getLocalStats(userKey);
-    allCards = rawCards.map(c=>{
-      const localSt = localMap[c.id] || null;
-      const merged = mergeStats(c.stats, localSt);
-      return { ...c, stats: merged };
-    });
-
-    selAreas = new Set(computeAvailableAreas());
-    selAssuntos.clear();
-    selDecks.clear();
-
-    refreshFiltersUI();
-    setStatus(`Conectado como ${userKey}`);
     showFilters();
-
     toast("Login ok");
 
   }catch(e){
@@ -1559,27 +1924,297 @@ async function tryResume(){
     if (!s || !s.user) { $("loginMsg").textContent = "—"; return; }
 
     setSession(String(s.user));
-    setStatus("Carregando flashcards...");
-    const rawCards = await loadCardsForUser(session.user);
+    await hydrateUserData(session.user);
 
-    const localMap = getLocalStats(session.user);
-    allCards = rawCards.map(c=>{
-      const localSt = localMap[c.id] || null;
-      const merged = mergeStats(c.stats, localSt);
-      return { ...c, stats: merged };
-    });
-
-    selAreas = new Set(computeAvailableAreas());
-    selAssuntos.clear();
-    selDecks.clear();
-
-    refreshFiltersUI();
-    setStatus(`Conectado como ${session.user}`);
     showFilters();
     toast("Sessão restaurada");
   }catch(e){
     clearSession();
   }
+}
+
+/** =========================
+ *  Flashcard Manager: Create
+ *  ========================= */
+function fillCreateAreaOptions(){
+  const sel = $("createArea");
+  if (!sel) return;
+  const areas = computeAvailableAreas();
+  const current = sel.value;
+
+  sel.innerHTML = "";
+  areas.forEach(a=>{
+    const opt = document.createElement("option");
+    opt.value = a;
+    opt.textContent = a;
+    sel.appendChild(opt);
+  });
+
+  if (areas.includes(current)) sel.value = current;
+}
+
+function getEditText(el){
+  const t = (el.innerText || "").replace(/\u00A0/g, " ").trim();
+  return t;
+}
+
+function clearCreateForm(){
+  $("createFront").innerText = "";
+  $("createBack").innerText = "";
+  $("createAssunto").value = "";
+  $("createDeck").value = "";
+  $("createInvert").checked = false;
+  $("createMsg").textContent = "—";
+}
+
+function createLocalCard(base){
+  const now = Date.now();
+  const rnd = Math.random().toString(16).slice(2,8);
+  const id = `local_${now}_${rnd}_${base}`;
+  return id;
+}
+
+function saveCreatedCard(){
+  if (!session) { toast("Faça login"); return; }
+
+  const area = String($("createArea").value || "").trim();
+  const assunto = String($("createAssunto").value || "").trim();
+  const deck = String($("createDeck").value || "").trim();
+  const frente = getEditText($("createFront"));
+  const verso = getEditText($("createBack"));
+  const invert = $("createInvert").checked;
+
+  try{
+    if (!area) throw new Error("Selecione uma área.");
+    if (!assunto) throw new Error("Preencha o assunto.");
+    if (!deck) throw new Error("Preencha o deck.");
+    if (!frente) throw new Error("Preencha a frente.");
+    if (!verso) throw new Error("Preencha o verso.");
+
+    const id1 = createLocalCard("a");
+    const card1 = {
+      id: id1,
+      area, assunto, deck,
+      frente, verso,
+      tags: "local",
+      seen_count: 0, correct_count: 0, wrong_count: 0
+    };
+
+    customStore.created.push(card1);
+
+    if (invert){
+      const id2 = createLocalCard("b");
+      const card2 = {
+        id: id2,
+        area, assunto, deck,
+        frente: verso,
+        verso: frente,
+        tags: "local,invertido",
+        seen_count: 0, correct_count: 0, wrong_count: 0
+      };
+      customStore.created.push(card2);
+    }
+
+    setLocalCustom(session.user, customStore);
+
+    // re-hidrata em memória
+    allCards = applyCustom(allCards.filter(c=>true)); // mantém base já aplicada; reaplica created/edits
+    refreshFiltersUI();
+    buildEditSelectors();
+
+    $("createMsg").textContent = invert ? "Salvo (2 versões criadas)." : "Salvo.";
+    toast("Card criado");
+    clearCreateForm();
+
+  }catch(e){
+    $("createMsg").textContent = String(e.message || e);
+    toast("Não salvou");
+  }
+}
+
+/** =========================
+ *  Flashcard Manager: Edit
+ *  ========================= */
+function buildEditSelectors(){
+  if (!session) return;
+
+  // Área
+  const areas = uniq(allCards.map(c=>c.area)).sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  const selArea = $("editArea");
+  const prevArea = selArea.value;
+
+  selArea.innerHTML = `<option value="">Selecione...</option>`;
+  areas.forEach(a=>{
+    const opt = document.createElement("option");
+    opt.value = a;
+    opt.textContent = a;
+    selArea.appendChild(opt);
+  });
+
+  if (areas.includes(prevArea)) selArea.value = prevArea;
+  else selArea.value = "";
+
+  rebuildEditAssuntos();
+}
+
+function rebuildEditAssuntos(){
+  const area = $("editArea").value;
+  $("editAssRow").style.display = area ? "block" : "none";
+  $("editDeckRow").style.display = "none";
+
+  $("editAssunto").innerHTML = "";
+  $("editDeck").innerHTML = "";
+  $("editCardsList").innerHTML = "";
+  deselectEditCard();
+
+  if (!area) return;
+
+  const assuntos = uniq(allCards.filter(c=>c.area===area).map(c=>c.assunto)).sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  const selAss = $("editAssunto");
+  selAss.innerHTML = `<option value="">Selecione...</option>`;
+  assuntos.forEach(a=>{
+    const opt = document.createElement("option");
+    opt.value = a;
+    opt.textContent = a;
+    selAss.appendChild(opt);
+  });
+}
+
+function rebuildEditDecks(){
+  const area = $("editArea").value;
+  const assunto = $("editAssunto").value;
+
+  $("editDeckRow").style.display = (area && assunto) ? "block" : "none";
+  $("editDeck").innerHTML = "";
+  $("editCardsList").innerHTML = "";
+  deselectEditCard();
+
+  if (!area || !assunto) return;
+
+  const decks = uniq(allCards.filter(c=>c.area===area && c.assunto===assunto).map(c=>c.deck))
+    .sort((a,b)=>a.localeCompare(b,"pt-BR",{numeric:true}));
+
+  const selDeck = $("editDeck");
+  selDeck.innerHTML = `<option value="">Selecione...</option>`;
+  decks.forEach(d=>{
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    selDeck.appendChild(opt);
+  });
+}
+
+function rebuildEditCardsList(){
+  const area = $("editArea").value;
+  const assunto = $("editAssunto").value;
+  const deck = $("editDeck").value;
+
+  $("editCardsList").innerHTML = "";
+  deselectEditCard();
+
+  if (!area || !assunto || !deck){
+    const div = document.createElement("div");
+    div.className = "mutedNote";
+    div.style.padding = "8px 6px";
+    div.textContent = "Selecione área → assunto → deck.";
+    $("editCardsList").appendChild(div);
+    return;
+  }
+
+  const pool = allCards.filter(c=>c.area===area && c.assunto===assunto && c.deck===deck);
+
+  if (!pool.length){
+    const div = document.createElement("div");
+    div.className = "mutedNote";
+    div.style.padding = "8px 6px";
+    div.textContent = "Nenhum card neste deck.";
+    $("editCardsList").appendChild(div);
+    return;
+  }
+
+  pool.forEach(c=>{
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mgrCardBtn";
+    btn.dataset.id = c.id;
+
+    const b = document.createElement("b");
+    b.textContent = (c.frente || "—").slice(0, 64);
+
+    const s = document.createElement("small");
+    s.textContent = `ID: ${c.id}`;
+
+    btn.appendChild(b);
+    btn.appendChild(s);
+
+    btn.onclick = ()=>{
+      selectEditCard(c.id);
+      // atualiza destaque
+      Array.from($("editCardsList").querySelectorAll(".mgrCardBtn")).forEach(x=>{
+        x.classList.toggle("mgrCardBtnActive", x.dataset.id === c.id);
+      });
+    };
+
+    $("editCardsList").appendChild(btn);
+  });
+}
+
+function deselectEditCard(){
+  editSelectedId = null;
+  $("editFront").innerText = "";
+  $("editBack").innerText = "";
+  $("btnEditSave").disabled = true;
+  $("editMsg").textContent = "—";
+}
+
+function selectEditCard(id){
+  editSelectedId = id;
+  const c = allCards.find(x=>x.id===id);
+  if (!c){
+    deselectEditCard();
+    return;
+  }
+  $("editFront").innerText = c.frente || "";
+  $("editBack").innerText = c.verso || "";
+  $("btnEditSave").disabled = false;
+  $("editMsg").textContent = `Editando: ${id}`;
+}
+
+function saveEditCard(){
+  if (!session) { toast("Faça login"); return; }
+  if (!editSelectedId) { toast("Selecione um card"); return; }
+
+  const id = editSelectedId;
+  const base = allCards.find(x=>x.id===id);
+  if (!base){ toast("Card não encontrado"); return; }
+
+  const frente = getEditText($("editFront"));
+  const verso = getEditText($("editBack"));
+
+  if (!frente || !verso){
+    $("editMsg").textContent = "Frente e verso precisam ter texto.";
+    toast("Não salvou");
+    return;
+  }
+
+  // salva somente override de campos editáveis
+  customStore.edits[id] = {
+    area: base.area,
+    assunto: base.assunto,
+    deck: base.deck,
+    frente,
+    verso,
+    tags: base.tags
+  };
+  setLocalCustom(session.user, customStore);
+
+  // reconstroi allCards: reaplica edits
+  allCards = applyCustom(allCards.filter(c=>true));
+  refreshFiltersUI();
+  rebuildEditCardsList();
+
+  $("editMsg").textContent = "Edição salva.";
+  toast("Salvo");
 }
 
 /** =========================
@@ -1632,10 +2267,35 @@ function wire(){
   $("btnStudy").onclick = ()=>{
     if (!session){ toast("Faça login"); return; }
     if (selAreas.size === 0){ toast("Marque pelo menos 1 área."); return; }
+    if (selAssuntos.size === 0){ toast("Marque pelo menos 1 assunto."); return; }
+    if (selDecks.size === 0){ toast("Marque pelo menos 1 deck."); return; }
     buildViewCards();
     showStudy();
     renderStudy();
   };
+
+  $("btnManage").onclick = ()=>{
+    if (!session){ toast("Faça login"); return; }
+    showManage();
+  };
+
+  $("btnMgrBack").onclick = ()=> showFilters();
+  $("tabCreate").onclick = ()=> setManageTab("create");
+  $("tabEdit").onclick = ()=> setManageTab("edit");
+
+  $("btnCreateSave").onclick = saveCreatedCard;
+
+  $("editArea").addEventListener("change", ()=>{
+    rebuildEditAssuntos();
+  });
+  $("editAssunto").addEventListener("change", ()=>{
+    rebuildEditDecks();
+  });
+  $("editDeck").addEventListener("change", ()=>{
+    rebuildEditCardsList();
+  });
+
+  $("btnEditSave").onclick = saveEditCard;
 
   $("btnBackToFilters").onclick = ()=> showFilters();
 
@@ -1656,6 +2316,8 @@ function wire(){
 
     if (e.key === "Escape") closeAcct();
     if (!session) return;
+
+    // atalhos somente no Study
     if ($("studyPanel").style.display !== "block") return;
 
     if (e.key === " "){ e.preventDefault(); toggleReveal(); }
@@ -1673,6 +2335,16 @@ function wire(){
     const isMobile = window.matchMedia("(max-width: 720px)").matches;
     $("navRowMobile").style.display = ($("studyPanel").style.display === "block" && isMobile) ? "flex" : "none";
   });
+
+  // ✅ tenta reduzir double-tap zoom no iOS (fallback)
+  let _lastTouchEnd = 0;
+  document.addEventListener("touchend", function(e){
+    const now = Date.now();
+    if (now - _lastTouchEnd <= 300){
+      e.preventDefault();
+    }
+    _lastTouchEnd = now;
+  }, { passive: false });
 }
 
 wire();
