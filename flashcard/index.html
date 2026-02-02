@@ -727,6 +727,39 @@
 
     /* ✅ Botão admin no header (some por padrão) */
     #btnAdminCreateTop{ display:none; }
+
+    /* ===== Progress (carregamento) ===== */
+    .progressWrap{
+      display:none;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 18px rgba(17,24,39,.06);
+      padding: 12px;
+      margin: 10px 0 14px;
+    }
+    .progressTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .progressTrack{
+      height: 10px;
+      border-radius: 999px;
+      background: var(--surface2);
+      border: 1px solid var(--line);
+      overflow:hidden;
+    }
+    .progressFill{
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width .18s ease;
+    }
   </style>
 </head>
 
@@ -814,6 +847,17 @@
             <div class="cardTitle">
               <span>Selecione o que estudar</span>
               <small id="statusLine">—</small>
+            </div>
+
+            <!-- ✅ Progresso de carregamento -->
+            <div class="progressWrap" id="hydrateUI" aria-hidden="true">
+              <div class="progressTop">
+                <span class="mutedNote" id="hydrateLabel">Carregando cards…</span>
+                <span class="chip"><span class="chipDot"></span> <span id="hydratePct">0%</span></span>
+              </div>
+              <div class="progressTrack">
+                <div class="progressFill" id="hydrateBar" style="width:0%"></div>
+              </div>
             </div>
 
             <div class="filtersGrid">
@@ -995,6 +1039,11 @@
               <small id="studyCounter">—</small>
             </div>
 
+            <!-- ✅ Parte dedicada para voltar à seleção (áreas/assuntos/decks) -->
+            <div class="miniRow" style="margin-bottom: 12px;">
+              <button class="miniBtn" id="btnBackToFiltersTop" type="button">← Voltar à seleção</button>
+            </div>
+
             <div class="studyShell">
               <button class="navArrow" id="btnPrevSide" type="button" aria-label="Anterior">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1151,6 +1200,7 @@ let editSelectedId = null;
  *  ========================= */
 let isHydrating = false;
 let hydrateRunId = 0;
+let hydrateProgress = { done: 0, total: 0 };
 
 /** =========================
  *  DOM helpers
@@ -1178,6 +1228,52 @@ function setHydrating(on, msg){
   if (bManage) bManage.disabled = isHydrating;
 
   if (msg) setStatus(msg);
+
+  // ✅ UI do progresso
+  const ui = $("hydrateUI");
+  if (ui){
+    ui.style.display = isHydrating ? "block" : "none";
+    ui.setAttribute("aria-hidden", isHydrating ? "false" : "true");
+  }
+
+  // quando liga, zera visual
+  if (isHydrating) setHydrateProgress(0, hydrateProgress.total || 0);
+}
+
+function setHydrateProgress(done, total){
+  hydrateProgress.done = Number(done || 0);
+  hydrateProgress.total = Number(total || 0);
+
+  const pct = hydrateProgress.total
+    ? Math.max(0, Math.min(100, Math.round((hydrateProgress.done / hydrateProgress.total) * 100)))
+    : 0;
+
+  const ui = $("hydrateUI");
+  if (ui){
+    ui.style.display = isHydrating ? "block" : "none";
+    ui.setAttribute("aria-hidden", isHydrating ? "false" : "true");
+  }
+
+  const pctEl = $("hydratePct");
+  if (pctEl) pctEl.textContent = `${pct}%`;
+
+  const barEl = $("hydrateBar");
+  if (barEl) barEl.style.width = `${pct}%`;
+
+  const labelEl = $("hydrateLabel");
+  if (labelEl){
+    labelEl.textContent = hydrateProgress.total
+      ? `Carregando cards… ${pct}% (${hydrateProgress.done}/${hydrateProgress.total})`
+      : "Carregando cards…";
+  }
+
+  if (isHydrating){
+    setStatus(
+      hydrateProgress.total
+        ? `Carregando cards… ${pct}% (${hydrateProgress.done}/${hydrateProgress.total})`
+        : "Carregando cards…"
+    );
+  }
 }
 
 function delayFrame(){
@@ -1624,6 +1720,8 @@ async function hydrateUserDataProgressive(runId){
   let done = 0;
   const total = full.length || 0;
 
+  setHydrateProgress(0, total);
+
   for (const area of areaOrder){
     if (!session || runId !== hydrateRunId) return;
 
@@ -1633,7 +1731,7 @@ async function hydrateUserDataProgressive(runId){
       selAreas.add(area);
       done += chunk.length;
 
-      setStatus(`Carregando cards… ${done}/${total}`);
+      setHydrateProgress(done, total);
       refreshFiltersUI();
       await delayFrame();
     }
@@ -1648,12 +1746,13 @@ async function hydrateUserDataProgressive(runId){
     selAreas.add(area);
     done += chunk.length;
 
-    setStatus(`Carregando cards… ${done}/${total}`);
+    setHydrateProgress(done, total);
     refreshFiltersUI();
     await delayFrame();
   }
 
   setStatus(`Conectado como ${session.user}`);
+  setHydrateProgress(total, total);
   refreshPillInfo();
 }
 
@@ -1676,7 +1775,14 @@ function renderStudy(){
   }
 
   if (!viewCards.length){
-    $("studyFace").textContent = isHydrating ? "Carregando cards..." : "Nenhum card na sua seleção.";
+    const pct = hydrateProgress.total
+      ? Math.round((hydrateProgress.done / hydrateProgress.total) * 100)
+      : 0;
+
+    $("studyFace").textContent = isHydrating
+      ? `Carregando cards… ${pct}%`
+      : "Nenhum card na sua seleção.";
+
     $("studyCounter").textContent = "0/0";
     $("studyNote").textContent = isHydrating
       ? "Aguarde o carregamento e então selecione área/assunto/deck."
@@ -1836,6 +1942,7 @@ function setSessionFromLogin(res){
 function clearSession(){
   hydrateRunId++; // cancela carregamento em andamento
   setHydrating(false, "—");
+  setHydrateProgress(0, 0);
 
   session = null;
   localStorage.removeItem(LS_SESSION_KEY);
@@ -2412,6 +2519,7 @@ function wire(){
   $("btnEditSave").onclick = saveEditCard;
 
   $("btnBackToFilters").onclick = ()=> showFilters();
+  $("btnBackToFiltersTop").onclick = ()=> showFilters();
 
   $("btnPrevSide").onclick = goPrev;
   $("btnNextSide").onclick = goNext;
