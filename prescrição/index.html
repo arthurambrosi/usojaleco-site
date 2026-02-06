@@ -1,0 +1,1538 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guia de Prescrições</title>
+  <!-- ========================= UJ DESIGN KIT (HEAD) Fontes + Tokens + CSS base ========================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts (base) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Outfit (brand only) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Montserrat (área + assuntos) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* ===== TOKENS (white) ===== */
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface2:#f8fafc;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+      --accent:#f97316;
+      /* ===== Layout controls ===== */
+      --edgeL: 24px;
+      --edgeR: 24px;
+      --deskGap: 18px;
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
+      --t: .18s ease;
+      --topH: 44px;
+      --sideW: 72px;
+    }
+    @media (max-width: 720px){
+      :root{
+        --edgeL: 16px;
+        --edgeR: 16px;
+        --deskGap: 14px;
+        --sideW: 60px;
+      }
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%), radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%), linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
+      overflow-x:hidden;
+      color-scheme: light;
+      padding-left: var(--sideW);
+    }
+    a{ color:inherit; text-decoration:none }
+    button, input, textarea, select{ font:inherit }
+    ::selection{ background:rgba(249,115,22,.18) }
+    /* ===== HEADER ===== */
+    .topbarWrap{
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar{
+      width: 100%;
+      padding: 16px var(--edgeR);
+      padding-left: var(--edgeL);
+      margin: 0;
+      display:flex;
+      align-items:center;
+      gap: 18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 190px;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .brand img{
+      height: 28px;
+      width: auto;
+      display:block;
+      user-select:none;
+      -webkit-user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
+    }
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap: 0;
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color:#475569;
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      pointer-events:none;
+    }
+    .brandName b{ font-weight: 800; color:#334155; }
+    .headRight{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+    .headBtn{
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid #e7ebf2;
+      background: #fff;
+      color:#334155;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background var(--t), filter var(--t), transform var(--t);
+      white-space: nowrap;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height: 1;
+    }
+    .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
+    .headBtn:active{ transform: translateY(0px); }
+    .headBtnPrimary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color:#fff;
+    }
+    .headBtnPrimary:hover{
+      background: var(--accent);
+      border-color: var(--accent);
+      filter: brightness(.92);
+    }
+    @media (max-width: 720px){
+      .topbar{ padding-top: 14px; padding-bottom: 14px; }
+      .brand{ min-width: auto; }
+      .headRight{ gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+      .headBtn{ height: 36px; padding: 0 12px; font-size: 13px; }
+    }
+    /* ===== Drawer ===== */
+    .sideNav{
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sideW);
+      height: 100vh;
+      background: #fff;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 10px;
+      z-index: 70;
+    }
+    .sideLogo{
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+    .sideMenuBtn{
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform var(--t), box-shadow var(--t), background var(--t);
+    }
+    .sideMenuBtn:hover{
+      transform: translateY(-1px);
+      background: #f8fafc;
+    }
+    .sideMenuBtn svg{
+      width: 22px;
+      height: 22px;
+      color:#0f172a;
+    }
+    .drawerOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t);
+      z-index: 50;
+    }
+    .drawer{
+      position: fixed;
+      top:0;
+      left: var(--sideW);
+      height:100vh;
+      width: min(360px, calc(100vw - var(--sideW)));
+      background: #fff;
+      border-right: 1px solid var(--line);
+      box-shadow: 0 14px 28px rgba(15,23,42,.12);
+      transform: translateX(-100%);
+      transition: transform var(--t);
+      z-index: 55;
+      padding: 14px 14px 20px;
+      overflow-y: auto;
+    }
+    body.drawer-open .drawer{
+      transform: translateX(0);
+    }
+    body.drawer-open .drawerOverlay{
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .drawerHeader{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .drawerLogo{
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    .drawerTitle{
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .drawerSubtitle{
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .loadProgress{
+      margin: 8px 0 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface2);
+      display: grid;
+      gap: 6px;
+    }
+    .loadText{
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--muted);
+    }
+    .progressBar{
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .progressBar span{
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fdba74, #f97316);
+      transition: width .2s ease;
+    }
+    /* ===== App wrap ===== */
+    .wrap{
+      width:100%;
+      max-width: 1180px;
+      margin:0 auto;
+      padding: 20px 28px 36px;
+    }
+    .contentArea{
+      margin-top: 16px;
+      padding: 16px 18px;
+      min-height: 120px;
+    }
+    /* ===== Cards ===== */
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--rBig);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+      min-width: 0;
+    }
+    /* ===== Campos ===== */
+    .label{
+      display:block;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: .2px;
+    }
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface2);
+      color: var(--text);
+      padding: 11px 12px;
+      outline:none;
+      transition: border-color var(--t), background var(--t), box-shadow var(--t);
+    }
+    .field:focus, .select:focus{
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
+      background: #fff;
+    }
+    /* ===== Botões (genéricos) ===== */
+    .btn{
+      cursor:pointer;
+      border-radius: var(--rBtn);
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      height: var(--topH);
+      font-weight: 900;
+      font-size: 13.5px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition: transform var(--t), background var(--t), border-color var(--t), box-shadow var(--t);
+      white-space: nowrap;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btnPrimary{
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(249,115,22,.18);
+    }
+    .btnPrimary:hover{
+      filter: brightness(.97);
+      box-shadow: 0 12px 22px rgba(249,115,22,.22);
+      border-color: rgba(249,115,22,.92);
+      background: rgba(249,115,22,.98);
+    }
+    .btnGhost{ background: #fff; border-color: var(--line); color: var(--text); }
+    .mutedNote{
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12.6px;
+      line-height: 1.35;
+    }
+    /* ===== Page-specific ===== */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--deskGap);
+      align-items: stretch;
+    }
+    .heroMain{
+      padding: 22px 24px 24px;
+    }
+    .eyebrow{
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #f97316;
+      margin: 0 0 12px;
+    }
+    .heroMain h1{
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(2.1rem, 3vw, 3.1rem);
+      margin: 0 0 8px;
+      line-height: 1.05;
+    }
+    .lead{
+      font-size: 1.02rem;
+      color: var(--muted);
+      margin: 0 0 18px;
+      line-height: 1.55;
+    }
+    .heroActions{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .heroAside{
+      display:grid;
+      gap: var(--deskGap);
+    }
+    .stat{
+      padding: 18px 20px;
+    }
+    .statValue{
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .statLabel{
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .filters{
+      margin-top: 18px;
+      padding: 16px 16px;
+    }
+    .filtersGrid{
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .drawer .filters{
+      margin-top: 0;
+      padding: 12px 12px;
+    }
+    .drawer .filtersGrid{
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .cards{
+      display:grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .area-card{
+      padding: 14px 14px;
+    }
+    .drawer .area-card{
+      padding: 12px 12px;
+      box-shadow: none;
+    }
+    .area-header{
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      border: none;
+      background: transparent;
+      text-align:left;
+      cursor:pointer;
+      padding: 0;
+      color: var(--text);
+      -webkit-appearance: none;
+      appearance: none;
+      -webkit-text-fill-color: var(--text);
+    }
+    .area-title{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .area-title h2{
+      margin: 0;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .area-count{
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .area-toggle{
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 800;
+      background: #fff;
+      color: #334155;
+    }
+    .area-body{
+      display: none;
+      margin-top: 14px;
+      text-align: left;
+    }
+    .area-card.is-open .area-body{
+      display: block;
+    }
+    .subject-list{
+      display: grid;
+      gap: 8px;
+      margin-bottom: 0;
+      text-align: left;
+    }
+    .subject-item{
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(15,23,42,.03);
+    }
+    .subject-btn{
+      width: 100%;
+      border: 0;
+      background: #fff;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      text-align: left;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.88rem;
+      line-height: 1.2;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      -webkit-appearance: none;
+      appearance: none;
+      -webkit-text-fill-color: var(--text);
+    }
+    .subject-btn:hover{
+      background: #f8fafc;
+    }
+    .subject-btn.is-active{
+      background: #fff7ed;
+    }
+    .subject-btn.is-active .subject-dot{
+      box-shadow: 0 0 0 2px rgba(249,115,22,.25);
+    }
+    .subject-dot{
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      display: inline-block;
+      flex-shrink: 0;
+      background: radial-gradient(circle at 30% 30%, #64748b 0%, #1f2937 55%, #0f172a 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .area-dot{
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fdba74 0%, #f97316 55%, #ea580c 100%);
+      box-shadow: 0 0 10px rgba(249,115,22,.55);
+      flex-shrink: 0;
+    }
+    .area-name{
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--text);
+      flex: 1;
+    }
+    .area-chevron{
+      width: 16px;
+      height: 16px;
+      color: #94a3b8;
+      transition: transform var(--t), color var(--t);
+      margin-left: auto;
+    }
+    .area-card.is-open .area-chevron{
+      color: var(--accent);
+      transform: rotate(180deg);
+    }
+    .area-header{
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 2px 2px;
+    }
+    .area-header{
+      gap: 10px;
+    }
+    .area-header h2{
+      font-size: 0.98rem;
+    }
+    .area-toggle{
+      display: none;
+    }
+    .subject-title{
+      flex: 1;
+    }
+    .subject-chevron{
+      color: #94a3b8;
+      transition: transform var(--t), color var(--t);
+      width: 18px;
+      height: 18px;
+    }
+    .subject-btn.is-active .subject-chevron{
+      color: #f97316;
+      transform: rotate(180deg);
+    }
+    .subject-detail{
+      display: grid;
+      gap: 12px;
+      text-align: left;
+    }
+    .guide-detail{
+      border-radius: var(--rMid);
+      padding: 14px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--line);
+    }
+    .detailHeader{
+      display:flex;
+      align-items:flex-start;
+      gap: 8px;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .detailTitles{
+      display:flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .detailTitle{
+      margin: 0;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .detailSubtitle{
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    .detailTools{
+      margin-left: auto;
+      display:flex;
+      align-items:center;
+    }
+    .detailTools .copyBtn{
+      height: 32px;
+      font-size: 0.76rem;
+      padding: 0 10px;
+    }
+    .detailSectionTitle{
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin: 0 0 6px;
+      color: var(--text);
+    }
+    .guide-detail h3{
+      margin: 0 0 8px;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .guide-card{
+      padding: 16px 18px 18px;
+    }
+    .guide-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .guide-title{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .guide-title h2{
+      margin: 0;
+      font-family: "DM Serif Display", serif;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(249,115,22,.12);
+      color: #9a3412;
+      font-weight: 800;
+      font-size: 0.78rem;
+    }
+    .toggle{
+      min-width: 110px;
+      height: 38px;
+    }
+    .guide-body{
+      margin-top: 16px;
+      display:none;
+    }
+    .guide-card.is-open .guide-body{
+      display:block;
+    }
+    .guide-tabs{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .guide-tab{
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      color: #475569;
+      transition: background var(--t), color var(--t), border-color var(--t);
+      font-size: 0.84rem;
+    }
+    .guide-tab:hover{
+      border-color: rgba(249,115,22,.35);
+      color: #0f172a;
+    }
+    .guide-tab--active{
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+    }
+    .guide-panel{
+      display:none;
+      border-radius: var(--rMid);
+      padding: 14px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--line);
+    }
+    .guide-panel.is-active{
+      display:block;
+    }
+    .guide-panel h1,
+    .guide-panel h2,
+    .guide-panel h3{
+      font-family: "DM Serif Display", serif;
+      margin-top: 0;
+    }
+    .guide-panel hr{
+      border: none;
+      border-top: 1px dashed rgba(15,23,42,.18);
+      margin: 12px 0;
+    }
+    .guide-panel.tone-neutro{ color: var(--text); }
+    .guide-panel.tone-destaque{
+      background: #fff7ed;
+      border-color: rgba(249,115,22,.35);
+      color: #9a3412;
+    }
+    .guide-panel.tone-alerta{
+      background: #fff1f2;
+      border-color: rgba(239,68,68,.35);
+      color: #991b1b;
+    }
+    .guide-panel.tone-sucesso{
+      background: #f0fdf4;
+      border-color: rgba(34,197,94,.35);
+      color: #166534;
+    }
+    .guide-panel.tone-info{
+      background: #eff6ff;
+      border-color: rgba(59,130,246,.35);
+      color: #1e3a8a;
+    }
+    .guide-panel.space-compact{
+      line-height: 1.35;
+    }
+    .guide-panel.space-normal{
+      line-height: 1.55;
+    }
+    .guide-panel.space-amplo{
+      line-height: 1.7;
+    }
+    .guide-panel.space-compact p,
+    .guide-panel.space-compact ul,
+    .guide-panel.space-compact ol{
+      margin: 0 0 6px;
+    }
+    .guide-panel.space-normal p,
+    .guide-panel.space-normal ul,
+    .guide-panel.space-normal ol{
+      margin: 0 0 12px;
+    }
+    .guide-panel.space-amplo p,
+    .guide-panel.space-amplo ul,
+    .guide-panel.space-amplo ol{
+      margin: 0 0 16px;
+    }
+    .guide-panel ul,
+    .guide-panel ol{
+      padding-left: 20px;
+    }
+    .guide-panel blockquote{
+      margin: 0 0 12px;
+      padding-left: 18px;
+      border-left: 4px solid var(--accent);
+      color: var(--text);
+    }
+    /* ===== Tabs por pasta ===== */
+    .folder-panels{
+      display: grid;
+      gap: var(--deskGap);
+    }
+    .folder-panel{
+      display: none;
+    }
+    .folder-panel.is-active{
+      display: block;
+    }
+    /* ===== Prescrição look (Montserrat + estilo semelhante ao exemplo) ===== */
+    .guide-panel[data-panel="prescricao"]{
+      font-family: "Montserrat", Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 15px;
+    }
+    .guide-panel[data-panel="prescricao"] h1,
+    .guide-panel[data-panel="prescricao"] h2,
+    .guide-panel[data-panel="prescricao"] h3,
+    .guide-panel[data-panel="prescricao"] h4{
+      font-family: "Montserrat", Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+    .guide-panel[data-panel="prescricao"] ul{
+      padding-left: 22px;
+    }
+    .guide-panel[data-panel="prescricao"] li{
+      margin-bottom: 6px;
+    }
+    .guide-panel[data-panel="prescricao"] blockquote{
+      margin: 8px 0 12px;
+      padding-left: 14px;
+      border-left: 3px solid var(--accent);
+      color: var(--text);
+      font-weight: 700;
+    }
+    .guide-panel[data-panel="prescricao"] em{
+      color: #8b5cf6;
+      font-style: italic;
+      font-weight: 600;
+    }
+    .panel-tools{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom: 10px;
+    }
+    .copyBtn{
+      border-radius: 999px;
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid rgba(15,23,42,.12);
+      background: #fff;
+      font-weight: 800;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      color: #0f172a;
+      transition: transform var(--t), background var(--t), border-color var(--t);
+    }
+    .copyBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(15,23,42,.2);
+    }
+    .copyBtn.is-copied{
+      background: #f0fdf4;
+      border-color: rgba(34,197,94,.4);
+      color: #166534;
+    }
+    .empty-state{
+      text-align: center;
+      color: var(--muted);
+      padding: 24px;
+      border: 1px dashed var(--line);
+      border-radius: var(--rBig);
+    }
+    .footer{
+      margin-top: 18px;
+      text-align: center;
+    }
+    @media (max-width: 720px){
+      body{
+        padding-left: var(--sideW);
+      }
+      .wrap{
+        padding: 18px 16px 30px;
+      }
+      .drawer{
+        left: var(--sideW);
+        width: min(360px, calc(100vw - var(--sideW)));
+      }
+    }
+    @media (max-width: 980px){
+      .hero{
+        grid-template-columns: 1fr;
+      }
+      .filtersGrid{
+        grid-template-columns: 1fr;
+      }
+      .toggle{
+        min-width: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sideNav" aria-label="Menu lateral">
+    <img class="sideLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" />
+    <button class="sideMenuBtn" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="drawer">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </aside>
+  <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true"></div>
+
+  <div class="wrap" id="appWrap">
+            <section class="hero">
+      <div class="heroMain card">
+        <p class="eyebrow">Guia de Prescrições</p>
+        <h1>Protocolos práticos no ponto de cuidado.</h1>
+        <p class="lead">Organize critérios, dicas, exames complementares e prescrições em um só lugar. Selecione a aba para ver os assuntos disponíveis.</p>
+        <div class="heroActions">
+          <a class="btn btnPrimary" href="/admin/">Adicionar ou editar</a>
+          <a class="btn btnGhost" href="#guia">Ver guias</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contentArea card" id="contentArea">
+      <div class="empty-state">Selecione um assunto no menu para ver o conteúdo.</div>
+    </section>
+  </div>
+
+  <aside class="drawer" id="drawer" aria-label="Menu de capítulos">
+    <div class="drawerHeader">
+      <img class="drawerLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" />
+      <div>
+        <div class="drawerTitle">Capítulos</div>
+        <div class="drawerSubtitle">Selecione uma área e um assunto</div>
+      </div>
+    </div>
+    <div class="loadProgress" id="loadProgress">
+      <div class="loadText" id="loadText">Carregando 0%</div>
+      <div class="progressBar"><span id="progressBar"></span></div>
+    </div>
+    <section class="filters card" id="guia">
+      <div class="filtersGrid">
+        <div>
+          <label class="label" for="search">Buscar</label>
+          <input class="field" type="search" id="search" placeholder="Buscar por assunto ou palavra-chave" />
+        </div>
+        <div>
+          <label class="label" for="clear">Ações</label>
+          <button class="btn btnGhost" id="clear" type="button">Limpar filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards" id="areaList"></section>
+    <div class="footer mutedNote">Dica: escolha uma aba para ver os assuntos. Para criar divisórias no editor, use três traços `---` em uma linha.</div>
+  </aside>
+
+    <template id="areaTemplate">
+    <article class="card area-card">
+      <button class="area-header" type="button">
+        <div class="area-title">
+          <h2></h2>
+          <span class="area-count"></span>
+        </div>
+        <span class="area-toggle">Ver assuntos</span>
+      </button>
+      <div class="area-body">
+        <div class="subject-list"></div>
+        <div class="subject-detail"></div>
+      </div>
+    </article>
+  </template>
+
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    const areaListEl = document.getElementById('areaList')
+    const searchInput = document.getElementById('search')
+    const clearBtn = document.getElementById('clear')
+    const contentArea = document.getElementById('contentArea')
+    const progressText = document.getElementById('loadText')
+    const progressBar = document.getElementById('progressBar')
+
+    const state = {
+      data: [],
+      loaded: 0,
+      total: 0
+    }
+
+    const areaSections = new Map()
+    let currentFilter = ''
+    const pendingByArea = new Map()
+    const areaOrder = []
+    let drainScheduled = false
+
+    function normalize(value) {
+      if (!value) {
+        return ''
+      }
+      return value
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+    }
+
+    function markdown(value) {
+      if (!value) {
+        return '<p class="mutedNote">Sem conteúdo.</p>'
+      }
+      return marked.parse(value)
+    }
+
+    function toPlainText(value) {
+      if (!value) {
+        return ''
+      }
+      const temp = document.createElement('div')
+      temp.innerHTML = marked.parse(value)
+      return temp.innerText.trim()
+    }
+
+    async function copyToClipboard(text) {
+      if (!text) {
+        return false
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text)
+        return true
+      }
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      try {
+        document.execCommand('copy')
+        return true
+      } finally {
+        document.body.removeChild(textarea)
+      }
+    }
+
+    function createCopyButton(label, text) {
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'copyBtn'
+      button.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 9V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <rect x="3" y="9" width="10" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span>${label}</span>
+      `
+      button.addEventListener('click', async () => {
+        const ok = await copyToClipboard(text)
+        if (!ok) {
+          return
+        }
+        const span = button.querySelector('span')
+        const original = span.textContent
+        span.textContent = 'Copiado'
+        button.classList.add('is-copied')
+        setTimeout(() => {
+          span.textContent = original
+          button.classList.remove('is-copied')
+        }, 1600)
+      })
+      return button
+    }
+
+    function activateTab(container, tabName) {
+      const tabs = container.querySelectorAll('.guide-tab')
+      const panels = container.querySelectorAll('.guide-panel')
+      tabs.forEach((btn) => {
+        const isActive = btn.dataset.tab === tabName
+        btn.classList.toggle('guide-tab--active', isActive)
+      })
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.panel === tabName
+        panel.classList.toggle('is-active', isActive)
+      })
+    }
+
+    function applyPanelStyle(panel, tone, spacing) {
+      const safeTone = tone || 'neutro'
+      const safeSpacing = spacing || 'normal'
+      panel.classList.add(`tone-${safeTone}`)
+      panel.classList.add(`space-${safeSpacing}`)
+    }
+
+    function activateFolderTab(container, tabName) {
+      const tabs = container.querySelectorAll('.folder-tab')
+      const panels = container.querySelectorAll('.folder-panel')
+      tabs.forEach((btn) => {
+        const isActive = btn.dataset.tab === tabName
+        btn.classList.toggle('guide-tab--active', isActive)
+      })
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.panel === tabName
+        panel.classList.toggle('is-active', isActive)
+      })
+    }
+
+    function buildDetail(item) {
+      const wrapper = document.createElement('div')
+      wrapper.className = 'guide-detail'
+      const title = item.assunto || 'Sem assunto'
+      const area = item.area || 'Sem área'
+      const tabsData = Array.isArray(item.tabs) ? item.tabs : []
+      const spacing = item.espacamento || 'normal'
+
+      const header = document.createElement('div')
+      header.className = 'detailHeader'
+      const titles = document.createElement('div')
+      titles.className = 'detailTitles'
+      const h3 = document.createElement('h3')
+      h3.className = 'detailTitle'
+      h3.textContent = title
+      const subtitle = document.createElement('div')
+      subtitle.className = 'detailSubtitle'
+      subtitle.textContent = area
+      titles.appendChild(h3)
+      titles.appendChild(subtitle)
+      header.appendChild(titles)
+
+      let copyText = ''
+      let allowCopy = true
+      if (tabsData.length) {
+        const prescTab = tabsData.find((tab) => normalize(tab.title).includes('prescri'))
+        if (prescTab && prescTab.content) {
+          copyText = toPlainText(prescTab.content)
+        }
+      } else if (item.prescricao) {
+        allowCopy = item.prescricao_copiavel !== false
+        copyText = (item.prescricao_copia || '').trim() || toPlainText(item.prescricao)
+      }
+
+      if (allowCopy && copyText) {
+        const tools = document.createElement('div')
+        tools.className = 'detailTools'
+        const label = item.prescricao_copiar_rotulo || 'Copiar prescrição'
+        tools.appendChild(createCopyButton(label, copyText))
+        header.appendChild(tools)
+      }
+
+      wrapper.appendChild(header)
+
+      const panel = document.createElement('div')
+      panel.className = 'guide-panel is-active'
+      let panelContent = ''
+      let panelTone = item.prescricao_tom
+
+      if (tabsData.length) {
+        const prescTab = tabsData.find((tab) => normalize(tab.title).includes('prescri'))
+        const content = prescTab && prescTab.content ? prescTab.content.trim() : ''
+        panelContent = content || '<p class="mutedNote">Sem conteúdo.</p>'
+        if (prescTab && prescTab.lineHeight) {
+          panel.style.lineHeight = prescTab.lineHeight
+        }
+        panelTone = prescTab && prescTab.tone ? prescTab.tone : panelTone
+      } else {
+        panelContent = markdown(item.prescricao)
+      }
+
+      panel.innerHTML = panelContent
+      applyPanelStyle(panel, panelTone, spacing)
+      wrapper.appendChild(panel)
+      return wrapper
+    }
+
+    function groupByArea(items) {
+      const map = new Map()
+      items.forEach((item) => {
+        const area = item.area || 'Sem área'
+        if (!map.has(area)) {
+          map.set(area, [])
+        }
+        map.get(area).push(item)
+      })
+      return map
+    }
+
+    function createSubjectItem(item) {
+      const itemWrap = document.createElement('div')
+      itemWrap.className = 'subject-item'
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'subject-btn'
+      const titleText = item.assunto || 'Sem assunto'
+      btn.innerHTML = `
+        <span class="subject-dot" aria-hidden="true"></span>
+        <span class="subject-title">${titleText}</span>
+        <svg class="subject-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.subject-btn.is-active').forEach((b) => b.classList.remove('is-active'))
+        btn.classList.add('is-active')
+        if (contentArea) {
+          contentArea.innerHTML = ''
+          contentArea.appendChild(buildDetail(item))
+        }
+        setDrawer(false)
+      })
+      itemWrap.appendChild(btn)
+      return itemWrap
+    }
+
+    function ensureAreaSection(area) {
+      if (areaSections.has(area)) {
+        return areaSections.get(area)
+      }
+      const card = document.createElement('article')
+      card.className = 'card area-card'
+      const header = document.createElement('button')
+      header.type = 'button'
+      header.className = 'area-header'
+      header.innerHTML = `
+        <span class="area-dot" aria-hidden="true"></span>
+        <span class="area-name">${area}</span>
+        <svg class="area-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `
+      const body = document.createElement('div')
+      body.className = 'area-body'
+      const subjectList = document.createElement('div')
+      subjectList.className = 'subject-list'
+      body.appendChild(subjectList)
+      header.addEventListener('click', () => {
+        card.classList.toggle('is-open')
+      })
+      card.appendChild(header)
+      card.appendChild(body)
+      areaListEl.appendChild(card)
+      const section = { card, list: subjectList }
+      areaSections.set(area, section)
+      return section
+    }
+
+    function appendItem(item) {
+      const empty = areaListEl.querySelector('.empty-state')
+      if (empty) {
+        empty.remove()
+      }
+      const area = item.area || 'Sem área'
+      const section = ensureAreaSection(area)
+      section.list.appendChild(createSubjectItem(item))
+    }
+
+    function renderAreaList(items) {
+      areaListEl.innerHTML = ''
+      areaSections.clear()
+      if (!items.length) {
+        const empty = document.createElement('div')
+        empty.className = 'empty-state'
+        empty.textContent = 'Nenhuma prescrição encontrada. Verifique os arquivos na pasta data.'
+        areaListEl.appendChild(empty)
+        return
+      }
+      const map = groupByArea(items)
+      const areas = Array.from(map.keys()).sort((a, b) => a.localeCompare(b, 'pt-BR'))
+      areas.forEach((area) => {
+        const section = ensureAreaSection(area)
+        map.get(area).forEach((item) => {
+          section.list.appendChild(createSubjectItem(item))
+        })
+      })
+    }
+
+    function filterItems(term) {
+      if (!term) {
+        return state.data
+      }
+      return state.data.filter((item) => {
+        const tabsText = Array.isArray(item.tabs)
+          ? item.tabs.map((tab) => `${tab.title || ''} ${tab.content || ''}`).join(' ')
+          : ''
+        const combined = [
+          item.assunto,
+          item.area,
+          item.criterios,
+          item.dicas,
+          item.exames,
+          item.prescricao,
+          item.prescricao_copia,
+          tabsText
+        ].join(' ')
+        const normalized = normalize(combined)
+        return normalized.includes(term)
+      })
+    }
+
+    function filterAndRender() {
+      currentFilter = normalize(searchInput.value.trim())
+      const results = filterItems(currentFilter)
+      pendingByArea.clear()
+      areaOrder.length = 0
+      drainScheduled = false
+      renderAreaList(results)
+    }
+
+    function ensurePendingArea(area) {
+      if (!pendingByArea.has(area)) {
+        pendingByArea.set(area, [])
+        areaOrder.push(area)
+      }
+      return pendingByArea.get(area)
+    }
+
+    function enqueueItems(items) {
+      items.forEach((item) => {
+        const area = item.area || 'Sem área'
+        ensurePendingArea(area).push(item)
+      })
+    }
+
+    function pendingCount() {
+      let total = 0
+      pendingByArea.forEach((queue) => {
+        total += queue.length
+      })
+      return total
+    }
+
+    function drainPending() {
+      drainScheduled = false
+      if (currentFilter) {
+        pendingByArea.clear()
+        areaOrder.length = 0
+        return
+      }
+      const start = performance.now()
+      let appended = true
+      while (appended) {
+        appended = false
+        areaOrder.forEach((area) => {
+          const queue = pendingByArea.get(area)
+          if (queue && queue.length) {
+            appendItem(queue.shift())
+            appended = true
+          }
+        })
+        if (performance.now() - start > 12) {
+          break
+        }
+      }
+      if (pendingCount() > 0) {
+        requestAnimationFrame(drainPending)
+      }
+    }
+
+    function scheduleDrain() {
+      if (drainScheduled) return
+      drainScheduled = true
+      requestAnimationFrame(drainPending)
+    }
+
+    function updateProgress(loaded, total) {
+      if (!progressText || !progressBar) {
+        return
+      }
+      const percent = total ? Math.round((loaded / total) * 100) : 0
+      progressText.textContent = total
+        ? `Carregando ${percent}% (${loaded}/${total})`
+        : 'Carregando...'
+      progressBar.style.width = `${percent}%`
+      if (total && loaded >= total) {
+        progressText.textContent = 'Carregamento completo'
+      }
+    }
+
+    function areaFromFile(file) {
+      const parts = file.split('/')
+      if (parts.length > 1) {
+        return decodeURIComponent(parts[0])
+      }
+      return 'Sem área'
+    }
+
+    function buildRoundRobinQueue(filesByArea) {
+      const areas = Array.from(filesByArea.keys()).sort((a, b) => a.localeCompare(b, 'pt-BR'))
+      const queues = new Map()
+      areas.forEach((area) => queues.set(area, filesByArea.get(area).slice()))
+      const result = []
+      let pending = true
+      while (pending) {
+        pending = false
+        areas.forEach((area) => {
+          const queue = queues.get(area)
+          if (queue && queue.length) {
+            result.push({ file: queue.shift(), area })
+            pending = true
+          }
+        })
+      }
+      return result
+    }
+
+    async function loadIndexFiles() {
+      try {
+        const response = await fetch(`./data/prescricoes_index.json`, { cache: 'no-store' })
+        if (!response.ok) return []
+        const payload = await response.json()
+        const files = Array.isArray(payload) ? payload : (payload.files || [])
+        if (!Array.isArray(files)) return []
+        const unique = Array.from(new Set(files.filter(Boolean)))
+        return unique
+      } catch (err) {
+        return []
+      }
+    }
+
+    async function loadFile(file, fallbackArea) {
+      try {
+        const res = await fetch(`./data/${file}`, { cache: 'no-store' })
+        if (!res.ok) {
+          return []
+        }
+        const data = await res.json()
+        const list = Array.isArray(data)
+          ? data
+          : (Array.isArray(data.prescricoes) ? data.prescricoes : [data])
+        return list.map((item) => ({
+          ...item,
+          area: fallbackArea || item.area || 'Sem área'
+        }))
+      } catch (err) {
+        return []
+      }
+    }
+
+    async function loadData() {
+      state.data = []
+      areaListEl.innerHTML = ''
+      pendingByArea.clear()
+      areaOrder.length = 0
+      drainScheduled = false
+
+      const files = await loadIndexFiles()
+      state.total = files.length
+      state.loaded = 0
+      updateProgress(0, state.total)
+
+      if (!files.length) {
+        renderAreaList([])
+        return
+      }
+
+      const filesByArea = new Map()
+      files.forEach((file) => {
+        const area = areaFromFile(file)
+        if (!filesByArea.has(area)) {
+          filesByArea.set(area, [])
+        }
+        filesByArea.get(area).push(file)
+      })
+
+      const queue = buildRoundRobinQueue(filesByArea)
+
+      for (const entry of queue) {
+        const items = await loadFile(entry.file, entry.area)
+        state.loaded += 1
+        if (items.length) {
+          state.data.push(...items)
+          if (currentFilter) {
+            renderAreaList(filterItems(currentFilter))
+          } else {
+            enqueueItems(items)
+            scheduleDrain()
+          }
+        }
+        updateProgress(state.loaded, state.total)
+        await new Promise((r) => setTimeout(r, 80))
+      }
+
+      if (!state.data.length) {
+        renderAreaList([])
+      }
+    }
+
+    searchInput.addEventListener('input', filterAndRender)
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = ''
+      filterAndRender()
+    })
+
+    const menuToggle = document.getElementById('menuToggle')
+    const drawerOverlay = document.getElementById('drawerOverlay')
+    const drawerEl = document.getElementById('drawer')
+
+    function setDrawer(open) {
+      document.body.classList.toggle('drawer-open', open)
+      if (menuToggle) {
+        menuToggle.setAttribute('aria-expanded', String(open))
+      }
+      if (!open && drawerEl) {
+        drawerEl.scrollTop = 0
+      }
+    }
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.contains('drawer-open')
+        setDrawer(!isOpen)
+      })
+    }
+    if (drawerOverlay) {
+      drawerOverlay.addEventListener('click', () => setDrawer(false))
+    }
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setDrawer(false)
+      }
+    })
+
+    loadData()
+  </script>
+</body>
+</html>
+
