@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guia de Prescrições</title>
+  <title>Guia de Prescri��es</title>
   <!-- ========================= UJ DESIGN KIT (HEAD) Fontes + Tokens + CSS base ========================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Outfit (brand only) -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Montserrat (área + assuntos) -->
+  <!-- Montserrat (�rea + assuntos) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -323,7 +323,7 @@
       box-shadow: 0 0 0 3px rgba(249,115,22,.18);
       background: #fff;
     }
-    /* ===== Botões (genéricos) ===== */
+    /* ===== Bot�es (gen�ricos) ===== */
     .btn{
       cursor:pointer;
       border-radius: var(--rBtn);
@@ -821,7 +821,7 @@
     .folder-panel.is-active{
       display: block;
     }
-    /* ===== Prescrição look (Montserrat + estilo semelhante ao exemplo) ===== */
+    /* ===== Prescri��o look (Montserrat + estilo semelhante ao exemplo) ===== */
     .guide-panel[data-panel="prescricao"]{
       font-family: "Montserrat", Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 15px;
@@ -973,9 +973,9 @@
   <div class="wrap" id="appWrap">
             <section class="hero">
       <div class="heroMain card">
-        <p class="eyebrow">Guia de Prescrições</p>
-        <h1>Protocolos práticos no ponto de cuidado.</h1>
-        <p class="lead">Organize critérios, dicas, exames complementares e prescrições em um só lugar. Selecione a aba para ver os assuntos disponíveis.</p>
+        <p class="eyebrow">Guia de Prescri��es</p>
+        <h1>Protocolos pr�ticos no ponto de cuidado.</h1>
+        <p class="lead">Organize crit�rios, dicas, exames complementares e prescri��es em um s� lugar. Selecione a aba para ver os assuntos dispon�veis.</p>
         <div class="heroActions">
           <a class="btn btnPrimary" href="/admin/">Adicionar ou editar</a>
           <a class="btn btnGhost" href="#guia">Ver guias</a>
@@ -984,16 +984,16 @@
     </section>
 
     <section class="contentArea card" id="contentArea">
-      <div class="empty-state">Selecione um assunto no menu para ver o conteúdo.</div>
+      <div class="empty-state">Selecione um assunto no menu para ver o conte�do.</div>
     </section>
   </div>
 
-  <aside class="drawer" id="drawer" aria-label="Menu de capítulos">
+  <aside class="drawer" id="drawer" aria-label="Menu de cap�tulos">
     <div class="drawerHeader">
       <img class="drawerLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" />
       <div>
-        <div class="drawerTitle">Capítulos</div>
-        <div class="drawerSubtitle">Selecione uma área e um assunto</div>
+        <div class="drawerTitle">Cap�tulos</div>
+        <div class="drawerSubtitle">Selecione uma �rea e um assunto</div>
       </div>
     </div>
     <div class="loadProgress" id="loadProgress">
@@ -1007,14 +1007,14 @@
           <input class="field" type="search" id="search" placeholder="Buscar por assunto ou palavra-chave" />
         </div>
         <div>
-          <label class="label" for="clear">Ações</label>
+          <label class="label" for="clear">A��es</label>
           <button class="btn btnGhost" id="clear" type="button">Limpar filtros</button>
         </div>
       </div>
     </section>
 
     <section class="cards" id="areaList"></section>
-    <div class="footer mutedNote">Dica: escolha uma aba para ver os assuntos. Para criar divisórias no editor, use três traços `---` em uma linha.</div>
+    <div class="footer mutedNote">Dica: escolha uma aba para ver os assuntos. Para criar divis�rias no editor, use tr�s tra�os `---` em uma linha.</div>
   </aside>
 
     <template id="areaTemplate">
@@ -1067,7 +1067,7 @@
 
     function markdown(value) {
       if (!value) {
-        return '<p class="mutedNote">Sem conteúdo.</p>'
+        return '<p class="mutedNote">Sem conte�do.</p>'
       }
       return marked.parse(value)
     }
@@ -1170,7 +1170,7 @@
 
     function setContentEmpty() {
       if (!contentArea) return
-      contentArea.innerHTML = '<div class="empty-state">Selecione um assunto no menu para ver o conteúdo.</div>'
+      contentArea.innerHTML = '<div class="empty-state">Selecione um assunto no menu para ver o conte�do.</div>'
     }
 
     function enterDetailView() {
@@ -1188,7 +1188,7 @@
       const wrapper = document.createElement('div')
       wrapper.className = 'guide-detail'
       const title = item.assunto || 'Sem assunto'
-      const area = item.area || 'Sem área'
+      const area = item.area || 'Sem �rea'
       const tabsData = Array.isArray(item.tabs) ? item.tabs : []
       const spacing = item.espacamento || 'normal'
 
@@ -1221,7 +1221,7 @@
       if (allowCopy && copyText) {
         const tools = document.createElement('div')
         tools.className = 'detailTools'
-        const label = item.prescricao_copiar_rotulo || 'Copiar prescrição'
+        const label = item.prescricao_copiar_rotulo || 'Copiar prescri��o'
         tools.appendChild(createCopyButton(label, copyText))
         header.appendChild(tools)
       }
@@ -1236,7 +1236,7 @@
       if (tabsData.length) {
         const prescTab = tabsData.find((tab) => normalize(tab.title).includes('prescri'))
         const content = prescTab && prescTab.content ? prescTab.content.trim() : ''
-        panelContent = content || '<p class="mutedNote">Sem conteúdo.</p>'
+        panelContent = content || '<p class="mutedNote">Sem conte�do.</p>'
         if (prescTab && prescTab.lineHeight) {
           panel.style.lineHeight = prescTab.lineHeight
         }
@@ -1254,7 +1254,7 @@
     function groupByArea(items) {
       const map = new Map()
       items.forEach((item) => {
-        const area = item.area || 'Sem área'
+        const area = item.area || 'Sem �rea'
         if (!map.has(area)) {
           map.set(area, [])
         }
@@ -1337,7 +1337,7 @@
       if (empty) {
         empty.remove()
       }
-      const area = item.area || 'Sem área'
+      const area = item.area || 'Sem �rea'
       const section = ensureAreaSection(area)
       section.list.appendChild(createSubjectItem(item))
     }
@@ -1348,7 +1348,7 @@
       if (!items.length) {
         const empty = document.createElement('div')
         empty.className = 'empty-state'
-        empty.textContent = 'Nenhuma prescrição encontrada. Verifique os arquivos na pasta data.'
+        empty.textContent = 'Nenhuma prescri��o encontrada. Verifique os arquivos na pasta data.'
         areaListEl.appendChild(empty)
         return
       }
@@ -1404,7 +1404,7 @@
 
     function enqueueItems(items) {
       items.forEach((item) => {
-        const area = item.area || 'Sem área'
+        const area = item.area || 'Sem �rea'
         ensurePendingArea(area).push(item)
       })
     }
@@ -1469,7 +1469,7 @@
       if (parts.length > 1) {
         return decodeURIComponent(parts[0])
       }
-      return 'Sem área'
+      return 'Sem �rea'
     }
 
     function buildRoundRobinQueue(filesByArea) {
@@ -1491,12 +1491,18 @@
       return result
     }
 
+        function parseJsonPayload(text) {
+      if (!text) return null
+      return JSON.parse(text.replace(/^\uFEFF/, ''))
+    }
+
     async function loadIndexFiles() {
       try {
         const response = await fetch(`./data/prescricoes_index.json`, { cache: 'no-store' })
         if (!response.ok) return []
-        const payload = await response.json()
-        const files = Array.isArray(payload) ? payload : (payload.files || [])
+        const raw = await response.text()
+        const payload = parseJsonPayload(raw)
+        const files = Array.isArray(payload) ? payload : (payload && payload.files ? payload.files : [])
         if (!Array.isArray(files)) return []
         const unique = Array.from(new Set(files.filter(Boolean)))
         return unique
@@ -1511,26 +1517,26 @@
         if (!res.ok) {
           return []
         }
-        const data = await res.json()
+        const raw = await res.text()
+        const data = parseJsonPayload(raw)
         const list = Array.isArray(data)
           ? data
-          : (Array.isArray(data.prescricoes) ? data.prescricoes : [data])
+          : (data && Array.isArray(data.prescricoes) ? data.prescricoes : (data ? [data] : []))
         return list.map((item) => ({
           ...item,
-          area: fallbackArea || item.area || 'Sem área'
+          area: fallbackArea || item.area || 'Sem �rea'
         }))
       } catch (err) {
         return []
       }
     }
-
-    async function window.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
       if (!isMobileView()) {
         document.body.classList.remove('mobile-detail')
       }
     })
 
-    loadData() {
+    async function loadData() {
       state.data = []
       areaListEl.innerHTML = ''
       pendingByArea.clear()
