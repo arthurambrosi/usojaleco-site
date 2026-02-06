@@ -916,6 +916,47 @@
         min-width: 90px;
       }
     }
+  
+    .mobileBack{
+      display:none;
+      align-items:center;
+      gap: 8px;
+      margin: 6px 0 12px;
+    }
+    .mobileBackBtn{
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    @media (max-width: 720px){
+      body{ padding-left: 0; }
+      .sideNav{ display:none; }
+      .drawerOverlay{ display:none; }
+      .drawer{
+        position: static;
+        transform: none;
+        width: 100%;
+        height: auto;
+        border: none;
+        box-shadow: none;
+        padding: 0 var(--edgeL) 24px;
+      }
+      .drawerHeader,
+      .loadProgress{ display:none; }
+      .wrap{ padding: 18px var(--edgeL) 12px; }
+      .contentArea{ display:none; }
+      .mobile-detail .contentArea{ display:block; }
+      .mobile-detail .drawer{ display:none; }
+      .mobile-detail .hero{ display:none; }
+      .mobile-detail .contentArea{ margin-top: 0; }
+      .mobile-detail .mobileBack{ display:flex; }
+    }
+
   </style>
 </head>
 <body>
@@ -1123,6 +1164,26 @@
       })
     }
 
+    function isMobileView() {
+      return window.matchMedia && window.matchMedia('(max-width: 720px)').matches
+    }
+
+    function setContentEmpty() {
+      if (!contentArea) return
+      contentArea.innerHTML = '<div class="empty-state">Selecione um assunto no menu para ver o conteúdo.</div>'
+    }
+
+    function enterDetailView() {
+      if (isMobileView()) {
+        document.body.classList.add('mobile-detail')
+      }
+    }
+
+    function exitDetailView() {
+      document.body.classList.remove('mobile-detail')
+      setContentEmpty()
+    }
+
     function buildDetail(item) {
       const wrapper = document.createElement('div')
       wrapper.className = 'guide-detail'
@@ -1221,9 +1282,19 @@
         btn.classList.add('is-active')
         if (contentArea) {
           contentArea.innerHTML = ''
+          const backWrap = document.createElement('div')
+          backWrap.className = 'mobileBack'
+          const backBtn = document.createElement('button')
+          backBtn.type = 'button'
+          backBtn.className = 'mobileBackBtn'
+          backBtn.textContent = '? Voltar'
+          backBtn.addEventListener('click', exitDetailView)
+          backWrap.appendChild(backBtn)
+          contentArea.appendChild(backWrap)
           contentArea.appendChild(buildDetail(item))
         }
         setDrawer(false)
+        enterDetailView()
       })
       itemWrap.appendChild(btn)
       return itemWrap
@@ -1453,7 +1524,13 @@
       }
     }
 
-    async function loadData() {
+    async function window.addEventListener('resize', () => {
+      if (!isMobileView()) {
+        document.body.classList.remove('mobile-detail')
+      }
+    })
+
+    loadData() {
       state.data = []
       areaListEl.innerHTML = ''
       pendingByArea.clear()
