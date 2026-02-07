@@ -320,6 +320,8 @@
     // =========================
     // Defaults (os 2 prompts que você mandou)
     // =========================
+    const FENCE = "```";
+
     const DEFAULT_PROMPT_A =
 `=== PROMPT (SEM ESTRUTURA FIXA — “O QUE TEM NA PRESCRIÇÃO”) ===
 Você vai receber um texto de PRESCRIÇÃO (FONTE).
@@ -349,7 +351,7 @@ TAREFA 2 — MEDICAMENTOS (EXTRAÇÃO PURA)
 - Não inclua horário “ideal”, efeitos adversos ou monitorização a menos que a FONTE declare isso explicitamente.
 
 FORMATO DE SAÍDA (OBRIGATÓRIO)
-- Responder dentro de UM ÚNICO BLOCO DE CÓDIGO: ```txt ... ```
+- Responder dentro de UM ÚNICO BLOCO DE CÓDIGO: ${FENCE}txt ... ${FENCE}
 - Nada fora do bloco.
 - Máximo de concisão.
 
@@ -383,7 +385,7 @@ OBJETIVO:
 - quando houver divergência/incerteza: registrar orientação segura (ex.: “validar protocolo local / especialista responsável”), sem chutar
 
 REGRA CRÍTICA (SÍMBOLOS PARA RASTREAMENTO):
-- Responda INTEIRAMENTE dentro de UM ÚNICO BLOCO DE CÓDIGO (\`\`\`txt ... \`\`\`).
+- Responda INTEIRAMENTE dentro de UM ÚNICO BLOCO DE CÓDIGO (${FENCE}txt ... ${FENCE}).
 - Dentro do bloco, os símbolos devem aparecer LITERALMENTE (sem virar “título” ou “lista automática”):
   - Títulos: "# ", "## ", "### "
   - Tópicos: "- " (hífen + espaço)
