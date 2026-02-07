@@ -327,28 +327,31 @@
 Você vai receber um texto de PRESCRIÇÃO (FONTE).
 
 OBJETIVO
-Extrair APENAS os TEMAS/SEÇÕES que a FONTE efetivamente aborda e organizar em uma estrutura criada por você.
+Mapear tudo o que a FONTE aborda e organizar em uma estrutura criada por você.
 Não completar lacunas. Não explicar medicina. Não sugerir condutas. Só mapear “sobre o que” o texto fala.
+A única parte fixa é a seção “COMPLEMENTOS OBRIGATÓRIOS”.
 
 REGRAS (CRÍTICAS)
 - Proibido inventar, inferir, deduzir ou completar com conhecimento externo.
 - Proibido copiar trechos da FONTE.
+- Proibido citar nomes de medicamentos, classes ou marcas.
 - Proibido revelar números, doses, mg, ml, intervalos, frequências, duração, metas numéricas ou valores.
 - Se estiver ambíguo, use [INCERTO]. Se não estiver explícito, não inclua.
 - Seja curto: títulos + poucas palavras (2–8) por item.
 
-TAREFA 1 — ESTRUTURA DE COBERTURA (CRIADA POR VOCÊ)
+TAREFA — ESTRUTURA DE COBERTURA (CRIADA POR VOCÊ)
 1) Crie uma lista hierárquica de “SEÇÕES” (categorias) que aparecem na FONTE.
 2) Para cada seção, liste os SUBTEMAS que a FONTE cobre (apenas rótulos curtos).
 3) Não use uma lista pré-definida. A estrutura deve refletir exatamente o conteúdo real da FONTE.
+4) Inclua também a seção “COMPLEMENTOS OBRIGATÓRIOS” com os itens abaixo, mesmo que a FONTE não cite.
 
-TAREFA 2 — MEDICAMENTOS (EXTRAÇÃO PURA)
-- Liste todos os medicamentos citados na FONTE (nomes exatos).
-- Para cada um, preencha SOMENTE o que estiver explicitamente na FONTE:
-  - SUS: [TEM] / [NÃO TEM] / [INCERTO—verificar RENAME/PCDT] / [NÃO INFORMADO]
-  - Administração/via: [INFORMADO] ou [NÃO INFORMADO]
-  - Observações de uso (não-numéricas): 1–2 rótulos curtos ou [NÃO INFORMADO]
-- Não inclua horário “ideal”, efeitos adversos ou monitorização a menos que a FONTE declare isso explicitamente.
+COMPLEMENTOS OBRIGATÓRIOS (SEMPRE INCLUIR NA LISTA)
+- Posologia / esquema de uso (sem números)
+- Horários e relação com refeições (jejum, antes/depois, manhã/tarde/noite)
+- Sintomas/efeitos comuns importantes percebidos pelo paciente
+- Contraindicações e alertas
+- Monitorização / exames necessários
+- Disponibilidade no SUS
 
 FORMATO DE SAÍDA (OBRIGATÓRIO)
 - Responder dentro de UM ÚNICO BLOCO DE CÓDIGO: ${FENCE}txt ... ${FENCE}
@@ -364,8 +367,13 @@ SAÍDA
   - <Subtema A>
   ...
 
-=== MEDICAMENTOS CITADOS (EXTRAÇÃO) ===
-- quero que mesmo que nao tenha no texto enviado, quero que coloque. POSOLOGIA, ORIENTAÇÃO DE QUANDO O EMDICAMENTO DEVE SER TOMADO( FORMA CURTA). POSSÍVEIS SINTOMAS IMPORTANTES E COMUNS AO TOMAR O MEDICAMENTO. CONTRAINDICAÇÕES AO USO. DISPONIBILIDADE NO SUS.  
+=== COMPLEMENTOS OBRIGATÓRIOS ===
+- Posologia / esquema de uso
+- Horários e relação com refeições
+- Sintomas/efeitos comuns importantes
+- Contraindicações e alertas
+- Monitorização / exames necessários
+- Disponibilidade no SUS
 `;
 
     const DEFAULT_PROMPT_B =
@@ -479,9 +487,22 @@ SAÍDA FINAL (OBRIGATÓRIA):
     // =========================
     // Build previews
     // =========================
+    function syncSourceAToB() {
+      const sourceAVal = $("sourceA").value;
+      const first = document.querySelector(".sourceText");
+      if (!first) return;
+      if (first.value !== sourceAVal) {
+        first.value = sourceAVal;
+      }
+    }
+
     function buildPreviewA(){
       const p = $("promptA").value.trim();
       const s = $("sourceA").value.trim();
+
+      syncSourceAToB();
+      buildPreviewB();
+
       const out =
 `=== PROMPT ===
 ${p}
