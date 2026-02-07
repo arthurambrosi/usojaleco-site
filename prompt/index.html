@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UJ • Prescrição Builder</title>
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --card:#11131a;
+      --card2:#0f1117;
+      --text:#e9ecf1;
+      --muted:#a9b0bd;
+      --line:rgba(255,255,255,.10);
+      --btn:#1b2130;
+      --btn2:#232b3e;
+      --accent:#ff7a00;
+      --good:#3ddc97;
+      --bad:#ff4d4d;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(255,122,0,.12), transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(61,220,151,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:28px 16px 56px;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+    .pillbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition:transform .06s ease, background .2s ease;
+      user-select:none;
+    }
+    .pill:hover{ background:rgba(255,255,255,.06) }
+    .pill:active{ transform:scale(.98) }
+    .pill.active{
+      border-color:rgba(255,122,0,.55);
+      box-shadow:0 0 0 3px rgba(255,122,0,.12);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (min-width: 980px){
+      .grid{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius:16px;
+      padding:14px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      margin:-6px 0 12px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+
+    textarea{
+      width:100%;
+      min-height:160px;
+      resize:vertical;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--text);
+      padding:12px;
+      font-family:var(--mono);
+      font-size:12.5px;
+      line-height:1.4;
+      outline:none;
+    }
+    textarea:focus{
+      border-color:rgba(255,122,0,.45);
+      box-shadow:0 0 0 3px rgba(255,122,0,.10);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:var(--btn);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:12.5px;
+      transition:transform .06s ease, background .2s ease;
+      user-select:none;
+    }
+    .btn:hover{ background:var(--btn2) }
+    .btn:active{ transform:scale(.98) }
+    .btn.accent{
+      border-color:rgba(255,122,0,.45);
+      background:rgba(255,122,0,.12);
+    }
+    .btn.ghost{
+      background:transparent;
+    }
+    .btn.small{
+      padding:8px 10px;
+      font-size:12px;
+      border-radius:10px;
+    }
+
+    .sources{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .sourceItem{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:14px;
+      padding:10px;
+      background:rgba(0,0,0,.12);
+    }
+    .sourceHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .label{
+      font-size:12.5px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      background:rgba(17,19,26,.92);
+      border:1px solid var(--line);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:12.5px;
+      box-shadow:0 14px 40px rgba(0,0,0,.35);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(-4px);
+    }
+
+    .hide{ display:none !important; }
+    .hint{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .kbd{
+      font-family:var(--mono);
+      font-size:11.5px;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>UJ • Prescrição Builder</h1>
+        <p>Abre um modo, cola as fontes e copie tudo pronto (prompt + textos). Tudo fica salvo automaticamente.</p>
+      </div>
+      <div class="pillbar">
+        <div class="pill active" id="tabA">Prompt A • Mapa de Cobertura</div>
+        <div class="pill" id="tabB">Prompt B • Prescrição Final</div>
+      </div>
+    </header>
+
+    <!-- =========================
+         MODO A
+    ========================= -->
+    <section id="modeA">
+      <div class="grid">
+        <div class="card">
+          <h2>Prompt A (editável)</h2>
+          <p class="sub">Você cola este texto na IA médica + a fonte abaixo. O botão “Copiar tudo” já junta automático.</p>
+          <textarea id="promptA"></textarea>
+          <div class="row">
+            <button class="btn small ghost" id="resetA">Resetar prompt padrão</button>
+            <button class="btn small" id="copyPromptA">Copiar só o prompt</button>
+          </div>
+          <p class="hint">Dica: como seu parser depende de símbolos, o prompt pede resposta em <span class="kbd">```txt</span> (bloco de código).</p>
+        </div>
+
+        <div class="card">
+          <h2>Fonte A (Prescrição do site / 1 texto)</h2>
+          <p class="sub">Cole aqui a prescrição que você quer “mapear”.</p>
+          <textarea id="sourceA" placeholder="Cole aqui a prescrição (FONTE) ..."></textarea>
+          <div class="row">
+            <button class="btn accent" id="copyAllA">Copiar tudo (prompt + fonte)</button>
+            <button class="btn ghost" id="clearA">Limpar</button>
+          </div>
+          <p class="hint">O texto copiado já vem no formato: PROMPT + separador + FONTE.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <h2>Prévia do que será copiado (Modo A)</h2>
+        <p class="sub">Isso é exatamente o que vai pro clipboard no botão “Copiar tudo”.</p>
+        <textarea id="previewA" readonly></textarea>
+      </div>
+    </section>
+
+    <!-- =========================
+         MODO B
+    ========================= -->
+    <section id="modeB" class="hide">
+      <div class="grid">
+        <div class="card">
+          <h2>Prompt B (editável)</h2>
+          <p class="sub">Prompt para gerar a prescrição final no seu padrão (com símbolos rastreáveis).</p>
+          <textarea id="promptB"></textarea>
+          <div class="row">
+            <button class="btn small ghost" id="resetB">Resetar prompt padrão</button>
+            <button class="btn small" id="copyPromptB">Copiar só o prompt</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Fontes (2+ textos)</h2>
+          <p class="sub">Cole “Prescrição do site”, “Prescrição da IA”, etc. Use o <b>+</b> para adicionar mais caixas.</p>
+
+          <div class="row" style="margin-top:0;">
+            <button class="btn small" id="addSource">+ Adicionar caixa</button>
+            <button class="btn small ghost" id="clearSources">Limpar todas</button>
+            <button class="btn small accent" id="copyAllB">Copiar tudo (prompt + fontes)</button>
+          </div>
+
+          <div class="sources" id="sourcesWrap" style="margin-top:12px;"></div>
+
+          <p class="hint">As fontes são coladas como <span class="kbd">=== FONTE 1 ===</span>, <span class="kbd">=== FONTE 2 ===</span>… pra ficar bem consistente.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <h2>Prévia do que será copiado (Modo B)</h2>
+        <p class="sub">Isso é exatamente o que vai pro clipboard no botão “Copiar tudo”.</p>
+        <textarea id="previewB" readonly></textarea>
+      </div>
+    </section>
+
+    <div class="toast" id="toast">Copiado ✅</div>
+  </div>
+
+  <script>
+    // =========================
+    // Defaults (os 2 prompts que você mandou)
+    // =========================
+    const DEFAULT_PROMPT_A =
+`Você vai receber um texto de PRESCRIÇÃO (FONTE).
+
+TAREFAS
+1) Criar um “MAPA DE COBERTURA” dizendo EXATAMENTE QUAIS TEMAS a prescrição aborda (apenas categorias), marcando cada item como:
+[PRESENTE] ou [AUSENTE]
+
+REGRAS DO MAPA:
+- NÃO copiar trechos.
+- NÃO revelar números, doses, mg, ml, intervalos, frequências, duração ou valores específicos.
+- Quando um item for [PRESENTE], você DEVE marcar como presente mesmo que não possa citar os números (apenas registre o TEMA).
+- NÃO diga “a fonte fala…” / “o texto diz…”. Apenas P/A e o nome do tema (2–8 palavras).
+
+2) Criar “COMPLEMENTOS OBRIGATÓRIOS” (curtíssimo) para CADA MEDICAMENTO que apareça na FONTE, contendo:
+- SUS: [TEM] / [NÃO TEM] / [INCERTO—verificar RENAME/PCDT]
+- Melhor horário: manhã/tarde/noite + motivo em 3–8 palavras (ex.: “diurético → evitar noite”)
+- O que o paciente pode sentir: 1 efeito comum, em 3–10 palavras
+- Cuidados/monitorização: 1 item prático (exame/lab/sintoma de alerta), em 3–10 palavras
+
+REGRAS DOS COMPLEMENTOS:
+- Não inventar medicamentos.
+- Não chutar dose/posologia.
+- Se algo não estiver claro, usar [NÃO INFORMADO] ou [INCERTO].
+
+FORMATO DE SAÍDA (OBRIGATÓRIO)
+- Responder dentro de UM ÚNICO BLOCO DE CÓDIGO (\`\`\`txt ... \`\`\`), sem Markdown fora.
+- Ser o mais curto possível.
+
+ESTRUTURA FIXA DA RESPOSTA (NUNCA OMITIR ITENS)
+=== MAPA DE COBERTURA (P/A) ===
+- Diagnóstico/definição
+- Critérios de gravidade/estratificação
+- Objetivos terapêuticos/metas
+- Conduta inicial/primeiros passos
+- Tratamento não farmacológico
+- Tratamento farmacológico (classes/esquemas/linhas)
+- Dosagem/posologia (categoria) — dose, via, frequência, duração
+- Dose pediátrica (categoria) — mg/kg, faixas etárias, limites máximos
+- Ajustes de dose (categoria) — renal/hepático/idoso/gestante/lactante
+- Contraindicações/precauções
+- Interações medicamentosas
+- Efeitos adversos (categoria)
+- Monitorização/laboratórios
+- Sinais de alerta/retorno imediato
+- Critérios de internação/alta
+- Seguimento/reavaliação
+- Orientações ao paciente (categoria)
+
+=== COMPLEMENTOS OBRIGATÓRIOS (POR MEDICAMENTO) ===
+- <NOME DO MEDICAMENTO>: SUS=... | Horário=... | Paciente pode sentir=... | Cuidado/monitorização=...
+
+IMPORTANTE
+- Isto é para organização/checagem de cobertura e educação. Não substitui avaliação clínica, protocolo local ou prescrição real.`;
+
+    const DEFAULT_PROMPT_B =
+`Você receberá 2 ou mais FONTES de conteúdo médico (ex.: prescrição de site + prescrição de outra IA).
+As FONTES servem SOMENTE como referência para construir uma PRESCRIÇÃO FINAL ÚNICA.
+
+PROIBIDO:
+- copiar trechos, frases ou estrutura textual específica das FONTES
+- reescrever/parafrasear mantendo “cara” de alguma FONTE
+- citar as FONTES ou mencionar “baseado na fonte X”
+- inventar doses/posologias específicas quando não estiverem claras nas FONTES
+
+OBJETIVO:
+- CRIAR uma PRESCRIÇÃO FINAL ORIGINAL, coesa e juridicamente defensável
+- integrar, consolidar e padronizar o conteúdo das FONTES no PADRÃO USOJALECO
+- remover redundâncias, resolver conflitos com prioridade para segurança clínica
+- quando houver divergência/incerteza: registrar orientação segura (ex.: “validar protocolo local / especialista responsável”), sem chutar
+
+REGRA CRÍTICA (SÍMBOLOS PARA RASTREAMENTO):
+- Responda INTEIRAMENTE dentro de UM ÚNICO BLOCO DE CÓDIGO (\`\`\`txt ... \`\`\`).
+- Dentro do bloco, os símbolos devem aparecer LITERALMENTE (sem virar “título” ou “lista automática”):
+  - Títulos: "# ", "## ", "### "
+  - Tópicos: "- " (hífen + espaço)
+  - Subtópicos: "  - " (EXATAMENTE 2 espaços + hífen + espaço)
+- Se algum símbolo não aparecer literalmente, reescreva tudo até ficar 100% conforme.
+
+HIERARQUIA OBRIGATÓRIA (NUNCA VARIAR):
+- #  aparece apenas 1 vez: o TEMA do documento
+- ## são as SEÇÕES maiores
+- ### são as SUBSEÇÕES
+- Proibido criar nível abaixo de ###.
+- Proibido título sem símbolo.
+
+FORMATO INTERNO (por bloco ## ou ###):
+Escolha APENAS 1 formato por bloco (não misturar):
+A) TEXTO CORRIDO: 1 parágrafo único, sem quebras de linha
+OU
+B) LISTA:
+- tópico (1 ideia por linha; sem numeração)
+  - subtópico (depende do tópico acima; só 1 nível; nunca sozinho)
+
+SEPARAÇÃO:
+- Sempre 1 linha em branco ao mudar de TEXTO CORRIDO ↔ LISTA.
+
+PROIBIÇÕES (PARSE/DESIGN):
+- Não usar: *, •, →, –, emojis, numeração (1., 2.)
+- Não quebrar linha dentro do mesmo tópico
+- Não criar listas “soltas” fora de uma ###
+
+SAÍDA FINAL (OBRIGATÓRIA):
+- Entregue APENAS a PRESCRIÇÃO FINAL no PADRÃO USOJALECO, dentro do bloco de código.
+- Comece exatamente assim:
+
+# <TEMA DA PRESCRIÇÃO>
+## <SEÇÃO MAIOR 1>
+### <SUBSEÇÃO 1>
+...`;
+
+    // =========================
+    // Helpers
+    // =========================
+    const $ = (id) => document.getElementById(id);
+
+    function toast(msg){
+      const t = $("toast");
+      t.textContent = msg || "Copiado ✅";
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"), 1300);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Copiado ✅");
+      }catch(e){
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        toast("Copiado ✅ (fallback)");
+      }
+    }
+
+    function save(key, value){
+      try{ localStorage.setItem(key, value); }catch(e){}
+    }
+    function load(key, fallback){
+      try{
+        const v = localStorage.getItem(key);
+        return (v === null || v === undefined) ? fallback : v;
+      }catch(e){ return fallback; }
+    }
+
+    // =========================
+    // Mode switching
+    // =========================
+    function setMode(mode){
+      const isA = mode === "A";
+      $("modeA").classList.toggle("hide", !isA);
+      $("modeB").classList.toggle("hide", isA);
+      $("tabA").classList.toggle("active", isA);
+      $("tabB").classList.toggle("active", !isA);
+      save("UJ_MODE", mode);
+    }
+
+    // =========================
+    // Build previews
+    // =========================
+    function buildPreviewA(){
+      const p = $("promptA").value.trim();
+      const s = $("sourceA").value.trim();
+      const out =
+`=== PROMPT ===
+${p}
+
+=== FONTE ===
+${s}`;
+      $("previewA").value = out;
+      save("UJ_PROMPT_A", $("promptA").value);
+      save("UJ_SOURCE_A", $("sourceA").value);
+    }
+
+    function buildPreviewB(){
+      const p = $("promptB").value.trim();
+      const sources = [...document.querySelectorAll(".sourceText")]
+        .map(t => t.value.trim())
+        .filter(v => v.length > 0);
+
+      let block = `=== PROMPT ===\n${p}\n`;
+      if(sources.length === 0){
+        block += `\n=== FONTE 1 ===\n`;
+      }else{
+        sources.forEach((txt, idx)=>{
+          block += `\n=== FONTE ${idx+1} ===\n${txt}\n`;
+        });
+      }
+
+      $("previewB").value = block.trimEnd();
+      save("UJ_PROMPT_B", $("promptB").value);
+      save("UJ_SOURCES_B", JSON.stringify(getSourcesValuesRaw()));
+    }
+
+    function getSourcesValuesRaw(){
+      return [...document.querySelectorAll(".sourceText")].map(t => t.value);
+    }
+
+    // =========================
+    // Sources UI (Mode B)
+    // =========================
+    function makeSourceItem(index, value){
+      const wrap = document.createElement("div");
+      wrap.className = "sourceItem";
+
+      const head = document.createElement("div");
+      head.className = "sourceHead";
+
+      const lab = document.createElement("div");
+      lab.className = "label";
+      lab.textContent = `FONTE ${index}`;
+
+      const actions = document.createElement("div");
+      actions.style.display = "flex";
+      actions.style.gap = "8px";
+
+      const btnCopy = document.createElement("button");
+      btnCopy.className = "btn small";
+      btnCopy.textContent = "Copiar só esta";
+      btnCopy.onclick = () => copyText(wrap.querySelector("textarea").value || "");
+
+      const btnDel = document.createElement("button");
+      btnDel.className = "btn small ghost";
+      btnDel.textContent = "Remover";
+      btnDel.onclick = () => {
+        const all = document.querySelectorAll(".sourceItem");
+        if(all.length <= 2){
+          toast("Mantenho no mínimo 2 caixas");
+          return;
+        }
+        wrap.remove();
+        renumberSources();
+        buildPreviewB();
+      };
+
+      actions.appendChild(btnCopy);
+      actions.appendChild(btnDel);
+
+      head.appendChild(lab);
+      head.appendChild(actions);
+
+      const ta = document.createElement("textarea");
+      ta.className = "sourceText";
+      ta.placeholder = `Cole aqui o texto da FONTE ${index}...`;
+      ta.value = value || "";
+      ta.addEventListener("input", buildPreviewB);
+
+      wrap.appendChild(head);
+      wrap.appendChild(ta);
+
+      return wrap;
+    }
+
+    function renumberSources(){
+      const items = document.querySelectorAll(".sourceItem");
+      items.forEach((it, i)=>{
+        const label = it.querySelector(".label");
+        label.textContent = `FONTE ${i+1}`;
+        const ta = it.querySelector("textarea");
+        ta.placeholder = `Cole aqui o texto da FONTE ${i+1}...`;
+      });
+    }
+
+    function initSources(){
+      const wrap = $("sourcesWrap");
+      wrap.innerHTML = "";
+
+      // tenta restaurar do storage
+      let saved = [];
+      try{
+        const raw = load("UJ_SOURCES_B", "");
+        if(raw) saved = JSON.parse(raw) || [];
+      }catch(e){ saved = []; }
+
+      const initialCount = Math.max(2, saved.length || 2);
+      for(let i=0; i<initialCount; i++){
+        wrap.appendChild(makeSourceItem(i+1, saved[i] || ""));
+      }
+    }
+
+    // =========================
+    // Init
+    // =========================
+    function init(){
+      // Mode
+      const mode = load("UJ_MODE", "A");
+      setMode(mode);
+
+      // Prompts + Source A
+      $("promptA").value = load("UJ_PROMPT_A", DEFAULT_PROMPT_A);
+      $("sourceA").value = load("UJ_SOURCE_A", "");
+
+      $("promptB").value = load("UJ_PROMPT_B", DEFAULT_PROMPT_B);
+
+      // Sources B
+      initSources();
+
+      // Bind tabs
+      $("tabA").onclick = () => setMode("A");
+      $("tabB").onclick = () => setMode("B");
+
+      // Bind inputs
+      $("promptA").addEventListener("input", buildPreviewA);
+      $("sourceA").addEventListener("input", buildPreviewA);
+
+      $("promptB").addEventListener("input", buildPreviewB);
+
+      // Buttons A
+      $("copyPromptA").onclick = () => copyText($("promptA").value);
+      $("copyAllA").onclick = () => copyText($("previewA").value);
+      $("clearA").onclick = () => { $("sourceA").value=""; buildPreviewA(); toast("Limpo"); };
+      $("resetA").onclick = () => { $("promptA").value = DEFAULT_PROMPT_A; buildPreviewA(); toast("Resetado"); };
+
+      // Buttons B
+      $("copyPromptB").onclick = () => copyText($("promptB").value);
+      $("copyAllB").onclick = () => copyText($("previewB").value);
+      $("resetB").onclick = () => { $("promptB").value = DEFAULT_PROMPT_B; buildPreviewB(); toast("Resetado"); };
+
+      $("addSource").onclick = () => {
+        const wrap = $("sourcesWrap");
+        const n = wrap.querySelectorAll(".sourceItem").length + 1;
+        wrap.appendChild(makeSourceItem(n, ""));
+        buildPreviewB();
+        toast("Caixa adicionada");
+      };
+
+      $("clearSources").onclick = () => {
+        const wrap = $("sourcesWrap");
+        wrap.querySelectorAll(".sourceText").forEach(t => t.value = "");
+        buildPreviewB();
+        toast("Fontes limpas");
+      };
+
+      // Build previews now
+      buildPreviewA();
+      buildPreviewB();
+    }
+
+    init();
+  </script>
+</body>
+</html>
