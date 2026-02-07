@@ -340,16 +340,11 @@ REGRAS (CRÍTICAS)
 
 TAREFA — ESTRUTURA DE COBERTURA (CRIADA POR VOCÊ)
 1) Crie uma lista hierárquica de SEÇÕES que aparecem na FONTE (sem lista pré-definida).
-2) Dentro de cada seção, liste SUBTEMAS e marque [PRESENTE]/[AUSENTE]/[INCERTO].
 3) A estrutura deve refletir exatamente “sobre o que” a FONTE fala (sem explicar medicina).
 4) REGRA OBRIGATÓRIA: se a FONTE tiver qualquer parte sobre tratamento farmacológico / plano medicamentoso,
    inclua também um subbloco “ITENS OBRIGATÓRIOS PARA COMPLETAR (SLOTS)” dentro dessa seção e marque cada item.
-5) Se a FONTE NÃO tiver tratamento farmacológico, ainda assim crie a seção:
-   - [AUSENTE] Plano medicamentoso
-     - ITENS OBRIGATÓRIOS PARA COMPLETAR (SLOTS)
-   e marque os itens como [AUSENTE] (ou [INCERTO] se o texto deixar dúvida).
 
-ITENS OBRIGATÓRIOS PARA COMPLETAR (SLOTS — SEM NÚMEROS)
+ITENS OBRIGATÓRIOS PARA COMPLETAR, MESMO SEM TER (SLOTS — SEM NÚMEROS)
 - Disponibilidade no SUS (RENAME/PCDT)
 - Horário e relação com refeições (jejum/antes/depois)
 - Melhor período do dia (manhã/tarde/noite)
@@ -360,6 +355,7 @@ ITENS OBRIGATÓRIOS PARA COMPLETAR (SLOTS — SEM NÚMEROS)
 
 FORMATO DE SAÍDA (OBRIGATÓRIO)
 - Responder dentro de UM ÚNICO BLOCO DE CÓDIGO: ${FENCE}txt ... ${FENCE}
+- O bloco deve iniciar com esse texto: Você é o maior especialista em medicina. Quero que crie um modelo de prescrição seguindo as estruturas a seguir. Esse modelo será utilizado na prática clinica em UBS, UPA, Hospitais e CLinicas. Entoa se atente a tudo que pode ser preciso!
 - Nada fora do bloco.
 - Use APENAS lista com hífen:
   - [PRESENTE] <Seção>
