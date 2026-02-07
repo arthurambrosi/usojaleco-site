@@ -321,58 +321,50 @@
     // Defaults (os 2 prompts que você mandou)
     // =========================
     const DEFAULT_PROMPT_A =
-`Você vai receber um texto de PRESCRIÇÃO (FONTE).
+`=== PROMPT (SEM ESTRUTURA FIXA — “O QUE TEM NA PRESCRIÇÃO”) ===
+Você vai receber um texto de PRESCRIÇÃO (FONTE).
 
-TAREFAS
-1) Criar um “MAPA DE COBERTURA” dizendo EXATAMENTE QUAIS TEMAS a prescrição aborda (apenas categorias), marcando cada item como:
-[PRESENTE] ou [AUSENTE]
+OBJETIVO
+Extrair APENAS os TEMAS/SEÇÕES que a FONTE efetivamente aborda e organizar em uma estrutura criada por você.
+Não completar lacunas. Não explicar medicina. Não sugerir condutas. Só mapear “sobre o que” o texto fala.
 
-REGRAS DO MAPA:
-- NÃO copiar trechos.
-- NÃO revelar números, doses, mg, ml, intervalos, frequências, duração ou valores específicos.
-- Quando um item for [PRESENTE], você DEVE marcar como presente mesmo que não possa citar os números (apenas registre o TEMA).
-- NÃO diga “a fonte fala…” / “o texto diz…”. Apenas P/A e o nome do tema (2–8 palavras).
+REGRAS (CRÍTICAS)
+- Proibido inventar, inferir, deduzir ou completar com conhecimento externo.
+- Proibido copiar trechos da FONTE.
+- Proibido revelar números, doses, mg, ml, intervalos, frequências, duração, metas numéricas ou valores.
+- Se estiver ambíguo, use [INCERTO]. Se não estiver explícito, não inclua.
+- Seja curto: títulos + poucas palavras (2–8) por item.
 
-2) Criar “COMPLEMENTOS OBRIGATÓRIOS” (curtíssimo) para CADA MEDICAMENTO que apareça na FONTE, contendo:
-- SUS: [TEM] / [NÃO TEM] / [INCERTO—verificar RENAME/PCDT]
-- Melhor horário: manhã/tarde/noite + motivo em 3–8 palavras (ex.: “diurético → evitar noite”)
-- O que o paciente pode sentir: 1 efeito comum, em 3–10 palavras
-- Cuidados/monitorização: 1 item prático (exame/lab/sintoma de alerta), em 3–10 palavras
+TAREFA 1 — ESTRUTURA DE COBERTURA (CRIADA POR VOCÊ)
+1) Crie uma lista hierárquica de “SEÇÕES” (categorias) que aparecem na FONTE.
+2) Para cada seção, liste os SUBTEMAS que a FONTE cobre (apenas rótulos curtos).
+3) Não use uma lista pré-definida. A estrutura deve refletir exatamente o conteúdo real da FONTE.
 
-REGRAS DOS COMPLEMENTOS:
-- Não inventar medicamentos.
-- Não chutar dose/posologia.
-- Se algo não estiver claro, usar [NÃO INFORMADO] ou [INCERTO].
+TAREFA 2 — MEDICAMENTOS (EXTRAÇÃO PURA)
+- Liste todos os medicamentos citados na FONTE (nomes exatos).
+- Para cada um, preencha SOMENTE o que estiver explicitamente na FONTE:
+  - SUS: [TEM] / [NÃO TEM] / [INCERTO—verificar RENAME/PCDT] / [NÃO INFORMADO]
+  - Administração/via: [INFORMADO] ou [NÃO INFORMADO]
+  - Observações de uso (não-numéricas): 1–2 rótulos curtos ou [NÃO INFORMADO]
+- Não inclua horário “ideal”, efeitos adversos ou monitorização a menos que a FONTE declare isso explicitamente.
 
 FORMATO DE SAÍDA (OBRIGATÓRIO)
-- Responder dentro de UM ÚNICO BLOCO DE CÓDIGO (\`\`\`txt ... \`\`\`), sem Markdown fora.
-- Ser o mais curto possível.
+- Responder dentro de UM ÚNICO BLOCO DE CÓDIGO: ```txt ... ```
+- Nada fora do bloco.
+- Máximo de concisão.
 
-ESTRUTURA FIXA DA RESPOSTA (NUNCA OMITIR ITENS)
-=== MAPA DE COBERTURA (P/A) ===
-- Diagnóstico/definição
-- Critérios de gravidade/estratificação
-- Objetivos terapêuticos/metas
-- Conduta inicial/primeiros passos
-- Tratamento não farmacológico
-- Tratamento farmacológico (classes/esquemas/linhas)
-- Dosagem/posologia (categoria) — dose, via, frequência, duração
-- Dose pediátrica (categoria) — mg/kg, faixas etárias, limites máximos
-- Ajustes de dose (categoria) — renal/hepático/idoso/gestante/lactante
-- Contraindicações/precauções
-- Interações medicamentosas
-- Efeitos adversos (categoria)
-- Monitorização/laboratórios
-- Sinais de alerta/retorno imediato
-- Critérios de internação/alta
-- Seguimento/reavaliação
-- Orientações ao paciente (categoria)
+SAÍDA
+=== COBERTURA (SEÇÕES REAIS ENCONTRADAS) ===
+- <Seção 1>
+  - <Subtema A>
+  - <Subtema B>
+- <Seção 2>
+  - <Subtema A>
+  ...
 
-=== COMPLEMENTOS OBRIGATÓRIOS (POR MEDICAMENTO) ===
-- <NOME DO MEDICAMENTO>: SUS=... | Horário=... | Paciente pode sentir=... | Cuidado/monitorização=...
-
-IMPORTANTE
-- Isto é para organização/checagem de cobertura e educação. Não substitui avaliação clínica, protocolo local ou prescrição real.`;
+=== MEDICAMENTOS CITADOS (EXTRAÇÃO) ===
+- quero que mesmo que nao tenha no texto enviado, quero que coloque. POSOLOGIA, ORIENTAÇÃO DE QUANDO O EMDICAMENTO DEVE SER TOMADO( FORMA CURTA). POSSÍVEIS SINTOMAS IMPORTANTES E COMUNS AO TOMAR O MEDICAMENTO. CONTRAINDICAÇÕES AO USO. DISPONIBILIDADE NO SUS.  
+`;
 
     const DEFAULT_PROMPT_B =
 `Você receberá 2 ou mais FONTES de conteúdo médico (ex.: prescrição de site + prescrição de outra IA).
