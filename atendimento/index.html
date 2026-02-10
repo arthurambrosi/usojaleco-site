@@ -905,6 +905,8 @@
       align-items:center;
       gap: 8px;
       cursor: pointer;
+      margin: 0;
+      padding: 2px 0;
     }
     .prescricao-section__summary::-webkit-details-marker{
       display:none;
@@ -956,6 +958,8 @@
       font-family: var(--font-display);
       font-weight: 700;
       color: #8a2d0b;
+      margin: 0;
+      padding: 2px 0;
     }
     .prescricao-subsection__summary::-webkit-details-marker{
       display:none;
@@ -1322,6 +1326,17 @@
       return match ? match[1].trim() : ''
     }
 
+    function getComputedBackground(el) {
+      if (!el || !el.ownerDocument || !el.ownerDocument.defaultView) return ''
+      const computed = el.ownerDocument.defaultView.getComputedStyle(el)
+      if (!computed) return ''
+      const bg = computed.backgroundColor || computed.background || ''
+      if (!bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)') {
+        return ''
+      }
+      return bg
+    }
+
     function getHighlightKind(el) {
       if (!el || el.nodeType !== 1) return null
       const isMark = el.tagName === 'MARK'
@@ -1331,6 +1346,9 @@
       const inlineBg = getInlineBackground(el)
       const inlineKind = classifyHighlightColor(inlineBg)
       if (inlineKind) return inlineKind
+      const computedBg = getComputedBackground(el)
+      const computedKind = classifyHighlightColor(computedBg)
+      if (computedKind) return computedKind
       if (hasYellowClass) return 'yellow'
       if (hasOrangeClass) return 'orange'
       if (isMark) return 'yellow'
@@ -1359,7 +1377,10 @@
     function getHighlightHeader(node) {
       if (!node || node.nodeType !== 1) return null
       if (getHighlightKind(node) === 'orange') return node
-      let highlight = node.querySelector('mark, .highlight, .marcatexto, .marcador')
+      const tag = node.tagName
+      const allowed = ['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'DIV']
+      if (!allowed.includes(tag)) return null
+      let highlight = node.querySelector('mark, .highlight, .marcatexto, .marcador, [style*="background"]')
       if (!highlight) {
         const styled = node.querySelector('[style*="background"]')
         if (styled && getHighlightKind(styled) === 'orange') {
@@ -1367,14 +1388,7 @@
         }
       }
       if (!highlight || getHighlightKind(highlight) !== 'orange') return null
-      const nodeText = node.textContent ? node.textContent.trim() : ''
-      const highlightText = highlight.textContent ? highlight.textContent.trim() : ''
-      if (!nodeText || !highlightText) return null
-      const normalized = nodeText.replace(/[:\\-–—]+$/, '').trim()
-      if (normalized === highlightText) {
-        return node
-      }
-      return null
+      return node
     }
 
     function createPrescriptionSection(quoteNode) {
@@ -1541,7 +1555,6 @@
 
       panel.innerHTML = panelContent
       applyPanelStyle(panel, panelTone, spacing)
-      structurePrescriptionSections(panel)
       wrapper.appendChild(panel)
       return wrapper
     }
@@ -1586,7 +1599,12 @@
           backBtn.addEventListener('click', exitDetailView)
           backWrap.appendChild(backBtn)
           contentArea.appendChild(backWrap)
-          contentArea.appendChild(buildDetail(item))
+          const detail = buildDetail(item)
+          contentArea.appendChild(detail)
+          const prescPanel = detail.querySelector('.guide-panel[data-panel="prescricao"]')
+          if (prescPanel) {
+            structurePrescriptionSections(prescPanel)
+          }
         }
         setDrawer(false)
         enterDetailView()
@@ -1920,3 +1938,4 @@
   </script>
 </body>
 </html>
+
