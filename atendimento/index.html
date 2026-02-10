@@ -882,9 +882,9 @@
       font-style: italic;
       font-weight: 600;
     }
-    .guide-panel[data-panel="prescricao"] mark,
     .guide-panel[data-panel="prescricao"] .highlight,
-    .guide-panel[data-panel="prescricao"] .marcatexto{
+    .guide-panel[data-panel="prescricao"] .marcatexto,
+    .guide-panel[data-panel="prescricao"] .marcador{
       background: rgba(255,106,26,.28);
       color: #8a2d0b;
       padding: 2px 4px;
@@ -893,8 +893,8 @@
     }
     .prescricao-section{
       border-bottom: 1px dashed rgba(11,18,32,.2);
-      padding: 6px 0;
-      margin: 6px 0;
+      padding: 8px 0;
+      margin: 0;
     }
     .prescricao-section:last-child{
       border-bottom: 0;
@@ -934,7 +934,7 @@
       width: 100%;
     }
     .prescricao-section__body{
-      margin: 6px 0 2px;
+      margin: 6px 0 0;
     }
     .prescricao-section__body > :first-child{
       margin-top: 0;
@@ -976,7 +976,7 @@
       margin: 0;
     }
     .prescricao-subsection__body{
-      margin: 6px 0 2px;
+      margin: 6px 0 0;
     }
     .prescricao-subsection__body > :first-child{
       margin-top: 0;
@@ -1279,31 +1279,94 @@
       panel.classList.add(`space-${safeSpacing}`)
     }
 
-    function isHighlightElement(el) {
-      if (!el || el.nodeType !== 1) return false
-      if (el.tagName === 'MARK') return true
-      const cls = (el.className || '').toString().toLowerCase()
-      if (cls.includes('highlight') || cls.includes('marcatexto') || cls.includes('marcador')) {
-        return true
+    function parseRgb(value) {
+      if (!value) return null
+      const match = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i)
+      if (!match) return null
+      return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) }
+    }
+
+    function parseHex(value) {
+      if (!value) return null
+      const match = value.match(/#([0-9a-f]{3}|[0-9a-f]{6})/i)
+      if (!match) return null
+      let hex = match[1]
+      if (hex.length === 3) {
+        hex = hex.split('').map((c) => c + c).join('')
       }
+      const int = parseInt(hex, 16)
+      return {
+        r: (int >> 16) & 255,
+        g: (int >> 8) & 255,
+        b: int & 255
+      }
+    }
+
+    function classifyHighlightColor(colorValue) {
+      const rgb = parseRgb(colorValue) || parseHex(colorValue)
+      if (!rgb) {
+        const lowered = (colorValue || '').toLowerCase()
+        if (lowered.includes('yellow') || lowered.includes('amarelo')) return 'yellow'
+        if (lowered.includes('orange') || lowered.includes('laranja')) return 'orange'
+        return null
+      }
+      const { r, g, b } = rgb
+      if (r > 200 && g > 200 && b < 140) return 'yellow'
+      if (r > 200 && g >= 60 && g <= 180 && b < 110) return 'orange'
+      return null
+    }
+
+    function getInlineBackground(el) {
       const style = el.getAttribute('style') || ''
-      if (/background/i.test(style) && /(ff6a1a|ff8a3d|f97316|orange)/i.test(style)) {
-        return true
-      }
-      return false
+      const match = style.match(/background(?:-color)?\s*:\s*([^;]+)/i)
+      return match ? match[1].trim() : ''
+    }
+
+    function getHighlightKind(el) {
+      if (!el || el.nodeType !== 1) return null
+      const isMark = el.tagName === 'MARK'
+      const cls = (el.className || '').toString().toLowerCase()
+      const hasYellowClass = cls.includes('amarelo') || cls.includes('yellow')
+      const hasOrangeClass = cls.includes('highlight') || cls.includes('marcatexto') || cls.includes('marcador') || cls.includes('laranja') || cls.includes('orange')
+      const inlineBg = getInlineBackground(el)
+      const inlineKind = classifyHighlightColor(inlineBg)
+      if (inlineKind) return inlineKind
+      if (hasYellowClass) return 'yellow'
+      if (hasOrangeClass) return 'orange'
+      if (isMark) return 'yellow'
+      return null
+    }
+
+    function stripYellowHighlights(panel) {
+      const candidates = panel.querySelectorAll('mark, .highlight, .marcatexto, .marcador, [style*="background"]')
+      candidates.forEach((el) => {
+        if (getHighlightKind(el) === 'yellow') {
+          el.remove()
+        }
+      })
+      removeEmptyBlocks(panel)
+    }
+
+    function removeEmptyBlocks(panel) {
+      const empties = panel.querySelectorAll('p, li, blockquote')
+      empties.forEach((el) => {
+        if (!el.textContent.trim()) {
+          el.remove()
+        }
+      })
     }
 
     function getHighlightHeader(node) {
       if (!node || node.nodeType !== 1) return null
-      if (isHighlightElement(node)) return node
+      if (getHighlightKind(node) === 'orange') return node
       let highlight = node.querySelector('mark, .highlight, .marcatexto, .marcador')
       if (!highlight) {
         const styled = node.querySelector('[style*="background"]')
-        if (styled && isHighlightElement(styled)) {
+        if (styled && getHighlightKind(styled) === 'orange') {
           highlight = styled
         }
       }
-      if (!highlight) return null
+      if (!highlight || getHighlightKind(highlight) !== 'orange') return null
       const nodeText = node.textContent ? node.textContent.trim() : ''
       const highlightText = highlight.textContent ? highlight.textContent.trim() : ''
       if (!nodeText || !highlightText) return null
@@ -1343,6 +1406,7 @@
 
     function structurePrescriptionSections(panel) {
       if (!panel) return
+      stripYellowHighlights(panel)
       const nodes = Array.from(panel.childNodes)
       if (!nodes.length) return
       const frag = document.createDocumentFragment()
