@@ -4,31 +4,38 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guia de Prescrições</title>
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
+  <!-- ========================= UJ DESIGN KIT (HEAD) Fontes + Tokens + CSS base ========================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts (base) -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Outfit (brand only) -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Montserrat (área + assuntos) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#f6f7f8;
+      /* ===== TOKENS (white) ===== */
+      --bg:#ffffff;
       --surface:#ffffff;
-      --surface2:#eef2f6;
-      --text:#0b1220;
-      --muted:#5f6b7a;
-      --line:#d6dde6;
-      --shadow: 0 10px 20px rgba(11,18,32,.08);
-      --shadow2: 0 16px 32px rgba(11,18,32,.12);
-      --accent:#ff6a1a;
-      --accent-2:#0ea5e9;
+      --surface2:#f8fafc;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+      --shadow: 0 10px 22px rgba(17,24,39,.08);
+      --shadow2: 0 14px 28px rgba(17,24,39,.10);
+      --accent:#f97316;
+      /* ===== Layout controls ===== */
       --edgeL: 24px;
       --edgeR: 24px;
       --deskGap: 18px;
-      --radius: 0px;
-      --t: .18s cubic-bezier(.2,.7,.2,1);
+      --rBig:26px;
+      --rMid:22px;
+      --rSm:18px;
+      --rBtn:14px;
+      --t: .18s ease;
       --topH: 44px;
       --sideW: 72px;
-      --font-body: "Sora", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      --font-display: "Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     @media (max-width: 720px){
       :root{
@@ -42,32 +49,21 @@
     html,body{ height:100% }
     body{
       margin:0;
-      font-family: var(--font-body);
+      font-family: Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 8% -10%, rgba(255,106,26,.16), transparent 60%),
-        radial-gradient(900px 500px at 90% 10%, rgba(14,165,233,.08), transparent 55%),
-        linear-gradient(rgba(11,18,32,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(11,18,32,.04) 1px, transparent 1px),
-        var(--bg);
-      background-size: auto, auto, 64px 64px, 64px 64px, auto;
-      background-attachment: fixed, fixed, fixed, fixed, fixed;
+      background: radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%), radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%), linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
       overflow-x:hidden;
       color-scheme: light;
       padding-left: var(--sideW);
     }
     a{ color:inherit; text-decoration:none }
     button, input, textarea, select{ font:inherit }
-    ::selection{ background:rgba(255,106,26,.2) }
-    :focus-visible{
-      outline: 2px solid rgba(255,106,26,.6);
-      outline-offset: 2px;
-    }
-
+    ::selection{ background:rgba(249,115,22,.18) }
     /* ===== HEADER ===== */
     .topbarWrap{
       background:#fff;
-      border-bottom: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(17,24,39,.10);
       position: sticky;
       top: 0;
       z-index: 40;
@@ -104,17 +100,17 @@
       display:flex;
       align-items:baseline;
       gap: 0;
-      font-family: var(--font-display);
+      font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 400;
       letter-spacing: -0.01em;
-      color:#1f2937;
+      color:#475569;
       user-select:none;
       -webkit-user-select:none;
       -ms-user-select:none;
       pointer-events:none;
     }
-    .brandName b{ font-weight: 800; color:#0b1220; }
+    .brandName b{ font-weight: 800; color:#334155; }
     .headRight{
       margin-left:auto;
       display:flex;
@@ -124,11 +120,11 @@
     .headBtn{
       height: 38px;
       padding: 0 14px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
+      border-radius: 999px;
+      border: 1px solid #e7ebf2;
       background: #fff;
-      color:#0b1220;
-      font-weight: 700;
+      color:#334155;
+      font-weight: 900;
       cursor: pointer;
       transition: background var(--t), filter var(--t), transform var(--t);
       white-space: nowrap;
@@ -137,17 +133,18 @@
       justify-content:center;
       text-align:center;
       line-height: 1;
-      letter-spacing: .02em;
     }
-    .headBtn:hover{ background:#f3f5f7; transform: translateY(-1px); }
+    .headBtn:hover{ background:#f8fafc; transform: translateY(-1px); }
     .headBtn:active{ transform: translateY(0px); }
     .headBtnPrimary{
-      background: linear-gradient(90deg, #ff6a1a, #ff8a3d);
-      border-color: #ff6a1a;
+      background: var(--accent);
+      border-color: var(--accent);
       color:#fff;
     }
     .headBtnPrimary:hover{
-      filter: brightness(.95);
+      background: var(--accent);
+      border-color: var(--accent);
+      filter: brightness(.92);
     }
     @media (max-width: 720px){
       .topbar{ padding-top: 14px; padding-bottom: 14px; }
@@ -155,7 +152,6 @@
       .headRight{ gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
       .headBtn{ height: 36px; padding: 0 12px; font-size: 13px; }
     }
-
     /* ===== Drawer ===== */
     .sideNav{
       position: fixed;
@@ -163,8 +159,10 @@
       top: 0;
       width: var(--sideW);
       height: 100vh;
-      background: #0b1220;
-      border-right: 1px solid #111827;
+      background: #fff;
+      border-right: 1px solid var(--line);
+
+      box-shadow: 8px 10px 24px rgba(15,23,42,.12);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -173,39 +171,36 @@
       z-index: 70;
     }
     .sideLogo{
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       object-fit: contain;
-      background: #fff;
-      border: 1px solid rgba(255,255,255,.2);
-      padding: 6px;
+      border-radius: 12px;
     }
     .sideMenuBtn{
       width: 42px;
       height: 42px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: var(--shadow);
       display: grid;
       place-items: center;
       cursor: pointer;
-      transition: transform var(--t), background var(--t), border-color var(--t);
-      box-shadow: none;
+      transition: transform var(--t), box-shadow var(--t), background var(--t);
     }
     .sideMenuBtn:hover{
       transform: translateY(-1px);
-      background: rgba(255,255,255,.12);
-      border-color: rgba(255,255,255,.25);
+      background: #f8fafc;
     }
     .sideMenuBtn svg{
       width: 22px;
       height: 22px;
-      color:#f8fafc;
+      color:#0f172a;
     }
     .drawerOverlay{
       position: fixed;
       inset: 0;
-      background: rgba(11,18,32,.35);
+      background: rgba(15,23,42,.25);
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--t);
@@ -219,7 +214,7 @@
       width: min(360px, calc(100vw - var(--sideW)));
       background: #fff;
       border-right: 1px solid var(--line);
-      box-shadow: var(--shadow2);
+      box-shadow: 0 14px 28px rgba(15,23,42,.12);
       transform: translateX(-100%);
       transition: transform var(--t);
       z-index: 55;
@@ -243,38 +238,37 @@
       width: 40px;
       height: 40px;
       object-fit: contain;
-      background: #fff;
-      border: 1px solid var(--line);
-      padding: 6px;
+      border-radius: 10px;
     }
     .drawerTitle{
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
       font-size: 1rem;
-      color: #0b1220;
+      color: #0f172a;
     }
     .drawerSubtitle{
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.82rem;
     }
     .loadProgress{
       margin: 8px 0 12px;
       padding: 10px 12px;
-      border: 1px dashed var(--line);
+      border: 1px solid var(--line);
+      border-radius: 14px;
       background: var(--surface2);
       display: grid;
       gap: 6px;
     }
     .loadText{
       font-size: 0.78rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--muted);
-      letter-spacing: .02em;
     }
     .progressBar{
-      height: 6px;
-      background: #e8edf3;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 999px;
       overflow: hidden;
       border: 1px solid var(--line);
     }
@@ -282,10 +276,9 @@
       display: block;
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #ff6a1a, #ff8a3d);
+      background: linear-gradient(90deg, #fdba74, #f97316);
       transition: width .2s ease;
     }
-
     /* ===== App wrap ===== */
     .wrap{
       width:100%;
@@ -298,55 +291,50 @@
       padding: 16px 18px;
       min-height: 120px;
     }
-
     /* ===== Cards ===== */
     .card{
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: var(--rBig);
       background: var(--surface);
       box-shadow: var(--shadow);
       position: relative;
       overflow:hidden;
       min-width: 0;
     }
-
     /* ===== Campos ===== */
     .label{
       display:block;
-      font-size: 11.5px;
+      font-size: 12.5px;
       color: var(--muted);
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
+      font-weight: 800;
       margin: 0 0 6px;
-      font-family: var(--font-display);
+      letter-spacing: .2px;
     }
     .field, .select{
       width:100%;
-      border-radius: var(--radius);
+      border-radius: 14px;
       border: 1px solid var(--line);
-      background: #fff;
+      background: var(--surface2);
       color: var(--text);
       padding: 11px 12px;
       outline:none;
       transition: border-color var(--t), background var(--t), box-shadow var(--t);
     }
     .field:focus, .select:focus{
-      border-color: rgba(255,106,26,.6);
-      box-shadow: 0 0 0 2px rgba(255,106,26,.2);
+      border-color: rgba(249,115,22,.55);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.18);
       background: #fff;
     }
-
     /* ===== Botões (genéricos) ===== */
     .btn{
       cursor:pointer;
-      border-radius: var(--radius);
+      border-radius: var(--rBtn);
       border: 1px solid var(--line);
       background: #fff;
       color: var(--text);
       padding: 0 12px;
       height: var(--topH);
-      font-weight: 700;
+      font-weight: 900;
       font-size: 13.5px;
       display:inline-flex;
       align-items:center;
@@ -356,29 +344,28 @@
       white-space: nowrap;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
-      letter-spacing: .02em;
     }
-    .btn:hover{ transform: translateY(-1px); background: #f4f6f9; border-color: rgba(11,18,32,.2); }
+    .btn:hover{ transform: translateY(-1px); background: var(--surface2); border-color: rgba(15,23,42,.14); }
     .btn:active{ transform: translateY(0px) scale(.99); }
     .btnPrimary{
       border-color: var(--accent);
-      background: linear-gradient(90deg, #ff6a1a, #ff8a3d);
+      background: var(--accent);
       color: #fff;
-      box-shadow: 0 10px 18px rgba(255,106,26,.18);
+      box-shadow: 0 10px 18px rgba(249,115,22,.18);
     }
     .btnPrimary:hover{
       filter: brightness(.97);
-      box-shadow: 0 12px 22px rgba(255,106,26,.22);
-      border-color: rgba(255,106,26,.92);
+      box-shadow: 0 12px 22px rgba(249,115,22,.22);
+      border-color: rgba(249,115,22,.92);
+      background: rgba(249,115,22,.98);
     }
     .btnGhost{ background: #fff; border-color: var(--line); color: var(--text); }
     .mutedNote{
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       font-size: 12.6px;
       line-height: 1.35;
     }
-
     /* ===== Page-specific ===== */
     .hero{
       display:grid;
@@ -387,33 +374,27 @@
       align-items: stretch;
     }
     .heroMain{
-      padding: 26px 26px 26px 22px;
-      border-left: 4px solid var(--accent);
-      background:
-        linear-gradient(90deg, rgba(255,106,26,.1), rgba(255,106,26,0) 60%),
-        #fff;
+      padding: 22px 24px 24px;
     }
     .eyebrow{
       text-transform: uppercase;
-      letter-spacing: 0.32em;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #ff6a1a;
+      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #f97316;
       margin: 0 0 12px;
-      font-family: var(--font-display);
     }
     .heroMain h1{
-      font-family: var(--font-display);
-      font-size: clamp(2.2rem, 3.2vw, 3.4rem);
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(2.1rem, 3vw, 3.1rem);
       margin: 0 0 8px;
       line-height: 1.05;
-      letter-spacing: -0.02em;
     }
     .lead{
       font-size: 1.02rem;
       color: var(--muted);
       margin: 0 0 18px;
-      line-height: 1.6;
+      line-height: 1.55;
     }
     .heroActions{
       display:flex;
@@ -429,15 +410,14 @@
     }
     .statValue{
       font-size: 2.1rem;
-      font-weight: 800;
-      color: #0b1220;
-      font-family: var(--font-display);
+      font-weight: 900;
+      color: #0f172a;
     }
     .statLabel{
       color: var(--muted);
       margin-top: 4px;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
     }
     .filters{
       margin-top: 18px;
@@ -493,23 +473,22 @@
     }
     .area-title h2{
       margin: 0;
-      font-family: var(--font-display);
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 1.05rem;
       color: var(--text);
-      letter-spacing: -0.01em;
     }
     .area-count{
       font-size: 0.85rem;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
     }
     .area-toggle{
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 999px;
       padding: 6px 12px;
-      font-weight: 700;
+      font-weight: 800;
       background: #fff;
-      color: #0b1220;
+      color: #334155;
     }
     .area-body{
       display: none;
@@ -527,7 +506,7 @@
     }
     .subject-item{
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 12px;
       background: #fff;
       overflow: hidden;
       box-shadow: 0 4px 10px rgba(15,23,42,.03);
@@ -542,49 +521,47 @@
       gap: 12px;
       cursor: pointer;
       text-align: left;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
       font-size: 0.88rem;
       line-height: 1.2;
-      font-family: var(--font-display);
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       -webkit-appearance: none;
       appearance: none;
       -webkit-text-fill-color: var(--text);
-      letter-spacing: .01em;
     }
     .subject-btn:hover{
-      background: #f6f8fb;
+      background: #f8fafc;
     }
     .subject-btn.is-active{
-      background: #fff3e8;
+      background: #fff7ed;
     }
     .subject-btn.is-active .subject-dot{
-      box-shadow: 0 0 0 2px rgba(255,106,26,.25);
+      box-shadow: 0 0 0 2px rgba(249,115,22,.25);
     }
     .subject-dot{
       width: 12px;
       height: 12px;
-      border-radius: var(--radius);
+      border-radius: 999px;
       display: inline-block;
       flex-shrink: 0;
-      background: linear-gradient(135deg, #64748b, #0f172a);
+      background: radial-gradient(circle at 30% 30%, #64748b 0%, #1f2937 55%, #0f172a 100%);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
     }
     .area-dot{
       width: 14px;
       height: 14px;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, #ffb066, #ff6a1a);
-      box-shadow: 0 0 10px rgba(255,106,26,.35);
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fdba74 0%, #f97316 55%, #ea580c 100%);
+      box-shadow: 0 0 10px rgba(249,115,22,.55);
       flex-shrink: 0;
     }
     .area-name{
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
       font-size: 0.95rem;
       color: var(--text);
       flex: 1;
-      letter-spacing: -0.01em;
     }
     .area-chevron{
       width: 16px;
@@ -602,6 +579,9 @@
       gap: 10px;
       padding: 2px 2px;
     }
+    .area-header{
+      gap: 10px;
+    }
     .area-header h2{
       font-size: 0.98rem;
     }
@@ -618,7 +598,7 @@
       height: 18px;
     }
     .subject-btn.is-active .subject-chevron{
-      color: #ff6a1a;
+      color: #f97316;
       transform: rotate(180deg);
     }
     .subject-detail{
@@ -627,7 +607,7 @@
       text-align: left;
     }
     .guide-detail{
-      border-radius: var(--radius);
+      border-radius: var(--rMid);
       padding: 20px 18px;
       background: #fff;
       border: 1px solid var(--line);
@@ -653,17 +633,17 @@
     }
     .detailTitle{
       margin: 0;
-      font-family: var(--font-display);
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text);
-      line-height: 1.05;
+      line-height: 0.98;
     }
     .detailSubtitle{
       font-size: 0.76rem;
       color: var(--muted);
-      font-weight: 600;
-      line-height: 1.1;
+      font-weight: 700;
+      line-height: 0.95;
       margin-top: -2px;
     }
     .detailTools{
@@ -677,15 +657,15 @@
       padding: 0 10px;
     }
     .detailSectionTitle{
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
       font-size: 0.9rem;
       margin: 0 0 6px;
       color: var(--text);
     }
     .guide-detail h3{
       margin: 0 0 8px;
-      font-family: var(--font-display);
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     .guide-card{
       padding: 16px 18px 18px;
@@ -703,7 +683,7 @@
     }
     .guide-title h2{
       margin: 0;
-      font-family: var(--font-display);
+      font-family: "DM Serif Display", serif;
       font-size: 1.35rem;
       line-height: 1.2;
     }
@@ -712,13 +692,11 @@
       align-items:center;
       width: fit-content;
       padding: 4px 10px;
-      border-radius: var(--radius);
-      background: rgba(255,106,26,.12);
-      color: #8a2d0b;
-      font-weight: 700;
+      border-radius: 999px;
+      background: rgba(249,115,22,.12);
+      color: #9a3412;
+      font-weight: 800;
       font-size: 0.78rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
     }
     .toggle{
       min-width: 110px;
@@ -739,20 +717,18 @@
     }
     .guide-tab{
       border: 1px solid var(--line);
-      border-radius: var(--radius);
+      border-radius: 999px;
       padding: 6px 12px;
       background: #fff;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       color: #475569;
       transition: background var(--t), color var(--t), border-color var(--t);
-      font-size: 0.76rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+      font-size: 0.84rem;
     }
     .guide-tab:hover{
-      border-color: rgba(255,106,26,.35);
-      color: #0b1220;
+      border-color: rgba(249,115,22,.35);
+      color: #0f172a;
     }
     .guide-tab--active{
       background: var(--accent);
@@ -761,7 +737,7 @@
     }
     .guide-panel{
       display:none;
-      border-radius: var(--radius);
+      border-radius: var(--rMid);
       padding: 14px 16px;
       background: #fff;
       border: 1px solid var(--line);
@@ -772,19 +748,19 @@
     .guide-panel h1,
     .guide-panel h2,
     .guide-panel h3{
-      font-family: var(--font-display);
+      font-family: "DM Serif Display", serif;
       margin-top: 0;
     }
     .guide-panel hr{
       border: none;
-      border-top: 1px dashed rgba(11,18,32,.18);
+      border-top: 1px dashed rgba(15,23,42,.18);
       margin: 12px 0;
     }
     .guide-panel.tone-neutro{ color: var(--text); }
     .guide-panel.tone-destaque{
-      background: #fff3e8;
-      border-color: rgba(255,106,26,.35);
-      color: #8a2d0b;
+      background: #fff7ed;
+      border-color: rgba(249,115,22,.35);
+      color: #9a3412;
     }
     .guide-panel.tone-alerta{
       background: #fff1f2;
@@ -833,10 +809,9 @@
       margin: 8px 0;
       padding: 6px 10px;
       border-left: 4px solid var(--accent);
-      background: #fff3e8;
+      background: #fff7ed;
       color: var(--text);
     }
-
     /* ===== Tabs por pasta ===== */
     .folder-panels{
       display: grid;
@@ -848,10 +823,9 @@
     .folder-panel.is-active{
       display: block;
     }
-
-    /* ===== Prescrição look ===== */
+    /* ===== Prescrição look (Montserrat + estilo semelhante ao exemplo) ===== */
     .guide-panel[data-panel="prescricao"]{
-      font-family: var(--font-body);
+      font-family: "Montserrat", Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size: 15px;
       background: #fff;
     }
@@ -859,8 +833,8 @@
     .guide-panel[data-panel="prescricao"] h2,
     .guide-panel[data-panel="prescricao"] h3,
     .guide-panel[data-panel="prescricao"] h4{
-      font-family: var(--font-display);
-      font-weight: 700;
+      font-family: "Montserrat", Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
       margin-top: 6px;
     }
     .guide-panel[data-panel="prescricao"] ul{
@@ -873,11 +847,11 @@
       margin: 8px 0;
       padding: 6px 10px;
       border-left: 4px solid var(--accent);
-      background: #fff3e8;
+      background: #fff7ed;
       color: var(--text);
     }
     .guide-panel[data-panel="prescricao"] em{
-      color: var(--accent-2);
+      color: #8b5cf6;
       font-style: italic;
       font-weight: 600;
     }
@@ -887,20 +861,19 @@
       margin-bottom: 10px;
     }
     .copyBtn{
-      border-radius: var(--radius);
+      border-radius: 999px;
       height: 34px;
       padding: 0 12px;
       border: 1px solid rgba(15,23,42,.12);
       background: #fff;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 0.78rem;
       cursor: pointer;
       display:inline-flex;
       align-items:center;
       gap: 8px;
-      color: #0b1220;
+      color: #0f172a;
       transition: transform var(--t), background var(--t), border-color var(--t);
-      letter-spacing: .02em;
     }
     .copyBtn:hover{
       transform: translateY(-1px);
@@ -916,8 +889,7 @@
       color: var(--muted);
       padding: 24px;
       border: 1px dashed var(--line);
-      border-radius: var(--radius);
-      background: #fff;
+      border-radius: var(--rBig);
     }
     .footer{
       margin-top: 18px;
@@ -946,7 +918,7 @@
         min-width: 90px;
       }
     }
-
+  
     .mobileBack{
       display:none;
       align-items:center;
@@ -957,9 +929,9 @@
       border: 1px solid var(--line);
       background: #fff;
       color: var(--text);
-      border-radius: var(--radius);
+      border-radius: 999px;
       padding: 6px 12px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
     }
 
@@ -986,6 +958,7 @@
       .mobile-detail .contentArea{ margin-top: 0; }
       .mobile-detail .mobileBack{ display:flex; }
     }
+
   </style>
 </head>
 <body>
@@ -1000,7 +973,7 @@
   <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true"></div>
 
   <div class="wrap" id="appWrap">
-    <section class="hero">
+            <section class="hero">
       <div class="heroMain card">
         <p class="eyebrow">Guia de Prescrições</p>
         <h1>Protocolos práticos no ponto de cuidado.</h1>
@@ -1043,7 +1016,7 @@
     <div class="footer mutedNote">Dica: escolha uma aba para ver os assuntos. Para criar divisórias no editor, use três traços `---` em uma linha.</div>
   </aside>
 
-  <template id="areaTemplate">
+    <template id="areaTemplate">
     <article class="card area-card">
       <button class="area-header" type="button">
         <div class="area-title">
@@ -1059,7 +1032,7 @@
     </article>
   </template>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const areaListEl = document.getElementById('areaList')
     const searchInput = document.getElementById('search')
@@ -1313,7 +1286,7 @@
           const backBtn = document.createElement('button')
           backBtn.type = 'button'
           backBtn.className = 'mobileBackBtn'
-          backBtn.textContent = '← Voltar'
+          backBtn.textContent = '? Voltar'
           backBtn.addEventListener('click', exitDetailView)
           backWrap.appendChild(backBtn)
           contentArea.appendChild(backWrap)
@@ -1517,7 +1490,7 @@
       return result
     }
 
-    function parseJsonPayload(text) {
+        function parseJsonPayload(text) {
       if (!text) return null
       return JSON.parse(text.replace(/^\uFEFF/, ''))
     }
@@ -1556,8 +1529,7 @@
         return []
       }
     }
-
-    window.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
       if (!isMobileView()) {
         document.body.classList.remove('mobile-detail')
       }
@@ -1651,3 +1623,4 @@
   </script>
 </body>
 </html>
+
