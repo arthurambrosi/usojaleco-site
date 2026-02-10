@@ -892,23 +892,49 @@
       font-weight: 700;
     }
     .prescricao-section{
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
-      padding: 12px 12px 10px;
-      margin: 12px 0;
-      box-shadow: 0 6px 14px rgba(11,18,32,.06);
+      border-bottom: 1px dashed rgba(11,18,32,.2);
+      padding: 6px 0;
+      margin: 6px 0;
     }
-    .prescricao-section__header{
-      margin-bottom: 8px;
+    .prescricao-section:last-child{
+      border-bottom: 0;
     }
-    .prescricao-section__quote{
+    .prescricao-section__summary{
+      list-style: none;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .prescricao-section__summary::-webkit-details-marker{
+      display:none;
+    }
+    .prescricao-section__summary::after{
+      content: "▸";
+      margin-left: auto;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    .prescricao-section[open] > .prescricao-section__summary::after{
+      content: "▾";
+      color: var(--accent);
+    }
+    .prescricao-section__summary:focus-visible{
+      outline: 2px solid rgba(255,106,26,.4);
+      outline-offset: 2px;
+    }
+    .guide-panel[data-panel="prescricao"] .prescricao-section__quote{
       margin: 0;
-      padding: 8px 12px;
-      border-left: 4px solid var(--accent);
+      padding: 6px 10px;
+      border-left: 3px solid var(--accent);
       background: #fff3e8;
       color: var(--text);
       font-weight: 700;
+      border-radius: 6px;
+      width: 100%;
+    }
+    .prescricao-section__body{
+      margin: 6px 0 2px;
     }
     .prescricao-section__body > :first-child{
       margin-top: 0;
@@ -917,22 +943,40 @@
       margin-bottom: 0;
     }
     .prescricao-subsection{
-      border: 1px dashed rgba(255,106,26,.35);
-      border-radius: var(--radius);
-      padding: 10px 12px;
-      margin: 10px 0;
-      background: #fff8f2;
+      margin: 8px 0 0 14px;
+      padding-left: 10px;
+      border-left: 2px solid rgba(255,106,26,.35);
     }
-    .prescricao-subsection__title{
+    .prescricao-subsection__summary{
+      list-style: none;
+      display:flex;
+      align-items:center;
+      gap: 6px;
+      cursor: pointer;
       font-family: var(--font-display);
       font-weight: 700;
       color: #8a2d0b;
-      margin-bottom: 6px;
     }
-    .prescricao-subsection__title p,
-    .prescricao-subsection__title mark,
-    .prescricao-subsection__title span{
+    .prescricao-subsection__summary::-webkit-details-marker{
+      display:none;
+    }
+    .prescricao-subsection__summary::after{
+      content: "▸";
+      margin-left: auto;
+      color: rgba(255,106,26,.8);
+      font-size: 0.85rem;
+    }
+    .prescricao-subsection[open] > .prescricao-subsection__summary::after{
+      content: "▾";
+      color: var(--accent);
+    }
+    .prescricao-subsection__summary p,
+    .prescricao-subsection__summary mark,
+    .prescricao-subsection__summary span{
       margin: 0;
+    }
+    .prescricao-subsection__body{
+      margin: 6px 0 2px;
     }
     .prescricao-subsection__body > :first-child{
       margin-top: 0;
@@ -1271,28 +1315,28 @@
     }
 
     function createPrescriptionSection(quoteNode) {
-      const section = document.createElement('section')
+      const section = document.createElement('details')
       section.className = 'prescricao-section'
-      const header = document.createElement('div')
-      header.className = 'prescricao-section__header'
+      const summary = document.createElement('summary')
+      summary.className = 'prescricao-section__summary'
       quoteNode.classList.add('prescricao-section__quote')
-      header.appendChild(quoteNode)
+      summary.appendChild(quoteNode)
       const body = document.createElement('div')
       body.className = 'prescricao-section__body'
-      section.appendChild(header)
+      section.appendChild(summary)
       section.appendChild(body)
       return { section, body }
     }
 
     function createPrescriptionSubsection(titleNode) {
-      const subsection = document.createElement('div')
+      const subsection = document.createElement('details')
       subsection.className = 'prescricao-subsection'
-      const title = document.createElement('div')
-      title.className = 'prescricao-subsection__title'
-      title.appendChild(titleNode)
+      const summary = document.createElement('summary')
+      summary.className = 'prescricao-subsection__summary'
+      summary.appendChild(titleNode)
       const body = document.createElement('div')
       body.className = 'prescricao-subsection__body'
-      subsection.appendChild(title)
+      subsection.appendChild(summary)
       subsection.appendChild(body)
       return { subsection, body }
     }
