@@ -278,10 +278,10 @@
     .work-track{
       display:grid;
       grid-auto-flow:column;
-      grid-auto-columns:minmax(260px, 80%);
-      gap:22px;
-      overflow-x:auto;
-      scroll-snap-type:x mandatory;
+      grid-auto-columns:100%;
+      gap:0;
+      overflow:hidden;
+      scroll-snap-type:none;
       padding-bottom:14px;
     }
     .work-track::-webkit-scrollbar{ height:10px; }
@@ -635,20 +635,22 @@
       var dotsWrap = document.getElementById("workDots");
       var dots = document.querySelectorAll("#workDots .dot");
       var buttons = document.querySelectorAll("[data-dir]");
+      var currentIndex = 0;
+      var totalItems = 0;
+      var autoTimer = null;
       if (!track) return;
 
       function updateDots(){
-        if (!dots.length || !track.clientWidth) return;
-        var index = Math.round(track.scrollLeft / track.clientWidth);
-        index = Math.min(index, dots.length - 1);
+        if (!dots.length) return;
         dots.forEach(function(dot, i){
-          dot.classList.toggle("active", i === index);
+          dot.classList.toggle("active", i === currentIndex);
         });
       }
 
       function buildDots(){
         if (!dotsWrap) return;
-        var pages = Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth));
+        totalItems = track.children.length;
+        var pages = Math.max(1, totalItems);
         dotsWrap.innerHTML = "";
         for (var i = 0; i < pages; i++){
           var dot = document.createElement("span");
@@ -657,6 +659,34 @@
         }
         dots = dotsWrap.querySelectorAll(".dot");
         updateDots();
+      }
+
+      function goTo(index, smooth){
+        if (!totalItems) return;
+        if (index < 0) index = totalItems - 1;
+        if (index >= totalItems) index = 0;
+        currentIndex = index;
+        var left = track.clientWidth * currentIndex;
+        if (smooth === false){
+          track.scrollLeft = left;
+        } else {
+          track.scrollTo({ left: left, behavior: "smooth" });
+        }
+        updateDots();
+      }
+
+      function startAuto(){
+        stopAuto();
+        autoTimer = setInterval(function(){
+          goTo(currentIndex + 1);
+        }, 2000);
+      }
+
+      function stopAuto(){
+        if (autoTimer){
+          clearInterval(autoTimer);
+          autoTimer = null;
+        }
       }
 
       function buildGallery(list){
@@ -675,6 +705,9 @@
           card.appendChild(img);
           track.appendChild(card);
         });
+        buildDots();
+        goTo(0, false);
+        startAuto();
       }
 
       function loadGallery(){
@@ -693,17 +726,28 @@
       buttons.forEach(function(btn){
         btn.addEventListener("click", function(){
           var dir = btn.getAttribute("data-dir") === "next" ? 1 : -1;
-          track.scrollBy({ left: dir * track.clientWidth * 0.85, behavior: "smooth" });
+          goTo(currentIndex + dir);
+          startAuto();
         });
       });
 
       track.addEventListener("scroll", function(){
         window.clearTimeout(track._scrollTimer);
-        track._scrollTimer = window.setTimeout(updateDots, 120);
+        track._scrollTimer = window.setTimeout(function(){
+          if (!track.clientWidth) return;
+          var index = Math.round(track.scrollLeft / track.clientWidth);
+          if (index !== currentIndex){
+            currentIndex = index;
+            updateDots();
+          }
+        }, 120);
       });
 
       loadGallery();
-      window.setTimeout(buildDots, 120);
+      window.addEventListener("resize", function(){
+        if (!totalItems) return;
+        goTo(currentIndex, false);
+      });
 
       function animateCounters(){
         var counters = document.querySelectorAll(".counter");
@@ -745,3 +789,12 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
