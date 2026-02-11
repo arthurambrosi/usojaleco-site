@@ -438,7 +438,10 @@
     @media (max-width: 600px){
       .topbar-inner{ flex-wrap:wrap; gap:12px; }
       .container{ padding:0 16px; }
-      h1{ font-size:34px; }
+      body{ font-size:15px; }
+      h1{ font-size:30px; }
+      .lead{ font-size:16px; }
+      .hero{ padding:56px 0 28px; gap:22px; }
       .steps{ grid-template-columns:1fr; }
       .steps .step:last-child{ grid-column:auto; }
       .diferenciais{ grid-template-columns:1fr; }
@@ -446,7 +449,13 @@
       .hero-actions .btn{ width:100%; justify-content:center; }
       .hero-stats{ gap:18px; }
       .hero-stats-right{ font-size:15px; gap:14px; }
-      .hero-stats-right strong{ font-size:30px; }
+      .hero-stats-right strong{ font-size:26px; }
+      .section{ padding:48px 0; }
+      .section h2{ font-size:30px; }
+      .section p.section-sub{ font-size:14px; }
+      .work-carousel{ width:100%; }
+      .work-card{ border-radius:20px; }
+      .work-card img{ filter: drop-shadow(0 12px 20px rgba(15,23,42,.18)); }
       .work-controls{
         flex-direction:column;
         gap:12px;
@@ -460,7 +469,13 @@
       .work-controls .arrow-btn{
         flex:1;
         text-align:center;
+        padding:10px 12px;
       }
+      .cards{ gap:16px; }
+      .card{ padding:18px; }
+      .cta{ padding:24px; }
+      .contact-card{ padding:16px; }
+      footer{ padding:24px 0 44px; }
     }
     @media (prefers-reduced-motion: reduce){
       *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
