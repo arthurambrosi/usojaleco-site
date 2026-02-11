@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=1200" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>UsoJaleco | Apresentacoes Medicas</title>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
       --shadow-soft:0 10px 24px rgba(15,23,42,.08);
       --radius:26px;
       --radius-sm:16px;
-      --max:1200px;
+      --max:900px;
       --font-body:"Space Grotesk", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
       --font-display:"Fraunces", "Times New Roman", serif;
     }
@@ -64,11 +64,13 @@
       align-items:center;
       gap:24px;
       padding:16px 0;
+      justify-content:center;
     }
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
+      justify-content:center;
     }
     .brand img{
       height:42px;
@@ -134,9 +136,10 @@
     .hero{
       padding:72px 0 40px;
       display:grid;
-      grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr);
-      gap:48px;
+      grid-template-columns: 1fr;
+      gap:28px;
       align-items:stretch;
+      text-align:center;
     }
     .eyebrow{
       text-transform:uppercase;
@@ -155,12 +158,14 @@
       font-size:18px;
       color:var(--muted);
       max-width:520px;
+      margin:0 auto;
     }
     .hero-actions{
       display:flex;
       gap:14px;
       margin:28px 0 20px;
       flex-wrap:wrap;
+      justify-content:center;
     }
     .hero-stats{
       display:flex;
@@ -168,6 +173,8 @@
       flex-wrap:wrap;
       color:var(--muted);
       font-size:14px;
+      justify-content:center;
+      text-align:center;
     }
     .hero-stats strong{
       display:block;
@@ -188,8 +195,9 @@
       gap:18px;
       font-size:16px;
       width:100%;
-      max-width:360px;
-      margin-left:auto;
+      max-width:640px;
+      margin:0 auto;
+      align-items:center;
     }
     .hero-stats-right strong{
       font-size:38px;
@@ -332,7 +340,7 @@
 
     .cards{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns: 1fr;
       gap:22px;
     }
     .card{
@@ -493,14 +501,6 @@
           <strong>Apresenta&ccedil;&otilde;es M&eacute;dicas</strong>
         </div>
       </div>
-      <nav class="nav">
-        <a href="#inicio">Inicio</a>
-        <a href="#processo">Como funciona</a>
-        <a href="#portfolio">Trabalhos</a>
-        <a href="#prazo">Prazo e pagamento</a>
-        <a href="#contato">Contato</a>
-      </nav>
-      <a class="btn primary" href="#contato">Solicitar or&ccedil;amento</a>
     </div>
   </header>
 
@@ -517,8 +517,6 @@
           <a class="btn primary" href="#contato">Quero meu projeto</a>
           <a class="btn ghost" href="#portfolio">Ver trabalhos</a>
         </div>
-      </div>
-      <div class="hero-visual">
         <div class="hero-stats hero-stats-right">
           <div>
             <strong><span class="counter" data-target="200" data-prefix="+">0</span></strong>
@@ -531,62 +529,6 @@
           <div>
             <strong><span class="counter" data-target="100" data-suffix="%">0</span></strong>
             Materiais editaveis
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="processo" class="section">
-      <div class="container">
-        <h2>Como Funciona</h2>
-        <p class="section-sub">
-          Cada etapa &eacute; cuidadosamente planejada para entregar uma apresenta&ccedil;&atilde;o clinica clara,
-          elegante e objetiva.
-        </p>
-        <div class="steps">
-          <div class="step" style="--step-bg:#ff8a00; --step-fg:#1f2937;">
-            <span>1</span>
-            <h3>Seu material</h3>
-            <p>Envie o material atual ou um briefing do conteudo que precisa de um design novo.</p>
-          </div>
-          <div class="step" style="--step-bg:#f26f1a; --step-fg:#1f2937;">
-            <span>2</span>
-            <h3>An&aacute;lise</h3>
-            <p>Fa&ccedil;o uma an&aacute;lise gratuita e um or&ccedil;amento personalizado para o seu projeto.</p>
-          </div>
-          <div class="step" style="--step-bg:#d45f2a; --step-fg:#1f2937;">
-            <span>3</span>
-            <h3>M&atilde;o na massa</h3>
-            <p>Roteiro clinico, estrutura narrativa e design para comunicar com clareza.</p>
-          </div>
-          <div class="step" style="--step-bg:#6b7280; --step-fg:#ffffff;">
-            <span>4</span>
-            <h3>Revis&atilde;o e ajustes</h3>
-            <p>Rodadas de revis&atilde;o com base no seu feedback e objetivos.</p>
-          </div>
-          <div class="step" style="--step-bg:#111827; --step-fg:#ffffff;">
-            <span>5</span>
-            <h3>Finaliza&ccedil;&atilde;o</h3>
-            <p>Entrega do material final em PowerPoint, 100% edit&aacute;vel.</p>
-          </div>
-        </div>
-
-        <div class="diferenciais">
-          <div class="chip">
-            <h4>Conte&uacute;do cientifico</h4>
-            <p>Organiza&ccedil;&atilde;o de dados, evid&ecirc;ncias e fluxos clinicos.</p>
-          </div>
-          <div class="chip">
-            <h4>Storytelling clinico</h4>
-            <p>Narrativa que guia o publico e refor&ccedil;a a mensagem principal.</p>
-          </div>
-          <div class="chip">
-            <h4>Design para clareza</h4>
-            <p>Slides legiveis, com tipografia e hierarquia visual.</p>
-          </div>
-          <div class="chip">
-            <h4>Suporte de ponta a ponta</h4>
-            <p>Acompanhamento durante revis&otilde;es e ajustes finais.</p>
           </div>
         </div>
       </div>
