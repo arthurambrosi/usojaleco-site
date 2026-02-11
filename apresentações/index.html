@@ -296,6 +296,13 @@
       position:relative;
       overflow:hidden;
       box-shadow:none;
+      opacity:.5;
+      transform:scale(.98);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .work-card.is-active{
+      opacity:1;
+      transform:scale(1);
     }
     .work-card img{
       width:100%;
@@ -303,6 +310,10 @@
       object-fit:cover;
       display:block;
       filter: drop-shadow(0 18px 28px rgba(15,23,42,.22));
+      transition:transform .8s ease;
+    }
+    .work-card.is-active img{
+      transform:scale(1.02);
     }
     .work-controls{
       display:flex;
@@ -329,6 +340,25 @@
       font-weight:700;
       cursor:pointer;
     }
+    .carousel-arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:white;
+      box-shadow:var(--shadow-soft);
+      font-size:20px;
+      font-weight:700;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      z-index:5;
+    }
+    .carousel-arrow.prev{ left:-18px; }
+    .carousel-arrow.next{ right:-18px; }
 
     .cards{
       display:grid;
@@ -554,16 +584,10 @@
         <div class="work-carousel">
           <div class="work-track" id="workTrack" data-manifest="data/manifest.json"></div>
           <div class="work-controls">
-            <div class="dots" id="workDots">
-              <span class="dot active"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
-            <div>
-              <button class="arrow-btn" data-dir="prev">Anterior</button>
-              <button class="arrow-btn" data-dir="next">Pr&oacute;ximo</button>
-            </div>
+            <div class="dots" id="workDots"></div>
           </div>
+          <button class="carousel-arrow prev" data-dir="prev" aria-label="Anterior">&#8249;</button>
+          <button class="carousel-arrow next" data-dir="next" aria-label="Pr&oacute;ximo">&#8250;</button>
         </div>
       </div>
     </section>
@@ -650,6 +674,13 @@
         });
       }
 
+      function updateActive(){
+        var cards = track.children;
+        for (var i = 0; i < cards.length; i++){
+          cards[i].classList.toggle("is-active", i === currentIndex);
+        }
+      }
+
       function buildDots(){
         if (!dotsWrap) return;
         totalItems = track.children.length;
@@ -662,6 +693,7 @@
         }
         dots = dotsWrap.querySelectorAll(".dot");
         updateDots();
+        updateActive();
       }
 
       function goTo(index, smooth){
@@ -678,6 +710,7 @@
           track.scrollTo({ left: left, behavior: "smooth" });
         }
         updateDots();
+        updateActive();
       }
 
       function startAuto(){
@@ -746,6 +779,7 @@
           if (index !== currentIndex){
             currentIndex = index;
             updateDots();
+            updateActive();
           }
         }, 120);
       });
