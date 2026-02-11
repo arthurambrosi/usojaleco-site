@@ -274,17 +274,16 @@
 
     .work-carousel{
       position:relative;
-      max-width:900px;
+      width:min(900px, 100%);
       margin:0 auto;
     }
     .work-track{
       display:grid;
       grid-auto-flow:column;
-      grid-auto-columns:min(820px, 92%);
+      grid-auto-columns:100%;
       gap:0;
       overflow:hidden;
       scroll-snap-type:none;
-      justify-content:center;
       padding-bottom:14px;
     }
     .work-track::-webkit-scrollbar{ height:10px; }
@@ -670,7 +669,9 @@
         if (index < 0) index = totalItems - 1;
         if (index >= totalItems) index = 0;
         currentIndex = index;
-        var left = track.clientWidth * currentIndex;
+        var slide = track.firstElementChild;
+        var slideWidth = slide ? slide.getBoundingClientRect().width : track.clientWidth;
+        var left = slideWidth * currentIndex;
         if (smooth === false){
           track.scrollLeft = left;
         } else {
@@ -738,8 +739,10 @@
       track.addEventListener("scroll", function(){
         window.clearTimeout(track._scrollTimer);
         track._scrollTimer = window.setTimeout(function(){
-          if (!track.clientWidth) return;
-          var index = Math.round(track.scrollLeft / track.clientWidth);
+          var slide = track.firstElementChild;
+          var slideWidth = slide ? slide.getBoundingClientRect().width : track.clientWidth;
+          if (!slideWidth) return;
+          var index = Math.round(track.scrollLeft / slideWidth);
           if (index !== currentIndex){
             currentIndex = index;
             updateDots();
