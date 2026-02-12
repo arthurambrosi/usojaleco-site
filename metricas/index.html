@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | Metricas</title>
+  <script defer src="/analytics-config.js"></script>
+  <script defer src="/analytics.js"></script>
+  <style>
+    :root {
+      --bg: #0a0f1f;
+      --card: #11182b;
+      --line: rgba(148, 163, 184, 0.25);
+      --text: #e2e8f0;
+      --muted: #93a3b8;
+      --brand-1: #f97316;
+      --brand-2: #fb923c;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --radius: 18px;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 500px at 100% -10%, rgba(249, 115, 22, 0.2), transparent 60%),
+        radial-gradient(900px 500px at -10% 0%, rgba(59, 130, 246, 0.2), transparent 60%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 18px 50px;
+    }
+
+    .hero {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(17, 24, 43, 0.95), rgba(9, 15, 30, 0.9));
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .status-ok { color: var(--ok); }
+    .status-warn { color: var(--warn); }
+
+    .links {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 12px 14px;
+      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      border: 0;
+    }
+
+    .events {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+    }
+
+    .events h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .events ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .home {
+      margin-top: 16px;
+    }
+
+    @media (max-width: 840px) {
+      .grid { grid-template-columns: 1fr; }
+      .links { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Painel de Metricas do Site</h1>
+      <p>Esta pagina centraliza o status da coleta de dados e os links para os relatorios no Google Analytics.</p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Status da Coleta</h2>
+          <div class="value" id="statusText">Verificando...</div>
+          <p id="statusHint">Carregando configuracao.</p>
+        </article>
+
+        <article class="card">
+          <h2>Measurement ID</h2>
+          <div class="value" id="measurementId">-</div>
+          <p>Configurado em <code>/analytics-config.js</code>.</p>
+        </article>
+
+        <article class="card">
+          <h2>Dominio Atual</h2>
+          <div class="value" id="domain">-</div>
+          <p>Use o mesmo dominio em todos os links do menu para consolidar dados.</p>
+        </article>
+      </div>
+
+      <div class="links">
+        <a class="btn" href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener">Abrir Google Analytics</a>
+        <a class="btn" href="/" data-track-event="metricas_back_home" data-track-label="Voltar para menu">Voltar para o Menu</a>
+      </div>
+
+      <section class="events">
+        <h2>Eventos rastreados automaticamente</h2>
+        <ul>
+          <li><code>page_view</code>: visualizacao de cada pagina</li>
+          <li><code>outbound_click</code>: clique em links externos</li>
+          <li><code>contact_click</code>: clique em WhatsApp ou Email</li>
+          <li><code>file_download</code>: clique em PDF, DOC, XLS, PPT, ZIP etc.</li>
+          <li><code>button_click</code>: clique em botoes</li>
+          <li><code>form_submit</code>: envio de formularios</li>
+        </ul>
+      </section>
+    </section>
+
+    <div class="home">
+      <a class="btn" href="/" data-track-event="metricas_home_link" data-track-label="Ir para inicio">Ir para inicio</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var config = window.USOJALECO_ANALYTICS_CONFIG || {};
+      var measurementId = String(config.measurementId || "").trim();
+      var statusText = document.getElementById("statusText");
+      var statusHint = document.getElementById("statusHint");
+      var measurementIdEl = document.getElementById("measurementId");
+      var domainEl = document.getElementById("domain");
+
+      measurementIdEl.textContent = measurementId || "Nao definido";
+      domainEl.textContent = window.location.hostname || "-";
+
+      if (!measurementId || measurementId === "G-XXXXXXXXXX") {
+        statusText.textContent = "Pendente";
+        statusText.className = "value status-warn";
+        statusHint.textContent = "Defina seu GA4 Measurement ID em /analytics-config.js para iniciar a coleta.";
+        return;
+      }
+
+      statusText.textContent = "Ativo";
+      statusText.className = "value status-ok";
+      statusHint.textContent = "A coleta esta ativa. Verifique o relatorio em Tempo Real no Google Analytics.";
+    })();
+  </script>
+</body>
+</html>
