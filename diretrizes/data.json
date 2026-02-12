@@ -6,18 +6,46 @@
         "nome_assunto": "Hipertensao arterial",
         "diretrizes": [
           {
-            "titulo": "Guideline for High Blood Pressure in Adults",
-            "instituicao": "AHA/ACC (EUA)",
-            "ano": 2017,
-            "link_pdf": "https://www.ahajournals.org/doi/pdf/10.1161/HYP.0000000000000065",
-            "tags": ["hipertensao", "pressao arterial", "eua"]
+            "titulo": "Diretriz Brasileira de Hipertensao Arterial - 2025",
+            "instituicao": "Sociedade Brasileira de Cardiologia (SBC) / Sociedade Brasileira de Hipertensao (SBH) / Sociedade Brasileira de Nefrologia (SBN)",
+            "ano": 2025,
+            "link_pdf": "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250624/0066-782X-abc-122-09-e20250624.x66747.pdf",
+            "tags": ["brasil", "diretriz", "hipertensao", "sbc", "sbh", "sbn"]
           },
           {
-            "titulo": "Global report on hypertension",
-            "instituicao": "WHO (Internacional)",
-            "ano": 2023,
-            "link_pdf": "https://iris.who.int/bitstream/handle/10665/372236/9789240081062-eng.pdf",
-            "tags": ["hipertensao", "global", "who"]
+            "titulo": "2017 ACC/AHA/AAPA/ABC/ACPM/AGS/APhA/ASH/ASPC/NMA/PCNA Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults",
+            "instituicao": "American College of Cardiology (ACC) / American Heart Association (AHA)",
+            "ano": 2017,
+            "link_pdf": "https://www.eshonline.org/esh-content/uploads/2019/08/2.-2017-ACCAHAAAPAABCACPMAGSAPhAASHASPCNMAPCNA-Guideline-for-the-Prevention-Detection-Evaluation-and-Management-of-High-Blood-Pressure-in-Adults.pdf",
+            "tags": ["eua", "diretriz", "aha", "acc", "hipertensao", "pressao-arterial"]
+          },
+          {
+            "titulo": "2024 ESC Guidelines for the management of elevated blood pressure and hypertension",
+            "instituicao": "European Society of Cardiology (ESC)",
+            "ano": 2024,
+            "link_pdf": "https://www.portailvasculaire.fr/sites/default/files/docs/ehae178.pdf",
+            "tags": ["europa", "esc", "diretriz", "hipertensao", "pressao-elevada"]
+          },
+          {
+            "titulo": "Protocolo Clinico e Diretrizes Terapeuticas (PCDT): Hipertensao Arterial Sistemica",
+            "instituicao": "Ministerio da Saude (Brasil) / CONITEC",
+            "ano": 2025,
+            "link_pdf": "https://www.gov.br/conitec/pt-br/midias/protocolos/pcdt-hipertensao-arterial-sistemica.pdf",
+            "tags": ["brasil", "sus", "pcdt", "protocolo", "hipertensao", "conitec"]
+          },
+          {
+            "titulo": "Guideline for the pharmacological treatment of hypertension in adults",
+            "instituicao": "World Health Organization (WHO)",
+            "ano": 2021,
+            "link_pdf": "https://iris.who.int/server/api/core/bitstreams/f062769d-f075-4a00-87af-0a2106e0bd04/content",
+            "tags": ["who", "oms", "diretriz", "farmacologico", "hipertensao", "global"]
+          },
+          {
+            "titulo": "2020 International Society of Hypertension Global Hypertension Practice Guidelines",
+            "instituicao": "International Society of Hypertension (ISH)",
+            "ano": 2020,
+            "link_pdf": "https://sbn.org.br/fileadmin/user_upload/2020_diretrizes/HYPERTENSION-GUIDELINES-2020_.pdf",
+            "tags": ["ish", "diretriz", "hipertensao", "global", "pratica-clinica"]
           }
         ]
       },
