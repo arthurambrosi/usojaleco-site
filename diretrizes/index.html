@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | Diretrizes e Protocolos</title>
+  <script defer src="/analytics-config.js"></script>
+  <script defer src="/analytics.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --surface:#121319;
+      --surface-2:#171923;
+      --text:#f8fafc;
+      --muted:#a1a1aa;
+      --hairline:rgba(255,255,255,.09);
+      --brand-1:#ff7a18;
+      --brand-2:#ffb703;
+      --shadow-1:0 18px 45px rgba(0,0,0,.45);
+      --shadow-2:0 12px 26px rgba(0,0,0,.32);
+      --r1:14px;
+      --r2:18px;
+      --r3:24px;
+      --ease:cubic-bezier(.2,.8,.2,1);
+      --max:1240px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(920px 340px at 80% 0%, rgba(255,122,24,.08), transparent 60%),
+        linear-gradient(180deg, #0b0c10 0%, #17181f 45%, #0b0c10 100%);
+    }
+
+    .page{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:26px 18px 40px;
+    }
+
+    .panel{
+      border-radius:var(--r3);
+      border:1px solid var(--hairline);
+      background:rgba(14,16,24,.84);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow-1);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 260px at 16% -20%, rgba(255,122,24,.17), transparent 66%),
+        radial-gradient(760px 250px at 100% 0%, rgba(255,183,3,.12), transparent 64%);
+      opacity:.85;
+    }
+
+    .hero{
+      position:relative;
+      padding:24px 22px 18px;
+      border-bottom:1px solid var(--hairline);
+      background:linear-gradient(135deg, rgba(27,28,34,.95) 0%, rgba(42,45,52,.95) 45%, rgba(255,122,24,.85) 100%);
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(8,10,14,.32);
+      transition:transform .18s var(--ease), background .18s var(--ease);
+    }
+
+    .back-btn:hover{
+      transform:translateY(-1px);
+      background:rgba(8,10,14,.44);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:4px 10px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(15,17,25,.9);
+      color:#d1d5db;
+    }
+
+    h1{
+      margin:12px 0 8px;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:.2px;
+    }
+
+    .hero p{
+      margin:0;
+      max-width:92ch;
+      color:rgba(255,255,255,.9);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .content{
+      position:relative;
+      padding:18px;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .control{
+      width:100%;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(13,15,22,.92);
+      color:var(--text);
+      padding:0 12px;
+      outline:0;
+      font-family:inherit;
+      font-size:14px;
+    }
+
+    .control:focus{
+      border-color:rgba(255,122,24,.6);
+      box-shadow:0 0 0 3px rgba(255,122,24,.2);
+    }
+
+    .clear-btn{
+      height:44px;
+      padding:0 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(15,17,24,.95);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s var(--ease), border-color .18s var(--ease);
+    }
+
+    .clear-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,122,24,.45);
+    }
+
+    .workspace{
+      display:grid;
+      grid-template-columns:repeat(12, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .col{
+      background:rgba(17,20,30,.92);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--r2);
+      padding:14px;
+      box-shadow:var(--shadow-2);
+      min-height:480px;
+    }
+
+    .col.specialty{ grid-column:span 3; }
+    .col.subject{ grid-column:span 4; }
+    .col.guideline{ grid-column:span 5; }
+
+    .col-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .col h2{
+      margin:0;
+      font-size:16px;
+    }
+
+    .count{
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .stack{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .option-btn{
+      width:100%;
+      text-align:left;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(14,16,24,.95);
+      color:var(--text);
+      border-radius:12px;
+      padding:12px;
+      cursor:pointer;
+      transition:transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .option-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,122,24,.45);
+      background:rgba(17,20,30,.96);
+    }
+
+    .option-btn.active{
+      border-color:rgba(255,183,3,.55);
+      background:
+        linear-gradient(145deg, rgba(255,122,24,.18), rgba(255,183,3,.1) 45%, rgba(14,16,24,.96) 70%);
+    }
+
+    .option-btn strong{
+      font-size:14px;
+      line-height:1.35;
+    }
+
+    .option-btn span{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .guideline-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .guideline-card{
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(14,16,24,.95);
+    }
+
+    .pdf-preview{
+      border-bottom:1px solid rgba(255,255,255,.1);
+      background:#101317;
+      min-height:180px;
+    }
+
+    .pdf-preview iframe{
+      border:0;
+      width:100%;
+      height:180px;
+      display:block;
+      background:#fff;
+    }
+
+    .card-body{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .card-body h3{
+      margin:0;
+      font-size:15px;
+      line-height:1.4;
+    }
+
+    .meta{
+      margin:0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .meta strong{
+      color:#d1d5db;
+      font-weight:700;
+    }
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+
+    .tag{
+      font-size:11px;
+      border-radius:999px;
+      padding:4px 8px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(19,22,31,.95);
+      color:#d1d5db;
+      font-weight:700;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      padding:11px 12px;
+      border-radius:999px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      font-size:13px;
+      border:0;
+      background:linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      transition:transform .18s var(--ease), filter .18s var(--ease);
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
+    }
+
+    .empty{
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:12px;
+      padding:18px 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      background:rgba(14,16,24,.6);
+    }
+
+    @media (max-width: 1080px){
+      .workspace{ grid-template-columns:1fr; }
+      .col.specialty,
+      .col.subject,
+      .col.guideline{ grid-column:auto; min-height:auto; }
+    }
+
+    @media (max-width: 700px){
+      .page{ padding:14px 12px 28px; }
+      .hero{ padding:20px 14px 16px; }
+      h1{ font-size:28px; }
+      .content{ padding:14px; }
+      .toolbar{ grid-template-columns:1fr; }
+      .clear-btn{ width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="panel">
+      <header class="hero">
+        <div class="hero-top">
+          <a class="back-btn" href="/">Voltar ao menu</a>
+          <span class="badge">UsoJaleco</span>
+        </div>
+        <h1>Buscador de Diretrizes e Protocolos</h1>
+        <p>Estrutura por especialidade -> assunto -> diretrizes. O conteudo e carregado por <code>/diretrizes/data.json</code> para voce atualizar facilmente sem editar HTML.</p>
+      </header>
+
+      <div class="content">
+        <div class="toolbar">
+          <input id="searchInput" class="control" type="search" placeholder="Buscar por especialidade, assunto ou titulo da diretriz..." />
+          <button id="clearBtn" class="clear-btn" type="button">Limpar busca</button>
+        </div>
+
+        <section class="workspace">
+          <article class="col specialty">
+            <div class="col-head">
+              <h2>Especialidades</h2>
+              <span id="specialtyCount" class="count">0</span>
+            </div>
+            <div id="specialtyList" class="stack"></div>
+          </article>
+
+          <article class="col subject">
+            <div class="col-head">
+              <h2>Assuntos</h2>
+              <span id="subjectCount" class="count">0</span>
+            </div>
+            <div id="subjectList" class="stack"></div>
+          </article>
+
+          <article class="col guideline">
+            <div class="col-head">
+              <h2>Diretrizes</h2>
+              <span id="guidelineCount" class="count">0</span>
+            </div>
+            <div id="guidelineList" class="guideline-list"></div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var state = {
+        catalog: [],
+        search: "",
+        selectedSpecialty: "",
+        selectedSubject: ""
+      };
+
+      var dom = {
+        searchInput: document.getElementById("searchInput"),
+        clearBtn: document.getElementById("clearBtn"),
+        specialtyList: document.getElementById("specialtyList"),
+        subjectList: document.getElementById("subjectList"),
+        guidelineList: document.getElementById("guidelineList"),
+        specialtyCount: document.getElementById("specialtyCount"),
+        subjectCount: document.getElementById("subjectCount"),
+        guidelineCount: document.getElementById("guidelineCount")
+      };
+
+      function normalize(value) {
+        return String(value || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      }
+
+      function getMatchingText(dirItem, specialtyName, subjectName) {
+        var tags = Array.isArray(dirItem.tags) ? dirItem.tags.join(" ") : "";
+        return normalize([
+          specialtyName,
+          subjectName,
+          dirItem.titulo,
+          dirItem.instituicao,
+          dirItem.ano,
+          tags
+        ].join(" "));
+      }
+
+      function filterSpecialties(term) {
+        if (!term) return state.catalog.slice();
+        return state.catalog.filter(function (specialty) {
+          if (normalize(specialty.especialidade).indexOf(term) !== -1) return true;
+          return (specialty.assuntos || []).some(function (subject) {
+            if (normalize(subject.nome_assunto).indexOf(term) !== -1) return true;
+            return (subject.diretrizes || []).some(function (dirItem) {
+              return getMatchingText(dirItem, specialty.especialidade, subject.nome_assunto).indexOf(term) !== -1;
+            });
+          });
+        });
+      }
+
+      function findSpecialty(name, inList) {
+        return (inList || state.catalog).find(function (item) { return item.especialidade === name; }) || null;
+      }
+
+      function filterSubjects(specialty, term) {
+        if (!specialty) return [];
+        var subjects = Array.isArray(specialty.assuntos) ? specialty.assuntos : [];
+        if (!term) return subjects.slice();
+        return subjects.filter(function (subject) {
+          if (normalize(subject.nome_assunto).indexOf(term) !== -1) return true;
+          return (subject.diretrizes || []).some(function (dirItem) {
+            return getMatchingText(dirItem, specialty.especialidade, subject.nome_assunto).indexOf(term) !== -1;
+          });
+        });
+      }
+
+      function findSubject(specialty, subjectName, filteredSubjects) {
+        if (!specialty) return null;
+        var source = filteredSubjects || specialty.assuntos || [];
+        return source.find(function (item) { return item.nome_assunto === subjectName; }) || null;
+      }
+
+      function filterGuidelines(specialtyName, subject, term) {
+        if (!subject) return [];
+        var list = Array.isArray(subject.diretrizes) ? subject.diretrizes : [];
+        if (!term) return list.slice();
+        return list.filter(function (dirItem) {
+          return getMatchingText(dirItem, specialtyName, subject.nome_assunto).indexOf(term) !== -1;
+        });
+      }
+
+      function countMatchesInSpecialty(specialty, term) {
+        if (!term) {
+          return (specialty.assuntos || []).reduce(function (acc, subject) {
+            return acc + ((subject.diretrizes || []).length);
+          }, 0);
+        }
+
+        var count = 0;
+        (specialty.assuntos || []).forEach(function (subject) {
+          (subject.diretrizes || []).forEach(function (dirItem) {
+            if (getMatchingText(dirItem, specialty.especialidade, subject.nome_assunto).indexOf(term) !== -1) {
+              count += 1;
+            }
+          });
+        });
+        return count;
+      }
+
+      function buildPreviewUrl(pdfUrl) {
+        if (!pdfUrl) return "";
+        return "https://docs.google.com/gview?embedded=1&url=" + encodeURIComponent(pdfUrl);
+      }
+
+      function ensureSelection(filteredSpecialties, filteredSubjects) {
+        if (!filteredSpecialties.length) {
+          state.selectedSpecialty = "";
+          state.selectedSubject = "";
+          return;
+        }
+
+        if (!findSpecialty(state.selectedSpecialty, filteredSpecialties)) {
+          state.selectedSpecialty = filteredSpecialties[0].especialidade;
+        }
+
+        if (!filteredSubjects.length) {
+          state.selectedSubject = "";
+          return;
+        }
+
+        if (!filteredSubjects.find(function (item) { return item.nome_assunto === state.selectedSubject; })) {
+          state.selectedSubject = filteredSubjects[0].nome_assunto;
+        }
+      }
+
+      function renderSpecialties(specialties, term) {
+        dom.specialtyList.innerHTML = "";
+        dom.specialtyCount.textContent = String(specialties.length);
+
+        if (!specialties.length) {
+          dom.specialtyList.innerHTML = '<div class="empty">Nenhuma especialidade encontrada.</div>';
+          return;
+        }
+
+        specialties.forEach(function (specialty) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option-btn" + (state.selectedSpecialty === specialty.especialidade ? " active" : "");
+          btn.innerHTML =
+            "<strong>" + specialty.especialidade + "</strong>" +
+            "<span>" + (specialty.assuntos || []).length + " assuntos • " + countMatchesInSpecialty(specialty, term) + " diretrizes</span>";
+          btn.addEventListener("click", function () {
+            state.selectedSpecialty = specialty.especialidade;
+            state.selectedSubject = "";
+            render();
+          });
+          dom.specialtyList.appendChild(btn);
+        });
+      }
+
+      function renderSubjects(subjects) {
+        dom.subjectList.innerHTML = "";
+        dom.subjectCount.textContent = String(subjects.length);
+
+        if (!subjects.length) {
+          dom.subjectList.innerHTML = '<div class="empty">Nenhum assunto encontrado para os filtros atuais.</div>';
+          return;
+        }
+
+        subjects.forEach(function (subject) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option-btn" + (state.selectedSubject === subject.nome_assunto ? " active" : "");
+          btn.innerHTML =
+            "<strong>" + subject.nome_assunto + "</strong>" +
+            "<span>" + (subject.diretrizes || []).length + " diretrizes</span>";
+          btn.addEventListener("click", function () {
+            state.selectedSubject = subject.nome_assunto;
+            render();
+          });
+          dom.subjectList.appendChild(btn);
+        });
+      }
+
+      function renderGuidelines(guidelines, specialtyName, subjectName) {
+        dom.guidelineList.innerHTML = "";
+        dom.guidelineCount.textContent = String(guidelines.length);
+
+        if (!guidelines.length) {
+          dom.guidelineList.innerHTML = '<div class="empty">Nenhuma diretriz encontrada para a selecao atual.</div>';
+          return;
+        }
+
+        guidelines.forEach(function (dirItem) {
+          var card = document.createElement("article");
+          card.className = "guideline-card";
+
+          var previewUrl = buildPreviewUrl(dirItem.link_pdf);
+          var previewHtml = previewUrl
+            ? '<div class="pdf-preview"><iframe loading="lazy" src="' + previewUrl + '" title="Preview do PDF"></iframe></div>'
+            : '<div class="pdf-preview"></div>';
+
+          var tags = Array.isArray(dirItem.tags) ? dirItem.tags : [];
+          var tagsHtml = tags.map(function (tag) {
+            return '<span class="tag">' + tag + "</span>";
+          }).join("");
+
+          card.innerHTML =
+            previewHtml +
+            '<div class="card-body">' +
+              "<h3>" + (dirItem.titulo || "Diretriz sem titulo") + "</h3>" +
+              '<p class="meta"><strong>Instituicao:</strong> ' + (dirItem.instituicao || "-") + "</p>" +
+              '<p class="meta"><strong>Ano:</strong> ' + (dirItem.ano || "-") + "</p>" +
+              '<p class="meta"><strong>Especialidade:</strong> ' + (specialtyName || "-") + " • <strong>Assunto:</strong> " + (subjectName || "-") + "</p>" +
+              (tagsHtml ? '<div class="tags">' + tagsHtml + "</div>" : "") +
+              '<a class="btn" href="' + (dirItem.link_pdf || "#") + '" target="_blank" rel="noopener">Abrir PDF</a>' +
+            "</div>";
+
+          dom.guidelineList.appendChild(card);
+        });
+      }
+
+      function render() {
+        var term = normalize(state.search);
+        var specialties = filterSpecialties(term);
+        var selectedSpecialtyObj = findSpecialty(state.selectedSpecialty, specialties);
+        var subjects = filterSubjects(selectedSpecialtyObj, term);
+
+        ensureSelection(specialties, subjects);
+
+        selectedSpecialtyObj = findSpecialty(state.selectedSpecialty, specialties);
+        subjects = filterSubjects(selectedSpecialtyObj, term);
+        var selectedSubjectObj = findSubject(selectedSpecialtyObj, state.selectedSubject, subjects);
+        var guidelines = filterGuidelines(
+          selectedSpecialtyObj ? selectedSpecialtyObj.especialidade : "",
+          selectedSubjectObj,
+          term
+        );
+
+        renderSpecialties(specialties, term);
+        renderSubjects(subjects);
+        renderGuidelines(
+          guidelines,
+          selectedSpecialtyObj ? selectedSpecialtyObj.especialidade : "",
+          selectedSubjectObj ? selectedSubjectObj.nome_assunto : ""
+        );
+      }
+
+      function attachEvents() {
+        dom.searchInput.addEventListener("input", function () {
+          state.search = dom.searchInput.value;
+          render();
+        });
+
+        dom.clearBtn.addEventListener("click", function () {
+          state.search = "";
+          dom.searchInput.value = "";
+          render();
+        });
+      }
+
+      fetch("./data.json")
+        .then(function (res) { return res.ok ? res.json() : []; })
+        .then(function (data) {
+          state.catalog = Array.isArray(data) ? data : [];
+          if (state.catalog.length) {
+            state.selectedSpecialty = state.catalog[0].especialidade || "";
+            var firstSubject = (state.catalog[0].assuntos || [])[0];
+            state.selectedSubject = firstSubject ? firstSubject.nome_assunto : "";
+          }
+          attachEvents();
+          render();
+        })
+        .catch(function () {
+          dom.specialtyList.innerHTML = '<div class="empty">Nao foi possivel carregar /diretrizes/data.json.</div>';
+          dom.subjectList.innerHTML = '<div class="empty">-</div>';
+          dom.guidelineList.innerHTML = '<div class="empty">-</div>';
+        });
+    })();
+  </script>
+</body>
+</html>

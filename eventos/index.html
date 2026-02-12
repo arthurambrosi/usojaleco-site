@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | Eventos Medicos</title>
+  <script defer src="/analytics-config.js"></script>
+  <script defer src="/analytics.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --surface:#121319;
+      --surface-2:#171923;
+      --text:#f8fafc;
+      --muted:#a1a1aa;
+      --hairline:rgba(255,255,255,.09);
+      --brand-1:#ff7a18;
+      --brand-2:#ffb703;
+      --ok:#22c55e;
+      --shadow-1:0 18px 45px rgba(0,0,0,.45);
+      --shadow-2:0 12px 26px rgba(0,0,0,.32);
+      --r1:14px;
+      --r2:18px;
+      --r3:24px;
+      --ease:cubic-bezier(.2,.8,.2,1);
+      --max:1160px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ min-height:100%; }
+
+    body{
+      margin:0;
+      font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 360px at 80% 0%, rgba(255,122,24,.08), transparent 60%),
+        linear-gradient(180deg, #0b0c10 0%, #17181f 45%, #0b0c10 100%);
+    }
+
+    .page{
+      width:min(var(--max), 100%);
+      margin:0 auto;
+      padding:26px 18px 42px;
+    }
+
+    .panel{
+      border-radius:var(--r3);
+      border:1px solid var(--hairline);
+      background:rgba(14,16,24,.82);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow-1);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(860px 260px at 20% -20%, rgba(255,122,24,.16), transparent 70%),
+        radial-gradient(760px 250px at 100% 0%, rgba(255,183,3,.12), transparent 64%);
+      opacity:.85;
+    }
+
+    .hero{
+      position:relative;
+      padding:26px 22px 20px;
+      border-bottom:1px solid var(--hairline);
+      background:
+        linear-gradient(135deg, rgba(27,28,34,.95) 0%, rgba(42,45,52,.95) 45%, rgba(255,122,24,.85) 100%);
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(8,10,14,.32);
+      transition:transform .18s var(--ease), background .18s var(--ease);
+    }
+
+    .back-btn:hover{
+      transform:translateY(-1px);
+      background:rgba(8,10,14,.44);
+    }
+
+    h1{
+      margin:14px 0 8px;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:.2px;
+    }
+
+    .hero p{
+      margin:0;
+      max-width:76ch;
+      color:rgba(255,255,255,.9);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .content{
+      position:relative;
+      padding:20px;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:1.4fr repeat(4, minmax(0,1fr)) auto;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+
+    .field label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .control{
+      width:100%;
+      height:42px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(13,15,22,.92);
+      color:var(--text);
+      padding:0 12px;
+      outline:0;
+      font-family:inherit;
+      font-size:14px;
+    }
+
+    .control:focus{
+      border-color:rgba(255,122,24,.6);
+      box-shadow:0 0 0 3px rgba(255,122,24,.2);
+    }
+
+    .clear-btn{
+      align-self:end;
+      height:42px;
+      padding:0 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(15,17,24,.95);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s var(--ease), border-color .18s var(--ease);
+    }
+
+    .clear-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,122,24,.45);
+    }
+
+    .summary{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:10px 0 16px;
+      color:var(--muted);
+      font-size:13px;
+      flex-wrap:wrap;
+    }
+
+    .summary strong{ color:#fff; }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .card{
+      position:relative;
+      background:rgba(18,20,28,.96);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--r2);
+      padding:16px;
+      box-shadow:var(--shadow-2);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:230px;
+    }
+
+    .card.is-featured{
+      border-color:rgba(255,183,3,.5);
+      background:
+        linear-gradient(155deg, rgba(255,122,24,.18), rgba(255,183,3,.08) 40%, rgba(18,20,28,.96) 60%);
+    }
+
+    .badge-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:4px 10px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(15,17,25,.9);
+      color:#d1d5db;
+    }
+
+    .badge-featured{
+      color:#fff7e6;
+      border-color:rgba(255,183,3,.5);
+      background:linear-gradient(90deg, rgba(255,122,24,.8), rgba(255,183,3,.7));
+    }
+
+    .card h3{
+      margin:0;
+      font-size:18px;
+      line-height:1.3;
+      min-height:48px;
+    }
+
+    .meta{
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .meta strong{
+      color:#e5e7eb;
+      font-weight:700;
+    }
+
+    .card .cta{
+      margin-top:auto;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      padding:12px 14px;
+      border-radius:999px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      font-size:14px;
+      border:0;
+      background:linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      transition:transform .18s var(--ease), filter .18s var(--ease);
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
+    }
+
+    .empty{
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:var(--r2);
+      padding:26px 16px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      background:rgba(14,16,24,.55);
+    }
+
+    @media (max-width: 1080px){
+      .controls{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+      .clear-btn{ width:100%; }
+      .cards{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 700px){
+      .page{ padding:14px 12px 28px; }
+      .hero{ padding:20px 14px 16px; }
+      h1{ font-size:28px; }
+      .content{ padding:14px; }
+      .controls{ grid-template-columns:1fr; }
+      .cards{ grid-template-columns:1fr; }
+      .card h3{ min-height:auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="panel">
+      <header class="hero">
+        <div class="hero-top">
+          <a class="back-btn" href="/">Voltar ao menu</a>
+          <span class="badge">UsoJaleco</span>
+        </div>
+        <h1>Agregador de Eventos Medicos</h1>
+        <p>Pesquise e filtre congressos, simposios, jornadas e cursos. A listagem e carregada por <code>/eventos/data.json</code> para facilitar sua atualizacao sem editar HTML.</p>
+      </header>
+
+      <div class="content">
+        <div class="controls">
+          <div class="field">
+            <label for="searchInput">Busca por nome</label>
+            <input id="searchInput" class="control" type="search" placeholder="Ex.: cardiologia, UTI, pediatria..." />
+          </div>
+          <div class="field">
+            <label for="typeFilter">Tipo</label>
+            <select id="typeFilter" class="control">
+              <option value="">Todos</option>
+              <option value="congresso">Congresso</option>
+              <option value="simposio">Simposio</option>
+              <option value="jornada">Jornada</option>
+              <option value="curso">Curso</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="modeFilter">Modalidade</label>
+            <select id="modeFilter" class="control">
+              <option value="">Todas</option>
+              <option value="presencial">Presencial</option>
+              <option value="online">Online</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="locationFilter">Localizacao</label>
+            <select id="locationFilter" class="control">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="areaFilter">Especialidade / area</label>
+            <select id="areaFilter" class="control">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <button id="clearBtn" class="clear-btn" type="button">Limpar filtros</button>
+        </div>
+
+        <div class="summary">
+          <div><strong id="resultCount">0</strong> eventos encontrados</div>
+          <div>Ordenacao padrao: data mais proxima primeiro</div>
+        </div>
+
+        <section id="cards" class="cards" aria-live="polite"></section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var state = {
+        events: [],
+        filters: {
+          q: "",
+          tipo: "",
+          modalidade: "",
+          localizacao: "",
+          area: ""
+        }
+      };
+
+      var dom = {
+        searchInput: document.getElementById("searchInput"),
+        typeFilter: document.getElementById("typeFilter"),
+        modeFilter: document.getElementById("modeFilter"),
+        locationFilter: document.getElementById("locationFilter"),
+        areaFilter: document.getElementById("areaFilter"),
+        clearBtn: document.getElementById("clearBtn"),
+        cards: document.getElementById("cards"),
+        resultCount: document.getElementById("resultCount")
+      };
+
+      function normalize(value) {
+        return String(value || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      }
+
+      function formatLabel(word) {
+        if (!word) return "-";
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      function parseDate(dateStr) {
+        if (!dateStr) return null;
+        var parts = String(dateStr).split("-");
+        if (parts.length !== 3) return null;
+        var year = Number(parts[0]);
+        var month = Number(parts[1]) - 1;
+        var day = Number(parts[2]);
+        var date = new Date(year, month, day);
+        if (Number.isNaN(date.getTime())) return null;
+        return date;
+      }
+
+      function formatDate(dateStr) {
+        var date = parseDate(dateStr);
+        if (!date) return "-";
+        return date.toLocaleDateString("pt-BR");
+      }
+
+      function formatDateRange(start, end) {
+        var startFmt = formatDate(start);
+        var endFmt = formatDate(end);
+        if (startFmt === "-" && endFmt === "-") return "-";
+        if (startFmt === endFmt || endFmt === "-") return startFmt;
+        return startFmt + " ate " + endFmt;
+      }
+
+      function eventLocation(eventItem) {
+        if (String(eventItem.modalidade).toLowerCase() === "online") {
+          return "Online";
+        }
+        if (eventItem.internacional) {
+          return eventItem.cidade ? eventItem.cidade + " - Internacional" : "Internacional";
+        }
+        var city = eventItem.cidade || "";
+        var uf = (eventItem.uf || "").toUpperCase();
+        if (city && uf) return city + "/" + uf;
+        if (uf) return uf;
+        if (city) return city;
+        return "Presencial";
+      }
+
+      function locationFilterKey(eventItem) {
+        if (eventItem.internacional) return "internacional";
+        return (eventItem.uf || "").toUpperCase();
+      }
+
+      function sortByNearestDate(list) {
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return list.slice().sort(function (a, b) {
+          var da = parseDate(a.data_inicio);
+          var db = parseDate(b.data_inicio);
+          if (!da && !db) return 0;
+          if (!da) return 1;
+          if (!db) return -1;
+
+          var aIsPast = da < today;
+          var bIsPast = db < today;
+
+          if (aIsPast !== bIsPast) {
+            return aIsPast ? 1 : -1;
+          }
+
+          return da.getTime() - db.getTime();
+        });
+      }
+
+      function buildDynamicFilters() {
+        var locationSet = {};
+        var areaSet = {};
+
+        state.events.forEach(function (item) {
+          if (item.internacional) {
+            locationSet.internacional = "Internacional";
+          } else if (item.uf) {
+            var uf = String(item.uf).toUpperCase();
+            locationSet[uf] = uf;
+          }
+
+          if (item.area) {
+            areaSet[item.area] = item.area;
+          }
+        });
+
+        Object.keys(locationSet).sort().forEach(function (key) {
+          if (key === "internacional") return;
+          var option = document.createElement("option");
+          option.value = key;
+          option.textContent = locationSet[key];
+          dom.locationFilter.appendChild(option);
+        });
+
+        if (locationSet.internacional) {
+          var intlOption = document.createElement("option");
+          intlOption.value = "internacional";
+          intlOption.textContent = "Internacional";
+          dom.locationFilter.appendChild(intlOption);
+        }
+
+        Object.keys(areaSet).sort().forEach(function (key) {
+          var option = document.createElement("option");
+          option.value = key;
+          option.textContent = areaSet[key];
+          dom.areaFilter.appendChild(option);
+        });
+      }
+
+      function filterEvents() {
+        var q = normalize(state.filters.q);
+        var tipo = normalize(state.filters.tipo);
+        var modalidade = normalize(state.filters.modalidade);
+        var localizacao = normalize(state.filters.localizacao);
+        var area = normalize(state.filters.area);
+
+        var filtered = state.events.filter(function (item) {
+          if (q && normalize(item.nome).indexOf(q) === -1) return false;
+          if (tipo && normalize(item.tipo) !== tipo) return false;
+          if (modalidade && normalize(item.modalidade) !== modalidade) return false;
+          if (localizacao && normalize(locationFilterKey(item)) !== localizacao) return false;
+          if (area && normalize(item.area) !== area) return false;
+          return true;
+        });
+
+        return sortByNearestDate(filtered);
+      }
+
+      function renderCards(list) {
+        dom.cards.innerHTML = "";
+        dom.resultCount.textContent = String(list.length);
+
+        if (!list.length) {
+          var empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "Nenhum evento encontrado com os filtros atuais.";
+          dom.cards.appendChild(empty);
+          return;
+        }
+
+        list.forEach(function (item) {
+          var card = document.createElement("article");
+          card.className = "card" + (item.destaque ? " is-featured" : "");
+
+          var badges = '<span class="badge">' + formatLabel(item.tipo || "evento") + '</span>';
+          if (item.destaque) {
+            badges = '<span class="badge badge-featured">Destaque</span>' + badges;
+          }
+
+          card.innerHTML =
+            '<div class="badge-row">' + badges + "</div>" +
+            "<h3>" + (item.nome || "Evento sem nome") + "</h3>" +
+            '<p class="meta">' +
+              "<span><strong>Data:</strong> " + formatDateRange(item.data_inicio, item.data_fim) + "</span>" +
+              "<span><strong>Local:</strong> " + eventLocation(item) + "</span>" +
+              "<span><strong>Modalidade:</strong> " + formatLabel(item.modalidade || "-") + "</span>" +
+              "<span><strong>Area:</strong> " + (item.area || "Nao informada") + "</span>" +
+            "</p>" +
+            '<div class="cta"><a class="btn" href="' + (item.link || "#") + '" target="_blank" rel="noopener">Saiba mais / Ver evento</a></div>';
+
+          dom.cards.appendChild(card);
+        });
+      }
+
+      function applyFiltersAndRender() {
+        renderCards(filterEvents());
+      }
+
+      function attachEvents() {
+        dom.searchInput.addEventListener("input", function () {
+          state.filters.q = dom.searchInput.value;
+          applyFiltersAndRender();
+        });
+
+        dom.typeFilter.addEventListener("change", function () {
+          state.filters.tipo = dom.typeFilter.value;
+          applyFiltersAndRender();
+        });
+
+        dom.modeFilter.addEventListener("change", function () {
+          state.filters.modalidade = dom.modeFilter.value;
+          applyFiltersAndRender();
+        });
+
+        dom.locationFilter.addEventListener("change", function () {
+          state.filters.localizacao = dom.locationFilter.value;
+          applyFiltersAndRender();
+        });
+
+        dom.areaFilter.addEventListener("change", function () {
+          state.filters.area = dom.areaFilter.value;
+          applyFiltersAndRender();
+        });
+
+        dom.clearBtn.addEventListener("click", function () {
+          state.filters = { q: "", tipo: "", modalidade: "", localizacao: "", area: "" };
+          dom.searchInput.value = "";
+          dom.typeFilter.value = "";
+          dom.modeFilter.value = "";
+          dom.locationFilter.value = "";
+          dom.areaFilter.value = "";
+          applyFiltersAndRender();
+        });
+      }
+
+      function validateEvent(item) {
+        if (!item || typeof item !== "object") return false;
+        if (!item.id || !item.nome || !item.tipo || !item.data_inicio || !item.modalidade || !item.link) return false;
+        return true;
+      }
+
+      fetch("./data.json")
+        .then(function (res) { return res.ok ? res.json() : []; })
+        .then(function (data) {
+          var list = Array.isArray(data) ? data : [];
+          state.events = list.filter(validateEvent);
+          buildDynamicFilters();
+          attachEvents();
+          applyFiltersAndRender();
+        })
+        .catch(function () {
+          dom.cards.innerHTML = '<div class="empty">Nao foi possivel carregar /eventos/data.json.</div>';
+        });
+    })();
+  </script>
+</body>
+</html>
