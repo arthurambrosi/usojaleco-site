@@ -4,178 +4,239 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>UsoJaleco | Diretrizes e Protocolos</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <script defer src="/analytics-config.js"></script>
   <script defer src="/analytics.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b0c10;
-      --surface:#121319;
-      --surface-2:#171923;
-      --text:#f8fafc;
-      --muted:#a1a1aa;
-      --hairline:rgba(255,255,255,.09);
-      --brand-1:#ff7a18;
-      --brand-2:#ffb703;
-      --shadow-1:0 18px 45px rgba(0,0,0,.45);
-      --shadow-2:0 12px 26px rgba(0,0,0,.32);
-      --r1:14px;
-      --r2:18px;
-      --r3:24px;
-      --ease:cubic-bezier(.2,.8,.2,1);
-      --max:1240px;
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface2:#f8fafc;
+      --text:#0f172a;
+      --muted:#6b7280;
+      --line:#e9eef5;
+      --accent:#f97316;
+      --shadow:0 10px 22px rgba(17,24,39,.08);
+      --shadow2:0 14px 28px rgba(17,24,39,.10);
+      --rBig:24px;
+      --rMid:18px;
+      --rSm:14px;
+      --containerMax:1240px;
+      --containerPad:24px;
+      --t:.18s ease;
     }
 
     *{ box-sizing:border-box; }
+    html,body{ min-height:100%; }
 
     body{
       margin:0;
-      min-height:100vh;
-      font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      font-family: Manrope, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(920px 340px at 80% 0%, rgba(255,122,24,.08), transparent 60%),
-        linear-gradient(180deg, #0b0c10 0%, #17181f 45%, #0b0c10 100%);
+        radial-gradient(1200px 600px at 12% 10%, rgba(249,115,22,.10), transparent 60%),
+        radial-gradient(1000px 580px at 85% 18%, rgba(15,23,42,.06), transparent 62%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg) 100%);
+      background-attachment: fixed, fixed, fixed;
     }
 
-    .page{
-      width:min(var(--max), 100%);
+    a{ color:inherit; text-decoration:none; }
+    button,input{ font:inherit; }
+
+    .topbarWrap{
+      background:#fff;
+      box-shadow:0 10px 22px rgba(17,24,39,.10);
+      position:sticky;
+      top:0;
+      z-index:40;
+    }
+
+    .topbar{
+      max-width:var(--containerMax);
       margin:0 auto;
-      padding:26px 18px 40px;
-    }
-
-    .panel{
-      border-radius:var(--r3);
-      border:1px solid var(--hairline);
-      background:rgba(14,16,24,.84);
-      backdrop-filter:blur(10px);
-      box-shadow:var(--shadow-1);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .panel::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(900px 260px at 16% -20%, rgba(255,122,24,.17), transparent 66%),
-        radial-gradient(760px 250px at 100% 0%, rgba(255,183,3,.12), transparent 64%);
-      opacity:.85;
-    }
-
-    .hero{
-      position:relative;
-      padding:24px 22px 18px;
-      border-bottom:1px solid var(--hairline);
-      background:linear-gradient(135deg, rgba(27,28,34,.95) 0%, rgba(42,45,52,.95) 45%, rgba(255,122,24,.85) 100%);
-    }
-
-    .hero-top{
+      padding:16px var(--containerPad);
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
+      gap:16px;
     }
 
-    .back-btn{
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:190px;
+      user-select:none;
+    }
+
+    .brand img{
+      height:28px;
+      width:auto;
+      display:block;
+      user-select:none;
+      pointer-events:none;
+      -webkit-user-drag:none;
+    }
+
+    .brandName{
+      display:flex;
+      align-items:baseline;
+      gap:0;
+      font-family: Outfit, Manrope, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size:18px;
+      font-weight:400;
+      letter-spacing:-.01em;
+      color:#475569;
+      user-select:none;
+      pointer-events:none;
+    }
+
+    .brandName b{
+      font-weight:800;
+      color:#334155;
+    }
+
+    .headRight{
+      margin-left:auto;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .headBtn{
+      height:38px;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid #e7ebf2;
+      background:#fff;
+      color:#334155;
+      font-weight:900;
+      cursor:pointer;
+      transition:background var(--t), filter var(--t), transform var(--t);
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      color:#fff;
-      text-decoration:none;
-      font-weight:700;
-      border:1px solid rgba(255,255,255,.35);
-      background:rgba(8,10,14,.32);
-      transition:transform .18s var(--ease), background .18s var(--ease);
+      line-height:1;
+      white-space:nowrap;
     }
 
-    .back-btn:hover{
+    .headBtn:hover{
+      background:#f8fafc;
       transform:translateY(-1px);
-      background:rgba(8,10,14,.44);
     }
 
-    .badge{
+    .headBtnPrimary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#fff;
+    }
+
+    .headBtnPrimary:hover{
+      background:var(--accent);
+      border-color:var(--accent);
+      filter:brightness(.94);
+    }
+
+    main{
+      max-width:var(--containerMax);
+      margin:0 auto;
+      padding:16px var(--containerPad) 42px;
+    }
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius:var(--rBig);
+      background:var(--surface);
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:14px;
+    }
+
+    .eyebrow{
       display:inline-flex;
       align-items:center;
       border-radius:999px;
-      padding:4px 10px;
+      border:1px solid rgba(249,115,22,.28);
+      background:rgba(249,115,22,.10);
+      color:#c2410c;
+      padding:5px 11px;
       font-size:11px;
       font-weight:800;
-      letter-spacing:.04em;
       text-transform:uppercase;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(15,17,25,.9);
-      color:#d1d5db;
+      letter-spacing:.08em;
+      margin-bottom:10px;
     }
 
     h1{
-      margin:12px 0 8px;
+      margin:0 0 8px;
       font-size:34px;
       line-height:1.08;
-      letter-spacing:.2px;
+      letter-spacing:.1px;
     }
 
     .hero p{
       margin:0;
-      max-width:92ch;
-      color:rgba(255,255,255,.9);
+      color:var(--muted);
+      line-height:1.58;
       font-size:14px;
-      line-height:1.55;
+      max-width:92ch;
     }
 
-    .content{
-      position:relative;
-      padding:18px;
+    .searchCard{
+      border:1px solid var(--line);
+      border-radius:var(--rBig);
+      background:var(--surface);
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-bottom:12px;
     }
 
     .toolbar{
       display:grid;
       grid-template-columns:1fr auto;
       gap:10px;
-      margin-bottom:14px;
     }
 
     .control{
       width:100%;
-      height:44px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(13,15,22,.92);
+      height:42px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--surface2);
       color:var(--text);
       padding:0 12px;
-      outline:0;
-      font-family:inherit;
+      outline:none;
       font-size:14px;
+      transition:border-color var(--t), box-shadow var(--t), background var(--t);
     }
 
     .control:focus{
-      border-color:rgba(255,122,24,.6);
-      box-shadow:0 0 0 3px rgba(255,122,24,.2);
+      border-color:rgba(249,115,22,.55);
+      box-shadow:0 0 0 3px rgba(249,115,22,.18);
+      background:#fff;
     }
 
     .clear-btn{
-      height:44px;
-      padding:0 16px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(15,17,24,.95);
-      color:#fff;
-      font-weight:700;
+      height:42px;
+      padding:0 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      font-weight:900;
       cursor:pointer;
-      transition:transform .18s var(--ease), border-color .18s var(--ease);
+      transition:transform var(--t), background var(--t), border-color var(--t);
+      white-space:nowrap;
     }
 
     .clear-btn:hover{
       transform:translateY(-1px);
-      border-color:rgba(255,122,24,.45);
+      background:var(--surface2);
+      border-color:rgba(15,23,42,.14);
     }
 
     .workspace{
@@ -185,12 +246,13 @@
     }
 
     .col{
-      background:rgba(17,20,30,.92);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:var(--r2);
+      border:1px solid var(--line);
+      border-radius:var(--rBig);
+      background:var(--surface);
+      box-shadow:var(--shadow);
       padding:14px;
-      box-shadow:var(--shadow-2);
-      min-height:480px;
+      min-height:500px;
+      min-width:0;
     }
 
     .col.specialty{ grid-column:span 3; }
@@ -208,11 +270,12 @@
     .col h2{
       margin:0;
       font-size:16px;
+      color:#111827;
     }
 
     .count{
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
       color:var(--muted);
     }
 
@@ -225,13 +288,13 @@
     .option-btn{
       width:100%;
       text-align:left;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(14,16,24,.95);
+      border:1px solid var(--line);
+      background:#fff;
       color:var(--text);
-      border-radius:12px;
+      border-radius:14px;
       padding:12px;
       cursor:pointer;
-      transition:transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+      transition:transform var(--t), border-color var(--t), background var(--t), box-shadow var(--t);
       display:flex;
       flex-direction:column;
       gap:4px;
@@ -239,24 +302,27 @@
 
     .option-btn:hover{
       transform:translateY(-1px);
-      border-color:rgba(255,122,24,.45);
-      background:rgba(17,20,30,.96);
+      background:var(--surface2);
+      border-color:rgba(15,23,42,.14);
+      box-shadow:var(--shadow);
     }
 
     .option-btn.active{
-      border-color:rgba(255,183,3,.55);
+      border-color:rgba(249,115,22,.42);
       background:
-        linear-gradient(145deg, rgba(255,122,24,.18), rgba(255,183,3,.1) 45%, rgba(14,16,24,.96) 70%);
+        linear-gradient(145deg, rgba(249,115,22,.12), rgba(249,115,22,.03) 45%, #fff 70%);
     }
 
     .option-btn strong{
       font-size:14px;
       line-height:1.35;
+      color:#111827;
     }
 
     .option-btn span{
       font-size:12px;
       color:var(--muted);
+      line-height:1.35;
     }
 
     .guideline-list{
@@ -266,15 +332,16 @@
     }
 
     .guideline-card{
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
       overflow:hidden;
-      background:rgba(14,16,24,.95);
+      background:#fff;
+      box-shadow:var(--shadow);
     }
 
     .pdf-preview{
-      border-bottom:1px solid rgba(255,255,255,.1);
-      background:#101317;
+      border-bottom:1px solid var(--line);
+      background:#f8fafc;
       min-height:180px;
     }
 
@@ -297,6 +364,7 @@
       margin:0;
       font-size:15px;
       line-height:1.4;
+      color:#111827;
     }
 
     .meta{
@@ -307,8 +375,8 @@
     }
 
     .meta strong{
-      color:#d1d5db;
-      font-weight:700;
+      color:#334155;
+      font-weight:800;
     }
 
     .tags{
@@ -321,10 +389,10 @@
       font-size:11px;
       border-radius:999px;
       padding:4px 8px;
-      border:1px solid rgba(255,255,255,.15);
-      background:rgba(19,22,31,.95);
-      color:#d1d5db;
-      font-weight:700;
+      border:1px solid var(--line);
+      background:var(--surface2);
+      color:#475569;
+      font-weight:800;
     }
 
     .btn{
@@ -332,93 +400,108 @@
       align-items:center;
       justify-content:center;
       width:100%;
-      padding:11px 12px;
-      border-radius:999px;
+      height:40px;
+      padding:0 12px;
+      border-radius:14px;
+      border:1px solid var(--accent);
+      background:var(--accent);
       color:#fff;
       text-decoration:none;
-      font-weight:800;
+      font-weight:900;
       font-size:13px;
-      border:0;
-      background:linear-gradient(90deg, var(--brand-1), var(--brand-2));
-      transition:transform .18s var(--ease), filter .18s var(--ease);
+      transition:filter var(--t), transform var(--t), box-shadow var(--t);
+      box-shadow:0 10px 18px rgba(249,115,22,.18);
     }
 
     .btn:hover{
+      filter:brightness(.95);
       transform:translateY(-1px);
-      filter:brightness(1.04);
+      box-shadow:0 12px 22px rgba(249,115,22,.24);
     }
 
     .empty{
-      border:1px dashed rgba(255,255,255,.2);
-      border-radius:12px;
+      border:1px dashed var(--line);
+      border-radius:14px;
       padding:18px 12px;
       text-align:center;
       color:var(--muted);
       font-size:13px;
-      background:rgba(14,16,24,.6);
+      background:var(--surface2);
     }
 
-    @media (max-width: 1080px){
+    @media (max-width:1080px){
       .workspace{ grid-template-columns:1fr; }
-      .col.specialty,
-      .col.subject,
-      .col.guideline{ grid-column:auto; min-height:auto; }
+      .col.specialty, .col.subject, .col.guideline{
+        grid-column:auto;
+        min-height:auto;
+      }
     }
 
-    @media (max-width: 700px){
-      .page{ padding:14px 12px 28px; }
-      .hero{ padding:20px 14px 16px; }
+    @media (max-width:720px){
+      :root{ --containerPad:16px; }
+      .topbar{ padding-top:14px; padding-bottom:14px; }
+      .brand{ min-width:auto; }
+      .headBtn{ height:36px; padding:0 12px; font-size:13px; }
       h1{ font-size:28px; }
-      .content{ padding:14px; }
+      .hero{ padding:16px; }
+      .searchCard{ padding:14px; }
       .toolbar{ grid-template-columns:1fr; }
       .clear-btn{ width:100%; }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <section class="panel">
-      <header class="hero">
-        <div class="hero-top">
-          <a class="back-btn" href="/">Voltar ao menu</a>
-          <span class="badge">UsoJaleco</span>
-        </div>
-        <h1>Buscador de Diretrizes e Protocolos</h1>
-        <p>Estrutura por especialidade -> assunto -> diretrizes. O conteudo e carregado por <code>/diretrizes/data.json</code> para voce atualizar facilmente sem editar HTML.</p>
-      </header>
-
-      <div class="content">
-        <div class="toolbar">
-          <input id="searchInput" class="control" type="search" placeholder="Buscar por especialidade, assunto ou titulo da diretriz..." />
-          <button id="clearBtn" class="clear-btn" type="button">Limpar busca</button>
-        </div>
-
-        <section class="workspace">
-          <article class="col specialty">
-            <div class="col-head">
-              <h2>Especialidades</h2>
-              <span id="specialtyCount" class="count">0</span>
-            </div>
-            <div id="specialtyList" class="stack"></div>
-          </article>
-
-          <article class="col subject">
-            <div class="col-head">
-              <h2>Assuntos</h2>
-              <span id="subjectCount" class="count">0</span>
-            </div>
-            <div id="subjectList" class="stack"></div>
-          </article>
-
-          <article class="col guideline">
-            <div class="col-head">
-              <h2>Diretrizes</h2>
-              <span id="guidelineCount" class="count">0</span>
-            </div>
-            <div id="guidelineList" class="guideline-list"></div>
-          </article>
-        </section>
+  <div class="topbarWrap">
+    <header class="topbar">
+      <div class="brand" aria-label="UsoJaleco">
+        <img alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" draggable="false" />
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
       </div>
+      <div class="headRight">
+        <a class="headBtn" href="/">Voltar ao menu</a>
+        <span class="headBtn headBtnPrimary">Diretrizes</span>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <section class="hero">
+      <span class="eyebrow">Diretrizes medicas</span>
+      <h1>Buscador de Diretrizes e Protocolos</h1>
+      <p>Estrutura por especialidade, assunto e diretrizes em PDF. O conteudo e carregado por <code>/diretrizes/data.json</code> para facilitar manutencao sem editar o HTML.</p>
+    </section>
+
+    <section class="searchCard">
+      <div class="toolbar">
+        <input id="searchInput" class="control" type="search" placeholder="Buscar por especialidade, assunto ou titulo da diretriz..." />
+        <button id="clearBtn" class="clear-btn" type="button">Limpar busca</button>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <article class="col specialty">
+        <div class="col-head">
+          <h2>Especialidades</h2>
+          <span id="specialtyCount" class="count">0</span>
+        </div>
+        <div id="specialtyList" class="stack"></div>
+      </article>
+
+      <article class="col subject">
+        <div class="col-head">
+          <h2>Assuntos</h2>
+          <span id="subjectCount" class="count">0</span>
+        </div>
+        <div id="subjectList" class="stack"></div>
+      </article>
+
+      <article class="col guideline">
+        <div class="col-head">
+          <h2>Diretrizes</h2>
+          <span id="guidelineCount" class="count">0</span>
+        </div>
+        <div id="guidelineList" class="guideline-list"></div>
+      </article>
     </section>
   </main>
 
@@ -565,7 +648,7 @@
           btn.className = "option-btn" + (state.selectedSpecialty === specialty.especialidade ? " active" : "");
           btn.innerHTML =
             "<strong>" + specialty.especialidade + "</strong>" +
-            "<span>" + (specialty.assuntos || []).length + " assuntos • " + countMatchesInSpecialty(specialty, term) + " diretrizes</span>";
+            "<span>" + (specialty.assuntos || []).length + " assuntos - " + countMatchesInSpecialty(specialty, term) + " diretrizes</span>";
           btn.addEventListener("click", function () {
             state.selectedSpecialty = specialty.especialidade;
             state.selectedSubject = "";
@@ -628,7 +711,7 @@
               "<h3>" + (dirItem.titulo || "Diretriz sem titulo") + "</h3>" +
               '<p class="meta"><strong>Instituicao:</strong> ' + (dirItem.instituicao || "-") + "</p>" +
               '<p class="meta"><strong>Ano:</strong> ' + (dirItem.ano || "-") + "</p>" +
-              '<p class="meta"><strong>Especialidade:</strong> ' + (specialtyName || "-") + " • <strong>Assunto:</strong> " + (subjectName || "-") + "</p>" +
+              '<p class="meta"><strong>Especialidade:</strong> ' + (specialtyName || "-") + " - <strong>Assunto:</strong> " + (subjectName || "-") + "</p>" +
               (tagsHtml ? '<div class="tags">' + tagsHtml + "</div>" : "") +
               '<a class="btn" href="' + (dirItem.link_pdf || "#") + '" target="_blank" rel="noopener">Abrir PDF</a>' +
             "</div>";
