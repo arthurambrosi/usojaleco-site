@@ -633,7 +633,12 @@
 
       function buildPreviewUrl(pdfUrl) {
         if (!pdfUrl) return "";
-        return "https://docs.google.com/gview?embedded=1&url=" + encodeURIComponent(pdfUrl);
+        var clean = String(pdfUrl).trim();
+        if (!clean) return "";
+        if (clean.indexOf("#") !== -1) {
+          return clean + "&page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0";
+        }
+        return clean + "#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0";
       }
 
       function ensureSelection(filteredSpecialties, filteredSubjects) {
@@ -721,7 +726,7 @@
 
           var previewUrl = buildPreviewUrl(dirItem.link_pdf);
           var previewHtml = previewUrl
-            ? '<div class="pdf-preview"><div class="pdf-sheet"><iframe loading="lazy" src="' + previewUrl + '" title="Preview do PDF"></iframe></div></div>'
+            ? '<div class="pdf-preview"><div class="pdf-sheet"><iframe loading="lazy" referrerpolicy="no-referrer" src="' + previewUrl + '" title="Preview do PDF"></iframe></div></div>'
             : '<div class="pdf-preview"><div class="pdf-sheet"></div></div>';
 
           var tags = Array.isArray(dirItem.tags) ? dirItem.tags : [];
