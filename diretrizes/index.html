@@ -672,6 +672,16 @@
         return clean;
       }
 
+      function buildPdfSourceCandidates(pdfUrl) {
+        var clean = buildPreviewUrl(pdfUrl);
+        if (!clean) return [];
+
+        var candidates = [clean];
+        candidates.push("https://corsproxy.io/?" + encodeURIComponent(clean));
+        candidates.push("https://api.allorigins.win/raw?url=" + encodeURIComponent(clean));
+        return candidates;
+      }
+
       function configurePdfJs() {
         if (!window.pdfjsLib || !window.pdfjsLib.GlobalWorkerOptions) {
           return false;
@@ -689,9 +699,48 @@
         }
       }
 
+      function loadPdfFirstPageFromCandidates(candidates) {
+        if (!candidates.length) {
+          return Promise.reject(new Error("no_pdf_source"));
+        }
+
+        var index = 0;
+        function tryNext() {
+          if (index >= candidates.length) {
+            return Promise.reject(new Error("all_sources_failed"));
+          }
+
+          var source = candidates[index++];
+          var loadingTask = window.pdfjsLib.getDocument({
+            url: source,
+            withCredentials: false
+          });
+
+          return loadingTask.promise
+            .then(function (pdf) {
+              return pdf.getPage(1);
+            })
+            .catch(function () {
+              return tryNext();
+            });
+        }
+
+        return tryNext();
+      }
+
       function renderFirstPageThumbnail(sheet) {
         if (!sheet || sheet.dataset.thumbLoaded === "1") return;
         sheet.dataset.thumbLoaded = "1";
+
+        var manualThumb = String(sheet.getAttribute("data-thumb-src") || "").trim();
+        if (manualThumb) {
+          var manualImg = sheet.querySelector(".pdf-thumb");
+          if (manualImg) {
+            manualImg.src = manualThumb;
+            sheet.classList.add("is-ready");
+            return;
+          }
+        }
 
         var pdfUrl = buildPreviewUrl(sheet.getAttribute("data-pdf-src"));
         if (!pdfUrl) {
@@ -704,15 +753,7 @@
           return;
         }
 
-        var loadingTask = window.pdfjsLib.getDocument({
-          url: pdfUrl,
-          withCredentials: false
-        });
-
-        loadingTask.promise
-          .then(function (pdf) {
-            return pdf.getPage(1);
-          })
+        loadPdfFirstPageFromCandidates(buildPdfSourceCandidates(pdfUrl))
           .then(function (page) {
             var baseViewport = page.getViewport({ scale: 1 });
             var targetWidth = 420;
@@ -867,9 +908,10 @@
           card.className = "guideline-card";
 
           var previewUrl = buildPreviewUrl(dirItem.link_pdf);
+          var previewThumb = dirItem.thumbnail ? String(dirItem.thumbnail).replace(/"/g, "&quot;") : "";
           var safePreviewUrl = previewUrl ? previewUrl.replace(/"/g, "&quot;") : "";
           var previewHtml = previewUrl
-            ? '<div class="pdf-preview"><div class="pdf-sheet" data-pdf-src="' + safePreviewUrl + '"><div class="pdf-thumb-skeleton">Carregando miniatura...</div><img class="pdf-thumb" alt="Miniatura da primeira pagina do PDF" loading="lazy" /></div></div>'
+            ? '<div class="pdf-preview"><div class="pdf-sheet" data-pdf-src="' + safePreviewUrl + '" data-thumb-src="' + previewThumb + '"><div class="pdf-thumb-skeleton">Carregando miniatura...</div><img class="pdf-thumb" alt="Miniatura da primeira pagina do PDF" loading="lazy" /></div></div>'
             : '<div class="pdf-preview"><div class="pdf-sheet is-failed"><div class="pdf-thumb-skeleton">Miniatura indisponivel</div><img class="pdf-thumb" alt="Miniatura indisponivel" loading="lazy" /></div></div>';
 
           var tags = Array.isArray(dirItem.tags) ? dirItem.tags : [];
