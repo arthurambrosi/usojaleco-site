@@ -343,6 +343,9 @@
       background:#f8fafc;
       border-bottom:1px solid var(--line);
       padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .pdf-sheet{
@@ -356,16 +359,45 @@
       overflow:hidden;
       background:#fff;
       box-shadow:0 6px 14px rgba(15,23,42,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .pdf-preview iframe{
-      border:0;
+    .pdf-thumb{
       width:100%;
       height:100%;
+      object-fit:cover;
       display:block;
       background:#fff;
+      opacity:0;
+      transition:opacity .2s ease;
+    }
+
+    .pdf-sheet.is-ready .pdf-thumb{
+      opacity:1;
+    }
+
+    .pdf-thumb-skeleton{
       position:absolute;
       inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:10px;
+      color:#64748b;
+      font-size:12px;
+      font-weight:700;
+      background:linear-gradient(180deg, #f8fafc, #eef2f7);
+    }
+
+    .pdf-sheet.is-ready .pdf-thumb-skeleton{
+      display:none;
+    }
+
+    .pdf-sheet.is-failed .pdf-thumb-skeleton{
+      color:#b91c1c;
     }
 
     .card-body{
@@ -529,6 +561,7 @@
     </section>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (function () {
       var state = {
@@ -537,6 +570,7 @@
         selectedSpecialty: "",
         selectedSubject: ""
       };
+      var thumbObserver = null;
 
       var dom = {
         searchInput: document.getElementById("searchInput"),
@@ -635,10 +669,114 @@
         if (!pdfUrl) return "";
         var clean = String(pdfUrl).trim();
         if (!clean) return "";
-        if (clean.indexOf("#") !== -1) {
-          return clean + "&page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0";
+        return clean;
+      }
+
+      function configurePdfJs() {
+        if (!window.pdfjsLib || !window.pdfjsLib.GlobalWorkerOptions) {
+          return false;
         }
-        return clean + "#page=1&view=FitH&toolbar=0&navpanes=0&scrollbar=0";
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        return true;
+      }
+
+      function setThumbFailed(sheet, message) {
+        if (!sheet) return;
+        sheet.classList.add("is-failed");
+        var hint = sheet.querySelector(".pdf-thumb-skeleton");
+        if (hint) {
+          hint.textContent = message || "Miniatura indisponivel";
+        }
+      }
+
+      function renderFirstPageThumbnail(sheet) {
+        if (!sheet || sheet.dataset.thumbLoaded === "1") return;
+        sheet.dataset.thumbLoaded = "1";
+
+        var pdfUrl = buildPreviewUrl(sheet.getAttribute("data-pdf-src"));
+        if (!pdfUrl) {
+          setThumbFailed(sheet, "Miniatura indisponivel");
+          return;
+        }
+
+        if (!configurePdfJs()) {
+          setThumbFailed(sheet, "Miniatura indisponivel");
+          return;
+        }
+
+        var loadingTask = window.pdfjsLib.getDocument({
+          url: pdfUrl,
+          withCredentials: false
+        });
+
+        loadingTask.promise
+          .then(function (pdf) {
+            return pdf.getPage(1);
+          })
+          .then(function (page) {
+            var baseViewport = page.getViewport({ scale: 1 });
+            var targetWidth = 420;
+            var scale = targetWidth / baseViewport.width;
+            var viewport = page.getViewport({ scale: scale });
+
+            var canvas = document.createElement("canvas");
+            var ctx = canvas.getContext("2d", { alpha: false });
+            canvas.width = Math.max(1, Math.floor(viewport.width));
+            canvas.height = Math.max(1, Math.floor(viewport.height));
+
+            return page.render({
+              canvasContext: ctx,
+              viewport: viewport
+            }).promise.then(function () {
+              return canvas.toDataURL("image/jpeg", 0.88);
+            });
+          })
+          .then(function (dataUrl) {
+            var img = sheet.querySelector(".pdf-thumb");
+            if (!img) {
+              setThumbFailed(sheet, "Miniatura indisponivel");
+              return;
+            }
+            img.src = dataUrl;
+            sheet.classList.add("is-ready");
+          })
+          .catch(function () {
+            setThumbFailed(sheet, "Miniatura indisponivel");
+          });
+      }
+
+      function initThumbnails() {
+        if (thumbObserver) {
+          thumbObserver.disconnect();
+          thumbObserver = null;
+        }
+
+        var sheets = dom.guidelineList.querySelectorAll(".pdf-sheet[data-pdf-src]");
+        if (!sheets.length) return;
+
+        if ("IntersectionObserver" in window) {
+          thumbObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                renderFirstPageThumbnail(entry.target);
+                if (thumbObserver) {
+                  thumbObserver.unobserve(entry.target);
+                }
+              }
+            });
+          }, {
+            root: null,
+            rootMargin: "220px 0px",
+            threshold: 0.01
+          });
+
+          sheets.forEach(function (sheet) {
+            thumbObserver.observe(sheet);
+          });
+          return;
+        }
+
+        sheets.forEach(renderFirstPageThumbnail);
       }
 
       function ensureSelection(filteredSpecialties, filteredSubjects) {
@@ -716,6 +854,10 @@
         dom.guidelineCount.textContent = String(guidelines.length);
 
         if (!guidelines.length) {
+          if (thumbObserver) {
+            thumbObserver.disconnect();
+            thumbObserver = null;
+          }
           dom.guidelineList.innerHTML = '<div class="empty">Nenhuma diretriz encontrada para a selecao atual.</div>';
           return;
         }
@@ -725,9 +867,10 @@
           card.className = "guideline-card";
 
           var previewUrl = buildPreviewUrl(dirItem.link_pdf);
+          var safePreviewUrl = previewUrl ? previewUrl.replace(/"/g, "&quot;") : "";
           var previewHtml = previewUrl
-            ? '<div class="pdf-preview"><div class="pdf-sheet"><iframe loading="lazy" referrerpolicy="no-referrer" src="' + previewUrl + '" title="Preview do PDF"></iframe></div></div>'
-            : '<div class="pdf-preview"><div class="pdf-sheet"></div></div>';
+            ? '<div class="pdf-preview"><div class="pdf-sheet" data-pdf-src="' + safePreviewUrl + '"><div class="pdf-thumb-skeleton">Carregando miniatura...</div><img class="pdf-thumb" alt="Miniatura da primeira pagina do PDF" loading="lazy" /></div></div>'
+            : '<div class="pdf-preview"><div class="pdf-sheet is-failed"><div class="pdf-thumb-skeleton">Miniatura indisponivel</div><img class="pdf-thumb" alt="Miniatura indisponivel" loading="lazy" /></div></div>';
 
           var tags = Array.isArray(dirItem.tags) ? dirItem.tags : [];
           var tagsHtml = tags.map(function (tag) {
@@ -747,6 +890,8 @@
 
           dom.guidelineList.appendChild(card);
         });
+
+        initThumbnails();
       }
 
       function render() {
