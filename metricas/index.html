@@ -191,26 +191,34 @@
 
   <script>
     (function () {
-      var config = window.USOJALECO_ANALYTICS_CONFIG || {};
-      var measurementId = String(config.measurementId || "").trim();
-      var statusText = document.getElementById("statusText");
-      var statusHint = document.getElementById("statusHint");
-      var measurementIdEl = document.getElementById("measurementId");
-      var domainEl = document.getElementById("domain");
+      function updateStatusPanel() {
+        var config = window.USOJALECO_ANALYTICS_CONFIG || {};
+        var measurementId = String(config.measurementId || "").trim();
+        var statusText = document.getElementById("statusText");
+        var statusHint = document.getElementById("statusHint");
+        var measurementIdEl = document.getElementById("measurementId");
+        var domainEl = document.getElementById("domain");
 
-      measurementIdEl.textContent = measurementId || "Nao definido";
-      domainEl.textContent = window.location.hostname || "-";
+        measurementIdEl.textContent = measurementId || "Nao definido";
+        domainEl.textContent = window.location.hostname || "-";
 
-      if (!measurementId || measurementId === "G-XXXXXXXXXX") {
-        statusText.textContent = "Pendente";
-        statusText.className = "value status-warn";
-        statusHint.textContent = "Defina seu GA4 Measurement ID em /analytics-config.js para iniciar a coleta.";
-        return;
+        if (!measurementId || measurementId === "G-XXXXXXXXXX") {
+          statusText.textContent = "Pendente";
+          statusText.className = "value status-warn";
+          statusHint.textContent = "Defina seu GA4 Measurement ID em /analytics-config.js para iniciar a coleta.";
+          return;
+        }
+
+        statusText.textContent = "Ativo";
+        statusText.className = "value status-ok";
+        statusHint.textContent = "A coleta esta ativa. Verifique o relatorio em Tempo Real no Google Analytics.";
       }
 
-      statusText.textContent = "Ativo";
-      statusText.className = "value status-ok";
-      statusHint.textContent = "A coleta esta ativa. Verifique o relatorio em Tempo Real no Google Analytics.";
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", updateStatusPanel);
+      } else {
+        updateStatusPanel();
+      }
     })();
   </script>
 </body>
