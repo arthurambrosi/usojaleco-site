@@ -24,7 +24,7 @@
       --rBig:24px;
       --rMid:18px;
       --rSm:14px;
-      --containerMax:1240px;
+      --containerMax:1340px;
       --containerPad:24px;
       --t:.18s ease;
     }
@@ -242,7 +242,7 @@
     .workspace{
       display:grid;
       grid-template-columns:repeat(12, minmax(0,1fr));
-      gap:12px;
+      gap:14px;
     }
 
     .col{
@@ -255,9 +255,9 @@
       min-width:0;
     }
 
-    .col.specialty{ grid-column:span 3; }
-    .col.subject{ grid-column:span 4; }
-    .col.guideline{ grid-column:span 5; }
+    .col.specialty{ grid-column:span 2; }
+    .col.subject{ grid-column:span 3; }
+    .col.guideline{ grid-column:span 7; }
 
     .col-head{
       display:flex;
@@ -326,9 +326,9 @@
     }
 
     .guideline-list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
     }
 
     .guideline-card{
@@ -340,17 +340,32 @@
     }
 
     .pdf-preview{
-      border-bottom:1px solid var(--line);
       background:#f8fafc;
-      min-height:180px;
+      border-bottom:1px solid var(--line);
+      padding:10px;
+    }
+
+    .pdf-sheet{
+      position:relative;
+      width:100%;
+      max-width:240px;
+      margin:0 auto;
+      aspect-ratio:210 / 297;
+      border:1px solid #e2e8f0;
+      border-radius:10px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:0 6px 14px rgba(15,23,42,.08);
     }
 
     .pdf-preview iframe{
       border:0;
       width:100%;
-      height:180px;
+      height:100%;
       display:block;
       background:#fff;
+      position:absolute;
+      inset:0;
     }
 
     .card-body{
@@ -429,12 +444,21 @@
       background:var(--surface2);
     }
 
+    .guideline-list .empty{
+      grid-column:1 / -1;
+    }
+
     @media (max-width:1080px){
       .workspace{ grid-template-columns:1fr; }
       .col.specialty, .col.subject, .col.guideline{
         grid-column:auto;
         min-height:auto;
       }
+    }
+
+    @media (max-width:900px){
+      .guideline-list{ grid-template-columns:1fr; }
+      .pdf-sheet{ max-width:220px; }
     }
 
     @media (max-width:720px){
@@ -697,8 +721,8 @@
 
           var previewUrl = buildPreviewUrl(dirItem.link_pdf);
           var previewHtml = previewUrl
-            ? '<div class="pdf-preview"><iframe loading="lazy" src="' + previewUrl + '" title="Preview do PDF"></iframe></div>'
-            : '<div class="pdf-preview"></div>';
+            ? '<div class="pdf-preview"><div class="pdf-sheet"><iframe loading="lazy" src="' + previewUrl + '" title="Preview do PDF"></iframe></div></div>'
+            : '<div class="pdf-preview"><div class="pdf-sheet"></div></div>';
 
           var tags = Array.isArray(dirItem.tags) ? dirItem.tags : [];
           var tagsHtml = tags.map(function (tag) {

@@ -24,7 +24,7 @@
       --rBig:24px;
       --rMid:18px;
       --rSm:14px;
-      --containerMax:1180px;
+      --containerMax:1340px;
       --containerPad:24px;
       --t:.18s ease;
     }
@@ -278,11 +278,11 @@
       border-radius:var(--rMid);
       background:var(--surface);
       box-shadow:var(--shadow);
-      padding:14px;
+      padding:12px;
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height:232px;
+      min-height:346px;
     }
 
     .card.is-featured{
@@ -322,8 +322,25 @@
       margin:0;
       font-size:18px;
       line-height:1.3;
-      min-height:48px;
+      min-height:54px;
       color:#111827;
+    }
+
+    .thumb{
+      width:100%;
+      aspect-ratio:16 / 9;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#eef2f7;
+      box-shadow:0 5px 14px rgba(15,23,42,.06);
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
     .meta{
@@ -530,6 +547,12 @@
         return startFmt + " ate " + endFmt;
       }
 
+      function eventThumbnail(eventItem) {
+        if (eventItem && eventItem.thumbnail) return eventItem.thumbnail;
+        var seed = encodeURIComponent(eventItem && eventItem.id ? eventItem.id : eventItem && eventItem.nome ? eventItem.nome : "evento");
+        return "https://picsum.photos/seed/" + seed + "/960/540";
+      }
+
       function eventLocation(eventItem) {
         if (String(eventItem.modalidade).toLowerCase() === "online") {
           return "Online";
@@ -654,6 +677,7 @@
 
           card.innerHTML =
             '<div class="badge-row">' + badges + "</div>" +
+            '<div class="thumb"><img src="' + eventThumbnail(item) + '" alt="Imagem do evento" loading="lazy" /></div>' +
             "<h3>" + (item.nome || "Evento sem nome") + "</h3>" +
             '<p class="meta">' +
               "<span><strong>Data:</strong> " + formatDateRange(item.data_inicio, item.data_fim) + "</span>" +

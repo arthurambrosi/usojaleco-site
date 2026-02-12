@@ -10,6 +10,7 @@
     "cidade": "Rio de Janeiro",
     "uf": "RJ",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev001/960/540",
     "link": "https://www.portal.cardiol.br/",
     "destaque": true
   },
@@ -24,6 +25,7 @@
     "cidade": "Salvador",
     "uf": "BA",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev002/960/540",
     "link": "https://www.instagram.com/usojaleco_/",
     "destaque": false
   },
@@ -38,6 +40,7 @@
     "cidade": "",
     "uf": "",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev003/960/540",
     "link": "https://www.sccm.org/",
     "destaque": true
   },
@@ -52,6 +55,7 @@
     "cidade": "",
     "uf": "",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev004/960/540",
     "link": "https://www.usojaleco.com.br/gasometria/",
     "destaque": false
   },
@@ -66,6 +70,7 @@
     "cidade": "Sao Paulo",
     "uf": "SP",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev005/960/540",
     "link": "https://infectologia.org.br/",
     "destaque": false
   },
@@ -80,6 +85,7 @@
     "cidade": "Salvador",
     "uf": "BA",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev006/960/540",
     "link": "https://www.sbp.com.br/",
     "destaque": false
   },
@@ -94,6 +100,7 @@
     "cidade": "Belo Horizonte",
     "uf": "MG",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev007/960/540",
     "link": "https://www.amib.org.br/",
     "destaque": false
   },
@@ -108,6 +115,7 @@
     "cidade": "Lisboa",
     "uf": "",
     "internacional": true,
+    "thumbnail": "https://picsum.photos/seed/ev008/960/540",
     "link": "https://www.esmo.org/",
     "destaque": true
   },
@@ -122,6 +130,7 @@
     "cidade": "Recife",
     "uf": "PE",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev009/960/540",
     "link": "https://www.febrasgo.org.br/",
     "destaque": false
   },
@@ -136,6 +145,7 @@
     "cidade": "Curitiba",
     "uf": "PR",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev010/960/540",
     "link": "https://www.sbahq.org/",
     "destaque": false
   },
@@ -150,6 +160,7 @@
     "cidade": "",
     "uf": "",
     "internacional": false,
+    "thumbnail": "https://picsum.photos/seed/ev011/960/540",
     "link": "https://abneuro.org.br/",
     "destaque": false
   },
@@ -164,6 +175,7 @@
     "cidade": "Barcelona",
     "uf": "",
     "internacional": true,
+    "thumbnail": "https://picsum.photos/seed/ev012/960/540",
     "link": "https://www.escardio.org/",
     "destaque": false
   }
