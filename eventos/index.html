@@ -327,12 +327,13 @@
     }
 
     .thumb{
+      position:relative;
       width:100%;
       aspect-ratio:16 / 9;
       border-radius:12px;
       overflow:hidden;
       border:1px solid var(--line);
-      background:#eef2f7;
+      background:linear-gradient(145deg, #e2e8f0, #cbd5e1);
       box-shadow:0 5px 14px rgba(15,23,42,.06);
     }
 
@@ -341,6 +342,34 @@
       height:100%;
       object-fit:cover;
       display:block;
+      opacity:0;
+      transition:opacity var(--t);
+    }
+
+    .thumb.has-image img{
+      opacity:1;
+    }
+
+    .thumb-fallback{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        linear-gradient(145deg, #e5e7eb, #cbd5e1);
+    }
+
+    .thumb-logo{
+      width:min(42%, 126px);
+      max-height:58%;
+      object-fit:contain;
+      filter:grayscale(1) contrast(.85);
+      opacity:.56;
+    }
+
+    .thumb.has-image .thumb-fallback{
+      display:none;
     }
 
     .meta{
@@ -496,6 +525,7 @@
           area: ""
         }
       };
+      var LOGO_SRC = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
 
       var dom = {
         searchInput: document.getElementById("searchInput"),
@@ -548,9 +578,7 @@
       }
 
       function eventThumbnail(eventItem) {
-        if (eventItem && eventItem.thumbnail) return eventItem.thumbnail;
-        var seed = encodeURIComponent(eventItem && eventItem.id ? eventItem.id : eventItem && eventItem.nome ? eventItem.nome : "evento");
-        return "https://picsum.photos/seed/" + seed + "/960/540";
+        return String((eventItem && eventItem.thumbnail) || "").trim();
       }
 
       function eventLocation(eventItem) {
@@ -571,6 +599,60 @@
       function locationFilterKey(eventItem) {
         if (eventItem.internacional) return "internacional";
         return (eventItem.uf || "").toUpperCase();
+      }
+
+      function createMetaLine(label, value) {
+        var span = document.createElement("span");
+        var strong = document.createElement("strong");
+        strong.textContent = label + ": ";
+        span.appendChild(strong);
+        span.appendChild(document.createTextNode(value));
+        return span;
+      }
+
+      function buildThumbElement(src, altText) {
+        var wrap = document.createElement("div");
+        wrap.className = "thumb";
+
+        var img = document.createElement("img");
+        img.alt = altText || "Imagem do evento";
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        var fallback = document.createElement("div");
+        fallback.className = "thumb-fallback";
+
+        var logo = document.createElement("img");
+        logo.className = "thumb-logo";
+        logo.alt = "Logo UsoJaleco";
+        logo.loading = "lazy";
+        logo.src = LOGO_SRC;
+
+        fallback.appendChild(logo);
+        wrap.appendChild(img);
+        wrap.appendChild(fallback);
+
+        function applyFallback() {
+          wrap.classList.remove("has-image");
+          img.removeAttribute("src");
+        }
+
+        img.addEventListener("load", function () {
+          if (img.naturalWidth > 1) {
+            wrap.classList.add("has-image");
+          } else {
+            applyFallback();
+          }
+        });
+        img.addEventListener("error", applyFallback);
+
+        if (src) {
+          img.src = src;
+        } else {
+          applyFallback();
+        }
+
+        return wrap;
       }
 
       function sortByNearestDate(list) {
@@ -670,22 +752,48 @@
           var card = document.createElement("article");
           card.className = "card" + (item.destaque ? " is-featured" : "");
 
-          var badges = '<span class="badge">' + formatLabel(item.tipo || "evento") + '</span>';
+          var badgeRow = document.createElement("div");
+          badgeRow.className = "badge-row";
+
           if (item.destaque) {
-            badges = '<span class="badge badge-featured">Destaque</span>' + badges;
+            var featuredBadge = document.createElement("span");
+            featuredBadge.className = "badge badge-featured";
+            featuredBadge.textContent = "Destaque";
+            badgeRow.appendChild(featuredBadge);
           }
 
-          card.innerHTML =
-            '<div class="badge-row">' + badges + "</div>" +
-            '<div class="thumb"><img src="' + eventThumbnail(item) + '" alt="Imagem do evento" loading="lazy" /></div>' +
-            "<h3>" + (item.nome || "Evento sem nome") + "</h3>" +
-            '<p class="meta">' +
-              "<span><strong>Data:</strong> " + formatDateRange(item.data_inicio, item.data_fim) + "</span>" +
-              "<span><strong>Local:</strong> " + eventLocation(item) + "</span>" +
-              "<span><strong>Modalidade:</strong> " + formatLabel(item.modalidade || "-") + "</span>" +
-              "<span><strong>Area:</strong> " + (item.area || "Nao informada") + "</span>" +
-            "</p>" +
-            '<div class="cta"><a class="btn" href="' + (item.link || "#") + '" target="_blank" rel="noopener">Saiba mais / Ver evento</a></div>';
+          var typeBadge = document.createElement("span");
+          typeBadge.className = "badge";
+          typeBadge.textContent = formatLabel(item.tipo || "evento");
+          badgeRow.appendChild(typeBadge);
+
+          var title = document.createElement("h3");
+          title.textContent = item.nome || "Evento sem nome";
+
+          var meta = document.createElement("p");
+          meta.className = "meta";
+          meta.appendChild(createMetaLine("Data", formatDateRange(item.data_inicio, item.data_fim)));
+          meta.appendChild(createMetaLine("Local", eventLocation(item)));
+          meta.appendChild(createMetaLine("Modalidade", formatLabel(item.modalidade || "-")));
+          meta.appendChild(createMetaLine("Area", item.area || "Nao informada"));
+
+          var cta = document.createElement("div");
+          cta.className = "cta";
+
+          var link = document.createElement("a");
+          link.className = "btn";
+          link.href = item.link || "#";
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.textContent = "Saiba mais / Ver evento";
+
+          cta.appendChild(link);
+
+          card.appendChild(badgeRow);
+          card.appendChild(buildThumbElement(eventThumbnail(item), "Imagem do evento"));
+          card.appendChild(title);
+          card.appendChild(meta);
+          card.appendChild(cta);
 
           dom.cards.appendChild(card);
         });

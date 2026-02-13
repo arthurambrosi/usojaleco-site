@@ -52,7 +52,7 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     <span class="pill">eventos/data.json + diretrizes/data.json</span>
     <label class="pill"><input id="autosave" type="checkbox" checked style="accent-color:#f97316" /> Auto salvar</label>
   </div>
-  <p class="hint">Edite por formulario e o JSON da pasta atualiza automaticamente. O seletor de arquivo apenas preenche o caminho (nao envia arquivo sozinho).</p>
+  <p class="hint">Edite por formulario e o JSON da pasta atualiza automaticamente. Upload de imagem vira Data URL no JSON (funciona sem pasta extra, mas aumenta o tamanho do arquivo).</p>
 
   <div class="tabs">
     <button class="tab on" data-tab="eventos" type="button">Eventos</button>
@@ -127,7 +127,7 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
       <label class="f c2"><span>Escolher imagem</span><input class="pick-dir-thumb" type="file" accept="image/*" /></label>
       <label class="f c12"><span>Tags (virgula)</span><input data-f="tags" type="text" placeholder="brasil, hipertensao, sbc" /></label>
     </div>
-    <p class="tiny">Para caminhos locais, coloque os arquivos nas pastas do repositorio (diretrizes/pdfs e diretrizes/thumbs).</p>
+    <p class="tiny">Thumbnail pode ser URL normal, caminho local ou Data URL (gerado automaticamente no upload).</p>
   </div>
 </template>
 
@@ -149,6 +149,15 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
   const markDirty = ()=>{if(state.loading) return; state.dirty=true; setStatus("Alteracoes pendentes","warn"); updateCount(); if(dom.autosave.checked) queueSave();};
   const clearDirty = ()=>{state.dirty=false; const d=new Date(); setStatus(`Salvo ${d.toLocaleTimeString()}`,"ok"); updateCount();};
   const queueSave = ()=>{clearTimeout(state.timer); state.timer=setTimeout(()=>saveAll(false),900);};
+  function readFileAsDataUrl(file){
+    return new Promise((resolve,reject)=>{
+      if(!file){ reject(new Error("arquivo_invalido")); return; }
+      const reader=new FileReader();
+      reader.onload=()=>resolve(String(reader.result||""));
+      reader.onerror=()=>reject(new Error("erro_leitura_arquivo"));
+      reader.readAsDataURL(file);
+    });
+  }
 
   function toggleTab(name){dom.tabs.forEach(b=>b.classList.toggle("on",b.dataset.tab===name));dom.panels.forEach(p=>p.hidden=p.dataset.panel!==name);}  
   dom.tabs.forEach(b=>b.addEventListener("click",()=>toggleTab(b.dataset.tab)));
@@ -166,7 +175,18 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     ["id","nome","tipo","area","data_inicio","data_fim","modalidade","cidade","uf","link","thumbnail","internacional","destaque"].forEach(k=>setField(n,k,data[k]));
     n.classList.toggle("featured",!!data.destaque);
     const d=$("[data-f='destaque']",n); d.addEventListener("change",()=>n.classList.toggle("featured",d.checked));
-    $(".pick-ev-thumb",n).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0]; if(f){setField(n,"thumbnail","./thumbs/eventos/"+f.name); markDirty();}});
+    $(".pick-ev-thumb",n).addEventListener("change",async e=>{
+      const f=e.target.files&&e.target.files[0];
+      if(!f) return;
+      try{
+        const dataUrl=await readFileAsDataUrl(f);
+        setField(n,"thumbnail",dataUrl);
+        setStatus("Imagem do evento incorporada no JSON","ok");
+        markDirty();
+      }catch(_err){
+        setStatus("Falha ao ler imagem do evento","err");
+      }
+    });
     return n;
   }
 
@@ -175,7 +195,18 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     setField(n,"titulo",data.titulo); setField(n,"instituicao",data.instituicao); setField(n,"ano",data.ano);
     setField(n,"link_pdf",data.link_pdf); setField(n,"thumbnail",data.thumbnail); setField(n,"tags",Array.isArray(data.tags)?data.tags.join(", "):data.tags);
     $(".pick-dir-pdf",n).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0]; if(f){setField(n,"link_pdf","./pdfs/"+f.name); markDirty();}});
-    $(".pick-dir-thumb",n).addEventListener("change",e=>{const f=e.target.files&&e.target.files[0]; if(f){setField(n,"thumbnail","./thumbs/"+f.name); markDirty();}});
+    $(".pick-dir-thumb",n).addEventListener("change",async e=>{
+      const f=e.target.files&&e.target.files[0];
+      if(!f) return;
+      try{
+        const dataUrl=await readFileAsDataUrl(f);
+        setField(n,"thumbnail",dataUrl);
+        setStatus("Miniatura da diretriz incorporada no JSON","ok");
+        markDirty();
+      }catch(_err){
+        setStatus("Falha ao ler miniatura da diretriz","err");
+      }
+    });
     return n;
   }
 
