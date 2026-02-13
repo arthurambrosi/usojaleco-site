@@ -354,6 +354,8 @@
       position:absolute;
       inset:0;
       display:flex;
+      flex-direction:column;
+      gap:10px;
       align-items:center;
       justify-content:center;
       background:
@@ -366,6 +368,16 @@
       object-fit:contain;
       filter:grayscale(1) contrast(.85);
       opacity:.56;
+    }
+
+    .thumb-fallback-text{
+      display:block;
+      color:#64748b;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.2;
+      text-align:center;
+      padding:0 8px;
     }
 
     .thumb.has-image .thumb-fallback{
@@ -631,11 +643,17 @@
         logo.loading = "lazy";
         logo.src = LOGO_SRC;
 
+        var fallbackText = document.createElement("span");
+        fallbackText.className = "thumb-fallback-text";
+        fallbackText.textContent = "Carregando imagem...";
+
         fallback.appendChild(logo);
+        fallback.appendChild(fallbackText);
         wrap.appendChild(img);
         wrap.appendChild(fallback);
 
-        function applyFallback() {
+        function applyFallback(message) {
+          fallbackText.textContent = message || "Sem imagem";
           wrap.classList.remove("has-image");
           img.removeAttribute("src");
         }
@@ -644,15 +662,17 @@
           if (img.naturalWidth > 1) {
             wrap.classList.add("has-image");
           } else {
-            applyFallback();
+            applyFallback("Sem imagem");
           }
         });
-        img.addEventListener("error", applyFallback);
+        img.addEventListener("error", function () {
+          applyFallback("Sem imagem");
+        });
 
         if (src) {
           img.src = src;
         } else {
-          applyFallback();
+          applyFallback("Sem imagem");
         }
 
         return wrap;
