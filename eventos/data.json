@@ -1,5 +1,6 @@
 [
   {
+    "id": "ev-001",
     "nome": "53º Congresso Brasileiro de Alergia e Imunologia",
     "tipo": "congresso",
     "area": "Alergia e Imunologia",
@@ -9,12 +10,12 @@
     "cidade": "Foz do Iguaçu",
     "uf": "PR",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT1VwHeQyI7DpxEOHuluVMzVxRsa_Yg0I_og&s",
     "link": "https://www.google.com/search?q=53%C2%BA+Congresso+Brasileiro+de+Alergia+e+Imunologia+2026",
-    "destaque": false,
-    "id": "ev-001"
+    "destaque": false
   },
   {
+    "id": "ev-002",
     "nome": "Congresso Paulista de Anestesiologia – COPA 2026",
     "tipo": "congresso",
     "area": "Anestesiologia",
@@ -26,10 +27,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Paulista+de+Anestesiologia+%E2%80%93+COPA+2026+2026",
-    "destaque": false,
-    "id": "ev-002"
+    "destaque": false
   },
   {
+    "id": "ev-003",
     "nome": "CONGRESSO LUSÓFONO BRASIL 2026",
     "tipo": "congresso",
     "area": "Anestesiologia",
@@ -41,10 +42,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=CONGRESSO+LUS%C3%93FONO+BRASIL+2026+2026",
-    "destaque": false,
-    "id": "ev-003"
+    "destaque": false
   },
   {
+    "id": "ev-004",
     "nome": "Congresso Brasileiro de Anestesiologia",
     "tipo": "congresso",
     "area": "Anestesiologia",
@@ -56,10 +57,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Anestesiologia+2026",
-    "destaque": false,
-    "id": "ev-004"
+    "destaque": false
   },
   {
+    "id": "ev-005",
     "nome": "43º Congresso SOCERJ (Sociedade de Cardiologia do Estado do Rio de Janeiro)",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -71,10 +72,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=43%C2%BA+Congresso+SOCERJ+%28Sociedade+de+Cardiologia+do+Estado+do+Rio+de+Janeiro%29+2026",
-    "destaque": false,
-    "id": "ev-005"
+    "destaque": false
   },
   {
+    "id": "ev-006",
     "nome": "46º Congresso da Sociedade de Cardiologia do Estado de São Paulo",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -86,10 +87,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=46%C2%BA+Congresso+da+Sociedade+de+Cardiologia+do+Estado+de+S%C3%A3o+Paulo+2026",
-    "destaque": false,
-    "id": "ev-006"
+    "destaque": false
   },
   {
+    "id": "ev-007",
     "nome": "Congresso Brasileiro de Insuficiência Cardíaca – DEIC 2026",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -101,10 +102,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Insufici%C3%AAncia+Card%C3%ADaca+%E2%80%93+DEIC+2026+2026",
-    "destaque": false,
-    "id": "ev-007"
+    "destaque": false
   },
   {
+    "id": "ev-008",
     "nome": "Congresso SOLACI SBHCI (Sociedade Brasileira de Hemodinâmica e Cardiologia Intervencionista)",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -116,10 +117,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+SOLACI+SBHCI+%28Sociedade+Brasileira+de+Hemodin%C3%A2mica+e+Cardiologia+Intervencionista%29+2026",
-    "destaque": false,
-    "id": "ev-008"
+    "destaque": false
   },
   {
+    "id": "ev-009",
     "nome": "52º Congresso Paranaense de Cardiologia",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -131,10 +132,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=52%C2%BA+Congresso+Paranaense+de+Cardiologia+2026",
-    "destaque": false,
-    "id": "ev-009"
+    "destaque": false
   },
   {
+    "id": "ev-010",
     "nome": "81º Congresso Brasileiro de Cardiologia together with World Congress Of Cardiology 2026",
     "tipo": "congresso",
     "area": "Cardiologia",
@@ -146,10 +147,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=81%C2%BA+Congresso+Brasileiro+de+Cardiologia+together+with+World+Congress+Of+Cardiology+2026+2026",
-    "destaque": false,
-    "id": "ev-010"
+    "destaque": false
   },
   {
+    "id": "ev-011",
     "nome": "36º Congresso Brasileiro de Cirurgia Dermatológica",
     "tipo": "congresso",
     "area": "Dermatologia",
@@ -161,10 +162,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=36%C2%BA+Congresso+Brasileiro+de+Cirurgia+Dermatol%C3%B3gica+2026",
-    "destaque": false,
-    "id": "ev-011"
+    "destaque": false
   },
   {
+    "id": "ev-012",
     "nome": "Congresso Cirurgia Ano 2026",
     "tipo": "congresso",
     "area": "Cirurgia Geral",
@@ -176,10 +177,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Cirurgia+Ano+2026+2026",
-    "destaque": false,
-    "id": "ev-012"
+    "destaque": false
   },
   {
+    "id": "ev-013",
     "nome": "XX Congresso Brasileiro de Transplantes",
     "tipo": "congresso",
     "area": "Cirurgia Geral",
@@ -191,10 +192,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XX+Congresso+Brasileiro+de+Transplantes+2027",
-    "destaque": false,
-    "id": "ev-013"
+    "destaque": false
   },
   {
+    "id": "ev-014",
     "nome": "18º Congress do DESC",
     "tipo": "congresso",
     "area": "Cirurgia Plástica",
@@ -206,10 +207,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=18%C2%BA+Congress+do+DESC+2026",
-    "destaque": false,
-    "id": "ev-014"
+    "destaque": false
   },
   {
+    "id": "ev-015",
     "nome": "Full Face Global",
     "tipo": "congresso",
     "area": "Cirurgia Plástica",
@@ -221,10 +222,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Full+Face+Global+2026",
-    "destaque": false,
-    "id": "ev-015"
+    "destaque": false
   },
   {
+    "id": "ev-016",
     "nome": "13º Congresso internacional de Cirurgia Plástica e Cosmiatria do Colégio Brasileiro de Cirurgia Plástica (CBCP)",
     "tipo": "congresso",
     "area": "Cirurgia Plástica",
@@ -236,10 +237,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=13%C2%BA+Congresso+internacional+de+Cirurgia+Pl%C3%A1stica+e+Cosmiatria+do+Col%C3%A9gio+Brasileiro+de+Cirurgia+Pl%C3%A1stica+%28CBCP%29+2026",
-    "destaque": false,
-    "id": "ev-016"
+    "destaque": false
   },
   {
+    "id": "ev-017",
     "nome": "62º Congresso Brasileiro de Cirurgia Plástica",
     "tipo": "congresso",
     "area": "Cirurgia Plástica",
@@ -251,10 +252,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=62%C2%BA+Congresso+Brasileiro+de+Cirurgia+Pl%C3%A1stica+2026",
-    "destaque": false,
-    "id": "ev-017"
+    "destaque": false
   },
   {
+    "id": "ev-018",
     "nome": "12º Congresso Sul-Brasileiro de Cirurgia Torácica",
     "tipo": "congresso",
     "area": "Cirurgia Torácica",
@@ -266,10 +267,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=12%C2%BA+Congresso+Sul-Brasileiro+de+Cirurgia+Tor%C3%A1cica+2026",
-    "destaque": false,
-    "id": "ev-018"
+    "destaque": false
   },
   {
+    "id": "ev-019",
     "nome": "18º Congresso Brasileiro de Videocirurgia e Robótica (SOBRACIL)",
     "tipo": "congresso",
     "area": "Cirurgia Torácica",
@@ -281,10 +282,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=18%C2%BA+Congresso+Brasileiro+de+Videocirurgia+e+Rob%C3%B3tica+%28SOBRACIL%29+2026",
-    "destaque": false,
-    "id": "ev-019"
+    "destaque": false
   },
   {
+    "id": "ev-020",
     "nome": "14º Congresso Norte-Nordeste e Centro-Oeste de Cirurgia Torácica",
     "tipo": "congresso",
     "area": "Cirurgia Torácica",
@@ -296,10 +297,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=14%C2%BA+Congresso+Norte-Nordeste+e+Centro-Oeste+de+Cirurgia+Tor%C3%A1cica+2026",
-    "destaque": false,
-    "id": "ev-020"
+    "destaque": false
   },
   {
+    "id": "ev-021",
     "nome": "40º Encontro Carioca de Cirurgia Vascular | Rio International Vascular Summit 2026",
     "tipo": "congresso",
     "area": "Cirurgia Vascular",
@@ -311,10 +312,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=40%C2%BA+Encontro+Carioca+de+Cirurgia+Vascular+%7C+Rio+International+Vascular+Summit+2026+2026",
-    "destaque": false,
-    "id": "ev-021"
+    "destaque": false
   },
   {
+    "id": "ev-022",
     "nome": "XXIV Encontro São Paulo | Congresso Internacional São Paulo de Cirurgia Vascular e Endovascular",
     "tipo": "congresso",
     "area": "Cirurgia Vascular",
@@ -326,10 +327,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXIV+Encontro+S%C3%A3o+Paulo+%7C+Congresso+Internacional+S%C3%A3o+Paulo+de+Cirurgia+Vascular+e+Endovascular+2026",
-    "destaque": false,
-    "id": "ev-022"
+    "destaque": false
   },
   {
+    "id": "ev-023",
     "nome": "46º Congresso Brasileiro de Angiologia e Cirurgia Vascular",
     "tipo": "congresso",
     "area": "Cirurgia Vascular",
@@ -341,10 +342,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=46%C2%BA+Congresso+Brasileiro+de+Angiologia+e+Cirurgia+Vascular+2026",
-    "destaque": false,
-    "id": "ev-023"
+    "destaque": false
   },
   {
+    "id": "ev-024",
     "nome": "15º Congresso Gaúcho de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -356,10 +357,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=15%C2%BA+Congresso+Ga%C3%BAcho+de+Cl%C3%ADnica+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-024"
+    "destaque": false
   },
   {
+    "id": "ev-025",
     "nome": "20º CONGRESSO PARANAENSE DE CLÍNICA MÉDICA",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -371,10 +372,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=20%C2%BA+CONGRESSO+PARANAENSE+DE+CL%C3%8DNICA+M%C3%89DICA+2026",
-    "destaque": false,
-    "id": "ev-025"
+    "destaque": false
   },
   {
+    "id": "ev-026",
     "nome": "III Congresso Pernambucano de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -386,10 +387,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=III+Congresso+Pernambucano+de+Cl%C3%ADnica+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-026"
+    "destaque": false
   },
   {
+    "id": "ev-027",
     "nome": "XIV Congresso Mineiro de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -401,10 +402,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XIV+Congresso+Mineiro+de+Cl%C3%ADnica+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-027"
+    "destaque": false
   },
   {
+    "id": "ev-028",
     "nome": "Congresso Sul-brasileiro de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -416,10 +417,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Sul-brasileiro+de+Cl%C3%ADnica+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-028"
+    "destaque": false
   },
   {
+    "id": "ev-029",
     "nome": "14º Congresso Paulista de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
@@ -431,10 +432,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=14%C2%BA+Congresso+Paulista+de+Cl%C3%ADnica+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-029"
+    "destaque": false
   },
   {
+    "id": "ev-030",
     "nome": "39º Congresso Regional Norte-Nordeste de Coloproctologia",
     "tipo": "congresso",
     "area": "Coloproctologia",
@@ -446,10 +447,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=39%C2%BA+Congresso+Regional+Norte-Nordeste+de+Coloproctologia+2026",
-    "destaque": false,
-    "id": "ev-030"
+    "destaque": false
   },
   {
+    "id": "ev-031",
     "nome": "VIII Congresso Paulista de Coloproctologia",
     "tipo": "congresso",
     "area": "Coloproctologia",
@@ -461,10 +462,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VIII+Congresso+Paulista+de+Coloproctologia+2026",
-    "destaque": false,
-    "id": "ev-031"
+    "destaque": false
   },
   {
+    "id": "ev-032",
     "nome": "74º Congresso Brasileiro de Coloproctologia",
     "tipo": "congresso",
     "area": "Coloproctologia",
@@ -476,10 +477,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=74%C2%BA+Congresso+Brasileiro+de+Coloproctologia+2026",
-    "destaque": false,
-    "id": "ev-032"
+    "destaque": false
   },
   {
+    "id": "ev-033",
     "nome": "XII Congresso Brasileiro de Dermatologia",
     "tipo": "congresso",
     "area": "Dermatologia",
@@ -491,10 +492,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XII+Congresso+Brasileiro+de+Dermatologia+2026",
-    "destaque": false,
-    "id": "ev-033"
+    "destaque": false
   },
   {
+    "id": "ev-034",
     "nome": "III Congresso Internacional de Tricologia, Medicina e Transplante Capilar",
     "tipo": "congresso",
     "area": "Dermatologia",
@@ -506,10 +507,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=III+Congresso+Internacional+de+Tricologia%2C+Medicina+e+Transplante+Capilar+2026",
-    "destaque": false,
-    "id": "ev-034"
+    "destaque": false
   },
   {
+    "id": "ev-035",
     "nome": "79º Congresso da Sociedade Brasileira de Dermatologia (SBD)",
     "tipo": "congresso",
     "area": "Dermatologia",
@@ -521,10 +522,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=79%C2%BA+Congresso+da+Sociedade+Brasileira+de+Dermatologia+%28SBD%29+2026",
-    "destaque": false,
-    "id": "ev-035"
+    "destaque": false
   },
   {
+    "id": "ev-036",
     "nome": "16º Congresso Paulista de Diabetes e Metabolismo",
     "tipo": "congresso",
     "area": "Endocrinologia e Metabologia",
@@ -536,10 +537,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=16%C2%BA+Congresso+Paulista+de+Diabetes+e+Metabolismo+2026",
-    "destaque": false,
-    "id": "ev-036"
+    "destaque": false
   },
   {
+    "id": "ev-037",
     "nome": "Gastrão 2026",
     "tipo": "congresso",
     "area": "Gastroenterologia",
@@ -551,10 +552,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Gastr%C3%A3o+2026+2026",
-    "destaque": false,
-    "id": "ev-037"
+    "destaque": false
   },
   {
+    "id": "ev-038",
     "nome": "6º Congresso Paulista de Fígado",
     "tipo": "congresso",
     "area": "Gastroenterologia",
@@ -566,10 +567,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=6%C2%BA+Congresso+Paulista+de+F%C3%ADgado+2026",
-    "destaque": false,
-    "id": "ev-038"
+    "destaque": false
   },
   {
+    "id": "ev-039",
     "nome": "14° CONGRESSO PAULISTA DE GERIATRIA E GERENTOLOGIA / 13° SIMPÓSIO DAS LIGAS DE GERIATRIA E GEREONTOLOGIA",
     "tipo": "simposio",
     "area": "Geriatria",
@@ -581,10 +582,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=14%C2%B0+CONGRESSO+PAULISTA+DE+GERIATRIA+E+GERENTOLOGIA+%2F+13%C2%B0+SIMP%C3%93SIO+DAS+LIGAS+DE+GERIATRIA+E+GEREONTOLOGIA+2026",
-    "destaque": false,
-    "id": "ev-039"
+    "destaque": false
   },
   {
+    "id": "ev-040",
     "nome": "CONGRESSO NORTE NORDESTE DE GERIATRIA E GERONTOLOGIA",
     "tipo": "congresso",
     "area": "Geriatria",
@@ -596,10 +597,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=CONGRESSO+NORTE+NORDESTE+DE+GERIATRIA+E+GERONTOLOGIA+2026",
-    "destaque": false,
-    "id": "ev-040"
+    "destaque": false
   },
   {
+    "id": "ev-041",
     "nome": "14º Congresso Sulbrasileiro de Geriatria e Gerontologia 35ª Jornada Paranaense de Geriatria e Gerontologia",
     "tipo": "jornada",
     "area": "Geriatria",
@@ -611,10 +612,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=14%C2%BA+Congresso+Sulbrasileiro+de+Geriatria+e+Gerontologia+35%C2%AA+Jornada+Paranaense+de+Geriatria+e+Gerontologia+2026",
-    "destaque": false,
-    "id": "ev-041"
+    "destaque": false
   },
   {
+    "id": "ev-042",
     "nome": "13º CONGRESSO DE GERIATRIA E GERONTOLOGIA DE MINAS GERAIS – GERMINAS 2026",
     "tipo": "congresso",
     "area": "Geriatria",
@@ -626,10 +627,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=13%C2%BA+CONGRESSO+DE+GERIATRIA+E+GERONTOLOGIA+DE+MINAS+GERAIS+%E2%80%93+GERMINAS+2026+2026",
-    "destaque": false,
-    "id": "ev-042"
+    "destaque": false
   },
   {
+    "id": "ev-043",
     "nome": "13º COGER – Congresso Centro Oeste de Geriatria e Gerontologia",
     "tipo": "congresso",
     "area": "Geriatria",
@@ -641,10 +642,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=13%C2%BA+COGER+%E2%80%93+Congresso+Centro+Oeste+de+Geriatria+e+Gerontologia+2026",
-    "destaque": false,
-    "id": "ev-043"
+    "destaque": false
   },
   {
+    "id": "ev-044",
     "nome": "13º CONGRESSO DE GERIATRIA E GERONTOLOGIA DO ESTADO DO RIO DE JANEIRO – GERIATRIO 2026",
     "tipo": "congresso",
     "area": "Geriatria",
@@ -656,10 +657,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=13%C2%BA+CONGRESSO+DE+GERIATRIA+E+GERONTOLOGIA+DO+ESTADO+DO+RIO+DE+JANEIRO+%E2%80%93+GERIATRIO+2026+2026",
-    "destaque": false,
-    "id": "ev-044"
+    "destaque": false
   },
   {
+    "id": "ev-045",
     "nome": "34º Congresso de Ginecologia e Obstetrícia de Ribeirão Preto",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -671,10 +672,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=34%C2%BA+Congresso+de+Ginecologia+e+Obstetr%C3%ADcia+de+Ribeir%C3%A3o+Preto+2026",
-    "destaque": false,
-    "id": "ev-045"
+    "destaque": false
   },
   {
+    "id": "ev-046",
     "nome": "XVI Congresso Sergipano de Ginecologia e Obstetrícia",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -686,10 +687,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVI+Congresso+Sergipano+de+Ginecologia+e+Obstetr%C3%ADcia+2026",
-    "destaque": false,
-    "id": "ev-046"
+    "destaque": false
   },
   {
+    "id": "ev-047",
     "nome": "63º Congresso Brasileiro de Ginecologia e Obstetrícia",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -701,10 +702,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=63%C2%BA+Congresso+Brasileiro+de+Ginecologia+e+Obstetr%C3%ADcia+2026",
-    "destaque": false,
-    "id": "ev-047"
+    "destaque": false
   },
   {
+    "id": "ev-048",
     "nome": "58º Congresso de Ginecologia e Obstetrícia do Distrito Federal",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -716,10 +717,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=58%C2%BA+Congresso+de+Ginecologia+e+Obstetr%C3%ADcia+do+Distrito+Federal+2026",
-    "destaque": false,
-    "id": "ev-048"
+    "destaque": false
   },
   {
+    "id": "ev-049",
     "nome": "50º Congresso da Sociedade de Ginecologia e Obstetrícia do Rio de Janeiro",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -731,10 +732,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=50%C2%BA+Congresso+da+Sociedade+de+Ginecologia+e+Obstetr%C3%ADcia+do+Rio+de+Janeiro+2026",
-    "destaque": false,
-    "id": "ev-049"
+    "destaque": false
   },
   {
+    "id": "ev-050",
     "nome": "VI Congresso Norte de Ginecologia e Obstetrícia | XXVIII Congresso Paraense de Ginecologia e Obstetrícia",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -746,10 +747,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VI+Congresso+Norte+de+Ginecologia+e+Obstetr%C3%ADcia+%7C+XXVIII+Congresso+Paraense+de+Ginecologia+e+Obstetr%C3%ADcia+2026",
-    "destaque": false,
-    "id": "ev-050"
+    "destaque": false
   },
   {
+    "id": "ev-051",
     "nome": "20th World Congress on Menopause",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -761,10 +762,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=20th+World+Congress+on+Menopause+2026",
-    "destaque": false,
-    "id": "ev-051"
+    "destaque": false
   },
   {
+    "id": "ev-052",
     "nome": "XVI Congresso Sergipano de Ginecologia e Obstetrícia",
     "tipo": "congresso",
     "area": "Ginecologia e Obstetrícia",
@@ -776,10 +777,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVI+Congresso+Sergipano+de+Ginecologia+e+Obstetr%C3%ADcia+2026",
-    "destaque": false,
-    "id": "ev-052"
+    "destaque": false
   },
   {
+    "id": "ev-053",
     "nome": "International Conference On Hematology and Stem Cell Therapy (ICHSCT)",
     "tipo": "congresso",
     "area": "Hematologia e hemoterapia",
@@ -791,10 +792,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=International+Conference+On+Hematology+and+Stem+Cell+Therapy+%28ICHSCT%29+2026",
-    "destaque": false,
-    "id": "ev-053"
+    "destaque": false
   },
   {
+    "id": "ev-054",
     "nome": "VI Congresso Brasileiro de Hematologia Clínico-Laboratorial (HEMATOCLIL)",
     "tipo": "congresso",
     "area": "Hematologia e hemoterapia",
@@ -806,10 +807,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VI+Congresso+Brasileiro+de+Hematologia+Cl%C3%ADnico-Laboratorial+%28HEMATOCLIL%29+2026",
-    "destaque": false,
-    "id": "ev-054"
+    "destaque": false
   },
   {
+    "id": "ev-055",
     "nome": "16th Brazilian Lymphoma Conference",
     "tipo": "congresso",
     "area": "Hematologia e hemoterapia",
@@ -821,10 +822,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=16th+Brazilian+Lymphoma+Conference+2026",
-    "destaque": false,
-    "id": "ev-055"
+    "destaque": false
   },
   {
+    "id": "ev-056",
     "nome": "XXX Congresso Brasileiro de Terapia Celular e Transplante de Medula Óssea",
     "tipo": "congresso",
     "area": "Hematologia e hemoterapia",
@@ -836,10 +837,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXX+Congresso+Brasileiro+de+Terapia+Celular+e+Transplante+de+Medula+%C3%93ssea+2026",
-    "destaque": false,
-    "id": "ev-056"
+    "destaque": false
   },
   {
+    "id": "ev-057",
     "nome": "Congresso Brasileiro de Hematologia, Hemoterapia e Terapia Celular",
     "tipo": "congresso",
     "area": "Hematologia e hemoterapia",
@@ -851,10 +852,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Hematologia%2C+Hemoterapia+e+Terapia+Celular+2026",
-    "destaque": false,
-    "id": "ev-057"
+    "destaque": false
   },
   {
+    "id": "ev-058",
     "nome": "X Congresso de Infecções Osteoarticulares",
     "tipo": "congresso",
     "area": "Infectologia",
@@ -866,10 +867,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=X+Congresso+de+Infec%C3%A7%C3%B5es+Osteoarticulares+2026",
-    "destaque": false,
-    "id": "ev-058"
+    "destaque": false
   },
   {
+    "id": "ev-059",
     "nome": "26ª Conferência Internacional sobre AIDS",
     "tipo": "congresso",
     "area": "Infectologia",
@@ -881,10 +882,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=26%C2%AA+Confer%C3%AAncia+Internacional+sobre+AIDS+2026",
-    "destaque": false,
-    "id": "ev-059"
+    "destaque": false
   },
   {
+    "id": "ev-060",
     "nome": "MedTrop 2026",
     "tipo": "congresso",
     "area": "Infectologia",
@@ -896,10 +897,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=MedTrop+2026+2026",
-    "destaque": false,
-    "id": "ev-060"
+    "destaque": false
   },
   {
+    "id": "ev-061",
     "nome": "XX Congresso Brasileiro de Controle de Infecção Hospitalar (CIHRIO)",
     "tipo": "congresso",
     "area": "Infectologia",
@@ -911,10 +912,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XX+Congresso+Brasileiro+de+Controle+de+Infec%C3%A7%C3%A3o+Hospitalar+%28CIHRIO%29+2026",
-    "destaque": false,
-    "id": "ev-061"
+    "destaque": false
   },
   {
+    "id": "ev-062",
     "nome": "Medic Safe - Proteção jurídica para médicos",
     "tipo": "congresso",
     "area": "Jurídico / Carreira médica",
@@ -926,10 +927,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Medic+Safe+-+Prote%C3%A7%C3%A3o+jur%C3%ADdica+para+m%C3%A9dicos",
-    "destaque": false,
-    "id": "ev-062"
+    "destaque": false
   },
   {
+    "id": "ev-063",
     "nome": "28º Congresso Brasileiro de Mastologia | 15º Brazilian Breast Cancer Symposium (BBCS)",
     "tipo": "congresso",
     "area": "Mastologia",
@@ -941,10 +942,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=28%C2%BA+Congresso+Brasileiro+de+Mastologia+%7C+15%C2%BA+Brazilian+Breast+Cancer+Symposium+%28BBCS%29+2026",
-    "destaque": false,
-    "id": "ev-063"
+    "destaque": false
   },
   {
+    "id": "ev-064",
     "nome": "1° Congresso Mundial, 5° Brasileiro e 5° Paulista de Urgências e Emergências Pediátricas",
     "tipo": "congresso",
     "area": "Medicina de Emergência",
@@ -956,10 +957,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=1%C2%B0+Congresso+Mundial%2C+5%C2%B0+Brasileiro+e+5%C2%B0+Paulista+de+Urg%C3%AAncias+e+Emerg%C3%AAncias+Pedi%C3%A1tricas+2026",
-    "destaque": false,
-    "id": "ev-064"
+    "destaque": false
   },
   {
+    "id": "ev-065",
     "nome": "2º Congresso Latino-Americano de Medicina de Emergência",
     "tipo": "congresso",
     "area": "Medicina de Emergência",
@@ -971,10 +972,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=2%C2%BA+Congresso+Latino-Americano+de+Medicina+de+Emerg%C3%AAncia+2026",
-    "destaque": false,
-    "id": "ev-065"
+    "destaque": false
   },
   {
+    "id": "ev-066",
     "nome": "II Congresso Nacional de Políticas Públicas e Saúde Coletiva (CONAPOSC)",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -986,10 +987,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=II+Congresso+Nacional+de+Pol%C3%ADticas+P%C3%BAblicas+e+Sa%C3%BAde+Coletiva+%28CONAPOSC%29+2026",
-    "destaque": false,
-    "id": "ev-066"
+    "destaque": false
   },
   {
+    "id": "ev-067",
     "nome": "V Congresso de Saúde Coletiva da Universidade Federal do Paraná (UFPR)",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1001,10 +1002,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=V+Congresso+de+Sa%C3%BAde+Coletiva+da+Universidade+Federal+do+Paran%C3%A1+%28UFPR%29+2026",
-    "destaque": false,
-    "id": "ev-067"
+    "destaque": false
   },
   {
+    "id": "ev-068",
     "nome": "2º Congresso Brasileiro de Enfermagem de Família e Comunidade | 2º Congresso Alagoano de Medicina de Família e Comunidade",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1016,10 +1017,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=2%C2%BA+Congresso+Brasileiro+de+Enfermagem+de+Fam%C3%ADlia+e+Comunidade+%7C+2%C2%BA+Congresso+Alagoano+de+Medicina+de+Fam%C3%ADlia+e+Comunidade+2026",
-    "destaque": false,
-    "id": "ev-068"
+    "destaque": false
   },
   {
+    "id": "ev-069",
     "nome": "3º Congresso Feridas",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1031,10 +1032,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3%C2%BA+Congresso+Feridas+2026",
-    "destaque": false,
-    "id": "ev-069"
+    "destaque": false
   },
   {
+    "id": "ev-070",
     "nome": "I Congresso Sul Maranhanse de Enfermagem",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1046,10 +1047,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=I+Congresso+Sul+Maranhanse+de+Enfermagem+2026",
-    "destaque": false,
-    "id": "ev-070"
+    "destaque": false
   },
   {
+    "id": "ev-071",
     "nome": "16º Congresso Nursing",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1061,10 +1062,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=16%C2%BA+Congresso+Nursing+2026",
-    "destaque": false,
-    "id": "ev-071"
+    "destaque": false
   },
   {
+    "id": "ev-072",
     "nome": "IX Congresso Sul-Brasileiro de Medicina de Família e Comunidade",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1076,10 +1077,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=IX+Congresso+Sul-Brasileiro+de+Medicina+de+Fam%C3%ADlia+e+Comunidade+2026",
-    "destaque": false,
-    "id": "ev-072"
+    "destaque": false
   },
   {
+    "id": "ev-073",
     "nome": "76º Congresso Brasileiro de Enfermagem",
     "tipo": "congresso",
     "area": "Medicina de Família e Comunidade",
@@ -1091,10 +1092,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=76%C2%BA+Congresso+Brasileiro+de+Enfermagem+2026",
-    "destaque": false,
-    "id": "ev-073"
+    "destaque": false
   },
   {
+    "id": "ev-074",
     "nome": "Conference 2026",
     "tipo": "congresso",
     "area": "Medicina Esportiva",
@@ -1106,10 +1107,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Conference+2026+2026",
-    "destaque": false,
-    "id": "ev-074"
+    "destaque": false
   },
   {
+    "id": "ev-075",
     "nome": "XXX Congresso Brasileiro de Medicina Física e Reabilitação",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1121,10 +1122,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXX+Congresso+Brasileiro+de+Medicina+F%C3%ADsica+e+Reabilita%C3%A7%C3%A3o+2026",
-    "destaque": false,
-    "id": "ev-075"
+    "destaque": false
   },
   {
+    "id": "ev-076",
     "nome": "Congresso Internacional de Fisioterapia Intervencionista e Prescrição (CONIFIP)",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1136,10 +1137,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+de+Fisioterapia+Intervencionista+e+Prescri%C3%A7%C3%A3o+%28CONIFIP%29+2026",
-    "destaque": false,
-    "id": "ev-076"
+    "destaque": false
   },
   {
+    "id": "ev-077",
     "nome": "3º Congresso Internacional de Fisioterapia Neonatal e Pediátrica",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1151,10 +1152,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3%C2%BA+Congresso+Internacional+de+Fisioterapia+Neonatal+e+Pedi%C3%A1trica+2026",
-    "destaque": false,
-    "id": "ev-077"
+    "destaque": false
   },
   {
+    "id": "ev-078",
     "nome": "Congresso Internacional de Fisioterapia na Saúde Pélvica (COINFISP)",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1166,10 +1167,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+de+Fisioterapia+na+Sa%C3%BAde+P%C3%A9lvica+%28COINFISP%29+2026",
-    "destaque": false,
-    "id": "ev-078"
+    "destaque": false
   },
   {
+    "id": "ev-079",
     "nome": "Congresso Internacional de Fisioterapia em Traumato-Ortopedia",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1181,10 +1182,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+de+Fisioterapia+em+Traumato-Ortopedia+2026",
-    "destaque": false,
-    "id": "ev-079"
+    "destaque": false
   },
   {
+    "id": "ev-080",
     "nome": "Congresso Brasileiro de Fisioterapia Musculoesquelética",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1196,10 +1197,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Fisioterapia+Musculoesquel%C3%A9tica+2026",
-    "destaque": false,
-    "id": "ev-080"
+    "destaque": false
   },
   {
+    "id": "ev-081",
     "nome": "Congresso Sul-Americano de Fisioterapia Manual, Postural e Funcional",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1211,10 +1212,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Sul-Americano+de+Fisioterapia+Manual%2C+Postural+e+Funcional+2026",
-    "destaque": false,
-    "id": "ev-081"
+    "destaque": false
   },
   {
+    "id": "ev-082",
     "nome": "4º Congresso Internacional de Fisioterapia em Obstetrícia",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1226,10 +1227,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=4%C2%BA+Congresso+Internacional+de+Fisioterapia+em+Obstetr%C3%ADcia+2026",
-    "destaque": false,
-    "id": "ev-082"
+    "destaque": false
   },
   {
+    "id": "ev-083",
     "nome": "9º Congresso Internacional de Fisioterapia em Coluna Vertebral",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1241,10 +1242,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=9%C2%BA+Congresso+Internacional+de+Fisioterapia+em+Coluna+Vertebral+2026",
-    "destaque": false,
-    "id": "ev-083"
+    "destaque": false
   },
   {
+    "id": "ev-084",
     "nome": "3º Congresso Internacional de Terapia Manual Moderna",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1256,10 +1257,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3%C2%BA+Congresso+Internacional+de+Terapia+Manual+Moderna+2026",
-    "destaque": false,
-    "id": "ev-084"
+    "destaque": false
   },
   {
+    "id": "ev-085",
     "nome": "16º Congresso Internacional de Fisioterapia",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1271,10 +1272,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=16%C2%BA+Congresso+Internacional+de+Fisioterapia+2026",
-    "destaque": false,
-    "id": "ev-085"
+    "destaque": false
   },
   {
+    "id": "ev-086",
     "nome": "Inter Neuro Fisio – Congresso Internacional de Fisioterapia Neurofuncional",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1286,10 +1287,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Inter+Neuro+Fisio+%E2%80%93+Congresso+Internacional+de+Fisioterapia+Neurofuncional+2026",
-    "destaque": false,
-    "id": "ev-086"
+    "destaque": false
   },
   {
+    "id": "ev-087",
     "nome": "IV Congresso de Estudantes e Fisioterapeutas CMEF",
     "tipo": "congresso",
     "area": "Medicina Física e Reabilitação",
@@ -1301,10 +1302,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=IV+Congresso+de+Estudantes+e+Fisioterapeutas+CMEF+2026",
-    "destaque": false,
-    "id": "ev-087"
+    "destaque": false
   },
   {
+    "id": "ev-088",
     "nome": "Congresso Brasileiro de Medicina Intensiva Neurológica (VIII COMIN)",
     "tipo": "congresso",
     "area": "Medicina Intensiva",
@@ -1316,10 +1317,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Medicina+Intensiva+Neurol%C3%B3gica+%28VIII+COMIN%29+2026",
-    "destaque": false,
-    "id": "ev-088"
+    "destaque": false
   },
   {
+    "id": "ev-089",
     "nome": "CONGRESSO EURO BRAZIL 2026",
     "tipo": "congresso",
     "area": "Medicina Intensiva",
@@ -1331,10 +1332,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=CONGRESSO+EURO+BRAZIL+2026+2026",
-    "destaque": false,
-    "id": "ev-089"
+    "destaque": false
   },
   {
+    "id": "ev-090",
     "nome": "CONGRESSO LUSO-BRASILEIRO 2026",
     "tipo": "congresso",
     "area": "Medicina Intensiva",
@@ -1346,10 +1347,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=CONGRESSO+LUSO-BRASILEIRO+2026+2026",
-    "destaque": false,
-    "id": "ev-090"
+    "destaque": false
   },
   {
+    "id": "ev-091",
     "nome": "Congresso Brasileiro de Medicina Intensiva (CBMI 2026)",
     "tipo": "congresso",
     "area": "Medicina Intensiva",
@@ -1361,10 +1362,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Medicina+Intensiva+%28CBMI+2026%29+2026",
-    "destaque": false,
-    "id": "ev-091"
+    "destaque": false
   },
   {
+    "id": "ev-092",
     "nome": "XII Congresso Latinoamericano de Cuidados Paliativos e XI Congresso Brasileiro de Cuidados Paliativos",
     "tipo": "congresso",
     "area": "Medicina preventiva e social",
@@ -1376,10 +1377,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XII+Congresso+Latinoamericano+de+Cuidados+Paliativos+e+XI+Congresso+Brasileiro+de+Cuidados+Paliativos+2026",
-    "destaque": false,
-    "id": "ev-092"
+    "destaque": false
   },
   {
+    "id": "ev-093",
     "nome": "64º COBEM – Congresso Brasileiro de Educação Médica",
     "tipo": "congresso",
     "area": "Medicina preventiva e social",
@@ -1391,10 +1392,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=64%C2%BA+COBEM+%E2%80%93+Congresso+Brasileiro+de+Educa%C3%A7%C3%A3o+M%C3%A9dica+2026",
-    "destaque": false,
-    "id": "ev-093"
+    "destaque": false
   },
   {
+    "id": "ev-094",
     "nome": "XXXIII Congresso Brasileiro de Nefrologia",
     "tipo": "congresso",
     "area": "Nefrologia",
@@ -1406,10 +1407,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXXIII+Congresso+Brasileiro+de+Nefrologia+2026",
-    "destaque": false,
-    "id": "ev-094"
+    "destaque": false
   },
   {
+    "id": "ev-095",
     "nome": "21º Congresso Brasileiro de Nefrologia Pediátrica",
     "tipo": "congresso",
     "area": "Pediatria",
@@ -1421,10 +1422,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=21%C2%BA+Congresso+Brasileiro+de+Nefrologia+Pedi%C3%A1trica+2026",
-    "destaque": false,
-    "id": "ev-095"
+    "destaque": false
   },
   {
+    "id": "ev-096",
     "nome": "3rd Congress of Yasargil Microneurosurgery Academy",
     "tipo": "congresso",
     "area": "Neurocirurgia",
@@ -1436,10 +1437,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3rd+Congress+of+Yasargil+Microneurosurgery+Academy+2026",
-    "destaque": false,
-    "id": "ev-096"
+    "destaque": false
   },
   {
+    "id": "ev-097",
     "nome": "17º Congresso Brasileiro de Estereotaxia e Neurocirurgia Funcional",
     "tipo": "congresso",
     "area": "Neurocirurgia",
@@ -1451,10 +1452,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=17%C2%BA+Congresso+Brasileiro+de+Estereotaxia+e+Neurocirurgia+Funcional+2026",
-    "destaque": false,
-    "id": "ev-097"
+    "destaque": false
   },
   {
+    "id": "ev-098",
     "nome": "Congresso Mundial Hidrocefalia 2026",
     "tipo": "congresso",
     "area": "Neurocirurgia",
@@ -1466,10 +1467,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Mundial+Hidrocefalia+2026+2026",
-    "destaque": false,
-    "id": "ev-098"
+    "destaque": false
   },
   {
+    "id": "ev-099",
     "nome": "XXXVI Congresso Brasileiro de Neurocirurgia",
     "tipo": "congresso",
     "area": "Neurocirurgia",
@@ -1481,10 +1482,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXXVI+Congresso+Brasileiro+de+Neurocirurgia+2026",
-    "destaque": false,
-    "id": "ev-099"
+    "destaque": false
   },
   {
+    "id": "ev-100",
     "nome": "XXII Congresso da Academia Brasileira de Neurocirurgia (CABNc)",
     "tipo": "congresso",
     "area": "Neurocirurgia",
@@ -1496,10 +1497,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXII+Congresso+da+Academia+Brasileira+de+Neurocirurgia+%28CABNc%29+2027",
-    "destaque": false,
-    "id": "ev-100"
+    "destaque": false
   },
   {
+    "id": "ev-101",
     "nome": "II CONPI – Congresso de Neurociências do Piauí",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1511,10 +1512,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=II+CONPI+%E2%80%93+Congresso+de+Neuroci%C3%AAncias+do+Piau%C3%AD+2026",
-    "destaque": false,
-    "id": "ev-101"
+    "destaque": false
   },
   {
+    "id": "ev-102",
     "nome": "ABN Summit Sul (Academia Brasileira de Neurologia)",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1526,10 +1527,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=ABN+Summit+Sul+%28Academia+Brasileira+de+Neurologia%29+2026",
-    "destaque": false,
-    "id": "ev-102"
+    "destaque": false
   },
   {
+    "id": "ev-103",
     "nome": "Congresso Brasileiro de Transtornos do Movimento",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1541,10 +1542,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Transtornos+do+Movimento+2026",
-    "destaque": false,
-    "id": "ev-103"
+    "destaque": false
   },
   {
+    "id": "ev-104",
     "nome": "Congresso Sergipano TDAH, TOD, TEA 2026",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1556,10 +1557,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Sergipano+TDAH%2C+TOD%2C+TEA+2026+2026",
-    "destaque": false,
-    "id": "ev-104"
+    "destaque": false
   },
   {
+    "id": "ev-105",
     "nome": "ABN Summit Norte (Academia Brasileira de Neurologia)",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1571,10 +1572,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=ABN+Summit+Norte+%28Academia+Brasileira+de+Neurologia%29+2026",
-    "destaque": false,
-    "id": "ev-105"
+    "destaque": false
   },
   {
+    "id": "ev-106",
     "nome": "ABN Summit Sudeste (Academia Brasileira de Neurologia)",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1586,10 +1587,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=ABN+Summit+Sudeste+%28Academia+Brasileira+de+Neurologia%29+2026",
-    "destaque": false,
-    "id": "ev-106"
+    "destaque": false
   },
   {
+    "id": "ev-107",
     "nome": "ABN Summit Centro-Oeste (Academia Brasileira de Neurologia)",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1601,10 +1602,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=ABN+Summit+Centro-Oeste+%28Academia+Brasileira+de+Neurologia%29+2026",
-    "destaque": false,
-    "id": "ev-107"
+    "destaque": false
   },
   {
+    "id": "ev-108",
     "nome": "ABN Summit Nordeste (Academia Brasileira de Neurologia)",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1616,10 +1617,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=ABN+Summit+Nordeste+%28Academia+Brasileira+de+Neurologia%29+2026",
-    "destaque": false,
-    "id": "ev-108"
+    "destaque": false
   },
   {
+    "id": "ev-109",
     "nome": "XXXII Congresso Brasileiro de Neurologia",
     "tipo": "congresso",
     "area": "Neurologia",
@@ -1631,10 +1632,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXXII+Congresso+Brasileiro+de+Neurologia+2026",
-    "destaque": false,
-    "id": "ev-109"
+    "destaque": false
   },
   {
+    "id": "ev-110",
     "nome": "Congresso Brasileiro de Nutrição",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1646,10 +1647,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Nutri%C3%A7%C3%A3o+2026",
-    "destaque": false,
-    "id": "ev-110"
+    "destaque": false
   },
   {
+    "id": "ev-111",
     "nome": "Nutri in Rio",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1661,10 +1662,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Nutri+in+Rio+2026",
-    "destaque": false,
-    "id": "ev-111"
+    "destaque": false
   },
   {
+    "id": "ev-112",
     "nome": "12º Congresso de Nutrição Comportamental",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1676,10 +1677,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=12%C2%BA+Congresso+de+Nutri%C3%A7%C3%A3o+Comportamental+2026",
-    "destaque": false,
-    "id": "ev-112"
+    "destaque": false
   },
   {
+    "id": "ev-113",
     "nome": "Congresso Nutmed de Nutrição Clínica",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1691,10 +1692,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Nutmed+de+Nutri%C3%A7%C3%A3o+Cl%C3%ADnica+2026",
-    "destaque": false,
-    "id": "ev-113"
+    "destaque": false
   },
   {
+    "id": "ev-114",
     "nome": "GANEPÃO 2026 | Congresso Internacional de Nutrição",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1706,10 +1707,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=GANEP%C3%83O+2026+%7C+Congresso+Internacional+de+Nutri%C3%A7%C3%A3o+2026",
-    "destaque": false,
-    "id": "ev-114"
+    "destaque": false
   },
   {
+    "id": "ev-115",
     "nome": "Congresso Norte e Nordeste de Nutrição Clínica e Esportiva",
     "tipo": "congresso",
     "area": "Nutrologia",
@@ -1721,10 +1722,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Norte+e+Nordeste+de+Nutri%C3%A7%C3%A3o+Cl%C3%ADnica+e+Esportiva+2026",
-    "destaque": false,
-    "id": "ev-115"
+    "destaque": false
   },
   {
+    "id": "ev-116",
     "nome": "48º SIMASP – Congresso da Oftalmo Escola",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1736,10 +1737,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=48%C2%BA+SIMASP+%E2%80%93+Congresso+da+Oftalmo+Escola+2026",
-    "destaque": false,
-    "id": "ev-116"
+    "destaque": false
   },
   {
+    "id": "ev-117",
     "nome": "22º Congresso da Sociedade Internacional de Oncologia Ocular",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1751,10 +1752,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=22%C2%BA+Congresso+da+Sociedade+Internacional+de+Oncologia+Ocular+2026",
-    "destaque": false,
-    "id": "ev-117"
+    "destaque": false
   },
   {
+    "id": "ev-118",
     "nome": "Congresso Norte e Nordeste de Oftalmologia 2026",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1766,10 +1767,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Norte+e+Nordeste+de+Oftalmologia+2026+2026",
-    "destaque": false,
-    "id": "ev-118"
+    "destaque": false
   },
   {
+    "id": "ev-119",
     "nome": "Refrativa R.I.O",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1781,10 +1782,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Refrativa+R.I.O+2026",
-    "destaque": false,
-    "id": "ev-119"
+    "destaque": false
   },
   {
+    "id": "ev-120",
     "nome": "50th BRAVS Meeting – Retina 2026",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1796,10 +1797,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=50th+BRAVS+Meeting+%E2%80%93+Retina+2026+2026",
-    "destaque": false,
-    "id": "ev-120"
+    "destaque": false
   },
   {
+    "id": "ev-121",
     "nome": "XXXIII Congresso de Catarata e Cirurgia Refrativa",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1811,10 +1812,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXXIII+Congresso+de+Catarata+e+Cirurgia+Refrativa+2026",
-    "destaque": false,
-    "id": "ev-121"
+    "destaque": false
   },
   {
+    "id": "ev-122",
     "nome": "8º Congresso Brasileiro de Oftalmologia Pediátrica e Estrabismo",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1826,10 +1827,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=8%C2%BA+Congresso+Brasileiro+de+Oftalmologia+Pedi%C3%A1trica+e+Estrabismo+2026",
-    "destaque": false,
-    "id": "ev-122"
+    "destaque": false
   },
   {
+    "id": "ev-123",
     "nome": "XIX Congresso Sul-brasileiro de Oftalmologia",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1841,10 +1842,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XIX+Congresso+Sul-brasileiro+de+Oftalmologia+2026",
-    "destaque": false,
-    "id": "ev-123"
+    "destaque": false
   },
   {
+    "id": "ev-124",
     "nome": "33º Congresso Internacional de Oculoplástica e 12º Congresso Internacional de Estética Periocular",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1856,10 +1857,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=33%C2%BA+Congresso+Internacional+de+Oculopl%C3%A1stica+e+12%C2%BA+Congresso+Internacional+de+Est%C3%A9tica+Periocular+2026",
-    "destaque": false,
-    "id": "ev-124"
+    "destaque": false
   },
   {
+    "id": "ev-125",
     "nome": "XXV Congresso da Sociedade Caipira de Oftalmologia",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1871,10 +1872,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXV+Congresso+da+Sociedade+Caipira+de+Oftalmologia+2026",
-    "destaque": false,
-    "id": "ev-125"
+    "destaque": false
   },
   {
+    "id": "ev-126",
     "nome": "88º Congresso da Sociedade Brasileira de Oftalmologia",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1886,10 +1887,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=88%C2%BA+Congresso+da+Sociedade+Brasileira+de+Oftalmologia+2026",
-    "destaque": false,
-    "id": "ev-126"
+    "destaque": false
   },
   {
+    "id": "ev-127",
     "nome": "70º Congresso Brasileiro de Oftalmologia",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1901,10 +1902,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=70%C2%BA+Congresso+Brasileiro+de+Oftalmologia+2026",
-    "destaque": false,
-    "id": "ev-127"
+    "destaque": false
   },
   {
+    "id": "ev-128",
     "nome": "Retina in Rio 2026",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1916,10 +1917,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Retina+in+Rio+2026+2026",
-    "destaque": false,
-    "id": "ev-128"
+    "destaque": false
   },
   {
+    "id": "ev-129",
     "nome": "I Congresso Internacional da Sociedade Brasileira de Córnea (SBC) | VI Congreso Internacional Pancornea",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1931,10 +1932,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=I+Congresso+Internacional+da+Sociedade+Brasileira+de+C%C3%B3rnea+%28SBC%29+%7C+VI+Congreso+Internacional+Pancornea+2026",
-    "destaque": false,
-    "id": "ev-129"
+    "destaque": false
   },
   {
+    "id": "ev-130",
     "nome": "11º Congreso de La Sociedad Paranamericana de Retina y Vitreo | 20º Foro Del Gladaof",
     "tipo": "congresso",
     "area": "Oftalmologia",
@@ -1946,10 +1947,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=11%C2%BA+Congreso+de+La+Sociedad+Paranamericana+de+Retina+y+Vitreo+%7C+20%C2%BA+Foro+Del+Gladaof+2026",
-    "destaque": false,
-    "id": "ev-130"
+    "destaque": false
   },
   {
+    "id": "ev-131",
     "nome": "Congresso Latino-Americano de Fisioterapia em Oncologia (COLAFO)",
     "tipo": "congresso",
     "area": "Oncologia clínica",
@@ -1961,10 +1962,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Latino-Americano+de+Fisioterapia+em+Oncologia+%28COLAFO%29+2026",
-    "destaque": false,
-    "id": "ev-131"
+    "destaque": false
   },
   {
+    "id": "ev-132",
     "nome": "Congresso da Sociedade Brasileira de Farmacêuticos em Oncologia (SOBRAFO) 2026",
     "tipo": "congresso",
     "area": "Oncologia clínica",
@@ -1976,10 +1977,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+da+Sociedade+Brasileira+de+Farmac%C3%AAuticos+em+Oncologia+%28SOBRAFO%29+2026+2026",
-    "destaque": false,
-    "id": "ev-132"
+    "destaque": false
   },
   {
+    "id": "ev-133",
     "nome": "2º Congresso Sobrice de Oncologia",
     "tipo": "congresso",
     "area": "Oncologia clínica",
@@ -1991,10 +1992,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=2%C2%BA+Congresso+Sobrice+de+Oncologia+2026",
-    "destaque": false,
-    "id": "ev-133"
+    "destaque": false
   },
   {
+    "id": "ev-134",
     "nome": "4º Congresso Alagipe de Câncer de Pulmão",
     "tipo": "congresso",
     "area": "Oncologia clínica",
@@ -2006,10 +2007,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=4%C2%BA+Congresso+Alagipe+de+C%C3%A2ncer+de+Pulm%C3%A3o+2026",
-    "destaque": false,
-    "id": "ev-134"
+    "destaque": false
   },
   {
+    "id": "ev-135",
     "nome": "20° Congresso Brasileiro de Cirurgia do Joelho",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2021,10 +2022,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=20%C2%B0+Congresso+Brasileiro+de+Cirurgia+do+Joelho+2026",
-    "destaque": false,
-    "id": "ev-135"
+    "destaque": false
   },
   {
+    "id": "ev-136",
     "nome": "20º Congresso da Sociedade Brasileira de Coluna (CSBC)",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2036,10 +2037,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=20%C2%BA+Congresso+da+Sociedade+Brasileira+de+Coluna+%28CSBC%29+2026",
-    "destaque": false,
-    "id": "ev-136"
+    "destaque": false
   },
   {
+    "id": "ev-137",
     "nome": "22º Congresso Brasileiro de Medicina e Cirurgia do Tornozelo e Pé",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2051,10 +2052,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=22%C2%BA+Congresso+Brasileiro+de+Medicina+e+Cirurgia+do+Tornozelo+e+P%C3%A9+2026",
-    "destaque": false,
-    "id": "ev-137"
+    "destaque": false
   },
   {
+    "id": "ev-138",
     "nome": "XIV Congresso Brasileiro de Oncologia Ortopédica (CBOO)",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2066,10 +2067,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XIV+Congresso+Brasileiro+de+Oncologia+Ortop%C3%A9dica+%28CBOO%29+2026",
-    "destaque": false,
-    "id": "ev-138"
+    "destaque": false
   },
   {
+    "id": "ev-139",
     "nome": "XXXI Congresso Brasileiro de Trauma Ortopédico",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2081,10 +2082,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXXI+Congresso+Brasileiro+de+Trauma+Ortop%C3%A9dico+2026",
-    "destaque": false,
-    "id": "ev-139"
+    "destaque": false
   },
   {
+    "id": "ev-140",
     "nome": "XVI Congresso Brasileiro de Ortopedia Pediátrica",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2096,10 +2097,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVI+Congresso+Brasileiro+de+Ortopedia+Pedi%C3%A1trica+2026",
-    "destaque": false,
-    "id": "ev-140"
+    "destaque": false
   },
   {
+    "id": "ev-141",
     "nome": "12º BRADOO – Congresso Brasileiro de Densitometria Osteoporose e Osteometabolismo",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2111,10 +2112,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=12%C2%BA+BRADOO+%E2%80%93+Congresso+Brasileiro+de+Densitometria+Osteoporose+e+Osteometabolismo+2026",
-    "destaque": false,
-    "id": "ev-141"
+    "destaque": false
   },
   {
+    "id": "ev-142",
     "nome": "25º Congresso Mineiro de Ortopedia e Traumatologia",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2126,10 +2127,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=25%C2%BA+Congresso+Mineiro+de+Ortopedia+e+Traumatologia+2026",
-    "destaque": false,
-    "id": "ev-142"
+    "destaque": false
   },
   {
+    "id": "ev-143",
     "nome": "XVI CBCOC – Congresso Brasileiro de Cirurgia de Ombro e Cotovelo",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2141,10 +2142,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVI+CBCOC+%E2%80%93+Congresso+Brasileiro+de+Cirurgia+de+Ombro+e+Cotovelo+2026",
-    "destaque": false,
-    "id": "ev-143"
+    "destaque": false
   },
   {
+    "id": "ev-144",
     "nome": "23° Congresso Brasileiro de Cirurgia do Tornozelo e Pé",
     "tipo": "congresso",
     "area": "Ortopedia e traumatologia",
@@ -2156,10 +2157,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=23%C2%B0+Congresso+Brasileiro+de+Cirurgia+do+Tornozelo+e+P%C3%A9+2028",
-    "destaque": false,
-    "id": "ev-144"
+    "destaque": false
   },
   {
+    "id": "ev-145",
     "nome": "41º Encontro Internacional de Audiologia",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2171,10 +2172,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=41%C2%BA+Encontro+Internacional+de+Audiologia+2026",
-    "destaque": false,
-    "id": "ev-145"
+    "destaque": false
   },
   {
+    "id": "ev-146",
     "nome": "Congresso Cearense de Otorrinolaringologia",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2186,10 +2187,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Cearense+de+Otorrinolaringologia+2026",
-    "destaque": false,
-    "id": "ev-146"
+    "destaque": false
   },
   {
+    "id": "ev-147",
     "nome": "XL Congresso Pan-Americano de Otorrinolaringologia e Cirurgia de Cabeça e Pescoço",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2201,10 +2202,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XL+Congresso+Pan-Americano+de+Otorrinolaringologia+e+Cirurgia+de+Cabe%C3%A7a+e+Pesco%C3%A7o+2026",
-    "destaque": false,
-    "id": "ev-147"
+    "destaque": false
   },
   {
+    "id": "ev-148",
     "nome": "Linfala 2026",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2216,10 +2217,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Linfala+2026+2026",
-    "destaque": false,
-    "id": "ev-148"
+    "destaque": false
   },
   {
+    "id": "ev-149",
     "nome": "1º Congresso Mato-Grossense de Otorrinolaringologia",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2231,10 +2232,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=1%C2%BA+Congresso+Mato-Grossense+de+Otorrinolaringologia+2026",
-    "destaque": false,
-    "id": "ev-149"
+    "destaque": false
   },
   {
+    "id": "ev-150",
     "nome": "Associação Internacional de Fonoaudiologia (IALP) 2026",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2246,10 +2247,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Associa%C3%A7%C3%A3o+Internacional+de+Fonoaudiologia+%28IALP%29+2026+2026",
-    "destaque": false,
-    "id": "ev-150"
+    "destaque": false
   },
   {
+    "id": "ev-151",
     "nome": "XXV Congresso da Fundação de Otorrinolaringologia (FORL)",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2261,10 +2262,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXV+Congresso+da+Funda%C3%A7%C3%A3o+de+Otorrinolaringologia+%28FORL%29+2026",
-    "destaque": false,
-    "id": "ev-151"
+    "destaque": false
   },
   {
+    "id": "ev-152",
     "nome": "34º Congresso Brasileiro de Fonoaudiologia",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2276,10 +2277,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=34%C2%BA+Congresso+Brasileiro+de+Fonoaudiologia+2026",
-    "destaque": false,
-    "id": "ev-152"
+    "destaque": false
   },
   {
+    "id": "ev-153",
     "nome": "56º Congresso de Otorrinolaringologia e Cirurgia Cervico-Facial",
     "tipo": "congresso",
     "area": "Otorrinolaringologia",
@@ -2291,10 +2292,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=56%C2%BA+Congresso+de+Otorrinolaringologia+e+Cirurgia+Cervico-Facial+2026",
-    "destaque": false,
-    "id": "ev-153"
+    "destaque": false
   },
   {
+    "id": "ev-154",
     "nome": "VI Congresso Latino-Americano de Biomedicina | XIV Congresso Sul-Brasileiro de Biomedicina",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2306,10 +2307,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VI+Congresso+Latino-Americano+de+Biomedicina+%7C+XIV+Congresso+Sul-Brasileiro+de+Biomedicina+2026",
-    "destaque": false,
-    "id": "ev-154"
+    "destaque": false
   },
   {
+    "id": "ev-155",
     "nome": "Biomedicina in Santos",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2321,10 +2322,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Biomedicina+in+Santos+2026",
-    "destaque": false,
-    "id": "ev-155"
+    "destaque": false
   },
   {
+    "id": "ev-156",
     "nome": "51º Congresso Brasileiro de Análises Clínicas",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2336,10 +2337,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=51%C2%BA+Congresso+Brasileiro+de+An%C3%A1lises+Cl%C3%ADnicas+2026",
-    "destaque": false,
-    "id": "ev-156"
+    "destaque": false
   },
   {
+    "id": "ev-157",
     "nome": "35º Congresso Brasileiro de Patologia | 28º Congresso Brasileiro de Citopatologia",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2351,10 +2352,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=35%C2%BA+Congresso+Brasileiro+de+Patologia+%7C+28%C2%BA+Congresso+Brasileiro+de+Citopatologia+2026",
-    "destaque": false,
-    "id": "ev-157"
+    "destaque": false
   },
   {
+    "id": "ev-158",
     "nome": "XII Congresso Sul Mineiro de Laboratórios Clínicos",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2366,10 +2367,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XII+Congresso+Sul+Mineiro+de+Laborat%C3%B3rios+Cl%C3%ADnicos+2026",
-    "destaque": false,
-    "id": "ev-158"
+    "destaque": false
   },
   {
+    "id": "ev-159",
     "nome": "XXVIII Congresso Brasileiro de Patologia do Trato Genital Inferior e Colposcopia",
     "tipo": "congresso",
     "area": "Patologia",
@@ -2381,10 +2382,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXVIII+Congresso+Brasileiro+de+Patologia+do+Trato+Genital+Inferior+e+Colposcopia+2026",
-    "destaque": false,
-    "id": "ev-159"
+    "destaque": false
   },
   {
+    "id": "ev-160",
     "nome": "4º Alergosul – Congresso Sul Brasileiro de Alergia e Imunologia em Pediatria",
     "tipo": "congresso",
     "area": "Pediatria",
@@ -2396,10 +2397,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=4%C2%BA+Alergosul+%E2%80%93+Congresso+Sul+Brasileiro+de+Alergia+e+Imunologia+em+Pediatria+2026",
-    "destaque": false,
-    "id": "ev-160"
+    "destaque": false
   },
   {
+    "id": "ev-161",
     "nome": "XVIII Congresso Gaúcho de Atualização em Pediatria",
     "tipo": "congresso",
     "area": "Pediatria",
@@ -2411,10 +2412,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVIII+Congresso+Ga%C3%BAcho+de+Atualiza%C3%A7%C3%A3o+em+Pediatria+2026",
-    "destaque": false,
-    "id": "ev-161"
+    "destaque": false
   },
   {
+    "id": "ev-162",
     "nome": "42º Congresso Brasileiro de Pediatria",
     "tipo": "congresso",
     "area": "Pediatria",
@@ -2426,10 +2427,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=42%C2%BA+Congresso+Brasileiro+de+Pediatria+2026",
-    "destaque": false,
-    "id": "ev-162"
+    "destaque": false
   },
   {
+    "id": "ev-163",
     "nome": "VIII Congresso Internacional & XXVIII Brasileiro da Associação Brasileira de Neurologia e Psiquiatria Infantil (ABENEPI)",
     "tipo": "congresso",
     "area": "Pediatria",
@@ -2441,10 +2442,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VIII+Congresso+Internacional+%26+XXVIII+Brasileiro+da+Associa%C3%A7%C3%A3o+Brasileira+de+Neurologia+e+Psiquiatria+Infantil+%28ABENEPI%29+2026",
-    "destaque": false,
-    "id": "ev-163"
+    "destaque": false
   },
   {
+    "id": "ev-164",
     "nome": "42º Congresso Luso-Brasileiro de Pneumologia e Tisiologia | 18º Congresso Brasileiro de Endoscopia Respiratória | 14º Congresso Luso-Brasileiro de Pneumologia",
     "tipo": "congresso",
     "area": "Pneumologia",
@@ -2456,10 +2457,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=42%C2%BA+Congresso+Luso-Brasileiro+de+Pneumologia+e+Tisiologia+%7C+18%C2%BA+Congresso+Brasileiro+de+Endoscopia+Respirat%C3%B3ria+%7C+14%C2%BA+Congresso+Luso-Brasileiro+de+Pneumologia+2026",
-    "destaque": false,
-    "id": "ev-164"
+    "destaque": false
   },
   {
+    "id": "ev-165",
     "nome": "Congresso Clínica Psiquiátrica",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2471,10 +2472,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Cl%C3%ADnica+Psiqui%C3%A1trica+2026",
-    "destaque": false,
-    "id": "ev-165"
+    "destaque": false
   },
   {
+    "id": "ev-166",
     "nome": "XVIII Congresso Brasileiro de Terapias Cognitivas",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2486,10 +2487,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVIII+Congresso+Brasileiro+de+Terapias+Cognitivas+2026",
-    "destaque": false,
-    "id": "ev-166"
+    "destaque": false
   },
   {
+    "id": "ev-167",
     "nome": "XII Congresso Brasileiro de Autismo",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2501,10 +2502,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XII+Congresso+Brasileiro+de+Autismo+2026",
-    "destaque": false,
-    "id": "ev-167"
+    "destaque": false
   },
   {
+    "id": "ev-168",
     "nome": "I Congresso Internacional Einstein de Psiquiatria, Saúde Mental e Bem-estar",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2516,10 +2517,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=I+Congresso+Internacional+Einstein+de+Psiquiatria%2C+Sa%C3%BAde+Mental+e+Bem-estar+2026",
-    "destaque": false,
-    "id": "ev-168"
+    "destaque": false
   },
   {
+    "id": "ev-169",
     "nome": "II Congresso Internacional de Boas Práticas em Saúde Mental: Comportamento Suicida, Autolesão e Luto",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2531,10 +2532,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=II+Congresso+Internacional+de+Boas+Pr%C3%A1ticas+em+Sa%C3%BAde+Mental%3A+Comportamento+Suicida%2C+Autoles%C3%A3o+e+Luto+2026",
-    "destaque": false,
-    "id": "ev-169"
+    "destaque": false
   },
   {
+    "id": "ev-170",
     "nome": "III Congresso Online de Psicoterapia Brasileira (COPSIB)",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2546,10 +2547,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=III+Congresso+Online+de+Psicoterapia+Brasileira+%28COPSIB%29+2026",
-    "destaque": false,
-    "id": "ev-170"
+    "destaque": false
   },
   {
+    "id": "ev-171",
     "nome": "Congress On Brain Behavior and Emotions",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2561,10 +2562,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congress+On+Brain+Behavior+and+Emotions+2026",
-    "destaque": false,
-    "id": "ev-171"
+    "destaque": false
   },
   {
+    "id": "ev-172",
     "nome": "12º Congresso Nacional de Psicologia",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2576,10 +2577,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=12%C2%BA+Congresso+Nacional+de+Psicologia+2026",
-    "destaque": false,
-    "id": "ev-172"
+    "destaque": false
   },
   {
+    "id": "ev-173",
     "nome": "XII Congresso Brasileiro de Psicologia Organizacional e do Trabalho",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2591,10 +2592,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XII+Congresso+Brasileiro+de+Psicologia+Organizacional+e+do+Trabalho+2026",
-    "destaque": false,
-    "id": "ev-173"
+    "destaque": false
   },
   {
+    "id": "ev-174",
     "nome": "3º Congresso Internacional de Mudança de Hábito e Estilo de vida em Saúde Mental",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2606,10 +2607,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3%C2%BA+Congresso+Internacional+de+Mudan%C3%A7a+de+H%C3%A1bito+e+Estilo+de+vida+em+Sa%C3%BAde+Mental+2026",
-    "destaque": false,
-    "id": "ev-174"
+    "destaque": false
   },
   {
+    "id": "ev-175",
     "nome": "VII Congresso Brasileiro dos Departamentos e Comissões da Associação Brasileira de Psiquiatria",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2621,10 +2622,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=VII+Congresso+Brasileiro+dos+Departamentos+e+Comiss%C3%B5es+da+Associa%C3%A7%C3%A3o+Brasileira+de+Psiquiatria+2026",
-    "destaque": false,
-    "id": "ev-175"
+    "destaque": false
   },
   {
+    "id": "ev-176",
     "nome": "Congresso Internacional de Desenvolvimento Infantil",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2636,10 +2637,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+de+Desenvolvimento+Infantil+2026",
-    "destaque": false,
-    "id": "ev-176"
+    "destaque": false
   },
   {
+    "id": "ev-177",
     "nome": "I Congresso Cearense de Gestalt-terapia CGF",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2651,10 +2652,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=I+Congresso+Cearense+de+Gestalt-terapia+CGF+2026",
-    "destaque": false,
-    "id": "ev-177"
+    "destaque": false
   },
   {
+    "id": "ev-178",
     "nome": "Congresso Internacional de Autismos do Brasil",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2666,10 +2667,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+de+Autismos+do+Brasil+2026",
-    "destaque": false,
-    "id": "ev-178"
+    "destaque": false
   },
   {
+    "id": "ev-179",
     "nome": "56ª Reunião Anual da Sociedade Brasileira de Psicologia",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2681,10 +2682,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=56%C2%AA+Reuni%C3%A3o+Anual+da+Sociedade+Brasileira+de+Psicologia+2026",
-    "destaque": false,
-    "id": "ev-179"
+    "destaque": false
   },
   {
+    "id": "ev-180",
     "nome": "XLIII Congresso Brasileiro de Psiquiatria",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2696,10 +2697,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XLIII+Congresso+Brasileiro+de+Psiquiatria+2026",
-    "destaque": false,
-    "id": "ev-180"
+    "destaque": false
   },
   {
+    "id": "ev-181",
     "nome": "41º Congresso Interamericano de Psicologia",
     "tipo": "congresso",
     "area": "Psiquiatria",
@@ -2711,10 +2712,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=41%C2%BA+Congresso+Interamericano+de+Psicologia+2027",
-    "destaque": false,
-    "id": "ev-181"
+    "destaque": false
   },
   {
+    "id": "ev-182",
     "nome": "Imagine 2026",
     "tipo": "congresso",
     "area": "Radiologia e diagnóstico por imagem",
@@ -2726,10 +2727,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Imagine+2026+2026",
-    "destaque": false,
-    "id": "ev-182"
+    "destaque": false
   },
   {
+    "id": "ev-183",
     "nome": "55º Congresso Brasileiro de Radiologia e Diagnóstico por Imagem",
     "tipo": "congresso",
     "area": "Radiologia e diagnóstico por imagem",
@@ -2741,10 +2742,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=55%C2%BA+Congresso+Brasileiro+de+Radiologia+e+Diagn%C3%B3stico+por+Imagem+2026",
-    "destaque": false,
-    "id": "ev-183"
+    "destaque": false
   },
   {
+    "id": "ev-184",
     "nome": "30º Congresso Brasileiro de Ultrassonografia da SBUS",
     "tipo": "congresso",
     "area": "Radiologia e diagnóstico por imagem",
@@ -2756,10 +2757,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=30%C2%BA+Congresso+Brasileiro+de+Ultrassonografia+da+SBUS+2026",
-    "destaque": false,
-    "id": "ev-184"
+    "destaque": false
   },
   {
+    "id": "ev-185",
     "nome": "29º Congresso Sobrice (Sociedade Brasileira de Radiologia Intervencionista e Cirurgia Endovascular)",
     "tipo": "congresso",
     "area": "Radiologia e diagnóstico por imagem",
@@ -2771,10 +2772,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=29%C2%BA+Congresso+Sobrice+%28Sociedade+Brasileira+de+Radiologia+Intervencionista+e+Cirurgia+Endovascular%29+2026",
-    "destaque": false,
-    "id": "ev-185"
+    "destaque": false
   },
   {
+    "id": "ev-186",
     "nome": "43ª Congresso Brasileiro de Reumatologia - SBR 2026 – Curitiba",
     "tipo": "congresso",
     "area": "Reumatologia",
@@ -2786,10 +2787,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=43%C2%AA+Congresso+Brasileiro+de+Reumatologia+-+SBR+2026+%E2%80%93+Curitiba+2026",
-    "destaque": false,
-    "id": "ev-186"
+    "destaque": false
   },
   {
+    "id": "ev-187",
     "nome": "XVI Congresso Norte Nordeste de Urologia",
     "tipo": "congresso",
     "area": "Urologia",
@@ -2801,10 +2802,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVI+Congresso+Norte+Nordeste+de+Urologia+2026",
-    "destaque": false,
-    "id": "ev-187"
+    "destaque": false
   },
   {
+    "id": "ev-188",
     "nome": "CONTINENCE 2026 – Congresso sobre Disfunções do Trato Urinário Inferior",
     "tipo": "congresso",
     "area": "Urologia",
@@ -2816,10 +2817,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=CONTINENCE+2026+%E2%80%93+Congresso+sobre+Disfun%C3%A7%C3%B5es+do+Trato+Urin%C3%A1rio+Inferior+2026",
-    "destaque": false,
-    "id": "ev-188"
+    "destaque": false
   },
   {
+    "id": "ev-189",
     "nome": "XVII Congresso Sul Brasileiro de Urologia",
     "tipo": "congresso",
     "area": "Urologia",
@@ -2831,10 +2832,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XVII+Congresso+Sul+Brasileiro+de+Urologia+2026",
-    "destaque": false,
-    "id": "ev-189"
+    "destaque": false
   },
   {
+    "id": "ev-190",
     "nome": "Conexão Farma 2026",
     "tipo": "congresso",
     "area": "Outros",
@@ -2846,10 +2847,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Conex%C3%A3o+Farma+2026+2026",
-    "destaque": false,
-    "id": "ev-190"
+    "destaque": false
   },
   {
+    "id": "ev-191",
     "nome": "1º Congresso Brasileiro de Pesquisa Clínica",
     "tipo": "congresso",
     "area": "Outros",
@@ -2861,10 +2862,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=1%C2%BA+Congresso+Brasileiro+de+Pesquisa+Cl%C3%ADnica+2026",
-    "destaque": false,
-    "id": "ev-191"
+    "destaque": false
   },
   {
+    "id": "ev-192",
     "nome": "2º Congresso de Doenças Raras e Neurodiversidade do Ceará",
     "tipo": "congresso",
     "area": "Outros",
@@ -2876,10 +2877,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=2%C2%BA+Congresso+de+Doen%C3%A7as+Raras+e+Neurodiversidade+do+Cear%C3%A1+2026",
-    "destaque": false,
-    "id": "ev-192"
+    "destaque": false
   },
   {
+    "id": "ev-193",
     "nome": "V Congresso de Ciências Farmacêuticas do Brasil Central",
     "tipo": "congresso",
     "area": "Outros",
@@ -2891,10 +2892,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=V+Congresso+de+Ci%C3%AAncias+Farmac%C3%AAuticas+do+Brasil+Central+2026",
-    "destaque": false,
-    "id": "ev-193"
+    "destaque": false
   },
   {
+    "id": "ev-194",
     "nome": "3º Congresso em Saúde do HC UFPE",
     "tipo": "congresso",
     "area": "Outros",
@@ -2906,10 +2907,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=3%C2%BA+Congresso+em+Sa%C3%BAde+do+HC+UFPE+2026",
-    "destaque": false,
-    "id": "ev-194"
+    "destaque": false
   },
   {
+    "id": "ev-195",
     "nome": "Congresso Internacional Endodontia em Foco",
     "tipo": "congresso",
     "area": "Outros",
@@ -2921,10 +2922,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Internacional+Endodontia+em+Foco+2026",
-    "destaque": false,
-    "id": "ev-195"
+    "destaque": false
   },
   {
+    "id": "ev-196",
     "nome": "XXV Congresso Brasileiro de Qualidade em Serviços de Saúde | VIII Congresso Brasileiro de Medicina Preventiva e Social e Administração em Saúde",
     "tipo": "congresso",
     "area": "Outros",
@@ -2936,10 +2937,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXV+Congresso+Brasileiro+de+Qualidade+em+Servi%C3%A7os+de+Sa%C3%BAde+%7C+VIII+Congresso+Brasileiro+de+Medicina+Preventiva+e+Social+e+Administra%C3%A7%C3%A3o+em+Sa%C3%BAde+2026",
-    "destaque": false,
-    "id": "ev-196"
+    "destaque": false
   },
   {
+    "id": "ev-197",
     "nome": "2º Congresso Cearense de Genética Médica | 2º Congresso de Doenças Raras",
     "tipo": "congresso",
     "area": "Outros",
@@ -2951,10 +2952,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=2%C2%BA+Congresso+Cearense+de+Gen%C3%A9tica+M%C3%A9dica+%7C+2%C2%BA+Congresso+de+Doen%C3%A7as+Raras+2026",
-    "destaque": false,
-    "id": "ev-197"
+    "destaque": false
   },
   {
+    "id": "ev-198",
     "nome": "I Congresso Internacional de Saúde Pública",
     "tipo": "congresso",
     "area": "Outros",
@@ -2966,10 +2967,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=I+Congresso+Internacional+de+Sa%C3%BAde+P%C3%BAblica+2026",
-    "destaque": false,
-    "id": "ev-198"
+    "destaque": false
   },
   {
+    "id": "ev-199",
     "nome": "Hospitalar 2026",
     "tipo": "congresso",
     "area": "Outros",
@@ -2981,10 +2982,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Hospitalar+2026+2026",
-    "destaque": false,
-    "id": "ev-199"
+    "destaque": false
   },
   {
+    "id": "ev-200",
     "nome": "5º Congresso Brasileiro de Cannabis Medicinal",
     "tipo": "congresso",
     "area": "Outros",
@@ -2996,10 +2997,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=5%C2%BA+Congresso+Brasileiro+de+Cannabis+Medicinal+2026",
-    "destaque": false,
-    "id": "ev-200"
+    "destaque": false
   },
   {
+    "id": "ev-201",
     "nome": "III Congresso de Anatomia do Vale do Paraíba",
     "tipo": "congresso",
     "area": "Outros",
@@ -3011,10 +3012,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=III+Congresso+de+Anatomia+do+Vale+do+Para%C3%ADba+2026",
-    "destaque": false,
-    "id": "ev-201"
+    "destaque": false
   },
   {
+    "id": "ev-202",
     "nome": "FCE Pharma 2026",
     "tipo": "congresso",
     "area": "Outros",
@@ -3026,10 +3027,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=FCE+Pharma+2026+2026",
-    "destaque": false,
-    "id": "ev-202"
+    "destaque": false
   },
   {
+    "id": "ev-203",
     "nome": "XXIV Congresso Brasileiro de Toxicologia",
     "tipo": "congresso",
     "area": "Outros",
@@ -3041,10 +3042,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXIV+Congresso+Brasileiro+de+Toxicologia+2026",
-    "destaque": false,
-    "id": "ev-203"
+    "destaque": false
   },
   {
+    "id": "ev-204",
     "nome": "4º Congresso Brasileiro de Medicina Geral",
     "tipo": "congresso",
     "area": "Outros",
@@ -3056,10 +3057,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=4%C2%BA+Congresso+Brasileiro+de+Medicina+Geral+2026",
-    "destaque": false,
-    "id": "ev-204"
+    "destaque": false
   },
   {
+    "id": "ev-205",
     "nome": "Dental Canal",
     "tipo": "congresso",
     "area": "Outros",
@@ -3071,10 +3072,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Dental+Canal+2026",
-    "destaque": false,
-    "id": "ev-205"
+    "destaque": false
   },
   {
+    "id": "ev-206",
     "nome": "Cannabis Summit Brasil",
     "tipo": "congresso",
     "area": "Outros",
@@ -3086,10 +3087,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Cannabis+Summit+Brasil+2026",
-    "destaque": false,
-    "id": "ev-206"
+    "destaque": false
   },
   {
+    "id": "ev-207",
     "nome": "Endo Summit Sul 2026",
     "tipo": "congresso",
     "area": "Outros",
@@ -3101,10 +3102,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Endo+Summit+Sul+2026+2026",
-    "destaque": false,
-    "id": "ev-207"
+    "destaque": false
   },
   {
+    "id": "ev-208",
     "nome": "MV Experience Forum 2026",
     "tipo": "congresso",
     "area": "Outros",
@@ -3116,10 +3117,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=MV+Experience+Forum+2026+2026",
-    "destaque": false,
-    "id": "ev-208"
+    "destaque": false
   },
   {
+    "id": "ev-209",
     "nome": "XXVII COBRAC – Congresso Brasileiro de Cirurgia e Traumatologia Buco-Maxilo-Facial",
     "tipo": "congresso",
     "area": "Outros",
@@ -3131,10 +3132,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XXVII+COBRAC+%E2%80%93+Congresso+Brasileiro+de+Cirurgia+e+Traumatologia+Buco-Maxilo-Facial+2026",
-    "destaque": false,
-    "id": "ev-209"
+    "destaque": false
   },
   {
+    "id": "ev-210",
     "nome": "XX Congresso Brasileiro de Sexualidade Humana (CBSH)",
     "tipo": "congresso",
     "area": "Outros",
@@ -3146,10 +3147,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=XX+Congresso+Brasileiro+de+Sexualidade+Humana+%28CBSH%29+2026",
-    "destaque": false,
-    "id": "ev-210"
+    "destaque": false
   },
   {
+    "id": "ev-211",
     "nome": "5º Congresso Internacional de Clínicas Multidisciplinares",
     "tipo": "congresso",
     "area": "Outros",
@@ -3161,10 +3162,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=5%C2%BA+Congresso+Internacional+de+Cl%C3%ADnicas+Multidisciplinares+2026",
-    "destaque": false,
-    "id": "ev-211"
+    "destaque": false
   },
   {
+    "id": "ev-212",
     "nome": "Orto 26 SPO",
     "tipo": "congresso",
     "area": "Outros",
@@ -3176,10 +3177,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Orto+26+SPO+2026",
-    "destaque": false,
-    "id": "ev-212"
+    "destaque": false
   },
   {
+    "id": "ev-213",
     "nome": "Congresso Brasileiro de Endodontia (COBE)",
     "tipo": "congresso",
     "area": "Outros",
@@ -3191,10 +3192,10 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Endodontia+%28COBE%29+2026",
-    "destaque": false,
-    "id": "ev-213"
+    "destaque": false
   },
   {
+    "id": "ev-214",
     "nome": "IV Congresso Brasileiro de Ciências Farmacêuticas",
     "tipo": "congresso",
     "area": "Outros",
@@ -3206,7 +3207,6 @@
     "internacional": false,
     "thumbnail": "",
     "link": "https://www.google.com/search?q=IV+Congresso+Brasileiro+de+Ci%C3%AAncias+Farmac%C3%AAuticas+2026",
-    "destaque": false,
-    "id": "ev-214"
+    "destaque": false
   }
 ]
