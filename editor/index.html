@@ -29,6 +29,7 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
 .c12{grid-column:span 12}.c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}.c2{grid-column:span 2}
 .subcard{border:1px solid var(--line);border-radius:12px;background:#f8fafc;padding:10px}.leaf{border:1px solid #dbe4ef;border-radius:11px;background:#fff;padding:10px}.empty{border:1px dashed #cbd5e1;border-radius:12px;padding:12px;color:var(--muted);text-align:center;font-size:13px;background:#f8fafc}
 .tiny{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.is-hidden{display:none!important}
 @media (max-width:960px){.c6,.c4,.c3,.c2{grid-column:span 6}}
 @media (max-width:680px){.container{padding:0 14px}.top-in{flex-direction:column;align-items:flex-start;padding:10px 0}.title strong{font-size:24px}.tabs{width:100%}.tab{flex:1}.c6,.c4,.c3,.c2{grid-column:span 12}}
 </style>
@@ -79,12 +80,11 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
       <label class="f c2"><span>ID</span><input data-f="id" type="text" placeholder="ev-001" /></label>
       <label class="f c6"><span>Nome</span><input data-f="nome" type="text" /></label>
       <label class="f c2"><span>Tipo</span><select data-f="tipo"><option value="">Selecione</option><option value="congresso">Congresso</option><option value="simposio">Simposio</option><option value="jornada">Jornada</option><option value="curso">Curso</option></select></label>
-      <label class="f c2"><span>Area</span><input data-f="area" type="text" /></label>
+      <label class="f c2"><span>Area</span><input data-f="area" type="text" list="areaOptions" /></label>
       <label class="f c3"><span>Data inicio</span><input data-f="data_inicio" type="date" /></label>
-      <label class="f c3"><span>Data fim</span><input data-f="data_fim" type="date" /></label>
-      <label class="f c2"><span>Modalidade</span><select data-f="modalidade"><option value="">Selecione</option><option value="presencial">Presencial</option><option value="online">Online</option></select></label>
-      <label class="f c2"><span>Cidade</span><input data-f="cidade" type="text" /></label>
-      <label class="f c2"><span>UF</span><input data-f="uf" type="text" /></label>
+      <label class="f check c3"><input data-f="online" type="checkbox" /><span>Evento online (booleano)</span></label>
+      <label class="f c2 presencial-only"><span>Cidade</span><input data-f="cidade" type="text" /></label>
+      <label class="f c2 presencial-only"><span>UF</span><input data-f="uf" type="text" /></label>
       <label class="f c6"><span>Link</span><input data-f="link" type="text" placeholder="https://..." /></label>
       <label class="f c4"><span>Thumbnail</span><input data-f="thumbnail" type="text" placeholder="./thumbs/eventos/img.jpg" /></label>
       <label class="f c2"><span>Escolher imagem</span><input class="pick-ev-thumb" type="file" accept="image/*" /></label>
@@ -93,6 +93,8 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     </div>
   </article>
 </template>
+
+<datalist id="areaOptions"></datalist>
 
 <template id="tplEsp">
   <article class="card esp-card">
@@ -144,6 +146,18 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
   const FILE_MODE = window.location.protocol === "file:";
   const API_BASE = FILE_MODE ? "http://127.0.0.1:8765" : "";
   const apiUrl = (path) => API_BASE + path;
+  const DEFAULT_EVENT_AREAS = [
+    "Cardiologia",
+    "Clinica Medica",
+    "Pediatria",
+    "Infectologia",
+    "Neurologia",
+    "Oncologia",
+    "Endocrinologia",
+    "Anestesiologia",
+    "Emergencia",
+    "Medicina Intensiva"
+  ];
 
   const setStatus = (t,m="")=>{dom.st.textContent=t;dom.st.className="pill"+(m?" "+m:"");};
   const markDirty = ()=>{if(state.loading) return; state.dirty=true; setStatus("Alteracoes pendentes","warn"); updateCount(); if(dom.autosave.checked) queueSave();};
@@ -157,6 +171,39 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
       reader.onerror=()=>reject(new Error("erro_leitura_arquivo"));
       reader.readAsDataURL(file);
     });
+  }
+  function isEventOnline(data){
+    if(!data || typeof data!=="object") return false;
+    if(typeof data.online==="boolean") return data.online;
+    return String(data.modalidade||"").toLowerCase()==="online";
+  }
+  function collectAreaValues(){
+    return $$(".evento-card [data-f='area']",dom.eventos)
+      .map(el=>String(el.value||"").trim())
+      .filter(Boolean);
+  }
+  function rebuildAreaOptions(extra){
+    const datalist=$("#areaOptions");
+    if(!datalist) return;
+    const uniq={};
+    DEFAULT_EVENT_AREAS.concat(extra||[]).forEach(a=>{
+      const v=String(a||"").trim();
+      if(v) uniq[v]=true;
+    });
+    datalist.innerHTML="";
+    Object.keys(uniq).sort((a,b)=>a.localeCompare(b,"pt-BR")).forEach(v=>{
+      const opt=document.createElement("option");
+      opt.value=v;
+      datalist.appendChild(opt);
+    });
+  }
+  function updateEventModeUI(card){
+    const isOnline=!!getField(card,"online");
+    $$(".presencial-only",card).forEach(el=>el.classList.toggle("is-hidden",isOnline));
+    const city=$("[data-f='cidade']",card);
+    const uf=$("[data-f='uf']",card);
+    if(city){ city.disabled=isOnline; if(isOnline) city.value=""; }
+    if(uf){ uf.disabled=isOnline; if(isOnline) uf.value=""; }
   }
 
   function toggleTab(name){dom.tabs.forEach(b=>b.classList.toggle("on",b.dataset.tab===name));dom.panels.forEach(p=>p.hidden=p.dataset.panel!==name);}  
@@ -172,9 +219,18 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
 
   function cardEvento(data={}){
     const n=$("#tplEvento").content.firstElementChild.cloneNode(true);
-    ["id","nome","tipo","area","data_inicio","data_fim","modalidade","cidade","uf","link","thumbnail","internacional","destaque"].forEach(k=>setField(n,k,data[k]));
+    ["id","nome","tipo","area","data_inicio","cidade","uf","link","thumbnail","internacional","destaque"].forEach(k=>setField(n,k,data[k]));
+    setField(n,"online",isEventOnline(data));
     n.classList.toggle("featured",!!data.destaque);
     const d=$("[data-f='destaque']",n); d.addEventListener("change",()=>n.classList.toggle("featured",d.checked));
+    const onlineInput=$("[data-f='online']",n);
+    if(onlineInput){
+      onlineInput.addEventListener("change",()=>{
+        updateEventModeUI(n);
+        markDirty();
+      });
+    }
+    updateEventModeUI(n);
     $(".pick-ev-thumb",n).addEventListener("change",async e=>{
       const f=e.target.files&&e.target.files[0];
       if(!f) return;
@@ -248,9 +304,26 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
   }
 
   function parseTags(v){return String(v||"").split(/[;,\n,]/).map(s=>s.trim()).filter(Boolean);}  
-  function evObj(card){return {id:getField(card,"id")||nextEvId(),nome:getField(card,"nome"),tipo:getField(card,"tipo"),area:getField(card,"area"),data_inicio:getField(card,"data_inicio"),data_fim:getField(card,"data_fim"),modalidade:getField(card,"modalidade"),cidade:getField(card,"cidade"),uf:getField(card,"uf").toUpperCase(),internacional:getField(card,"internacional"),thumbnail:getField(card,"thumbnail"),link:getField(card,"link"),destaque:getField(card,"destaque")};}
+  function evObj(card){
+    const online=!!getField(card,"online");
+    return {
+      id:getField(card,"id")||nextEvId(),
+      nome:getField(card,"nome"),
+      tipo:getField(card,"tipo"),
+      area:getField(card,"area"),
+      data_inicio:getField(card,"data_inicio"),
+      modalidade:online?"online":"presencial",
+      online:online,
+      cidade:online?"":getField(card,"cidade"),
+      uf:online?"":getField(card,"uf").toUpperCase(),
+      internacional:getField(card,"internacional"),
+      thumbnail:getField(card,"thumbnail"),
+      link:getField(card,"link"),
+      destaque:getField(card,"destaque")
+    };
+  }
   function dirObj(card){const ano=parseInt(getField(card,"ano"),10); return {titulo:getField(card,"titulo"),instituicao:getField(card,"instituicao"),ano:Number.isFinite(ano)?ano:"",link_pdf:getField(card,"link_pdf"),thumbnail:getField(card,"thumbnail"),tags:parseTags(getField(card,"tags"))};}
-  const evValid=o=>!!(o.id||o.nome||o.tipo||o.data_inicio||o.modalidade||o.link);
+  const evValid=o=>!!(o.id||o.nome||o.tipo||o.data_inicio||typeof o.online==="boolean"||o.modalidade||o.link);
   const dirValid=o=>!!(o.titulo||o.instituicao||o.ano||o.link_pdf||(o.tags&&o.tags.length));
 
   function collect(){
@@ -290,6 +363,7 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
       dom.eventos.innerHTML=""; dom.dirs.innerHTML="";
       (Array.isArray(j.eventos)?j.eventos:[]).forEach(e=>dom.eventos.appendChild(cardEvento(e)));
       (Array.isArray(j.diretrizes)?j.diretrizes:[]).forEach(d=>dom.dirs.appendChild(cardEsp(d)));
+      rebuildAreaOptions((Array.isArray(j.eventos)?j.eventos:[]).map(e=>e&&e.area));
       state.dirty=false; renumber(); setStatus("Dados carregados","ok");
     }catch(e){const hint=FILE_MODE?" | Abra http://127.0.0.1:8765 (nao abra o HTML direto).":""; setStatus("Erro ao carregar"+hint,"err"); console.error(e);} 
     finally{state.loading=false; updateCount();}
@@ -303,7 +377,14 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     dom.ct.textContent=`${ec} eventos | ${sp} especialidades | ${as} assuntos | ${dr} diretrizes`;
   }
 
-  dom.addEvento.addEventListener("click",()=>{const em=$(".empty",dom.eventos); if(em) em.remove(); dom.eventos.appendChild(cardEvento({id:nextEvId()})); renumber(); markDirty();});
+  dom.addEvento.addEventListener("click",()=>{
+    const em=$(".empty",dom.eventos);
+    if(em) em.remove();
+    dom.eventos.appendChild(cardEvento({id:nextEvId(),online:false,modalidade:"presencial"}));
+    renumber();
+    rebuildAreaOptions(collectAreaValues());
+    markDirty();
+  });
   dom.addEsp.addEventListener("click",()=>{const em=$(".empty",dom.dirs); if(em) em.remove(); dom.dirs.appendChild(cardEsp({especialidade:"",assuntos:[{nome_assunto:"",diretrizes:[{}]}]})); renumber(); markDirty();});
   dom.save.addEventListener("click",()=>saveAll(true));
   dom.reload.addEventListener("click",()=>{if(state.dirty&&!confirm("Recarregar vai perder alteracoes locais. Continuar?")) return; loadAll();});
@@ -322,11 +403,20 @@ main{padding:18px 0 36px}.status{display:flex;gap:8px;flex-wrap:wrap;align-items
     if(t.closest(".apply-qtd")){const a=t.closest(".ass-card");const q=Math.max(0,parseInt($(".qtd-dir",a).value||"0",10)||0);const list=$(".dir-list",a);let n=$$(":scope > .dir-card",list).length; if(q<n&&!confirm(`Remover ${n-q} diretriz(es)?`)) return; while($$(":scope > .dir-card",list).length>q){$$(":scope > .dir-card",list).pop().remove();} while($$(":scope > .dir-card",list).length<q){list.appendChild(cardDir({}));} ensureEmpty(list,".dir-card","Nenhuma diretriz."); renumber(); markDirty(); return;}
   });
 
-  dom.root.addEventListener("input",(e)=>{if(e.target instanceof HTMLElement && e.target.closest(".panel")) markDirty();});
-  dom.root.addEventListener("change",(e)=>{if(e.target instanceof HTMLElement && e.target.closest(".panel")) markDirty();});
+  dom.root.addEventListener("input",(e)=>{
+    if(!(e.target instanceof HTMLElement) || !e.target.closest(".panel")) return;
+    if(e.target.matches("[data-f='area']")) rebuildAreaOptions(collectAreaValues());
+    markDirty();
+  });
+  dom.root.addEventListener("change",(e)=>{
+    if(!(e.target instanceof HTMLElement) || !e.target.closest(".panel")) return;
+    if(e.target.matches("[data-f='area']")) rebuildAreaOptions(collectAreaValues());
+    markDirty();
+  });
   window.addEventListener("beforeunload",(e)=>{if(!state.dirty) return; e.preventDefault(); e.returnValue="";});
 
   toggleTab("eventos");
+  rebuildAreaOptions([]);
   if(FILE_MODE){
     setStatus("Modo arquivo detectado. Inicie: python editor\\server.py e abra http://127.0.0.1:8765","warn");
   }

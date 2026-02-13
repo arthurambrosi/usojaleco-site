@@ -569,12 +569,14 @@
         return date.toLocaleDateString("pt-BR");
       }
 
-      function formatDateRange(start, end) {
-        var startFmt = formatDate(start);
-        var endFmt = formatDate(end);
-        if (startFmt === "-" && endFmt === "-") return "-";
-        if (startFmt === endFmt || endFmt === "-") return startFmt;
-        return startFmt + " ate " + endFmt;
+      function eventIsOnline(eventItem) {
+        if (!eventItem || typeof eventItem !== "object") return false;
+        if (typeof eventItem.online === "boolean") return eventItem.online;
+        return String(eventItem.modalidade || "").toLowerCase() === "online";
+      }
+
+      function eventModalidade(eventItem) {
+        return eventIsOnline(eventItem) ? "online" : "presencial";
       }
 
       function eventThumbnail(eventItem) {
@@ -582,7 +584,7 @@
       }
 
       function eventLocation(eventItem) {
-        if (String(eventItem.modalidade).toLowerCase() === "online") {
+        if (eventIsOnline(eventItem)) {
           return "Online";
         }
         if (eventItem.internacional) {
@@ -597,6 +599,7 @@
       }
 
       function locationFilterKey(eventItem) {
+        if (eventIsOnline(eventItem)) return "";
         if (eventItem.internacional) return "internacional";
         return (eventItem.uf || "").toUpperCase();
       }
@@ -682,6 +685,9 @@
         var areaSet = {};
 
         state.events.forEach(function (item) {
+          if (eventIsOnline(item)) {
+            return;
+          }
           if (item.internacional) {
             locationSet.internacional = "Internacional";
           } else if (item.uf) {
@@ -727,7 +733,7 @@
         var filtered = state.events.filter(function (item) {
           if (q && normalize(item.nome).indexOf(q) === -1) return false;
           if (tipo && normalize(item.tipo) !== tipo) return false;
-          if (modalidade && normalize(item.modalidade) !== modalidade) return false;
+          if (modalidade && normalize(eventModalidade(item)) !== modalidade) return false;
           if (localizacao && normalize(locationFilterKey(item)) !== localizacao) return false;
           if (area && normalize(item.area) !== area) return false;
           return true;
@@ -772,9 +778,9 @@
 
           var meta = document.createElement("p");
           meta.className = "meta";
-          meta.appendChild(createMetaLine("Data", formatDateRange(item.data_inicio, item.data_fim)));
+          meta.appendChild(createMetaLine("Data", formatDate(item.data_inicio)));
           meta.appendChild(createMetaLine("Local", eventLocation(item)));
-          meta.appendChild(createMetaLine("Modalidade", formatLabel(item.modalidade || "-")));
+          meta.appendChild(createMetaLine("Modalidade", formatLabel(eventModalidade(item))));
           meta.appendChild(createMetaLine("Area", item.area || "Nao informada"));
 
           var cta = document.createElement("div");
@@ -842,7 +848,8 @@
 
       function validateEvent(item) {
         if (!item || typeof item !== "object") return false;
-        if (!item.id || !item.nome || !item.tipo || !item.data_inicio || !item.modalidade || !item.link) return false;
+        if (!item.id || !item.nome || !item.tipo || !item.data_inicio || !item.link) return false;
+        if (typeof item.online !== "boolean" && !item.modalidade) return false;
         return true;
       }
 
