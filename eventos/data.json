@@ -265,7 +265,7 @@
     "cidade": "Brasília",
     "uf": "DF",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://dgt.edlo.com.br/wp-content/uploads/2024/01/Cards-DGT-09.jpg",
     "link": "https://www.google.com/search?q=18%C2%BA+Congresso+Brasileiro+de+Videocirurgia+e+Rob%C3%B3tica+%28SOBRACIL%29+2026",
     "destaque": false
   },
@@ -280,7 +280,7 @@
     "cidade": "Manaus",
     "uf": "AM",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://www.sbct.com.br/wp-content/uploads/2026/01/01.webp",
     "link": "https://www.google.com/search?q=14%C2%BA+Congresso+Norte-Nordeste+e+Centro-Oeste+de+Cirurgia+Tor%C3%A1cica+2026",
     "destaque": false
   },
@@ -295,7 +295,7 @@
     "cidade": "Rio de Janeiro",
     "uf": "RJ",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://images.sympla.com.br/68c80691a9313-lg.jpg",
     "link": "https://www.google.com/search?q=40%C2%BA+Encontro+Carioca+de+Cirurgia+Vascular+%7C+Rio+International+Vascular+Summit+2026+2026",
     "destaque": false
   },
@@ -310,7 +310,7 @@
     "cidade": "São Paulo",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://images.sympla.com.br/6914727535cab-xs.jpg",
     "link": "https://www.google.com/search?q=XXIV+Encontro+S%C3%A3o+Paulo+%7C+Congresso+Internacional+S%C3%A3o+Paulo+de+Cirurgia+Vascular+e+Endovascular+2026",
     "destaque": false
   },
@@ -325,7 +325,7 @@
     "cidade": "Salvador",
     "uf": "BA",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://sbacv.org.br/wp-content/uploads/2025/07/Materiais_Nacional_1920_726.jpg",
     "link": "https://www.google.com/search?q=46%C2%BA+Congresso+Brasileiro+de+Angiologia+e+Cirurgia+Vascular+2026",
     "destaque": false
   },
@@ -340,13 +340,13 @@
     "cidade": "Porto Alegre",
     "uf": "RS",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLFekzNCcB4_f2kIYGv8RTLkJiy7m18ubNA&s",
     "link": "https://www.google.com/search?q=15%C2%BA+Congresso+Ga%C3%BAcho+de+Cl%C3%ADnica+M%C3%A9dica+2026",
     "destaque": false
   },
   {
     "id": "ev-025",
-    "nome": "20º CONGRESSO PARANAENSE DE CLÍNICA MÉDICA",
+    "nome": "20º Congresso Paranaense de Clínica Médica",
     "tipo": "congresso",
     "area": "Clínica Médica",
     "data_inicio": "2026-05-29",
@@ -370,7 +370,7 @@
     "cidade": "Recife",
     "uf": "PE",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://sfo3.digitaloceanspaces.com/iweventos/imagens/attitudepromo/2025-12/cabecalho-mobile-III-CPCM.png",
     "link": "https://www.google.com/search?q=III+Congresso+Pernambucano+de+Cl%C3%ADnica+M%C3%A9dica+2026",
     "destaque": false
   },
@@ -385,7 +385,7 @@
     "cidade": "Belo Horizonte",
     "uf": "MG",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://attitudepromo.com.br/wp-content/uploads/2025/10/mineiro.png",
     "link": "https://www.google.com/search?q=XIV+Congresso+Mineiro+de+Cl%C3%ADnica+M%C3%A9dica+2026",
     "destaque": false
   },
@@ -400,7 +400,7 @@
     "cidade": "Florianópolis",
     "uf": "SC",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://sfo3.digitaloceanspaces.com/iweventos/imagens/attitudepromo/2025-11/Group%20cabecalho-sulbra-clinica-medica-mobile.png",
     "link": "https://www.google.com/search?q=Congresso+Sul-brasileiro+de+Cl%C3%ADnica+M%C3%A9dica+2026",
     "destaque": false
   },
@@ -415,7 +415,7 @@
     "cidade": "Campinas",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7mDAYQ-RGdOEWV0aqBDRtGT-KNESK_Z-B-w&s",
     "link": "https://www.google.com/search?q=14%C2%BA+Congresso+Paulista+de+Cl%C3%ADnica+M%C3%A9dica+2026",
     "destaque": false
   },
