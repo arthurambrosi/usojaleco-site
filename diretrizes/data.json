@@ -3,197 +3,31 @@
     "especialidade": "Cardiologia",
     "assuntos": [
       {
-        "nome_assunto": "Hipertensao arterial",
+        "nome_assunto": "Hipertensão Arterial",
         "diretrizes": [
           {
-            "titulo": "Diretriz Brasileira de Hipertensao Arterial - 2025",
-            "instituicao": "Sociedade Brasileira de Cardiologia (SBC) / Sociedade Brasileira de Hipertensao (SBH) / Sociedade Brasileira de Nefrologia (SBN)",
+            "titulo": "Diretriz Brasileira de Hipertensão Arterial – 2025",
+            "instituicao": "Sociedade Brasileira de Cardiologia (SBC), Sociedade Brasileira de Hipertensão (SBH), Sociedade Brasileira de Nefrologia (SBN).",
             "ano": 2025,
             "link_pdf": "https://abccardiol.org/wp-content/uploads/articles_xml/0066-782X-abc-122-09-e20250624/0066-782X-abc-122-09-e20250624.x66747.pdf",
-            "tags": ["brasil", "diretriz", "hipertensao", "sbc", "sbh", "sbn"]
+            "thumbnail": "./thumbs/C.png",
+            "tags": []
           },
           {
-            "titulo": "2017 ACC/AHA/AAPA/ABC/ACPM/AGS/APhA/ASH/ASPC/NMA/PCNA Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults",
-            "instituicao": "American College of Cardiology (ACC) / American Heart Association (AHA)",
-            "ano": 2017,
-            "link_pdf": "https://www.eshonline.org/esh-content/uploads/2019/08/2.-2017-ACCAHAAAPAABCACPMAGSAPhAASHASPCNMAPCNA-Guideline-for-the-Prevention-Detection-Evaluation-and-Management-of-High-Blood-Pressure-in-Adults.pdf",
-            "tags": ["eua", "diretriz", "aha", "acc", "hipertensao", "pressao-arterial"]
+            "titulo": "Guideline for the Prevention, Detection,Evaluation and Management of High BloodPressure in Adults: A Report of the AmericanCollege of Cardiolog",
+            "instituicao": "AmericanCollege of Cardiology",
+            "ano": 2025,
+            "link_pdf": "https://www.ahajournals.org/doi/epdf/10.1161/HYP.0000000000000249",
+            "thumbnail": "",
+            "tags": []
           },
           {
             "titulo": "2024 ESC Guidelines for the management of elevated blood pressure and hypertension",
-            "instituicao": "European Society of Cardiology (ESC)",
+            "instituicao": "European Society of Cardiology",
             "ano": 2024,
             "link_pdf": "https://www.portailvasculaire.fr/sites/default/files/docs/ehae178.pdf",
-            "tags": ["europa", "esc", "diretriz", "hipertensao", "pressao-elevada"]
-          },
-          {
-            "titulo": "Protocolo Clinico e Diretrizes Terapeuticas (PCDT): Hipertensao Arterial Sistemica",
-            "instituicao": "Ministerio da Saude (Brasil) / CONITEC",
-            "ano": 2025,
-            "link_pdf": "https://www.gov.br/conitec/pt-br/midias/protocolos/pcdt-hipertensao-arterial-sistemica.pdf",
-            "tags": ["brasil", "sus", "pcdt", "protocolo", "hipertensao", "conitec"]
-          },
-          {
-            "titulo": "Guideline for the pharmacological treatment of hypertension in adults",
-            "instituicao": "World Health Organization (WHO)",
-            "ano": 2021,
-            "link_pdf": "https://iris.who.int/server/api/core/bitstreams/f062769d-f075-4a00-87af-0a2106e0bd04/content",
-            "tags": ["who", "oms", "diretriz", "farmacologico", "hipertensao", "global"]
-          },
-          {
-            "titulo": "2020 International Society of Hypertension Global Hypertension Practice Guidelines",
-            "instituicao": "International Society of Hypertension (ISH)",
-            "ano": 2020,
-            "link_pdf": "https://sbn.org.br/fileadmin/user_upload/2020_diretrizes/HYPERTENSION-GUIDELINES-2020_.pdf",
-            "tags": ["ish", "diretriz", "hipertensao", "global", "pratica-clinica"]
-          }
-        ]
-      },
-      {
-        "nome_assunto": "Sindrome coronariana aguda",
-        "diretrizes": [
-          {
-            "titulo": "ESC Guideline for Acute Coronary Syndromes",
-            "instituicao": "ESC (Europa)",
-            "ano": 2023,
-            "link_pdf": "https://www.escardio.org/static-file/Escardio/Guidelines/Publications/ACS/2023_ESC_Guidelines_for_the_management_of_acute_coronary_syndromes.pdf",
-            "tags": ["acs", "esc", "europa"]
-          },
-          {
-            "titulo": "Universal Definition of Myocardial Infarction",
-            "instituicao": "ESC/AHA/WHF",
-            "ano": 2018,
-            "link_pdf": "https://academic.oup.com/eurheartj/article-pdf/40/3/237/30216872/ehy462.pdf",
-            "tags": ["iam", "infarto", "troponina"]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "especialidade": "Infectologia",
-    "assuntos": [
-      {
-        "nome_assunto": "Sepse",
-        "diretrizes": [
-          {
-            "titulo": "International Guidelines for Management of Sepsis and Septic Shock",
-            "instituicao": "Surviving Sepsis Campaign",
-            "ano": 2021,
-            "link_pdf": "https://journals.lww.com/ccmjournal/Fulltext/2021/11000/Surviving_Sepsis_Campaign__International.21.pdf",
-            "tags": ["sepse", "uti", "choque septico"]
-          },
-          {
-            "titulo": "Brazilian Sepsis Institute - Practical Recommendations",
-            "instituicao": "ILAS (Brasil)",
-            "ano": 2023,
-            "link_pdf": "https://ilas.org.br/assets/arquivos/ferramentas/recomendacoes-sepse-2023.pdf",
-            "tags": ["brasil", "ilas", "sepse"]
-          }
-        ]
-      },
-      {
-        "nome_assunto": "Antimicrobianos",
-        "diretrizes": [
-          {
-            "titulo": "WHO AWaRe Antibiotic Book",
-            "instituicao": "WHO (Internacional)",
-            "ano": 2022,
-            "link_pdf": "https://iris.who.int/bitstream/handle/10665/365553/9789240062382-eng.pdf",
-            "tags": ["antibiotico", "aware", "stewardship"]
-          },
-          {
-            "titulo": "Guideline on Antimicrobial Stewardship",
-            "instituicao": "NICE (Reino Unido)",
-            "ano": 2015,
-            "link_pdf": "https://www.nice.org.uk/guidance/ng15/resources/antimicrobial-stewardship-systems-and-processes-for-effective-antimicrobial-medicine-use-pdf-1837273110469",
-            "tags": ["stewardship", "resistencia", "uk"]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "especialidade": "Pneumologia",
-    "assuntos": [
-      {
-        "nome_assunto": "Asma",
-        "diretrizes": [
-          {
-            "titulo": "GINA Report for Asthma Management and Prevention",
-            "instituicao": "GINA (Global Initiative for Asthma)",
-            "ano": 2024,
-            "link_pdf": "https://ginasthma.org/wp-content/uploads/2024/05/GINA-2024-Full-Report-1.pdf",
-            "tags": ["asma", "gina", "broncoespasmo"]
-          },
-          {
-            "titulo": "Diretrizes da Sociedade Brasileira de Pneumologia para Asma",
-            "instituicao": "SBPT (Brasil)",
-            "ano": 2020,
-            "link_pdf": "https://www.scielo.br/j/jbpneu/a/MDzbYkq7gGk8D4YQwDnvGpc/?format=pdf&lang=pt",
-            "tags": ["asma", "brasil", "sbpt"]
-          }
-        ]
-      },
-      {
-        "nome_assunto": "DPOC",
-        "diretrizes": [
-          {
-            "titulo": "Global Strategy for Prevention, Diagnosis and Management of COPD",
-            "instituicao": "GOLD (Internacional)",
-            "ano": 2024,
-            "link_pdf": "https://goldcopd.org/wp-content/uploads/2023/11/GOLD-2024_v1.2-11Jan24_WMV.pdf",
-            "tags": ["dpoc", "gold", "tabagismo"]
-          },
-          {
-            "titulo": "ERS Guideline on Long-Term Home Oxygen Therapy",
-            "instituicao": "ERS (Europa)",
-            "ano": 2020,
-            "link_pdf": "https://erj.ersjournals.com/content/erj/55/3/1901003.full.pdf",
-            "tags": ["oxigenio", "dpoc", "ers"]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "especialidade": "Endocrinologia",
-    "assuntos": [
-      {
-        "nome_assunto": "Diabetes mellitus tipo 2",
-        "diretrizes": [
-          {
-            "titulo": "Standards of Care in Diabetes",
-            "instituicao": "ADA (EUA)",
-            "ano": 2025,
-            "link_pdf": "https://diabetesjournals.org/care/article-pdf/48/Supplement_1/S1/792719/dci25s001.pdf",
-            "tags": ["diabetes", "ada", "glicemia"]
-          },
-          {
-            "titulo": "Diretriz da Sociedade Brasileira de Diabetes",
-            "instituicao": "SBD (Brasil)",
-            "ano": 2024,
-            "link_pdf": "https://diretriz.diabetes.org.br/wp-content/uploads/2024/03/diretriz-sbd-2024-completa.pdf",
-            "tags": ["diabetes", "brasil", "sbd"]
-          }
-        ]
-      },
-      {
-        "nome_assunto": "Hipotireoidismo",
-        "diretrizes": [
-          {
-            "titulo": "European Thyroid Association Guideline",
-            "instituicao": "ETA (Europa)",
-            "ano": 2023,
-            "link_pdf": "https://etj.bioscientifica.com/downloadpdf/journals/etj/12/3/ETJ-23-0011.pdf",
-            "tags": ["tireoide", "levotiroxina", "eta"]
-          },
-          {
-            "titulo": "Clinical Practice Guideline for Hypothyroidism",
-            "instituicao": "AACE/ATA (EUA)",
-            "ano": 2012,
-            "link_pdf": "https://www.endocrinepractice.org/article/S1530-891X(20)43036-9/pdf",
-            "tags": ["hipotireoidismo", "ata", "aace"]
+            "thumbnail": "./thumbs/B.png",
+            "tags": []
           }
         ]
       }
