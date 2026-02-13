@@ -370,16 +370,6 @@
       opacity:.56;
     }
 
-    .thumb-fallback-text{
-      display:block;
-      color:#64748b;
-      font-size:12px;
-      font-weight:800;
-      line-height:1.2;
-      text-align:center;
-      padding:0 8px;
-    }
-
     .thumb.has-image .thumb-fallback{
       display:none;
     }
@@ -643,17 +633,11 @@
         logo.loading = "lazy";
         logo.src = LOGO_SRC;
 
-        var fallbackText = document.createElement("span");
-        fallbackText.className = "thumb-fallback-text";
-        fallbackText.textContent = "Carregando imagem...";
-
         fallback.appendChild(logo);
-        fallback.appendChild(fallbackText);
         wrap.appendChild(img);
         wrap.appendChild(fallback);
 
-        function applyFallback(message) {
-          fallbackText.textContent = message || "Sem imagem";
+        function applyFallback() {
           wrap.classList.remove("has-image");
           img.removeAttribute("src");
         }
@@ -662,17 +646,17 @@
           if (img.naturalWidth > 1) {
             wrap.classList.add("has-image");
           } else {
-            applyFallback("Sem imagem");
+            applyFallback();
           }
         });
         img.addEventListener("error", function () {
-          applyFallback("Sem imagem");
+          applyFallback();
         });
 
         if (src) {
           img.src = src;
         } else {
-          applyFallback("Sem imagem");
+          applyFallback();
         }
 
         return wrap;

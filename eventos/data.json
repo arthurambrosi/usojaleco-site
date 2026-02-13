@@ -31,7 +31,7 @@
   },
   {
     "id": "ev-003",
-    "nome": "CONGRESSO LUSÓFONO BRASIL 2026",
+    "nome": "Congresso Lusófono Brasil 2026",
     "tipo": "congresso",
     "area": "Anestesiologia",
     "data_inicio": "2026-05-28",
@@ -55,13 +55,13 @@
     "cidade": "Fortaleza",
     "uf": "CE",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSabuyHUQ4JzfDejLKCFLX1wmRxLNjYK8d6aQ&s",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Anestesiologia+2026",
     "destaque": false
   },
   {
     "id": "ev-005",
-    "nome": "43º Congresso SOCERJ (Sociedade de Cardiologia do Estado do Rio de Janeiro)",
+    "nome": "43º Congresso SOCERJ",
     "tipo": "congresso",
     "area": "Cardiologia",
     "data_inicio": "2026-05-07",
@@ -70,7 +70,7 @@
     "cidade": "Rio de Janeiro",
     "uf": "RJ",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR50Tzm7CSBNnw-2LJrQab4Tc7_UGVbzGC5g&s",
     "link": "https://www.google.com/search?q=43%C2%BA+Congresso+SOCERJ+%28Sociedade+de+Cardiologia+do+Estado+do+Rio+de+Janeiro%29+2026",
     "destaque": false
   },
@@ -85,7 +85,7 @@
     "cidade": "São Paulo",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://media.licdn.com/dms/image/v2/C4D1BAQHI9Kba26LVEQ/company-background_10000/company-background_10000/0/1648216521721/socesp_cover?e=2147483647&v=beta&t=KBseWlneoTk0DflCBrFlTmVE_s5L_n7-nwPu-AowtYo",
     "link": "https://www.google.com/search?q=46%C2%BA+Congresso+da+Sociedade+de+Cardiologia+do+Estado+de+S%C3%A3o+Paulo+2026",
     "destaque": false
   },
@@ -100,7 +100,7 @@
     "cidade": "Porto Alegre",
     "uf": "RS",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://www.deic2026.com.br/img/logo-post.jpg",
     "link": "https://www.google.com/search?q=Congresso+Brasileiro+de+Insufici%C3%AAncia+Card%C3%ADaca+%E2%80%93+DEIC+2026+2026",
     "destaque": false
   },
@@ -115,7 +115,7 @@
     "cidade": "São Paulo",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://static.wixstatic.com/media/963fe2_01467991adea44d785c546188e079743~mv2.png/v1/fill/w_560,h_334,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/placeholder.png",
     "link": "https://www.google.com/search?q=Congresso+SOLACI+SBHCI+%28Sociedade+Brasileira+de+Hemodin%C3%A2mica+e+Cardiologia+Intervencionista%29+2026",
     "destaque": false
   },
@@ -130,7 +130,7 @@
     "cidade": "Curitiba",
     "uf": "PR",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://www.congressoprcardio.com.br/img/logo-home.png",
     "link": "https://www.google.com/search?q=52%C2%BA+Congresso+Paranaense+de+Cardiologia+2026",
     "destaque": false
   },
@@ -145,7 +145,7 @@
     "cidade": "Rio de Janeiro",
     "uf": "RJ",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://sfo3.digitaloceanspaces.com/iweventos/imagens/sbc/2026-01/icone-b-sbc.png",
     "link": "https://www.google.com/search?q=81%C2%BA+Congresso+Brasileiro+de+Cardiologia+together+with+World+Congress+Of+Cardiology+2026+2026",
     "destaque": false
   },
@@ -160,23 +160,8 @@
     "cidade": "Goiânia",
     "uf": "GO",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrtSF73lQLqCTK6xXWMJTGU_29s1J0EfqVWg&s",
     "link": "https://www.google.com/search?q=36%C2%BA+Congresso+Brasileiro+de+Cirurgia+Dermatol%C3%B3gica+2026",
-    "destaque": false
-  },
-  {
-    "id": "ev-012",
-    "nome": "Congresso Cirurgia Ano 2026",
-    "tipo": "congresso",
-    "area": "Cirurgia Geral",
-    "data_inicio": "2026-04-30",
-    "modalidade": "presencial",
-    "online": false,
-    "cidade": "Belo Horizonte",
-    "uf": "MG",
-    "internacional": false,
-    "thumbnail": "",
-    "link": "https://www.google.com/search?q=Congresso+Cirurgia+Ano+2026+2026",
     "destaque": false
   },
   {
@@ -190,7 +175,7 @@
     "cidade": "Belo Horizonte",
     "uf": "MG",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://sbcancer.org.br/wp-content/uploads/2025/06/LOGO-ABTO-2025-HORIZONTAL.png",
     "link": "https://www.google.com/search?q=XX+Congresso+Brasileiro+de+Transplantes+2027",
     "destaque": false
   },
@@ -220,7 +205,7 @@
     "cidade": "São Paulo",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://www.cirurgiaplastica.org.br/wp-content/uploads/2026/01/desc_2026_w.jpg",
     "link": "https://www.google.com/search?q=Full+Face+Global+2026",
     "destaque": false
   },
@@ -235,7 +220,7 @@
     "cidade": "São Paulo",
     "uf": "SP",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://congressocbcp.com.br/wp-content/uploads/2025/10/banner_xiii_congresso_internacional_cirurgia_plastica_cosmiatria_cbcp_2026_2048x746.png",
     "link": "https://www.google.com/search?q=13%C2%BA+Congresso+internacional+de+Cirurgia+Pl%C3%A1stica+e+Cosmiatria+do+Col%C3%A9gio+Brasileiro+de+Cirurgia+Pl%C3%A1stica+%28CBCP%29+2026",
     "destaque": false
   },
@@ -250,7 +235,7 @@
     "cidade": "Fortaleza",
     "uf": "CE",
     "internacional": false,
-    "thumbnail": "",
+    "thumbnail": "https://www.cirurgiaplastica.org.br/wp-content/uploads/2025/11/62-congresso.jpg",
     "link": "https://www.google.com/search?q=62%C2%BA+Congresso+Brasileiro+de+Cirurgia+Pl%C3%A1stica+2026",
     "destaque": false
   },
