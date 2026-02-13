@@ -268,6 +268,59 @@
     .summary strong{ color:var(--text); }
 
     .cards{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .area-block{
+      border:1px solid var(--line);
+      border-radius:var(--rMid);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.97), rgba(255,255,255,.97)),
+        linear-gradient(130deg, var(--area-c1, #0ea5e9), var(--area-c2, #2563eb));
+      box-shadow:var(--shadow);
+      padding:12px;
+    }
+
+    .area-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.42);
+      border-radius:12px;
+      background:
+        linear-gradient(115deg, rgba(255,255,255,.82), rgba(255,255,255,.62)),
+        linear-gradient(130deg, var(--area-c1, #0ea5e9), var(--area-c2, #2563eb));
+    }
+
+    .area-title{
+      margin:0;
+      font-size:18px;
+      line-height:1.2;
+      color:#0f172a;
+      font-weight:900;
+    }
+
+    .area-count{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.58);
+      padding:4px 10px;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:#334155;
+      background:rgba(255,255,255,.72);
+      white-space:nowrap;
+    }
+
+    .area-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0,1fr));
       gap:12px;
@@ -333,45 +386,47 @@
       border-radius:12px;
       overflow:hidden;
       border:1px solid var(--line);
-      background:linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      background:linear-gradient(145deg, var(--area-c1, #0ea5e9), var(--area-c2, #2563eb));
       box-shadow:0 5px 14px rgba(15,23,42,.06);
     }
 
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      opacity:0;
-      transition:opacity var(--t);
-    }
-
-    .thumb.has-image img{
-      opacity:1;
+    .thumb::before{
+      content:"";
+      position:absolute;
+      inset:-26% -12%;
+      background:
+        radial-gradient(circle at 24% 16%, rgba(255,255,255,.28), rgba(255,255,255,0) 50%),
+        radial-gradient(circle at 80% 88%, rgba(255,255,255,.22), rgba(255,255,255,0) 42%);
+      pointer-events:none;
     }
 
     .thumb-fallback{
       position:absolute;
       inset:0;
       display:flex;
-      flex-direction:column;
-      gap:10px;
       align-items:center;
       justify-content:center;
       background:
-        linear-gradient(145deg, #e5e7eb, #cbd5e1);
+        radial-gradient(circle at 50% 50%, rgba(15,23,42,.14) 0%, rgba(15,23,42,.48) 68%, rgba(15,23,42,.78) 100%),
+        linear-gradient(145deg, var(--area-c1, #0ea5e9), var(--area-c2, #2563eb));
+    }
+
+    .thumb-logo-wrap{
+      width:min(44%, 132px);
+      aspect-ratio:1;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(160deg, var(--area-c3, #1e3a8a), rgba(2,6,23,.94));
+      border:1px solid rgba(255,255,255,.34);
+      box-shadow:0 12px 24px rgba(2,6,23,.45);
+      backdrop-filter: blur(1px);
     }
 
     .thumb-logo{
-      width:min(42%, 126px);
-      max-height:58%;
+      width:72%;
       object-fit:contain;
-      filter:grayscale(1) contrast(.85);
-      opacity:.56;
-    }
-
-    .thumb.has-image .thumb-fallback{
-      display:none;
+      filter:drop-shadow(0 3px 8px rgba(0,0,0,.35));
     }
 
     .meta{
@@ -429,7 +484,7 @@
     @media (max-width:1080px){
       .controls{ grid-template-columns:repeat(2, minmax(0,1fr)); }
       .clear-btn{ width:100%; }
-      .cards{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .area-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
     }
 
     @media (max-width:720px){
@@ -441,7 +496,8 @@
       .hero{ padding:16px; }
       .filtersCard{ padding:14px; }
       .controls{ grid-template-columns:1fr; }
-      .cards{ grid-template-columns:1fr; }
+      .area-grid{ grid-template-columns:1fr; }
+      .area-head{ flex-direction:column; align-items:flex-start; }
       .card h3{ min-height:auto; }
     }
   </style>
@@ -464,7 +520,7 @@
     <section class="hero">
       <span class="eyebrow">Eventos medicos</span>
       <h1>Agregador de Congressos, Simposios, Jornadas e Cursos</h1>
-      <p>Pesquise e filtre eventos por tipo, modalidade, localizacao e area. A listagem usa <code>/eventos/data.json</code>, para voce atualizar conteudo sem alterar HTML.</p>
+      <p>Pesquise e filtre eventos por tipo, modalidade, localizacao e area. Os eventos ficam organizados por area e cada card usa uma identidade visual com degradê proprio e logo central.</p>
     </section>
 
     <section class="filtersCard">
@@ -581,8 +637,48 @@
         return eventIsOnline(eventItem) ? "online" : "presencial";
       }
 
-      function eventThumbnail(eventItem) {
-        return String((eventItem && eventItem.thumbnail) || "").trim();
+      function hashString(value) {
+        var text = String(value || "");
+        var hash = 0;
+        for (var i = 0; i < text.length; i += 1) {
+          hash = (hash * 31 + text.charCodeAt(i)) % 360;
+        }
+        return hash;
+      }
+
+      function areaTheme(areaName) {
+        var key = normalize(areaName);
+        var palette = {
+          "cardiologia": ["#0284c7", "#1d4ed8", "#132a7a"],
+          "dermatologia": ["#ea580c", "#c2410c", "#7c2d12"],
+          "endocrinologia e metabologia": ["#0ea5a5", "#0f766e", "#134e4a"],
+          "ginecologia e obstetricia": ["#be185d", "#9d174d", "#701a3b"],
+          "infectologia": ["#16a34a", "#15803d", "#14532d"],
+          "neurologia": ["#4f46e5", "#4338ca", "#312e81"],
+          "oftalmologia": ["#0891b2", "#0e7490", "#164e63"],
+          "oncologia": ["#dc2626", "#b91c1c", "#7f1d1d"],
+          "ortopedia e traumatologia": ["#7c3aed", "#6d28d9", "#4c1d95"],
+          "pediatria": ["#0d9488", "#0f766e", "#134e4a"],
+          "psiquiatria": ["#9333ea", "#7e22ce", "#581c87"],
+          "radiologia e diagnostico por imagem": ["#0369a1", "#075985", "#0c4a6e"],
+          "reumatologia": ["#2563eb", "#1d4ed8", "#1e3a8a"],
+          "urologia": ["#0f766e", "#0f766e", "#115e59"]
+        };
+
+        if (palette[key]) {
+          return {
+            c1: palette[key][0],
+            c2: palette[key][1],
+            c3: palette[key][2]
+          };
+        }
+
+        var hue = hashString(key || "eventos");
+        return {
+          c1: "hsl(" + hue + " 84% 58%)",
+          c2: "hsl(" + ((hue + 34) % 360) + " 76% 46%)",
+          c3: "hsl(" + ((hue + 8) % 360) + " 30%)"
+        };
       }
 
       function eventLocation(eventItem) {
@@ -615,17 +711,18 @@
         return span;
       }
 
-      function buildThumbElement(src, altText) {
+      function buildThumbElement(theme) {
         var wrap = document.createElement("div");
         wrap.className = "thumb";
-
-        var img = document.createElement("img");
-        img.alt = altText || "Imagem do evento";
-        img.loading = "lazy";
-        img.decoding = "async";
+        wrap.style.setProperty("--area-c1", theme.c1);
+        wrap.style.setProperty("--area-c2", theme.c2);
+        wrap.style.setProperty("--area-c3", theme.c3);
 
         var fallback = document.createElement("div");
         fallback.className = "thumb-fallback";
+
+        var logoWrap = document.createElement("div");
+        logoWrap.className = "thumb-logo-wrap";
 
         var logo = document.createElement("img");
         logo.className = "thumb-logo";
@@ -633,31 +730,9 @@
         logo.loading = "lazy";
         logo.src = LOGO_SRC;
 
-        fallback.appendChild(logo);
-        wrap.appendChild(img);
+        logoWrap.appendChild(logo);
+        fallback.appendChild(logoWrap);
         wrap.appendChild(fallback);
-
-        function applyFallback() {
-          wrap.classList.remove("has-image");
-          img.removeAttribute("src");
-        }
-
-        img.addEventListener("load", function () {
-          if (img.naturalWidth > 1) {
-            wrap.classList.add("has-image");
-          } else {
-            applyFallback();
-          }
-        });
-        img.addEventListener("error", function () {
-          applyFallback();
-        });
-
-        if (src) {
-          img.src = src;
-        } else {
-          applyFallback();
-        }
 
         return wrap;
       }
@@ -746,6 +821,29 @@
         return sortByNearestDate(filtered);
       }
 
+      function groupByArea(list) {
+        var groups = {};
+
+        list.forEach(function (item) {
+          var areaName = (item.area || "").trim() || "Sem area definida";
+          if (!groups[areaName]) {
+            groups[areaName] = [];
+          }
+          groups[areaName].push(item);
+        });
+
+        return Object.keys(groups)
+          .sort(function (a, b) {
+            return a.localeCompare(b, "pt-BR");
+          })
+          .map(function (areaName) {
+            return {
+              area: areaName,
+              items: groups[areaName]
+            };
+          });
+      }
+
       function renderCards(list) {
         dom.cards.innerHTML = "";
         dom.resultCount.textContent = String(list.length);
@@ -758,54 +856,84 @@
           return;
         }
 
-        list.forEach(function (item) {
-          var card = document.createElement("article");
-          card.className = "card" + (item.destaque ? " is-featured" : "");
+        groupByArea(list).forEach(function (group) {
+          var theme = areaTheme(group.area);
+          var areaBlock = document.createElement("section");
+          areaBlock.className = "area-block";
+          areaBlock.style.setProperty("--area-c1", theme.c1);
+          areaBlock.style.setProperty("--area-c2", theme.c2);
+          areaBlock.style.setProperty("--area-c3", theme.c3);
 
-          var badgeRow = document.createElement("div");
-          badgeRow.className = "badge-row";
+          var areaHead = document.createElement("div");
+          areaHead.className = "area-head";
 
-          if (item.destaque) {
-            var featuredBadge = document.createElement("span");
-            featuredBadge.className = "badge badge-featured";
-            featuredBadge.textContent = "Destaque";
-            badgeRow.appendChild(featuredBadge);
-          }
+          var areaTitle = document.createElement("h2");
+          areaTitle.className = "area-title";
+          areaTitle.textContent = group.area;
 
-          var typeBadge = document.createElement("span");
-          typeBadge.className = "badge";
-          typeBadge.textContent = formatLabel(item.tipo || "evento");
-          badgeRow.appendChild(typeBadge);
+          var areaCount = document.createElement("span");
+          areaCount.className = "area-count";
+          areaCount.textContent = group.items.length + (group.items.length === 1 ? " evento" : " eventos");
 
-          var title = document.createElement("h3");
-          title.textContent = item.nome || "Evento sem nome";
+          areaHead.appendChild(areaTitle);
+          areaHead.appendChild(areaCount);
 
-          var meta = document.createElement("p");
-          meta.className = "meta";
-          meta.appendChild(createMetaLine("Data", formatDate(item.data_inicio)));
-          meta.appendChild(createMetaLine("Local", eventLocation(item)));
-          meta.appendChild(createMetaLine("Modalidade", formatLabel(eventModalidade(item))));
-          meta.appendChild(createMetaLine("Area", item.area || "Nao informada"));
+          var areaGrid = document.createElement("div");
+          areaGrid.className = "area-grid";
 
-          var cta = document.createElement("div");
-          cta.className = "cta";
+          group.items.forEach(function (item) {
+            var card = document.createElement("article");
+            card.className = "card" + (item.destaque ? " is-featured" : "");
 
-          var link = document.createElement("a");
-          link.className = "btn";
-          link.href = item.link || "#";
-          link.target = "_blank";
-          link.rel = "noopener";
-          link.textContent = "Saiba mais / Ver evento";
+            var badgeRow = document.createElement("div");
+            badgeRow.className = "badge-row";
 
-          cta.appendChild(link);
+            if (item.destaque) {
+              var featuredBadge = document.createElement("span");
+              featuredBadge.className = "badge badge-featured";
+              featuredBadge.textContent = "Destaque";
+              badgeRow.appendChild(featuredBadge);
+            }
 
-          card.appendChild(badgeRow);
-          card.appendChild(buildThumbElement(eventThumbnail(item), "Imagem do evento"));
-          card.appendChild(title);
-          card.appendChild(meta);
-          card.appendChild(cta);
+            var typeBadge = document.createElement("span");
+            typeBadge.className = "badge";
+            typeBadge.textContent = formatLabel(item.tipo || "evento");
+            badgeRow.appendChild(typeBadge);
 
-          dom.cards.appendChild(card);
+            var title = document.createElement("h3");
+            title.textContent = item.nome || "Evento sem nome";
+
+            var meta = document.createElement("p");
+            meta.className = "meta";
+            meta.appendChild(createMetaLine("Data", formatDate(item.data_inicio)));
+            meta.appendChild(createMetaLine("Local", eventLocation(item)));
+            meta.appendChild(createMetaLine("Modalidade", formatLabel(eventModalidade(item))));
+            meta.appendChild(createMetaLine("Area", item.area || "Nao informada"));
+
+            var cta = document.createElement("div");
+            cta.className = "cta";
+
+            var link = document.createElement("a");
+            link.className = "btn";
+            link.href = item.link || "#";
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = "Saiba mais / Ver evento";
+
+            cta.appendChild(link);
+
+            card.appendChild(badgeRow);
+            card.appendChild(buildThumbElement(theme));
+            card.appendChild(title);
+            card.appendChild(meta);
+            card.appendChild(cta);
+
+            areaGrid.appendChild(card);
+          });
+
+          areaBlock.appendChild(areaHead);
+          areaBlock.appendChild(areaGrid);
+          dom.cards.appendChild(areaBlock);
         });
       }
 
