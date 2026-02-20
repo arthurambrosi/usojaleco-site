@@ -2085,23 +2085,78 @@
      * Local Storage (por conta)
      ************************************************************/
     function sessionKey(){ return "uj_rx_session_v3"; }
+    function globalSessionKey(){ return "uj_site_auth_v1"; }
     function profileKey(email){ return `uj_rx_profile_v3__${(email||"").toLowerCase()}`; }
     function configKey(){ return "uj_rx_pagecfg_v3"; }
 
+    function normalizeUnifiedUser(u){
+      if(!u || !u.email) return null;
+      return {
+        email: u.email,
+        name: u.name || u.email,
+        picture: u.picture || "",
+        sub: u.sub || ""
+      };
+    }
+
+    function saveUnifiedSession(user){
+      try{
+        if(!user || !user.email){
+          localStorage.removeItem(globalSessionKey());
+          return;
+        }
+        localStorage.setItem(globalSessionKey(), JSON.stringify({
+          email: user.email,
+          name: user.name || user.email,
+          picture: user.picture || "",
+          sub: user.sub || "",
+          provider: "google",
+          iat: Math.floor(Date.now()/1000),
+          exp: 0
+        }));
+      }catch(e){}
+    }
+
+    function loadUnifiedSession(){
+      try{
+        const raw = localStorage.getItem(globalSessionKey());
+        if(!raw) return null;
+        const u = JSON.parse(raw);
+        if(!u || !u.email) return null;
+
+        const exp = Number(u.exp || 0);
+        if(isFinite(exp) && exp > 0 && Math.floor(Date.now()/1000) >= exp){
+          localStorage.removeItem(globalSessionKey());
+          return null;
+        }
+
+        return normalizeUnifiedUser(u);
+      }catch(e){
+        return null;
+      }
+    }
+
     function saveSession(){
       try{
-        if(!state.user){ localStorage.removeItem(sessionKey()); return; }
+        if(!state.user){
+          localStorage.removeItem(sessionKey());
+          saveUnifiedSession(null);
+          return;
+        }
         localStorage.setItem(sessionKey(), JSON.stringify(state.user));
+        saveUnifiedSession(state.user);
       }catch(e){}
     }
     function loadSession(){
       try{
         const raw = localStorage.getItem(sessionKey());
-        if(!raw) return null;
-        const u = JSON.parse(raw);
-        if(u && u.email) return u;
+        if(raw){
+          const u = JSON.parse(raw);
+          if(u && u.email) return u;
+        }
       }catch(e){}
-      return null;
+
+      return loadUnifiedSession();
     }
     function saveProfile(){
       if(!state.user || !state.user.email) return;
