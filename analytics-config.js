@@ -12,6 +12,8 @@
       allowedDomains: [],
       allowedEmails: [],
       skipPaths: [],
+      forceEntryPath: true,
+      entryPath: "/inicio",
       localUsers: [
         {
           username: "arthurambrosi",

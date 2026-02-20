@@ -178,6 +178,8 @@
     var allowedDomains = toStringArray(config.allowedDomains).map(toLowerSafe);
     var allowedEmails = toStringArray(config.allowedEmails).map(toLowerSafe);
     var localUsers = normalizeLocalUsers(config.localUsers);
+    var forceEntryPath = config.forceEntryPath !== false;
+    var entryPath = String(config.entryPath || "/inicio").trim() || "/inicio";
 
     var text = {
       title: String(config.title || "Acesso restrito"),
@@ -279,6 +281,83 @@
       }
     }
 
+    function normalizedEntryPath() {
+      return normalizePathForAuth(entryPath);
+    }
+
+    function isOnEntryPath() {
+      return normalizePathForAuth(window.location.pathname || "/") === normalizedEntryPath();
+    }
+
+    function isSafeNextPath(path) {
+      var value = String(path || "").trim();
+      if (!value) {
+        return false;
+      }
+      if (value.charAt(0) !== "/") {
+        return false;
+      }
+      if (value.indexOf("//") === 0) {
+        return false;
+      }
+      return true;
+    }
+
+    function buildEntryUrl() {
+      var target = normalizedEntryPath();
+      if (!forceEntryPath) {
+        return target;
+      }
+
+      var currentFull = window.location.pathname + window.location.search + window.location.hash;
+      if (isOnEntryPath() || !isSafeNextPath(currentFull)) {
+        return target;
+      }
+
+      return target + "?next=" + encodeURIComponent(currentFull);
+    }
+
+    function redirectToEntryIfNeeded() {
+      if (!forceEntryPath || isOnEntryPath()) {
+        return false;
+      }
+
+      var targetUrl = buildEntryUrl();
+      var currentFull = window.location.pathname + window.location.search + window.location.hash;
+      if (targetUrl === currentFull) {
+        return false;
+      }
+
+      window.location.replace(targetUrl);
+      return true;
+    }
+
+    function getNextParam() {
+      try {
+        var params = new URLSearchParams(window.location.search || "");
+        return String(params.get("next") || "");
+      } catch (_err) {
+        return "";
+      }
+    }
+
+    function redirectToNextAfterLogin() {
+      if (!forceEntryPath || !isOnEntryPath()) {
+        return;
+      }
+
+      var next = getNextParam();
+      if (!isSafeNextPath(next)) {
+        return;
+      }
+
+      if (normalizePathForAuth(next) === normalizedEntryPath()) {
+        return;
+      }
+
+      window.location.replace(next);
+    }
+
     function emitState() {
       var detail = {
         authenticated: !!currentUser,
@@ -333,7 +412,11 @@
       currentUser = user ? normalizeUser(user) : null;
       if (currentUser) {
         unlockScreen(currentUser);
+        redirectToNextAfterLogin();
       } else {
+        if (redirectToEntryIfNeeded()) {
+          return;
+        }
         lockScreen();
       }
       updateApi();
@@ -934,6 +1017,27 @@
 
   function toLowerSafe(value) {
     return String(value || "").trim().toLowerCase();
+  }
+
+  function normalizePathForAuth(pathname) {
+    var path = String(pathname || "/");
+    path = path.split("#")[0].split("?")[0];
+    if (!path) {
+      path = "/";
+    }
+    if (path.charAt(0) !== "/") {
+      path = "/" + path;
+    }
+
+    if (path.length > 1 && path.slice(-1) === "/") {
+      path = path.slice(0, -1);
+    }
+
+    if (path.toLowerCase().slice(-11) === "/index.html") {
+      path = path.slice(0, -11) || "/";
+    }
+
+    return path.toLowerCase() || "/";
   }
 
   function pathMatches(pathname, patterns) {
