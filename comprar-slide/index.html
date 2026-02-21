@@ -3,48 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UsoJaleco | Comprar Slides de Medicina</title>
-  <meta name="description" content="Templates e apresentações prontas para medicina, organizadas por especialidade.">
-  <meta name="theme-color" content="#0c1228">
+  <title>UsoJaleco | Comprar Slides</title>
+  <meta name="description" content="Vitrine de slides e templates de medicina organizados por especialidade.">
+  <meta name="theme-color" content="#0a0b0f">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070a14;
-      --bg-2: #0c1228;
-      --panel: #101938;
-      --panel-2: #16244f;
-      --ink: #f7f8fd;
-      --muted: #9ea7c2;
-      --line: rgba(162, 181, 240, 0.22);
-      --brand: #ff6a1a;
-      --brand-2: #ff944f;
-      --chip: rgba(255, 106, 26, 0.18);
-      --ok: #6ce8b2;
-      --radius: 16px;
-      --shadow: 0 24px 46px rgba(0, 4, 14, 0.45);
-      --maxw: 1160px;
-      --tap: 46px;
+      --bg: #0a0b0f;
+      --card-bg: #12141b;
+      --card-bg-2: #171a24;
+      --text: #e6e9ef;
+      --muted: #9aa4b2;
+      --accent: #ff7a18;
+      --accent-2: #ffb703;
+      --line: #232838;
+      --ok: #67d8a8;
+      --error: #ff8c8c;
+      --tap: 44px;
+      --radius: 18px;
+      --radius-sm: 12px;
     }
 
-    * { box-sizing: border-box; }
-
-    html, body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    html,
+    body {
       min-height: 100%;
     }
 
     body {
-      font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-      color: var(--ink);
       background:
-        radial-gradient(1100px 540px at 85% -10%, rgba(255, 106, 26, 0.2), transparent 65%),
-        radial-gradient(980px 500px at -10% 15%, rgba(71, 123, 255, 0.17), transparent 60%),
-        linear-gradient(180deg, var(--bg-2), var(--bg) 60%);
-      line-height: 1.5;
+        radial-gradient(1100px 600px at 90% -10%, rgba(255, 122, 24, 0.12), transparent 62%),
+        radial-gradient(900px 500px at -10% 10%, rgba(255, 183, 3, 0.08), transparent 58%),
+        var(--bg);
+      color: var(--text);
+      padding: 18px;
     }
 
     a {
@@ -53,323 +54,684 @@
     }
 
     .wrap {
-      width: min(var(--maxw), calc(100% - 1.6rem));
-      margin-inline: auto;
-      padding: 1.2rem 0 2rem;
+      width: min(1200px, 100%);
+      margin: 0 auto;
     }
 
-    .top {
+    .navBar {
+      background: linear-gradient(180deg, rgba(18, 20, 27, 0.92), rgba(10, 11, 15, 0.88));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      gap: 12px;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.4rem;
+      margin-bottom: 22px;
     }
 
-    .brand {
-      display: inline-flex;
+    .navLeft {
+      display: flex;
       align-items: center;
-      gap: 0.7rem;
+      gap: 12px;
     }
 
-    .brand img {
-      width: 38px;
-      height: 38px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: #fff;
+    .logoBox {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 5px;
+      overflow: hidden;
+      flex: 0 0 auto;
     }
 
-    .brand span {
-      font-family: "Bebas Neue", sans-serif;
-      letter-spacing: 0.05em;
-      font-size: 2rem;
-      line-height: 1;
+    .logoBox img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .brandName {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      color: #fff;
+      line-height: 1.02;
+    }
+
+    .brandSub {
+      margin-top: 4px;
+      color: rgba(230, 233, 239, 0.78);
+      font-size: 11px;
+      font-weight: 500;
+      display: block;
+    }
+
+    .social {
+      display: flex;
+      gap: 8px;
+    }
+
+    .social a {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .social a:hover {
+      border-color: var(--accent);
+      background: rgba(255, 122, 24, 0.1);
+    }
+
+    .social svg {
+      display: block;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .hero {
-      border: 1px solid var(--line);
-      border-radius: calc(var(--radius) + 6px);
-      padding: clamp(1.2rem, 2.6vw, 2rem);
-      background:
-        linear-gradient(120deg, rgba(11, 21, 46, 0.88), rgba(13, 24, 49, 0.94)),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: -40% auto auto -18%;
-      width: 500px;
-      height: 500px;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(255, 106, 26, 0.22), transparent 62%);
-      z-index: -1;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: linear-gradient(150deg, rgba(24, 27, 38, 0.96), rgba(16, 18, 27, 0.95));
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
     }
 
     .hero h1 {
-      margin: 0;
-      font-family: "Bebas Neue", sans-serif;
-      letter-spacing: 0.04em;
-      line-height: 0.95;
-      font-size: clamp(2.5rem, 8vw, 4.6rem);
-      max-width: 14ch;
+      font-size: clamp(1.7rem, 4.6vw, 2.45rem);
+      font-weight: 800;
+      line-height: 1.08;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero p {
-      margin: 0.8rem 0 0;
-      max-width: 70ch;
       color: var(--muted);
-      font-size: clamp(0.95rem, 1.9vw, 1.06rem);
+      font-size: 0.98rem;
     }
 
-    .panel {
-      margin-top: 1rem;
-      border: 1px solid var(--line);
-      background: rgba(9, 15, 33, 0.84);
-      border-radius: var(--radius);
-      padding: 1rem;
-    }
-
-    .status {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .status.ok { color: var(--ok); }
-    .status.error { color: #ff8c8c; }
-
-    .cats {
-      margin-top: 0.8rem;
+    .showcaseHeader {
       display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 0.55rem;
     }
 
-    .cat-btn {
-      border: 1px solid var(--line);
-      background: rgba(17, 29, 59, 0.95);
-      color: #eaf0ff;
-      min-height: var(--tap);
-      padding: 0.35rem 0.78rem;
-      border-radius: 999px;
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.86rem;
-      font-weight: 600;
-      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    .headerText {
+      flex: 1;
+      min-width: 280px;
     }
 
-    .cat-btn:hover { transform: translateY(-1px); }
-
-    .cat-btn.is-active {
-      border-color: rgba(255, 148, 79, 0.9);
-      background: linear-gradient(180deg, rgba(255, 106, 26, 0.95), rgba(242, 88, 4, 0.95));
+    .headerText h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
       color: #fff;
     }
 
+    .headerText p {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .searchBox {
+      width: min(370px, 100%);
+      position: relative;
+    }
+
+    .searchInput {
+      width: 100%;
+      min-height: var(--tap);
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      padding: 11px 14px 11px 44px;
+      outline: none;
+      font-size: 0.94rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .searchInput:focus {
+      border-color: var(--accent);
+    }
+
+    .searchIcon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .status {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.error {
+      color: var(--error);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      min-height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #edf1f9;
+      padding: 0 12px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    }
+
+    .chip:hover {
+      transform: translateY(-1px);
+    }
+
+    .chip.active {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(255, 122, 24, 0.9), rgba(255, 183, 3, 0.85));
+      color: #16110d;
+    }
+
     .grid {
-      margin-top: 1rem;
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
 
     .card {
-      grid-column: span 4;
+      background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background:
-        linear-gradient(180deg, rgba(19, 31, 65, 0.98), rgba(13, 23, 47, 0.95));
-      padding: 1rem;
-      display: grid;
-      gap: 0.85rem;
-      min-height: 250px;
-      box-shadow: 0 14px 30px rgba(0, 4, 14, 0.35);
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
     }
 
-    .badge {
-      display: inline-flex;
-      width: fit-content;
-      align-items: center;
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 122, 24, 0.82);
+    }
+
+    .thumbWrap {
+      width: 100%;
+      height: 180px;
+      background: #0e1118;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .thumbWrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .card:hover .thumbWrap img {
+      transform: scale(1.05);
+    }
+
+    .areaTag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      border: 1px solid rgba(255, 183, 3, 0.62);
+      background: rgba(22, 18, 10, 0.72);
+      color: #ffd48f;
+      padding: 4px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 148, 79, 0.45);
-      padding: 0.2rem 0.55rem;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: var(--chip);
-      color: #ffd8bf;
+      font-size: 0.7rem;
       font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      max-width: calc(100% - 20px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .card h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      line-height: 1.25;
-      text-wrap: balance;
+    .cardBody {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .title {
+      font-size: 1.05rem;
+      line-height: 1.28;
+      font-weight: 800;
+      color: #fff;
     }
 
     .desc {
-      margin: 0;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      flex: 1;
     }
 
-    .meta {
-      display: grid;
-      gap: 0.42rem;
-      color: #dfe8ff;
-      font-size: 0.86rem;
-      margin-top: auto;
+    .priceRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      gap: 8px;
     }
 
-    .buy {
-      margin-top: 0.45rem;
+    .price {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .price small {
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-right: 4px;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 2px;
+    }
+
+    .btn {
       min-height: var(--tap);
-      border: 0;
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      padding: 0 10px;
+      font-size: 0.88rem;
+      font-weight: 800;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      padding: 0.55rem 0.85rem;
-      background: linear-gradient(180deg, var(--brand-2), var(--brand));
-      color: #1c130d;
-      font-weight: 800;
-      letter-spacing: 0.01em;
+      flex: 1;
+      transition: transform 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btnVideo {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.11);
+      color: #edf1f9;
+    }
+
+    .btnBuy {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #18120e;
+      border-color: rgba(255, 255, 255, 0.08);
     }
 
     .empty {
-      grid-column: 1 / -1;
-      border: 1px dashed var(--line);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
       border-radius: var(--radius);
-      padding: 1rem;
-      color: var(--muted);
+      padding: 18px;
       text-align: center;
+      color: var(--muted);
     }
 
     .foot {
-      margin-top: 1rem;
-      padding-top: 0.8rem;
-      border-top: 1px solid rgba(162, 181, 240, 0.22);
+      margin-top: 16px;
+      color: #8d95ac;
       font-size: 0.8rem;
-      color: #8f9abc;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 10px;
     }
 
-    @media (max-width: 1024px) {
-      .card { grid-column: span 6; }
-    }
-
-    @media (max-width: 700px) {
-      .wrap {
-        width: min(var(--maxw), calc(100% - 1rem));
-        padding-top: 0.7rem;
+    @media (max-width: 760px) {
+      body {
+        padding: 12px;
       }
 
-      .brand span { font-size: 1.72rem; }
-      .hero { padding: 1rem; }
-      .panel { padding: 0.8rem; }
-      .card {
-        grid-column: 1 / -1;
-        min-height: 220px;
+      .navBar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .showcaseHeader {
+        align-items: stretch;
+      }
+
+      .searchBox {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="top">
-      <a class="brand" href="../index.html" aria-label="Ir para página principal">
-        <img id="brand-logo" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" alt="Logo UsoJaleco">
-        <span>UsoJaleco</span>
-      </a>
+    <header class="navBar">
+      <div class="navLeft">
+        <a class="logoBox" href="../index.html" aria-label="Ir para inicio">
+          <img id="brandLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
+        </a>
+        <div>
+          <div class="brandName">UsoJaleco</div>
+          <span class="brandSub">Vitrine de Slides</span>
+        </div>
+      </div>
+
+      <div class="social">
+        <svg width="0" height="0" style="position:absolute;">
+          <defs>
+            <linearGradient id="socialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff7a18"></stop>
+              <stop offset="100%" stop-color="#ffb703"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <a href="https://www.instagram.com/usojaleco_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="url(#socialGrad)">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a href="https://www.tiktok.com/@usojaleco" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="url(#socialGrad)">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+          </svg>
+        </a>
+        <a href="https://wa.me/5571981577908" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="url(#socialGrad)">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+        </a>
+      </div>
     </header>
 
     <section class="hero">
-      <h1>COMPRAR SLIDES DE MEDICINA</h1>
+      <h1>Slides premium para medicina</h1>
       <p>
-        Catálogo dinâmico com links da sua planilha. Os cards são separados por especialidade usando a coluna
-        <strong>Área do tema</strong>, posicionada após o link de compra.
+        Design inspirado na vitrine de templates do repositorio `usojaleco-site`.
+        Conteudos carregados da sua planilha e separados por area do tema.
       </p>
     </section>
 
-    <section class="panel">
-      <p id="status" class="status">Carregando planilha...</p>
-      <div id="categories" class="cats" aria-label="Filtros por especialidade"></div>
-      <div id="slides-grid" class="grid" aria-live="polite"></div>
-      <div class="foot">
-        Fonte de dados: aba <strong>Slides</strong> da planilha configurada no script.
+    <section class="showcaseHeader">
+      <div class="headerText">
+        <h2>Catalogo de apresentacoes</h2>
+        <p>Filtre por especialidade ou busque por titulo.</p>
+      </div>
+
+      <div class="searchBox">
+        <svg class="searchIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="searchInput" class="searchInput" type="search" placeholder="Buscar slide...">
       </div>
     </section>
+
+    <p id="status" class="status">Carregando slides...</p>
+    <div id="categoryFilters" class="filters" aria-label="Filtros por categoria"></div>
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <div class="foot">
+      Origem: planilha Google ID <strong>1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ</strong> (gid <strong>1847176508</strong>).
+    </div>
   </div>
 
   <script>
     (function () {
-      const LOGO = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
-      const SHEET_ID_FIXED = "COLE_AQUI_O_ID_DA_MESMA_PLANILHA";
-      const SHEET_TAB = "Slides";
-      const querySheetId = new URLSearchParams(window.location.search).get("sheetId");
-      const SHEET_ID = querySheetId || window.USOJALECO_SHEET_ID || SHEET_ID_FIXED;
+      const LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
+      const DEFAULT_SHEET_ID = "1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ";
+      const DEFAULT_GID = "1847176508";
+      const DEFAULT_SHEET_NAME = "Slides";
+
+      const params = new URLSearchParams(window.location.search);
+      const SHEET_ID = params.get("sheetId") || DEFAULT_SHEET_ID;
+      const SHEET_GID = params.get("gid") || DEFAULT_GID;
+      const SHEET_NAME = params.get("sheet") || DEFAULT_SHEET_NAME;
 
       const statusEl = document.getElementById("status");
-      const categoriesEl = document.getElementById("categories");
-      const gridEl = document.getElementById("slides-grid");
-      const logoEl = document.getElementById("brand-logo");
+      const filtersEl = document.getElementById("categoryFilters");
+      const gridEl = document.getElementById("grid");
+      const searchInput = document.getElementById("searchInput");
+      const brandLogo = document.getElementById("brandLogo");
 
       let allSlides = [];
       let activeCategory = "Todas";
+      let searchTerm = "";
 
-      function normalizeKey(key) {
-        return String(key || "")
+      if (brandLogo) {
+        brandLogo.src = LOGO_URL;
+      }
+
+      function normalizeKey(value) {
+        return String(value || "")
           .trim()
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^\w\s]/g, "")
           .replace(/\s+/g, "_");
       }
 
-      function pick(row, keys) {
+      function pick(obj, keys) {
         for (const key of keys) {
-          if (row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== "") {
-            return String(row[key]).trim();
+          const val = obj[key];
+          if (val !== undefined && val !== null && String(val).trim() !== "") {
+            return String(val).trim();
           }
         }
         return "";
       }
 
-      function updateStatus(text, mode) {
+      function sanitizeUrl(url) {
+        if (!url) return "#";
+        try {
+          const parsed = new URL(url, window.location.href);
+          if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+            return parsed.href;
+          }
+        } catch (_) {}
+        return "#";
+      }
+
+      function setStatus(text, mode) {
         statusEl.textContent = text;
         statusEl.className = "status" + (mode ? " " + mode : "");
       }
 
-      function parseGoogleSheetJson(text) {
-        const start = text.indexOf("{");
-        const end = text.lastIndexOf("}");
+      function parseGvizEnvelope(raw) {
+        const start = raw.indexOf("{");
+        const end = raw.lastIndexOf("}");
         if (start < 0 || end < 0) {
-          throw new Error("Resposta da planilha inválida.");
+          throw new Error("Resposta de planilha invalida.");
         }
-        return JSON.parse(text.slice(start, end + 1));
+        return JSON.parse(raw.slice(start, end + 1));
       }
 
-      function loadGoogleSheetJsonp(sheetId, sheetTab) {
-        return new Promise((resolve, reject) => {
+      function rowsFromTable(table) {
+        const cols = (table.cols || []).map(function (c, idx) {
+          const label = c && c.label ? c.label.trim() : "";
+          return label || "col_" + idx;
+        });
+
+        const rawRows = (table.rows || []).map(function (r) {
+          const out = {};
+          cols.forEach(function (col, idx) {
+            const cell = r && r.c ? r.c[idx] : null;
+            out[normalizeKey(col)] = cell && cell.v !== null ? String(cell.v).trim() : "";
+          });
+          return out;
+        });
+
+        const missingHeaders = cols.every(function (c) {
+          return /^col_\d+$/.test(c);
+        });
+
+        if (!missingHeaders || rawRows.length === 0) {
+          return rawRows;
+        }
+
+        const headerRow = rawRows[0];
+        const headerKeys = Object.keys(headerRow);
+        const dynamicHeaders = headerKeys.map(function (key, idx) {
+          return normalizeKey(headerRow[key]) || "col_" + idx;
+        });
+
+        return rawRows.slice(1).map(function (row) {
+          const out = {};
+          headerKeys.forEach(function (key, idx) {
+            out[dynamicHeaders[idx]] = row[key];
+          });
+          return out;
+        });
+      }
+
+      function isActiveValue(val) {
+        if (!val) return true;
+        const v = String(val).trim().toLowerCase();
+        return v === "x" || v === "1" || v === "true" || v === "sim" || v === "ativo";
+      }
+
+      function mapRowToSlide(row) {
+        const title = pick(row, ["titulo", "slide", "nome", "tema", "titulo_do_slide", "assunto"]);
+        const description = pick(row, ["descricao", "descricao_do_slide", "resumo", "subtitulo"]);
+        const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]);
+        const buyLink = pick(row, ["link_compra", "link_de_compra", "link_de_pagamento", "link", "url"]);
+        const video = pick(row, ["video", "link_video", "video_link", "reel"]);
+        const image = pick(row, ["imagem", "thumb", "thumbnail", "capa", "foto"]);
+        const active = pick(row, ["ativo", "publicar", "status"]);
+
+        let area = pick(row, ["area_do_tema", "area_tema", "area", "especialidade", "categoria"]);
+        if (!area) {
+          const keys = Object.keys(row);
+          const buyIndex = keys.findIndex(function (k) {
+            return k === "link_compra" || k === "link_de_compra" || k === "link_de_pagamento";
+          });
+          if (buyIndex >= 0 && buyIndex + 1 < keys.length) {
+            area = String(row[keys[buyIndex + 1]] || "").trim();
+          }
+        }
+
+        return {
+          title: title || "Slide sem titulo",
+          description: description || "Apresentacao pronta para estudo, aula ou plantao.",
+          price: price || "",
+          buyLink: sanitizeUrl(buyLink),
+          video: sanitizeUrl(video),
+          image: sanitizeUrl(image),
+          area: area || "Sem categoria",
+          active: isActiveValue(active)
+        };
+      }
+
+      function parseCsv(text) {
+        const lines = text.split(/\r?\n/).filter(function (l) { return l.trim() !== ""; });
+        if (!lines.length) return [];
+
+        const splitCsvLine = function (line) {
+          const result = [];
+          let cur = "";
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            const next = line[i + 1];
+            if (ch === "\"" && inQuotes && next === "\"") {
+              cur += "\"";
+              i++;
+            } else if (ch === "\"") {
+              inQuotes = !inQuotes;
+            } else if (ch === "," && !inQuotes) {
+              result.push(cur);
+              cur = "";
+            } else {
+              cur += ch;
+            }
+          }
+          result.push(cur);
+          return result.map(function (v) { return v.trim(); });
+        };
+
+        const headerValues = splitCsvLine(lines[0]).map(normalizeKey);
+        const rows = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const cells = splitCsvLine(lines[i]);
+          if (!cells.length) continue;
+          const row = {};
+          headerValues.forEach(function (h, idx) {
+            row[h || ("col_" + idx)] = cells[idx] || "";
+          });
+          rows.push(row);
+        }
+        return rows;
+      }
+
+      async function loadWithFetch(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Falha ao buscar planilha (" + response.status + ").");
+        }
+        return response.text();
+      }
+
+      function loadGvizJsonp(sheetId, gid, sheetName) {
+        return new Promise(function (resolve, reject) {
           const callbackName = "__sheetCb_" + Math.random().toString(36).slice(2);
           const script = document.createElement("script");
 
-          const cleanup = () => {
+          const cleanup = function () {
             delete window[callbackName];
-            if (script.parentNode) {
-              script.parentNode.removeChild(script);
-            }
+            if (script.parentNode) script.parentNode.removeChild(script);
           };
 
           window[callbackName] = function (payload) {
@@ -379,211 +741,169 @@
 
           script.onerror = function () {
             cleanup();
-            reject(new Error("Não foi possível carregar a planilha (JSONP)."));
+            reject(new Error("Falha ao carregar JSONP."));
           };
 
-          script.src = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
-            "/gviz/tq?sheet=" + encodeURIComponent(sheetTab) +
-            "&tqx=responseHandler:" + callbackName;
-
+          const base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
+          const query = gid
+            ? "?gid=" + encodeURIComponent(gid) + "&tqx=responseHandler:" + callbackName
+            : "?sheet=" + encodeURIComponent(sheetName) + "&tqx=responseHandler:" + callbackName;
+          script.src = base + query;
           document.head.appendChild(script);
         });
       }
 
-      function toRows(table) {
-        const cols = (table.cols || []).map((c, index) => {
-          const label = (c && c.label ? c.label : "").trim();
-          return label || "col_" + index;
-        });
-
-        const rawRows = (table.rows || []).map((r) => {
-          const out = {};
-          cols.forEach((col, idx) => {
-            const cell = r && r.c ? r.c[idx] : null;
-            out[normalizeKey(col)] = cell && cell.v !== null ? String(cell.v).trim() : "";
-          });
-          return out;
-        });
-
-        const headerMissing = cols.every((c) => /^col_\d+$/.test(c));
-        if (!headerMissing || !rawRows.length) {
-          return rawRows;
-        }
-
-        const firstRow = rawRows[0];
-        const firstKeys = Object.keys(firstRow);
-        const dynamicHeaders = firstKeys.map((k, idx) => normalizeKey(firstRow[k]) || "col_" + idx);
-
-        return rawRows.slice(1).map((row) => {
-          const out = {};
-          firstKeys.forEach((k, idx) => {
-            out[dynamicHeaders[idx]] = row[k];
-          });
-          return out;
-        });
-      }
-
-      function mapSlide(row) {
-        const title = pick(row, ["titulo", "slide", "nome", "tema", "titulo_do_slide", "assunto"]);
-        const description = pick(row, ["descricao", "descricao_do_slide", "subtitulo", "resumo"]);
-        const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]);
-        const buyLink = pick(row, ["link_compra", "compra", "link_de_compra", "link_de_pagamento", "link", "url"]);
-
-        const keys = Object.keys(row);
-        let area = pick(row, ["area_do_tema", "area", "especialidade", "categoria"]);
-
-        if (!area) {
-          const buyIndex = keys.findIndex((k) => k === "link_compra" || k === "link_de_compra" || k === "compra");
-          if (buyIndex >= 0 && buyIndex + 1 < keys.length) {
-            area = String(row[keys[buyIndex + 1]] || "").trim();
+      async function loadRowsFromSheet(sheetId, gid, sheetName) {
+        const gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
+        const gvizUrl = gid
+          ? gvizBase + "?tqx=out:json&gid=" + encodeURIComponent(gid)
+          : gvizBase + "?tqx=out:json&sheet=" + encodeURIComponent(sheetName);
+        try {
+          const gvizRaw = await loadWithFetch(gvizUrl);
+          const payload = parseGvizEnvelope(gvizRaw);
+          return rowsFromTable(payload.table || {});
+        } catch (_) {
+          try {
+            const payload = await loadGvizJsonp(sheetId, gid, sheetName);
+            return rowsFromTable(payload.table || {});
+          } catch (_) {
+            const csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
+              "/export?format=csv&gid=" + encodeURIComponent(gid || "");
+            const csvRaw = await loadWithFetch(csvUrl);
+            return parseCsv(csvRaw);
           }
         }
-
-        return {
-          title: title || "Slide sem título",
-          description: description || "Apresentação pronta para uso em estudo, aula ou revisão.",
-          area: area || "Sem categoria",
-          price: price || "",
-          buyLink: buyLink || "#"
-        };
       }
 
-      function sanitizeUrl(url) {
-        try {
-          const parsed = new URL(url, window.location.href);
-          return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : "#";
-        } catch (_) {
-          return "#";
-        }
+      function getCategories(slides) {
+        const unique = Array.from(new Set(slides.map(function (s) { return s.area; }).filter(Boolean)));
+        unique.sort(function (a, b) {
+          return a.localeCompare(b, "pt-BR");
+        });
+        return ["Todas"].concat(unique);
       }
 
-      function categoriesFromSlides(slides) {
-        const set = new Set(slides.map((s) => s.area).filter(Boolean));
-        return ["Todas", ...Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"))];
-      }
-
-      function renderCategories() {
-        const categories = categoriesFromSlides(allSlides);
-        categoriesEl.innerHTML = "";
-
-        categories.forEach((category) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "cat-btn" + (category === activeCategory ? " is-active" : "");
-          btn.textContent = category;
-          btn.addEventListener("click", function () {
+      function renderFilters() {
+        const categories = getCategories(allSlides);
+        filtersEl.innerHTML = "";
+        categories.forEach(function (category) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "chip" + (category === activeCategory ? " active" : "");
+          button.textContent = category;
+          button.addEventListener("click", function () {
             activeCategory = category;
-            renderCategories();
+            renderFilters();
             renderGrid();
           });
-          categoriesEl.appendChild(btn);
+          filtersEl.appendChild(button);
         });
+      }
+
+      function getVisibleSlides() {
+        return allSlides.filter(function (slide) {
+          const matchesCategory = activeCategory === "Todas" || slide.area === activeCategory;
+          const searchSource = (slide.title + " " + slide.description + " " + slide.area).toLowerCase();
+          const matchesSearch = searchTerm === "" || searchSource.includes(searchTerm);
+          return matchesCategory && matchesSearch;
+        });
+      }
+
+      function buildCard(slide) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const image = slide.image && slide.image !== "#" ? slide.image : "https://via.placeholder.com/960x540/0f1118/6f7790?text=Slide+UsoJaleco";
+        const hasVideo = slide.video && slide.video !== "#";
+        const hasBuy = slide.buyLink && slide.buyLink !== "#";
+        const priceText = slide.price ? slide.price : "A consultar";
+
+        card.innerHTML = [
+          "<div class=\"thumbWrap\">",
+          "  <span class=\"areaTag\">" + escapeHtml(slide.area) + "</span>",
+          "  <img loading=\"lazy\" src=\"" + escapeAttr(image) + "\" alt=\"" + escapeAttr(slide.title) + "\">",
+          "</div>",
+          "<div class=\"cardBody\">",
+          "  <h3 class=\"title\">" + escapeHtml(slide.title) + "</h3>",
+          "  <p class=\"desc\">" + escapeHtml(slide.description) + "</p>",
+          "  <div class=\"priceRow\">",
+          "    <div class=\"price\"><small>R$</small>" + escapeHtml(priceText) + "</div>",
+          "  </div>",
+          "  <div class=\"actions\">",
+          hasVideo
+            ? "    <a class=\"btn btnVideo\" href=\"" + escapeAttr(slide.video) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Ver video</a>"
+            : "    <span class=\"btn btnVideo\" style=\"opacity:.55;pointer-events:none;\">Sem video</span>",
+          hasBuy
+            ? "    <a class=\"btn btnBuy\" href=\"" + escapeAttr(slide.buyLink) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Comprar</a>"
+            : "    <span class=\"btn btnBuy\" style=\"opacity:.55;pointer-events:none;\">Sem link</span>",
+          "  </div>",
+          "</div>"
+        ].join("\n");
+
+        return card;
       }
 
       function renderGrid() {
-        const visible = activeCategory === "Todas"
-          ? allSlides
-          : allSlides.filter((slide) => slide.area === activeCategory);
-
+        const visible = getVisibleSlides();
         gridEl.innerHTML = "";
 
         if (!visible.length) {
           const empty = document.createElement("div");
           empty.className = "empty";
-          empty.textContent = "Nenhum slide encontrado para essa especialidade.";
+          empty.textContent = "Nenhum slide encontrado com esse filtro.";
           gridEl.appendChild(empty);
+          setStatus("0 slides encontrados.", "");
           return;
         }
 
-        visible.forEach((slide) => {
-          const card = document.createElement("article");
-          card.className = "card";
-
-          const area = document.createElement("span");
-          area.className = "badge";
-          area.textContent = slide.area;
-
-          const title = document.createElement("h2");
-          title.textContent = slide.title;
-
-          const desc = document.createElement("p");
-          desc.className = "desc";
-          desc.textContent = slide.description;
-
-          const meta = document.createElement("div");
-          meta.className = "meta";
-
-          if (slide.price) {
-            const price = document.createElement("strong");
-            price.textContent = "Valor: " + slide.price;
-            meta.appendChild(price);
-          }
-
-          const buy = document.createElement("a");
-          buy.className = "buy";
-          buy.href = sanitizeUrl(slide.buyLink);
-          buy.target = "_blank";
-          buy.rel = "noopener noreferrer";
-          buy.textContent = "Comprar slide";
-
-          card.appendChild(area);
-          card.appendChild(title);
-          card.appendChild(desc);
-          card.appendChild(meta);
-          card.appendChild(buy);
-          gridEl.appendChild(card);
+        visible.forEach(function (slide) {
+          gridEl.appendChild(buildCard(slide));
         });
+
+        setStatus(visible.length + " slides encontrados.", "ok");
       }
 
-      async function loadSlides() {
-        if (!SHEET_ID || SHEET_ID === "COLE_AQUI_O_ID_DA_MESMA_PLANILHA") {
-          updateStatus("Defina o SHEET_ID no script para carregar os slides da sua planilha.", "error");
-          return;
-        }
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
 
-        updateStatus("Carregando dados da aba Slides...");
-
-        let payload = null;
-
-        try {
-          const endpoint = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) +
-            "/gviz/tq?tqx=out:json&sheet=" + encodeURIComponent(SHEET_TAB);
-          const response = await fetch(endpoint);
-          if (!response.ok) {
-            throw new Error("Falha ao acessar a planilha (" + response.status + ").");
-          }
-          const text = await response.text();
-          payload = parseGoogleSheetJson(text);
-        } catch (_) {
-          payload = await loadGoogleSheetJsonp(SHEET_ID, SHEET_TAB);
-        }
-
-        const rows = toRows(payload.table || {});
-        const mapped = rows.map(mapSlide).filter((item) => item.buyLink && item.buyLink !== "#");
-
-        allSlides = mapped;
+      function escapeAttr(value) {
+        return escapeHtml(value);
       }
 
       async function init() {
         try {
-          await loadSlides();
-          if (!allSlides.length) {
-            updateStatus("Planilha carregada, mas não foram encontrados slides válidos.", "error");
+          setStatus("Carregando slides da planilha...", "");
+          const rows = await loadRowsFromSheet(SHEET_ID, SHEET_GID, SHEET_NAME);
+          const slides = rows.map(mapRowToSlide).filter(function (s) { return s.active; });
+
+          if (!slides.length) {
+            setStatus("Planilha carregada, mas sem slides ativos.", "error");
+            renderGrid();
             return;
           }
-          updateStatus("Planilha carregada com sucesso.", "ok");
-          renderCategories();
+
+          allSlides = slides;
+          renderFilters();
           renderGrid();
         } catch (error) {
-          updateStatus("Erro ao carregar os slides: " + error.message, "error");
+          setStatus(
+            "Falha ao carregar a planilha. Verifique permissao publica e aba/gid. Erro: " + error.message,
+            "error"
+          );
         }
       }
 
-      // Mantém a URL da logo no escopo para fácil atualização futura.
-      window.USOJALECO_LOGO = LOGO;
-      if (logoEl) {
-        logoEl.src = LOGO;
-      }
+      searchInput.addEventListener("input", function (event) {
+        searchTerm = String(event.target.value || "").trim().toLowerCase();
+        renderGrid();
+      });
+
       init();
     })();
   </script>
