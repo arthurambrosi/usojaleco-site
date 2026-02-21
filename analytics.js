@@ -203,6 +203,7 @@
     };
 
     var ui = ensureAuthUi(text);
+    ensureUnifiedHeader(ui);
     var currentUser = null;
 
     function readStoredUser() {
@@ -724,6 +725,319 @@
     }
   }
 
+  function ensureUnifiedHeader(ui) {
+    ensureUnifiedHeaderStyles();
+
+    var existing = document.getElementById("uj-unified-header");
+    var header = existing || document.createElement("div");
+    var inner;
+    var left;
+    var center;
+    var right;
+
+    if (!existing) {
+      header.id = "uj-unified-header";
+
+      inner = document.createElement("div");
+      inner.id = "uj-unified-inner";
+
+      left = document.createElement("div");
+      left.id = "uj-unified-left";
+
+      center = document.createElement("div");
+      center.id = "uj-unified-center";
+      center.setAttribute("data-has-search", "0");
+
+      right = document.createElement("div");
+      right.id = "uj-unified-right";
+
+      var brandLink = document.createElement("a");
+      brandLink.id = "uj-unified-brand";
+      brandLink.href = "/inicio";
+      brandLink.setAttribute("aria-label", "UsoJaleco");
+
+      var logo = document.createElement("img");
+      logo.id = "uj-unified-brand-logo";
+      logo.alt = "Logo UsoJaleco";
+      logo.src = findUnifiedHeaderLogo();
+
+      var brandText = document.createElement("div");
+      brandText.id = "uj-unified-brand-text";
+      var brandPartA = document.createElement("span");
+      brandPartA.textContent = "uso";
+      var brandPartB = document.createElement("b");
+      brandPartB.textContent = "jaleco";
+      brandText.appendChild(brandPartA);
+      brandText.appendChild(brandPartB);
+
+      brandLink.appendChild(logo);
+      brandLink.appendChild(brandText);
+      left.appendChild(brandLink);
+
+      inner.appendChild(left);
+      inner.appendChild(center);
+      inner.appendChild(right);
+      header.appendChild(inner);
+
+      if (document.body && document.body.firstChild) {
+        document.body.insertBefore(header, document.body.firstChild);
+      } else if (document.body) {
+        document.body.appendChild(header);
+      } else {
+        document.documentElement.appendChild(header);
+      }
+    } else {
+      inner = document.getElementById("uj-unified-inner");
+      left = document.getElementById("uj-unified-left");
+      center = document.getElementById("uj-unified-center");
+      right = document.getElementById("uj-unified-right");
+    }
+
+    if (!right || !center) {
+      return;
+    }
+
+    var legacyHeaders = collectLegacyHeaders(header);
+    var searchNode = findSearchNodeInLegacyHeaders(legacyHeaders);
+    mountSearchInUnifiedCenter(center, searchNode);
+    hideLegacyHeaders(legacyHeaders);
+
+    if (ui && ui.account) {
+      ui.account.classList.add("uj-auth-account-inline");
+      if (ui.account.parentNode !== right) {
+        right.appendChild(ui.account);
+      }
+    }
+  }
+
+  function findUnifiedHeaderLogo() {
+    var fallback = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
+    var candidates = [
+      "img[src*='Design%20sem%20nome%20(28)']",
+      "img[alt*='UsoJaleco' i]",
+      ".brand img",
+      "header img"
+    ];
+
+    for (var i = 0; i < candidates.length; i += 1) {
+      var node = document.querySelector(candidates[i]);
+      if (node && node.getAttribute) {
+        var src = String(node.getAttribute("src") || node.src || "").trim();
+        if (src) {
+          return src;
+        }
+      }
+    }
+
+    return fallback;
+  }
+
+  function collectLegacyHeaders(unifiedHeader) {
+    var headers = [];
+    if (!document.body || !document.body.children) {
+      return headers;
+    }
+
+    var children = Array.prototype.slice.call(document.body.children);
+    for (var i = 0; i < children.length && i < 12; i += 1) {
+      var child = children[i];
+      if (!child || child === unifiedHeader) {
+        continue;
+      }
+      if (child.id === "uj-auth-overlay" || child.id === "uj-auth-account") {
+        continue;
+      }
+      if (isLikelyLegacyHeader(child)) {
+        headers.push(child);
+      }
+    }
+
+    return headers;
+  }
+
+  function isLikelyLegacyHeader(node) {
+    if (!node || !node.tagName) {
+      return false;
+    }
+
+    var tag = String(node.tagName || "").toLowerCase();
+    var cls = String(node.className || "").toLowerCase();
+    var id = String(node.id || "").toLowerCase();
+    var marker = tag + " " + cls + " " + id;
+
+    if (tag === "header") {
+      return true;
+    }
+
+    if (marker.indexOf("topbar") !== -1 || marker.indexOf("header") !== -1 || marker.indexOf("navbar") !== -1) {
+      return true;
+    }
+
+    if (node.querySelector) {
+      if (node.querySelector(".brand,.brandName,[class*='brand'],[id*='brand']")) {
+        return true;
+      }
+      if (node.querySelector("img[alt*='UsoJaleco' i]")) {
+        return true;
+      }
+      if (node.querySelector("[role='search'],.searchWrap,.searchPill")) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function findSearchNodeInLegacyHeaders(headers) {
+    for (var i = 0; i < headers.length; i += 1) {
+      var header = headers[i];
+      if (!header || !header.querySelectorAll) {
+        continue;
+      }
+
+      var containerCandidates = header.querySelectorAll("[role='search'],.searchWrap,.searchPill,.searchBox,.search-bar,.search");
+      for (var j = 0; j < containerCandidates.length; j += 1) {
+        var container = containerCandidates[j];
+        if (containsSearchInput(container)) {
+          return container;
+        }
+      }
+
+      var inputs = header.querySelectorAll(
+        "input[type='search'],input[placeholder*='busca' i],input[placeholder*='busque' i],input[placeholder*='pesquis' i],input[id*='search' i],input[class*='search' i],input[id='q'],input[name='q']"
+      );
+      for (var k = 0; k < inputs.length; k += 1) {
+        var input = inputs[k];
+        if (!looksLikeSearchInput(input)) {
+          continue;
+        }
+        var wrap = input.closest("form,[role='search'],.searchWrap,.searchPill,.searchBox,.search-bar");
+        return wrap || input;
+      }
+    }
+
+    return null;
+  }
+
+  function containsSearchInput(node) {
+    if (!node || !node.querySelectorAll) {
+      return false;
+    }
+    var inputs = node.querySelectorAll("input,textarea");
+    for (var i = 0; i < inputs.length; i += 1) {
+      if (looksLikeSearchInput(inputs[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function looksLikeSearchInput(input) {
+    if (!input || !input.tagName) {
+      return false;
+    }
+
+    var tag = String(input.tagName || "").toLowerCase();
+    if (tag !== "input" && tag !== "textarea") {
+      return false;
+    }
+
+    var type = String(input.type || "text").toLowerCase();
+    if (type === "password" || type === "email" || type === "number" || type === "tel" || type === "date" || type === "datetime-local" || type === "month" || type === "time" || type === "week" || type === "url") {
+      return false;
+    }
+
+    if (type === "search") {
+      return true;
+    }
+
+    var marker =
+      String(input.id || "") +
+      " " +
+      String(input.name || "") +
+      " " +
+      String(input.className || "") +
+      " " +
+      String(input.getAttribute("placeholder") || "") +
+      " " +
+      String(input.getAttribute("aria-label") || "");
+    marker = marker.toLowerCase();
+
+    if (marker.indexOf("search") !== -1 || marker.indexOf("pesquis") !== -1 || marker.indexOf("busca") !== -1 || marker.indexOf("busque") !== -1) {
+      return true;
+    }
+
+    return marker.trim() === "q";
+  }
+
+  function mountSearchInUnifiedCenter(center, searchNode) {
+    if (!center) {
+      return;
+    }
+
+    while (center.firstChild) {
+      center.removeChild(center.firstChild);
+    }
+
+    if (!searchNode) {
+      center.setAttribute("data-has-search", "0");
+      return;
+    }
+
+    var tag = String(searchNode.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") {
+      var wrap = document.createElement("div");
+      wrap.className = "uj-unified-search-wrap";
+      wrap.appendChild(searchNode);
+      center.appendChild(wrap);
+    } else {
+      center.appendChild(searchNode);
+    }
+
+    searchNode.setAttribute("data-uj-search-in-head", "1");
+    center.setAttribute("data-has-search", "1");
+  }
+
+  function hideLegacyHeaders(headers) {
+    for (var i = 0; i < headers.length; i += 1) {
+      var node = headers[i];
+      if (!node || node.id === "uj-unified-header") {
+        continue;
+      }
+      node.setAttribute("data-uj-legacy-header", "1");
+      node.style.display = "none";
+    }
+  }
+
+  function ensureUnifiedHeaderStyles() {
+    if (document.getElementById("uj-unified-header-style")) {
+      return;
+    }
+
+    var style = document.createElement("style");
+    style.id = "uj-unified-header-style";
+    style.textContent =
+      "#uj-unified-header{position:sticky;top:0;z-index:2147483000;background:#fff;border-bottom:1px solid #e2e8f0;box-shadow:0 8px 18px rgba(15,23,42,.08);}" +
+      "#uj-unified-inner{max-width:1240px;height:64px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;}" +
+      "#uj-unified-left{display:flex;align-items:center;min-width:170px;}" +
+      "#uj-unified-brand{display:flex;align-items:center;gap:10px;color:#334155;text-decoration:none;user-select:none;}" +
+      "#uj-unified-brand-logo{height:28px;width:auto;display:block;}" +
+      "#uj-unified-brand-text{display:flex;align-items:baseline;gap:0;font-family:Outfit,Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:18px;font-weight:500;color:#475569;}" +
+      "#uj-unified-brand-text b{font-weight:800;color:#334155;}" +
+      "#uj-unified-center{display:flex;justify-content:center;align-items:center;min-width:0;}" +
+      "#uj-unified-center>*{width:min(760px,100%);}" +
+      "#uj-unified-center .searchWrap{width:100%;display:flex;justify-content:center;}" +
+      "#uj-unified-center .searchPill{width:min(760px,100%);}" +
+      "#uj-unified-center .uj-unified-search-wrap{display:flex;justify-content:center;width:min(760px,100%);}" +
+      "#uj-unified-center input[type='search'],#uj-unified-center input[type='text']{max-width:100%;}" +
+      "#uj-unified-right{display:flex;justify-content:flex-end;align-items:center;min-width:150px;}" +
+      "[data-uj-legacy-header='1']{display:none !important;}" +
+      "@media (max-width:860px){#uj-unified-inner{grid-template-columns:auto minmax(0,1fr) auto;height:60px;gap:10px;padding:0 12px;}#uj-unified-left{min-width:130px;}#uj-unified-right{min-width:100px;}#uj-unified-brand-text{font-size:16px;}#uj-unified-brand-logo{height:24px;}}" +
+      "@media (max-width:640px){#uj-unified-inner{grid-template-columns:auto auto;grid-template-areas:'left right' 'center center';height:auto;row-gap:10px;padding:10px 12px;}#uj-unified-left{grid-area:left;}#uj-unified-right{grid-area:right;min-width:0;}#uj-unified-center{grid-area:center;}}";
+
+    document.head.appendChild(style);
+  }
+
   function ensureAuthUi(text) {
     var existingOverlay = document.getElementById("uj-auth-overlay");
     var existingAccount = document.getElementById("uj-auth-account");
@@ -860,14 +1174,16 @@
       "#uj-auth-status{margin:10px 0 0;font-size:12px;color:#64748b;text-align:center;}" +
       "#uj-auth-error{margin:10px 0 0;font-size:13px;color:#b91c1c;text-align:center;}" +
       "#uj-auth-retry{margin:12px auto 0;height:38px;padding:0 16px;border-radius:999px;border:1px solid #f97316;background:#fff;color:#c2410c;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}" +
-      "#uj-auth-account{position:fixed;top:14px;right:14px;z-index:2147483646;display:none;align-items:center;gap:10px;padding:8px 10px;background:#fff;border:1px solid #e2e8f0;border-radius:999px;box-shadow:0 10px 24px rgba(15,23,42,.12);font-family:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}" +
-      "#uj-auth-avatar{width:34px;height:34px;border-radius:999px;background:#f97316;color:#fff;font-size:14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background-size:cover;background-position:center;}" +
+      "#uj-auth-account{display:none;align-items:center;gap:8px;padding:4px 8px;background:#fff;border:1px solid #e2e8f0;border-radius:999px;font-family:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}" +
+      "#uj-auth-account.uj-auth-account-inline{position:static;box-shadow:none;}" +
+      "#uj-auth-avatar{width:28px;height:28px;border-radius:999px;background:#f97316;color:#fff;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background-size:cover;background-position:center;}" +
       "#uj-auth-avatar.has-image{color:transparent;}" +
       "#uj-auth-meta{display:flex;flex-direction:column;min-width:0;}" +
-      "#uj-auth-name{font-size:12px;line-height:1.1;color:#0f172a;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
-      "#uj-auth-email{font-size:11px;line-height:1.1;color:#64748b;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
-      "#uj-auth-logout{height:30px;padding:0 12px;border-radius:999px;border:1px solid #f1f5f9;background:#fff;color:#334155;font-size:12px;font-weight:700;cursor:pointer;}" +
-      "@media (max-width:720px){#uj-auth-account{left:12px;right:12px;top:auto;bottom:12px;justify-content:space-between;}#uj-auth-name,#uj-auth-email{max-width:120px;}}";
+      "#uj-auth-name{font-size:11px;line-height:1.1;color:#0f172a;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
+      "#uj-auth-email{font-size:10px;line-height:1.1;color:#64748b;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
+      "#uj-auth-logout{height:24px;padding:0 8px;border-radius:999px;border:0;background:transparent;color:#64748b;font-size:11px;font-weight:700;cursor:pointer;}" +
+      "#uj-auth-logout:hover{background:#f8fafc;color:#0f172a;}" +
+      "@media (max-width:720px){#uj-auth-email{display:none;}#uj-auth-name{max-width:90px;}}";
 
     document.head.appendChild(style);
   }
