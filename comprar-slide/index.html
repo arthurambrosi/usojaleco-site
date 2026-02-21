@@ -575,13 +575,37 @@
 
       function sanitizeUrl(url) {
         if (!url) return "#";
+        let value = String(url).trim();
+        if (!value) return "#";
+
+        // Suporta links colados sem protocolo (ex.: fast.greenn.com/xxx).
+        if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(value)) {
+          const looksLikeDomain = /^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(value);
+          const knownHosts = /^(www\.|wa\.me\/|youtube\.com\/|youtu\.be\/|instagram\.com\/|tiktok\.com\/|drive\.google\.com\/)/i.test(value);
+          if (looksLikeDomain || knownHosts) {
+            value = "https://" + value.replace(/^\/+/, "");
+          }
+        }
+
         try {
-          const parsed = new URL(url, window.location.href);
+          const parsed = new URL(value, window.location.href);
           if (parsed.protocol === "http:" || parsed.protocol === "https:") {
             return parsed.href;
           }
         } catch (_) {}
         return "#";
+      }
+
+      function normalizeImageUrl(url) {
+        const safe = sanitizeUrl(url);
+        if (safe === "#") return "#";
+
+        // Converte links de arquivo do Drive em thumbnail renderizavel.
+        const driveMatch = safe.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+        if (driveMatch && driveMatch[1]) {
+          return "https://drive.google.com/thumbnail?id=" + driveMatch[1] + "&sz=w1200";
+        }
+        return safe;
       }
 
       function setStatus(text, mode) {
@@ -643,22 +667,30 @@
       }
 
       function mapRowToSlide(row) {
-        const title = pick(row, ["titulo", "slide", "nome", "tema", "titulo_do_slide", "assunto"]);
-        const description = pick(row, ["descricao", "descricao_do_slide", "resumo", "subtitulo"]);
-        const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]);
-        const buyLink = pick(row, ["link_compra", "link_de_compra", "link_de_pagamento", "link", "url"]);
-        const video = pick(row, ["video", "link_video", "video_link", "reel"]);
-        const image = pick(row, ["imagem", "thumb", "thumbnail", "capa", "foto"]);
-        const active = pick(row, ["ativo", "publicar", "status"]);
+        const keys = Object.keys(row);
+        const byIndex = function (idx) {
+          if (idx < 0 || idx >= keys.length) return "";
+          return String(row[keys[idx]] || "").trim();
+        };
+
+        // Mapeamento por nome + fallback por posicao (A-H do print enviado).
+        const active = pick(row, ["ativo", "active", "publicar", "status"]) || byIndex(0);
+        const title = pick(row, ["titulo", "slide", "nome", "tema", "titulo_do_slide", "assunto"]) || byIndex(1);
+        const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]) || byIndex(2);
+        const description = pick(row, ["descricao", "descricao_do_slide", "resumo", "subtitulo"]) || byIndex(3);
+        const image = pick(row, ["imagem", "thumb", "thumbnail", "capa", "foto"]) || byIndex(4);
+        const video = pick(row, ["video", "link_video", "video_link", "reel"]) || byIndex(5);
+        const buyLink = pick(row, ["link_compra", "link_de_compra", "link_de_pagamento", "link", "url"]) || byIndex(6);
 
         let area = pick(row, ["area_do_tema", "area_tema", "area", "especialidade", "categoria"]);
         if (!area) {
-          const keys = Object.keys(row);
           const buyIndex = keys.findIndex(function (k) {
             return k === "link_compra" || k === "link_de_compra" || k === "link_de_pagamento";
           });
           if (buyIndex >= 0 && buyIndex + 1 < keys.length) {
             area = String(row[keys[buyIndex + 1]] || "").trim();
+          } else {
+            area = byIndex(7);
           }
         }
 
@@ -668,7 +700,7 @@
           price: price || "",
           buyLink: sanitizeUrl(buyLink),
           video: sanitizeUrl(video),
-          image: sanitizeUrl(image),
+          image: normalizeImageUrl(image),
           area: area || "Sem categoria",
           active: isActiveValue(active)
         };
@@ -746,8 +778,8 @@
 
           const base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
           const query = gid
-            ? "?gid=" + encodeURIComponent(gid) + "&tqx=responseHandler:" + callbackName
-            : "?sheet=" + encodeURIComponent(sheetName) + "&tqx=responseHandler:" + callbackName;
+            ? "?gid=" + encodeURIComponent(gid) + "&headers=1&tqx=responseHandler:" + callbackName
+            : "?sheet=" + encodeURIComponent(sheetName) + "&headers=1&tqx=responseHandler:" + callbackName;
           script.src = base + query;
           document.head.appendChild(script);
         });
@@ -756,23 +788,38 @@
       async function loadRowsFromSheet(sheetId, gid, sheetName) {
         const gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
         const gvizUrl = gid
-          ? gvizBase + "?tqx=out:json&gid=" + encodeURIComponent(gid)
-          : gvizBase + "?tqx=out:json&sheet=" + encodeURIComponent(sheetName);
+          ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
+          : gvizBase + "?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName);
+
+        let lastError = null;
+
         try {
           const gvizRaw = await loadWithFetch(gvizUrl);
           const payload = parseGvizEnvelope(gvizRaw);
           return rowsFromTable(payload.table || {});
-        } catch (_) {
+        } catch (err) {
+          lastError = err;
           try {
             const payload = await loadGvizJsonp(sheetId, gid, sheetName);
             return rowsFromTable(payload.table || {});
-          } catch (_) {
+          } catch (err2) {
+            lastError = err2;
             const csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
               "/export?format=csv&gid=" + encodeURIComponent(gid || "");
-            const csvRaw = await loadWithFetch(csvUrl);
-            return parseCsv(csvRaw);
+            try {
+              const csvRaw = await loadWithFetch(csvUrl);
+              return parseCsv(csvRaw);
+            } catch (err3) {
+              lastError = err3;
+              const pubCsvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
+                "/pub?gid=" + encodeURIComponent(gid || "") + "&single=true&output=csv";
+              const csvRawPub = await loadWithFetch(pubCsvUrl);
+              return parseCsv(csvRawPub);
+            }
           }
         }
+
+        throw lastError || new Error("Nao foi possivel carregar a planilha.");
       }
 
       function getCategories(slides) {
@@ -892,8 +939,12 @@
           renderFilters();
           renderGrid();
         } catch (error) {
+          const msg = String(error && error.message ? error.message : error || "");
+          const unauthorized = /401|unauthorized|nao autorizado|não autorizado/i.test(msg);
           setStatus(
-            "Falha ao carregar a planilha. Verifique permissao publica e aba/gid. Erro: " + error.message,
+            unauthorized
+              ? "A planilha esta privada. Em Compartilhar, habilite 'Qualquer pessoa com o link: Leitor' ou publique a aba Slides."
+              : "Falha ao carregar a planilha. Verifique permissao publica e aba/gid. Erro: " + msg,
             "error"
           );
         }
