@@ -12,8 +12,20 @@
       allowedDomains: [],
       allowedEmails: [],
       skipPaths: [],
+      protectedPaths: [
+        "/inicio*",
+        "/receita*",
+        "/gasometria*",
+        "/criarsolicitacao*",
+        "/scores*",
+        "/flashcard*",
+        "/prescrição*",
+        "/prescricao*"
+      ],
       forceEntryPath: true,
       entryPath: "/inicio",
+      allowGuest: true,
+      allowSignup: true,
       localUsers: [
         {
           username: "arthurambrosi",

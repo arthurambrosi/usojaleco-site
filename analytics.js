@@ -177,9 +177,21 @@
     var googleClientId = String(config.googleClientId || "").trim();
     var allowedDomains = toStringArray(config.allowedDomains).map(toLowerSafe);
     var allowedEmails = toStringArray(config.allowedEmails).map(toLowerSafe);
-    var localUsers = normalizeLocalUsers(config.localUsers);
+    var protectedPaths = toStringArray(config.protectedPaths);
+    var localUsersStorageKey = String(config.localUsersStorageKey || "uj_site_local_users_v1").trim() || "uj_site_local_users_v1";
+    var configLocalUsers = normalizeLocalUsers(config.localUsers);
+    var localUsers = [];
+    var allowGuest = config.allowGuest !== false;
+    var allowSignup = config.allowSignup !== false;
     var forceEntryPath = config.forceEntryPath !== false;
     var entryPath = String(config.entryPath || "/inicio").trim() || "/inicio";
+
+    refreshLocalUsers();
+    if (protectedPaths.length && !pathMatches(window.location.pathname || "/", protectedPaths)) {
+      disableAuthUi();
+      exposeDisabledApi();
+      return;
+    }
 
     var text = {
       title: String(config.title || "Acesso restrito"),
@@ -199,12 +211,56 @@
       usernamePlaceholder: String(config.usernamePlaceholder || "Digite seu usuario"),
       passwordPlaceholder: String(config.passwordPlaceholder || "Digite sua senha"),
       submitLabel: String(config.submitLabel || "Entrar"),
-      invalidCredentials: String(config.invalidCredentialsText || "Usuario ou senha invalidos.")
+      invalidCredentials: String(config.invalidCredentialsText || "Usuario ou senha invalidos."),
+      guestLabel: String(config.guestLabel || "Entrar como visitante"),
+      signupToggleLabel: String(config.signupToggleLabel || "Criar conta"),
+      signupNameLabel: String(config.signupNameLabel || "Nome"),
+      signupUserLabel: String(config.signupUserLabel || "Novo usuario"),
+      signupPassLabel: String(config.signupPassLabel || "Nova senha"),
+      signupPassConfirmLabel: String(config.signupPassConfirmLabel || "Confirmar senha"),
+      signupNamePlaceholder: String(config.signupNamePlaceholder || "Seu nome"),
+      signupUserPlaceholder: String(config.signupUserPlaceholder || "Escolha um usuario"),
+      signupPassPlaceholder: String(config.signupPassPlaceholder || "Crie uma senha"),
+      signupPassConfirmPlaceholder: String(config.signupPassConfirmPlaceholder || "Repita a senha"),
+      signupCreateLabel: String(config.signupCreateLabel || "Criar e entrar"),
+      signupCancelLabel: String(config.signupCancelLabel || "Cancelar"),
+      signupExistsText: String(config.signupExistsText || "Esse usuario ja existe."),
+      signupSuccessText: String(config.signupSuccessText || "Conta criada com sucesso."),
+      signupInvalidText: String(config.signupInvalidText || "Preencha os dados corretamente.")
     };
 
     var ui = ensureAuthUi(text);
-    ensureUnifiedHeader(ui);
     var currentUser = null;
+
+    function disableAuthUi() {
+      var overlay = document.getElementById("uj-auth-overlay");
+      var account = document.getElementById("uj-auth-account");
+      document.documentElement.classList.remove("uj-auth-locked");
+      if (overlay) {
+        overlay.style.display = "none";
+      }
+      if (account) {
+        account.style.display = "none";
+      }
+    }
+
+    function exposeDisabledApi() {
+      window.USOJALECO_AUTH = window.USOJALECO_AUTH || {};
+      window.USOJALECO_AUTH.sessionKey = sessionKey;
+      window.USOJALECO_AUTH.getUser = function () {
+        return null;
+      };
+      window.USOJALECO_AUTH.isAuthenticated = function () {
+        return false;
+      };
+      window.USOJALECO_AUTH.logout = function () {
+        try {
+          window.localStorage.removeItem(sessionKey);
+        } catch (_err) {
+          // no-op
+        }
+      };
+    }
 
     function readStoredUser() {
       var data = readJsonStorage(sessionKey);
@@ -437,8 +493,9 @@
       ui.status.textContent = "";
       ui.retry.style.display = "none";
       ui.googleMount.innerHTML = "";
+      refreshLocalUsers();
 
-      if (!localUsers.length) {
+      if (!localUsers.length && !allowGuest && !allowSignup) {
         setUiError("Configure auth.localUsers em /analytics-config.js.");
         return;
       }
@@ -475,14 +532,206 @@
       submit.type = "submit";
       submit.textContent = text.submitLabel;
 
+      var altRow = document.createElement("div");
+      altRow.className = "uj-auth-alt-row";
+
+      var guestBtn = null;
+      if (allowGuest) {
+        guestBtn = document.createElement("button");
+        guestBtn.type = "button";
+        guestBtn.className = "uj-auth-alt-btn";
+        guestBtn.textContent = text.guestLabel;
+        altRow.appendChild(guestBtn);
+      }
+
+      var signupToggle = null;
+      if (allowSignup) {
+        signupToggle = document.createElement("button");
+        signupToggle.type = "button";
+        signupToggle.className = "uj-auth-alt-btn";
+        signupToggle.textContent = text.signupToggleLabel;
+        altRow.appendChild(signupToggle);
+      }
+
+      var signupBox = null;
+      var signupNameInput = null;
+      var signupUserInput = null;
+      var signupPassInput = null;
+      var signupPassConfirmInput = null;
+      var signupSubmit = null;
+      var signupCancel = null;
+
+      if (allowSignup) {
+        signupBox = document.createElement("div");
+        signupBox.className = "uj-auth-signup";
+        signupBox.style.display = "none";
+
+        function createSignupField(labelText, placeholderText, type, autocompleteValue) {
+          var field = document.createElement("label");
+          field.className = "uj-auth-field";
+          var label = document.createElement("span");
+          label.textContent = labelText;
+          var input = document.createElement("input");
+          input.type = type || "text";
+          input.placeholder = placeholderText || "";
+          input.autocomplete = autocompleteValue || "off";
+          field.appendChild(label);
+          field.appendChild(input);
+          return { field: field, input: input };
+        }
+
+        var fName = createSignupField(text.signupNameLabel, text.signupNamePlaceholder, "text", "name");
+        var fUser = createSignupField(text.signupUserLabel, text.signupUserPlaceholder, "text", "username");
+        var fPass = createSignupField(text.signupPassLabel, text.signupPassPlaceholder, "password", "new-password");
+        var fPass2 = createSignupField(
+          text.signupPassConfirmLabel,
+          text.signupPassConfirmPlaceholder,
+          "password",
+          "new-password"
+        );
+
+        signupNameInput = fName.input;
+        signupUserInput = fUser.input;
+        signupPassInput = fPass.input;
+        signupPassConfirmInput = fPass2.input;
+
+        signupBox.appendChild(fName.field);
+        signupBox.appendChild(fUser.field);
+        signupBox.appendChild(fPass.field);
+        signupBox.appendChild(fPass2.field);
+
+        var signupActions = document.createElement("div");
+        signupActions.className = "uj-auth-signup-actions";
+
+        signupSubmit = document.createElement("button");
+        signupSubmit.type = "button";
+        signupSubmit.textContent = text.signupCreateLabel;
+
+        signupCancel = document.createElement("button");
+        signupCancel.type = "button";
+        signupCancel.className = "secondary";
+        signupCancel.textContent = text.signupCancelLabel;
+
+        signupActions.appendChild(signupSubmit);
+        signupActions.appendChild(signupCancel);
+        signupBox.appendChild(signupActions);
+      }
+
       form.appendChild(userField);
       form.appendChild(passField);
       form.appendChild(submit);
+      if (allowGuest || allowSignup) {
+        form.appendChild(altRow);
+      }
+      if (signupBox) {
+        form.appendChild(signupBox);
+      }
       ui.googleMount.appendChild(form);
+
+      function setSignupVisible(show) {
+        if (!signupBox) {
+          return;
+        }
+        signupBox.style.display = show ? "grid" : "none";
+        if (signupToggle) {
+          signupToggle.textContent = show ? text.signupCancelLabel : text.signupToggleLabel;
+        }
+      }
+
+      if (signupToggle) {
+        signupToggle.addEventListener("click", function () {
+          setSignupVisible(signupBox && signupBox.style.display === "none");
+        });
+      }
+
+      if (signupCancel) {
+        signupCancel.addEventListener("click", function () {
+          setSignupVisible(false);
+        });
+      }
+
+      if (guestBtn) {
+        guestBtn.addEventListener("click", function () {
+          resetUiError();
+          ui.status.textContent = "";
+          var guestUser = normalizeUser({
+            email: "visitante@usojaleco.local",
+            username: "visitante",
+            name: "Visitante",
+            picture: "",
+            sub: "local:visitante",
+            provider: "local",
+            role: "guest",
+            iat: Math.floor(Date.now() / 1000),
+            exp: 0
+          });
+          setStoredUser(guestUser);
+          applyState(guestUser);
+        });
+      }
+
+      if (signupSubmit) {
+        signupSubmit.addEventListener("click", function () {
+          resetUiError();
+          ui.status.textContent = "";
+
+          var signupName = String(signupNameInput.value || "").trim();
+          var signupUser = normalizeLoginKey(signupUserInput.value || "");
+          var signupPass = String(signupPassInput.value || "");
+          var signupPassConfirm = String(signupPassConfirmInput.value || "");
+
+          if (!signupName || !signupUser || signupUser.length < 3 || signupPass.length < 4 || signupPass !== signupPassConfirm) {
+            setUiError(text.signupInvalidText);
+            return;
+          }
+
+          if (!/^[a-z0-9._-]+$/.test(signupUser)) {
+            setUiError("Use apenas letras, numeros, ponto, underscore ou hifen.");
+            return;
+          }
+
+          if (findLocalUserByIdentity(signupUser)) {
+            setUiError(text.signupExistsText);
+            return;
+          }
+
+          var created = createCustomUser({
+            username: signupUser,
+            password: signupPass,
+            name: signupName,
+            role: "user"
+          });
+
+          if (!created) {
+            setUiError(text.signupInvalidText);
+            return;
+          }
+
+          ui.status.textContent = text.signupSuccessText;
+          userInput.value = created.username;
+          passInput.value = created.password;
+          setSignupVisible(false);
+
+          var createdUser = normalizeUser({
+            email: created.email || created.username,
+            username: created.username,
+            name: created.name || created.username,
+            picture: created.picture || "",
+            sub: created.sub || ("local:" + created.username),
+            provider: "local",
+            role: created.role || "user",
+            iat: Math.floor(Date.now() / 1000),
+            exp: 0
+          });
+          setStoredUser(createdUser);
+          applyState(createdUser);
+        });
+      }
 
       form.addEventListener("submit", function (eventObj) {
         eventObj.preventDefault();
         resetUiError();
+        ui.status.textContent = "";
 
         var typedUser = normalizeLoginKey(userInput.value);
         var typedPass = String(passInput.value || "");
@@ -635,6 +884,69 @@
       return result;
     }
 
+    function mergeUsers(baseUsers, extraUsers) {
+      var map = {};
+      var merged = [];
+
+      function appendUser(user) {
+        if (!user || !user.username) {
+          return;
+        }
+        if (map[user.username]) {
+          return;
+        }
+        map[user.username] = true;
+        merged.push(user);
+      }
+
+      for (var i = 0; i < baseUsers.length; i += 1) {
+        appendUser(baseUsers[i]);
+      }
+      for (var j = 0; j < extraUsers.length; j += 1) {
+        appendUser(extraUsers[j]);
+      }
+
+      return merged;
+    }
+
+    function refreshLocalUsers() {
+      var storedUsers = normalizeLocalUsers(readJsonStorage(localUsersStorageKey));
+      localUsers = mergeUsers(configLocalUsers, storedUsers);
+    }
+
+    function createCustomUser(payload) {
+      var normalized = normalizeLocalUsers([payload]);
+      if (!normalized.length) {
+        return null;
+      }
+
+      refreshLocalUsers();
+      var candidate = normalized[0];
+      if (findLocalUserByIdentity(candidate.username)) {
+        return null;
+      }
+
+      var storedUsers = normalizeLocalUsers(readJsonStorage(localUsersStorageKey));
+      storedUsers.push(candidate);
+      writeJsonStorage(localUsersStorageKey, storedUsers);
+      refreshLocalUsers();
+      return candidate;
+    }
+
+    function findLocalUserByIdentity(value) {
+      var key = normalizeLoginKey(value);
+      if (!key) {
+        return null;
+      }
+      for (var i = 0; i < localUsers.length; i += 1) {
+        var item = localUsers[i];
+        if (item.username === key || normalizeLoginKey(item.email) === key) {
+          return item;
+        }
+      }
+      return null;
+    }
+
     function findLocalUser(username, password) {
       for (var i = 0; i < localUsers.length; i += 1) {
         var item = localUsers[i];
@@ -650,12 +962,16 @@
     }
 
     function isAllowedLocalUser(loginValue) {
-      if (!localUsers.length) {
+      var key = normalizeLoginKey(loginValue);
+      if (!key) {
         return false;
       }
 
-      var key = normalizeLoginKey(loginValue);
-      if (!key) {
+      if (allowGuest && key === "visitante") {
+        return true;
+      }
+
+      if (!localUsers.length) {
         return false;
       }
 
@@ -1171,10 +1487,16 @@
       "#uj-auth-local-form input:focus{outline:none;border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,.16);}" +
       "#uj-auth-local-form button{height:40px;padding:0 14px;border:0;border-radius:999px;background:linear-gradient(90deg,#f97316,#fb923c);color:#fff;font:800 14px Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;cursor:pointer;}" +
       "#uj-auth-local-form button:hover{filter:brightness(.98);}" +
+      "#uj-auth-local-form .uj-auth-alt-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}" +
+      "#uj-auth-local-form .uj-auth-alt-btn{height:34px;padding:0 12px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#334155;font:700 12px Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;cursor:pointer;}" +
+      "#uj-auth-local-form .uj-auth-alt-btn:hover{border-color:#f97316;color:#c2410c;background:#fff7ed;}" +
+      "#uj-auth-local-form .uj-auth-signup{display:grid;gap:8px;border:1px solid #e2e8f0;border-radius:12px;padding:10px;background:#f8fafc;}" +
+      "#uj-auth-local-form .uj-auth-signup-actions{display:flex;gap:8px;}" +
+      "#uj-auth-local-form .uj-auth-signup-actions .secondary{background:#fff;border:1px solid #e2e8f0;color:#334155;font-weight:700;}" +
       "#uj-auth-status{margin:10px 0 0;font-size:12px;color:#64748b;text-align:center;}" +
       "#uj-auth-error{margin:10px 0 0;font-size:13px;color:#b91c1c;text-align:center;}" +
       "#uj-auth-retry{margin:12px auto 0;height:38px;padding:0 16px;border-radius:999px;border:1px solid #f97316;background:#fff;color:#c2410c;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}" +
-      "#uj-auth-account{display:none;align-items:center;gap:8px;padding:4px 8px;background:#fff;border:1px solid #e2e8f0;border-radius:999px;font-family:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}" +
+      "#uj-auth-account{position:fixed;top:12px;right:12px;z-index:2147483646;display:none;align-items:center;gap:8px;padding:4px 8px;background:#fff;border:1px solid #e2e8f0;border-radius:999px;box-shadow:0 8px 20px rgba(15,23,42,.12);font-family:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;}" +
       "#uj-auth-account.uj-auth-account-inline{position:static;box-shadow:none;}" +
       "#uj-auth-avatar{width:28px;height:28px;border-radius:999px;background:#f97316;color:#fff;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background-size:cover;background-position:center;}" +
       "#uj-auth-avatar.has-image{color:transparent;}" +
@@ -1183,7 +1505,7 @@
       "#uj-auth-email{font-size:10px;line-height:1.1;color:#64748b;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
       "#uj-auth-logout{height:24px;padding:0 8px;border-radius:999px;border:0;background:transparent;color:#64748b;font-size:11px;font-weight:700;cursor:pointer;}" +
       "#uj-auth-logout:hover{background:#f8fafc;color:#0f172a;}" +
-      "@media (max-width:720px){#uj-auth-email{display:none;}#uj-auth-name{max-width:90px;}}";
+      "@media (max-width:720px){#uj-auth-account{top:8px;right:8px;}#uj-auth-email{display:none;}#uj-auth-name{max-width:90px;}}";
 
     document.head.appendChild(style);
   }
@@ -1337,6 +1659,12 @@
 
   function normalizePathForAuth(pathname) {
     var path = String(pathname || "/");
+    try {
+      path = decodeURIComponent(path);
+    } catch (_err) {
+      // no-op
+    }
+
     path = path.split("#")[0].split("?")[0];
     if (!path) {
       path = "/";
@@ -1344,6 +1672,8 @@
     if (path.charAt(0) !== "/") {
       path = "/" + path;
     }
+
+    path = path.replace(/\\/g, "/").replace(/\/{2,}/g, "/");
 
     if (path.length > 1 && path.slice(-1) === "/") {
       path = path.slice(0, -1);
@@ -1361,21 +1691,26 @@
       return false;
     }
 
+    var currentPath = normalizePathForAuth(pathname || "/");
+
     for (var i = 0; i < patterns.length; i += 1) {
-      var pattern = patterns[i];
-      if (!pattern) {
+      var rawPattern = String(patterns[i] || "").trim();
+      if (!rawPattern) {
         continue;
       }
 
-      if (pathname === pattern) {
+      var hasWildcard = rawPattern.slice(-1) === "*";
+      var normalizedPattern = normalizePathForAuth(hasWildcard ? rawPattern.slice(0, -1) : rawPattern);
+
+      if (hasWildcard && currentPath.indexOf(normalizedPattern) === 0) {
         return true;
       }
 
-      if (pattern.slice(-1) === "*" && pathname.indexOf(pattern.slice(0, -1)) === 0) {
+      if (currentPath === normalizedPattern) {
         return true;
       }
 
-      if (pathname.indexOf(pattern) === 0) {
+      if (currentPath.indexOf(normalizedPattern + "/") === 0) {
         return true;
       }
     }
