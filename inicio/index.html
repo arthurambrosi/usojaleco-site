@@ -335,6 +335,47 @@
       background: color-mix(in srgb, var(--accent) 8%, var(--panel));
     }
 
+    .tool-mode-wrap {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tool-mode {
+      display: inline-flex;
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--panel);
+      box-shadow: 0 6px 14px rgba(12, 20, 34, 0.08);
+    }
+
+    .tool-mode-btn {
+      min-height: 42px;
+      padding: 0 18px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .tool-mode-btn + .tool-mode-btn {
+      border-left: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line));
+    }
+
+    .tool-mode-btn.active {
+      background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent-2) 85%, #fff));
+      color: #fff;
+    }
+
+    .tool-mode-btn:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, #fff);
+      outline-offset: -2px;
+    }
+
     .cards {
       margin-top: 8px;
       display: grid;
@@ -482,6 +523,13 @@
       </div>
     </section>
 
+    <div class="tool-mode-wrap" aria-label="Tipo de ferramenta">
+      <div class="tool-mode" id="toolMode" role="tablist" aria-label="Selecionar publico">
+        <button type="button" class="tool-mode-btn" data-mode="estudo" role="tab" aria-selected="false">Estudo</button>
+        <button type="button" class="tool-mode-btn active" data-mode="profissional" role="tab" aria-selected="true">Profissional</button>
+      </div>
+    </div>
+
     <section id="cards" class="cards" aria-live="polite"></section>
   </main>
 
@@ -503,6 +551,10 @@
       var brandLogo = document.getElementById("brandLogo");
       var cardsEl = document.getElementById("cards");
       var darkToggle = document.getElementById("darkToggle");
+      var toolModeEl = document.getElementById("toolMode");
+
+      var allCards = [];
+      var activeMode = "profissional";
 
       var FALLBACK_CARDS = [
         {
@@ -511,6 +563,7 @@
           subtitulo: "Guia passo a passo para estruturar historias clinicas, evolucao e raciocinio clinico.",
           nome_verde: "INICIAR PRATICA",
           link: "../index.html",
+          perfil: "e",
           ativo: "x"
         },
         {
@@ -519,6 +572,7 @@
           subtitulo: "Acesse o banco de prescricoes ambulatoriais, doses e condutas para estudo.",
           nome_verde: "ACESSAR BIBLIOTECA",
           link: "../comprar-slides/index.html",
+          perfil: "p",
           ativo: "x"
         },
         {
@@ -527,6 +581,7 @@
           subtitulo: "Consulte protocolos de emergencia, sedacao, drogas vasoativas e sala vermelha.",
           nome_verde: "ABRIR GUIA",
           link: "#",
+          perfil: "p",
           ativo: "x"
         },
         {
@@ -535,6 +590,7 @@
           subtitulo: "Ferramentas de calculo clinico para rotina de internato e ambulatorio.",
           nome_verde: "ACESSAR CALCULADORAS",
           link: "#",
+          perfil: "e",
           ativo: "x"
         }
       ];
@@ -568,6 +624,13 @@
         if (!value) return true;
         var v = String(value).trim().toLowerCase();
         return v === "x" || v === "1" || v === "sim" || v === "true" || v === "ativo";
+      }
+
+      function normalizeAudience(value) {
+        var v = normalizeKey(value);
+        if (v === "e" || v === "estudo" || v === "study") return "estudo";
+        if (v === "p" || v === "profissional" || v === "professional") return "profissional";
+        return "profissional";
       }
 
       function sanitizeUrl(url) {
@@ -830,16 +893,38 @@
         var subtitle = pick(row, ["subtitulo", "descricao", "description"]) || byIndex(3);
         var cta = pick(row, ["nome_verde", "cta", "texto_verde", "link_texto"]) || byIndex(4);
         var link = pick(row, ["link", "url", "href"]) || byIndex(5);
+        var audience = pick(row, ["perfil", "publico", "tipo", "segmento", "grupo", "modo"]) || byIndex(6);
         var active = pick(row, ["ativo", "status"]) || byIndex(0);
 
         return {
           active: isActive(active),
+          audience: normalizeAudience(audience),
           icon: icon || "clipboard",
           title: title || "Titulo do card",
           subtitle: subtitle || "Descricao curta do recurso.",
           cta: cta || "ACESSAR",
           link: sanitizeUrl(link)
         };
+      }
+
+      function updateModeUi() {
+        if (!toolModeEl) return;
+        var buttons = toolModeEl.querySelectorAll(".tool-mode-btn");
+        buttons.forEach(function (btn) {
+          var isActive = btn.getAttribute("data-mode") === activeMode;
+          btn.classList.toggle("active", isActive);
+          btn.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+      }
+
+      function getVisibleCards() {
+        return allCards.filter(function (item) {
+          return normalizeAudience(item.audience) === activeMode;
+        });
+      }
+
+      function renderVisibleCards() {
+        renderCards(getVisibleCards());
       }
 
       function escapeHtml(value) {
@@ -906,6 +991,20 @@
         });
       }
 
+      function initModeToggle() {
+        if (!toolModeEl) return;
+        var buttons = toolModeEl.querySelectorAll(".tool-mode-btn");
+        buttons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var mode = btn.getAttribute("data-mode") || "profissional";
+            activeMode = normalizeAudience(mode);
+            updateModeUi();
+            renderVisibleCards();
+          });
+        });
+        updateModeUi();
+      }
+
       function initCards() {
         var pubKeyFromUrl = extractPublishedKey(SHEET_PUB_URL);
         var finalPubKey = pubKeyFromUrl || SHEET_PUB_KEY || "";
@@ -914,18 +1013,22 @@
           .then(function (rows) {
             var mapped = rows.map(mapRow).filter(function (item) { return item.active; });
             if (!mapped.length) {
-              renderCards(FALLBACK_CARDS.map(mapRow));
+              allCards = FALLBACK_CARDS.map(mapRow);
+              renderVisibleCards();
               return;
             }
-            renderCards(mapped);
+            allCards = mapped;
+            renderVisibleCards();
           })
           .catch(function () {
-            renderCards(FALLBACK_CARDS.map(mapRow));
+            allCards = FALLBACK_CARDS.map(mapRow);
+            renderVisibleCards();
           });
       }
 
       initTheme();
       initDarkToggle();
+      initModeToggle();
       initCards();
     })();
   </script>
