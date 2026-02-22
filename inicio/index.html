@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f1f4f7;
@@ -21,6 +21,8 @@
       --muted: #576273;
       --accent: #ff7a18;
       --accent-2: #ffb703;
+      --brand-uso: #ff7a18;
+      --brand-jaleco: #2f3640;
       --danger: #df3a3a;
       --warning: #e07b13;
       --radius: 14px;
@@ -39,6 +41,7 @@
       --muted: #a2afc5;
       --accent: #ff8f3a;
       --accent-2: #ffc154;
+      --brand-jaleco: #c1c9d6;
       --danger: #ff7d7d;
       --warning: #ffb14a;
       --shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
@@ -122,11 +125,22 @@
 
     .brand-title {
       font-size: 1.2rem;
-      font-weight: 800;
+      font-family: "Montserrat", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 220px;
+      letter-spacing: 0.01em;
+      line-height: 1;
+    }
+
+    .brand-uso {
+      color: var(--brand-uso);
+    }
+
+    .brand-jaleco {
+      color: var(--brand-jaleco);
     }
 
     .right-icons {
@@ -180,9 +194,19 @@
 
     .hero h1 {
       font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-family: "Kaushan Script", "Manrope", cursive;
+      font-weight: 400;
       line-height: 1.03;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.01em;
       margin-bottom: 8px;
+    }
+
+    .hero-uso {
+      color: var(--brand-uso);
+    }
+
+    .hero-jaleco {
+      color: var(--brand-jaleco);
     }
 
     .hero p {
@@ -194,47 +218,60 @@
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
+      align-items: center;
     }
 
     .btn {
       min-height: var(--tap);
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid transparent;
-      padding: 0 18px;
+      padding: 0 24px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 0.95rem;
       font-weight: 800;
-      transition: transform .15s ease, opacity .15s ease;
+      min-width: 250px;
+      white-space: nowrap;
+      transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .hero-actions .btn svg {
+      flex: 0 0 auto;
     }
 
     .btn:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, #fff);
+      outline-offset: 2px;
     }
 
     .btn-primary {
       background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent-2) 85%, #fff));
       color: #fff;
+      box-shadow: 0 10px 18px rgba(255, 122, 24, 0.25);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 14px 24px rgba(255, 122, 24, 0.32);
     }
 
     .btn-secondary {
-      background: transparent;
-      border-color: var(--line);
+      background: var(--panel);
+      border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
       color: var(--text);
     }
 
-    .status {
-      margin: 14px 0 10px;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .btn-secondary:hover {
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+      background: color-mix(in srgb, var(--accent) 8%, var(--panel));
     }
-
-    .status.ok { color: var(--accent); }
-    .status.error { color: var(--danger); }
 
     .cards {
       margin-top: 8px;
@@ -308,14 +345,6 @@
       background: var(--panel);
     }
 
-    .sheet-help {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 0.82rem;
-      border-top: 1px solid var(--line);
-      padding-top: 10px;
-    }
-
     @media (max-width: 1000px) {
       .card { grid-column: span 6; }
     }
@@ -356,7 +385,7 @@
         <span class="brand-logo">
           <img id="brandLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
         </span>
-        <strong class="brand-title">UsoJaleco</strong>
+        <strong class="brand-title"><span class="brand-uso">Uso</span><span class="brand-jaleco">Jaleco</span></strong>
       </a>
 
       <div class="right-icons">
@@ -376,7 +405,7 @@
 
   <main class="shell">
     <section class="hero">
-      <h1>UsoJaleco</h1>
+      <h1><span class="hero-uso">Uso</span><span class="hero-jaleco">Jaleco</span></h1>
       <p>Economizando seu tempo com excelencia.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="../index.html">
@@ -390,15 +419,7 @@
       </div>
     </section>
 
-    <p id="status" class="status">Carregando cards do inicio...</p>
     <section id="cards" class="cards" aria-live="polite"></section>
-
-    <p class="sheet-help">
-      Planilha recomendada: aba <strong>Inicio</strong> com colunas
-      <code>ativo</code>, <code>icone</code>, <code>nome_cima</code>, <code>subtitulo</code>, <code>nome_verde</code>, <code>link</code>.
-      Tambem aceita aliases: <code>titulo</code>, <code>descricao</code>, <code>cta</code>, <code>url</code>.
-      Pode usar planilha publicada (<code>/spreadsheets/d/e/.../pub</code>) por <code>sheetPubKey</code>.
-    </p>
   </main>
 
   <script>
@@ -418,7 +439,6 @@
 
       var brandLogo = document.getElementById("brandLogo");
       var cardsEl = document.getElementById("cards");
-      var statusEl = document.getElementById("status");
       var darkToggle = document.getElementById("darkToggle");
 
       var FALLBACK_CARDS = [
@@ -458,11 +478,6 @@
 
       if (brandLogo) {
         brandLogo.src = LOGO_URL;
-      }
-
-      function setStatus(text, mode) {
-        statusEl.textContent = text;
-        statusEl.className = "status" + (mode ? " " + mode : "");
       }
 
       function normalizeKey(value) {
@@ -829,7 +844,6 @@
       }
 
       function initCards() {
-        setStatus("Carregando cards da planilha...", "");
         var pubKeyFromUrl = extractPublishedKey(SHEET_PUB_URL);
         var finalPubKey = pubKeyFromUrl || SHEET_PUB_KEY || "";
 
@@ -837,22 +851,12 @@
           .then(function (rows) {
             var mapped = rows.map(mapRow).filter(function (item) { return item.active; });
             if (!mapped.length) {
-              setStatus("Sem cards ativos na planilha. Exibindo cards padrao.", "error");
               renderCards(FALLBACK_CARDS.map(mapRow));
               return;
             }
-            setStatus(mapped.length + " cards carregados da planilha.", "ok");
             renderCards(mapped);
           })
-          .catch(function (err) {
-            var msg = String(err && err.message ? err.message : err || "");
-            var unauthorized = /401|unauthorized|nao autorizado|não autorizado/i.test(msg);
-            setStatus(
-              unauthorized
-                ? "A planilha esta privada. Em Compartilhar, habilite 'Qualquer pessoa com o link: Leitor' ou publique a aba Inicio."
-                : "Falha ao carregar planilha. Exibindo cards padrao. " + msg,
-              "error"
-            );
+          .catch(function () {
             renderCards(FALLBACK_CARDS.map(mapRow));
           });
       }
