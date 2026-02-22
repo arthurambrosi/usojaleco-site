@@ -7,10 +7,29 @@
   <meta name="description" content="UsoJaleco - Economizando seu tempo com excelencia.">
   <meta name="theme-color" content="#f3f5f8">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Manrope:wght@400;500;600;700;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: "Kaushan Script";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src:
+        local("Kaushan Script"),
+        local("KaushanScript-Regular"),
+        url("https://fonts.gstatic.com/s/kaushanscript/v19/vm8vdRfvXFLG3OLnsO15WYS5DF7_.ttf") format("truetype");
+    }
+
+    @font-face {
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src:
+        local("Montserrat Bold"),
+        local("Montserrat-Bold"),
+        url("https://fonts.gstatic.com/s/montserrat/v31/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuM70w-.ttf") format("truetype");
+    }
+
     :root {
       --bg: #f1f4f7;
       --bg-soft: #f7fafb;
@@ -125,7 +144,7 @@
 
     .brand-title {
       font-size: 1.2rem;
-      font-family: "Montserrat", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: "Montserrat", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif !important;
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
@@ -194,7 +213,7 @@
 
     .hero h1 {
       font-size: clamp(2.2rem, 6vw, 4.2rem);
-      font-family: "Kaushan Script", "Manrope", cursive;
+      font-family: "Kaushan Script", "Brush Script MT", "Segoe Script", cursive !important;
       font-weight: 400;
       line-height: 1.03;
       letter-spacing: 0.01em;
