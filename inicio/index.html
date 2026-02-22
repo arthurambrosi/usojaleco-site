@@ -491,6 +491,12 @@
       function sanitizeUrl(url) {
         var value = String(url || "").trim();
         if (!value) return "#";
+
+        // Corrige erros comuns de protocolo colado manualmente.
+        if (/^tp:\/\//i.test(value) || /^ttps:\/\//i.test(value) || /^ttp:\/\//i.test(value)) {
+          value = "h" + value;
+        }
+
         if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(value) && value !== "#") {
           if (/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(value)) {
             value = "https://" + value;
@@ -633,19 +639,36 @@
           ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
           : gvizBase + "?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName);
 
+        var lastError = null;
+
         return loadWithFetch(gvizUrl)
           .then(function (raw) {
             return rowsFromTable(parseGvizEnvelope(raw).table || {});
           })
-          .catch(function () {
+          .catch(function (err) {
+            lastError = err;
             return loadGvizJsonp(sheetId, gid, sheetName)
               .then(function (payload) {
                 return rowsFromTable(payload.table || {});
               })
-              .catch(function () {
+              .catch(function (err2) {
+                lastError = err2;
                 var csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
                   "/export?format=csv&gid=" + encodeURIComponent(gid || "");
-                return loadWithFetch(csvUrl).then(parseCsv);
+                return loadWithFetch(csvUrl)
+                  .then(parseCsv)
+                  .catch(function (err3) {
+                    lastError = err3;
+                    var pubCsvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
+                      "/pub?gid=" + encodeURIComponent(gid || "") + "&single=true&output=csv";
+                    return loadWithFetch(pubCsvUrl)
+                      .then(parseCsv)
+                      .catch(function (err4) {
+                        var finalMessage = String((err4 && err4.message) || err4 || "");
+                        var previous = String((lastError && lastError.message) || lastError || "");
+                        throw new Error(finalMessage || previous || "Nao foi possivel carregar a planilha.");
+                      });
+                  });
               });
           });
       }
@@ -763,7 +786,14 @@
             renderCards(mapped);
           })
           .catch(function (err) {
-            setStatus("Falha ao carregar planilha. Exibindo cards padrao. " + String(err.message || err), "error");
+            var msg = String(err && err.message ? err.message : err || "");
+            var unauthorized = /401|unauthorized|nao autorizado|não autorizado/i.test(msg);
+            setStatus(
+              unauthorized
+                ? "A planilha esta privada. Em Compartilhar, habilite 'Qualquer pessoa com o link: Leitor' ou publique a aba Inicio."
+                : "Falha ao carregar planilha. Exibindo cards padrao. " + msg,
+              "error"
+            );
             renderCards(FALLBACK_CARDS.map(mapRow));
           });
       }
