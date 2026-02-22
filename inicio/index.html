@@ -1,557 +1,870 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UsoJaleco - Início</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UsoJaleco | Inicio</title>
+  <meta name="description" content="UsoJaleco - Economizando seu tempo com excelencia.">
+  <meta name="theme-color" content="#f3f5f8">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
-
-  <!-- Fonte do nome "usojaleco" (Outfit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#ffffff;
-      --ink:#0f172a;
-      --muted:#6b7280;
-      --line:#e9eef5;
-
-      --pill:#f6f7f7;
-      --pillStroke:#e7ebf2;
-
-      --shadow: 0 10px 22px rgba(17,24,39,.08);
-      --shadow2: 0 14px 28px rgba(17,24,39,.10);
-
-      --radiusIcon: 26px;
-      --iconSize: 92px;
-
-      --containerMax: 1160px;
-      --containerPad: 24px;
+    :root {
+      --bg: #f1f4f7;
+      --bg-soft: #f7fafb;
+      --panel: #ffffff;
+      --panel-2: #f8fafc;
+      --line: #d9e0e8;
+      --text: #121920;
+      --muted: #576273;
+      --accent: #0d8a4b;
+      --accent-2: #2ab56e;
+      --danger: #df3a3a;
+      --warning: #e07b13;
+      --radius: 14px;
+      --radius-lg: 18px;
+      --shadow: 0 10px 24px rgba(12, 20, 34, 0.08);
+      --tap: 44px;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    body.dark {
+      --bg: #0d1117;
+      --bg-soft: #121824;
+      --panel: #161e2a;
+      --panel-2: #1a2433;
+      --line: #2b3648;
+      --text: #e6ecf7;
+      --muted: #a2afc5;
+      --accent: #2ebf71;
+      --accent-2: #58d694;
+      --danger: #ff7d7d;
+      --warning: #ffb14a;
+      --shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
     }
 
-    /* HEADER */
-    .topbarWrap{
-      background:#fff;
-      box-shadow: 0 10px 22px rgba(17,24,39,.10);
-    }
-    .topbar{
-      max-width: var(--containerMax);
-      padding: 16px var(--containerPad);
-      margin: 0 auto;
-      display:flex;
-      align-items:center;
-      gap: 18px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 190px;
-
-      /* === impede "cursor de texto", seleção e arrasto === */
-      user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .brand img{
-      height: 28px;
-      width: auto;
-      display:block;
-
-      /* === impede arrastar a imagem / seleção === */
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-user-drag: none;
-      pointer-events: none; /* clique não "pega" na imagem */
-    }
-    .brandName{
-      display:flex;
-      align-items:baseline;
-      gap: 0;
-      font-family: Outfit, Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size: 18px;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      color:#475569;
-
-      /* === impede selecionar/copiar e cursor de texto === */
-      user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      pointer-events: none; /* clique não "pega" no texto */
-    }
-    .brandName b{
-      font-weight: 800;
-      color:#334155;
+    html,
+    body {
+      min-height: 100%;
     }
 
-    .searchWrap{
-      flex: 1 1 auto;
-      display:flex;
-      justify-content:center;
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
     }
 
-    .searchPill{
-      width: min(640px, 62vw);
-      height: 40px;
-      border-radius: 999px;
-      background: var(--pill);
-      border: 1px solid var(--pillStroke);
-      display:flex;
-      align-items:center;
-      padding: 0 12px;
-      gap: 10px;
-    }
-    .searchPill svg{ flex:0 0 auto; opacity:.55; }
-    .searchInput{
-      appearance:none;
-      border:0;
-      outline:0;
-      background: transparent;
-      width: 100%;
-      font-size: 14px;
-      color:#4b5563;
-    }
-    .kbd{
-      display:flex;
-      align-items:center;
-      gap: 6px;
-      margin-left: 8px;
-      flex:0 0 auto;
-      user-select:none;
-      color:#6b7280;
-      font-size: 12px;
-      font-weight: 600;
-      opacity:.95;
-    }
-    .kbdKey{
-      border: 1px solid #cfd6e3;
-      background:#fff;
-      padding: 2px 8px;
-      border-radius: 8px;
-      line-height: 1.1;
-      box-shadow: 0 1px 0 rgba(15,23,42,.04);
-    }
-    .kbdPlus{
-      opacity:.75;
-      font-weight: 800;
-      margin: 0 2px;
-    }
-
-    .actions{
-      min-width: 120px;
-      display:flex;
-      justify-content:flex-end;
-      align-items:center;
-      gap: 14px;
-    }
-    .iconBtn{
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display:grid;
-      place-items:center;
-      border: 1px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      color: #f97316;
-    }
-    .iconBtn:hover{
-      background:#fff7ed;
-      border-color:#fed7aa;
-    }
-    .iconBtn svg{ width: 22px; height: 22px; }
-
-    /* CONTEÚDO */
-    main{
-      max-width: var(--containerMax);
-      padding: 12px var(--containerPad) 46px;
-      margin: 0 auto;
-    }
-
-    .sectionLine{
-      border-top: 1px solid var(--line);
-      padding-top: 22px;
-      margin-top: 14px;
-    }
-    .sectionLine:first-child{
-      border-top: none;
-      padding-top: 10px;
-      margin-top: 0;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 44px 34px;
-      align-items:start;
-      justify-items:center;
-      padding: 10px 0 6px;
-    }
-
-    .tile{
-      width: 100%;
-      max-width: 150px;
-      text-decoration:none;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap: 12px;
+    a {
       color: inherit;
+      text-decoration: none;
     }
 
-    .iconBox{
-      width: var(--iconSize);
-      height: var(--iconSize);
-      border-radius: var(--radiusIcon);
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      background:#fff;
-      display:grid;
-      place-items:center;
-      transform: translateY(0);
-      transition: transform .18s ease, box-shadow .18s ease;
+    .shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 16px 24px;
     }
 
-    .iconBox img{
-      width:100%;
-      height:100%;
-      display:block;
-      object-fit: cover;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: color-mix(in srgb, var(--panel) 90%, transparent);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
     }
 
-    .tileLabel{
-      font-size: 15px;
-      font-weight: 500;
-      color:#374151;
-      line-height: 1.15;
-      text-align:center;
-      max-width: 150px;
-      word-break: break-word;
+    .topbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      justify-content: space-between;
     }
 
-    .tile:hover .iconBox{
-      transform: translateY(-2px);
-      box-shadow: var(--shadow2);
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
 
-    /* Mensagens */
-    .status{
-      display:none;
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, #2ebf71, #70dfa8);
+      border: 1px solid color-mix(in srgb, var(--line) 80%, #fff);
+      flex: 0 0 auto;
+      overflow: hidden;
+    }
+
+    .brand-logo img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+      padding: 3px;
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      border: 1px solid transparent;
+      transition: background .15s ease, border-color .15s ease;
+    }
+
+    .menu a:hover {
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+    }
+
+    .right-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px 16px;
-      color:#475569;
-      background:#fbfdff;
-      margin: 16px 0;
-      font-size: 14px;
+      background: var(--panel);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease;
     }
-    .status.show{ display:block; }
 
-    /* Responsivo */
-    @media (max-width: 1100px){
-      .grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px 22px; }
-      .brand{ min-width: 170px; }
-      .actions{ min-width: 96px; }
+    .icon-btn:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: color-mix(in srgb, var(--accent) 9%, var(--panel));
     }
-    @media (max-width: 720px){
-      :root{ --containerPad: 16px; --iconSize: 86px; --radiusIcon: 24px; }
-      .topbar{ padding: 14px var(--containerPad); }
-      .brand{ min-width: auto; }
-      .searchWrap{ justify-content:stretch; }
-      .searchPill{ width: 100%; }
-      .grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 14px; }
-      .tile{ max-width: 140px; }
-      .tileLabel{ font-size: 14px; }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      user-select: none;
+    }
+
+    .hero {
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: var(--shadow);
+      padding: clamp(20px, 4vw, 42px);
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: clamp(1rem, 2.1vw, 1.35rem);
+      margin-bottom: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn {
+      min-height: var(--tap);
+      border-radius: 10px;
+      border: 1px solid transparent;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent-2) 85%, #fff));
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .status {
+      margin: 14px 0 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status.ok { color: var(--accent); }
+    .status.error { color: var(--danger); }
+
+    .cards {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      grid-column: span 4;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      min-height: 220px;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+    }
+
+    .card h3 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin-bottom: auto;
+    }
+
+    .card .cta {
+      margin-top: 4px;
+      color: var(--accent);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--panel);
+    }
+
+    .sheet-help {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1000px) {
+      .card { grid-column: span 6; }
+    }
+
+    @media (max-width: 840px) {
+      .topbar-inner {
+        flex-wrap: wrap;
+      }
+
+      .mobile-menu-btn {
+        display: inline-flex;
+        margin-left: auto;
+      }
+
+      .menu {
+        width: 100%;
+        display: none;
+        border-top: 1px solid var(--line);
+        padding-top: 8px;
+      }
+
+      .menu.open {
+        display: flex;
+      }
+
+      .menu a {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .right-icons {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .shell {
+        padding: 0 10px 18px;
+      }
+
+      .hero {
+        padding: 18px 14px;
+      }
+
+      .card {
+        grid-column: 1 / -1;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
     }
   </style>
-  <script defer src="/analytics-config.js"></script>
-  <script defer src="/analytics.js"></script>
 </head>
-
 <body>
-  <div class="topbarWrap">
-    <header class="topbar">
-      <div class="brand" aria-label="UsoJaleco">
-        <img
-          alt="Logo UsoJaleco"
-          src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
-          draggable="false"
-        />
-        <div class="brandName"><span>uso</span><b>jaleco</b></div>
-      </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../index.html" aria-label="Ir para inicio">
+        <span class="brand-logo">
+          <img id="brandLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
+        </span>
+        <strong class="brand-title">UsoJaleco</strong>
+      </a>
 
-      <div class="searchWrap">
-        <div class="searchPill" role="search">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
-            <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+      <button class="mobile-menu-btn" id="menuBtn" aria-label="Abrir menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
 
-          <input id="q" class="searchInput" type="text" placeholder="Busque no UsoJaleco" autocomplete="off" />
+      <nav class="menu" id="menu">
+        <a href="../comprar-slides/index.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+          Protocolos
+        </a>
+        <a href="../index.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path></svg>
+          Anamnese Dirigida
+        </a>
+        <a href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"></rect></svg>
+          Calculadoras
+        </a>
+      </nav>
 
-          <div class="kbd" aria-hidden="true">
-            <span class="kbdKey">CTRL</span>
-            <span class="kbdPlus">+</span>
-            <span class="kbdKey">K</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="iconBtn" id="toggleTheme" type="button" aria-label="Alternar tema (visual)">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M21 13.2A8.2 8.2 0 1 1 10.8 3a6.8 6.8 0 1 0 10.2 10.2Z"
-                  stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-          </svg>
+      <div class="right-icons">
+        <button class="icon-btn" title="Ajuda" aria-label="Ajuda">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
         </button>
-
-        <button class="iconBtn" type="button" aria-label="Conta">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2"/>
-          </svg>
+        <button class="icon-btn" title="Configuracoes" aria-label="Configuracoes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8.92 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9"></path></svg>
         </button>
+        <button class="icon-btn" id="darkToggle" title="Modo dark" aria-label="Alternar modo dark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+        <span class="avatar" title="Arthur Andrade">AR</span>
       </div>
-    </header>
-  </div>
+    </div>
+  </header>
 
-  <main>
-    <div id="status" class="status"></div>
-
-    <section class="sectionLine" aria-label="Atalhos - Parte 1">
-      <div id="gridTop" class="grid"></div>
+  <main class="shell">
+    <section class="hero">
+      <h1>UsoJaleco</h1>
+      <p>Economizando seu tempo com excelencia.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="../index.html">
+          Fazer Anamnese Dirigida
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a class="btn btn-secondary" href="../comprar-slides/index.html">
+          Consultar Protocolos
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
     </section>
 
-    <section class="sectionLine" aria-label="Atalhos - Parte 2">
-      <div id="gridBottom" class="grid"></div>
-    </section>
+    <p id="status" class="status">Carregando cards do inicio...</p>
+    <section id="cards" class="cards" aria-live="polite"></section>
+
+    <p class="sheet-help">
+      Planilha recomendada: aba <strong>Inicio</strong> com colunas
+      <code>ativo</code>, <code>icone</code>, <code>nome_cima</code>, <code>subtitulo</code>, <code>nome_verde</code>, <code>link</code>.
+      Tambem aceita aliases: <code>titulo</code>, <code>descricao</code>, <code>cta</code>, <code>url</code>.
+    </p>
   </main>
 
   <script>
-    const SHEET_CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx/pub?output=csv";
+    (function () {
+      var LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
+      var DEFAULT_SHEET_ID = "1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ";
+      var DEFAULT_SHEET_NAME = "Inicio";
+      var STORAGE_THEME = "usojaleco_inicio_dark_mode";
 
-    const SPLIT_AFTER = 12;
+      var params = new URLSearchParams(window.location.search);
+      var SHEET_ID = params.get("sheetId") || DEFAULT_SHEET_ID;
+      var SHEET_GID = params.get("gid");
+      var SHEET_NAME = params.get("sheet") || DEFAULT_SHEET_NAME;
 
-    const $ = (sel)=>document.querySelector(sel);
+      var brandLogo = document.getElementById("brandLogo");
+      var cardsEl = document.getElementById("cards");
+      var statusEl = document.getElementById("status");
+      var darkToggle = document.getElementById("darkToggle");
+      var menuBtn = document.getElementById("menuBtn");
+      var menu = document.getElementById("menu");
 
-    function setStatus(msg){
-      const el = $("#status");
-      if(!msg){ el.classList.remove("show"); el.textContent=""; return; }
-      el.textContent = msg;
-      el.classList.add("show");
-    }
+      var FALLBACK_CARDS = [
+        {
+          icone: "clipboard",
+          nome_cima: "Fazer Anamnese Dirigida",
+          subtitulo: "Guia passo a passo para estruturar historias clinicas, evolucao e raciocinio clinico.",
+          nome_verde: "INICIAR PRATICA",
+          link: "../index.html",
+          ativo: "x"
+        },
+        {
+          icone: "pen",
+          nome_cima: "Consultar Protocolos",
+          subtitulo: "Acesse o banco de prescricoes ambulatoriais, doses e condutas para estudo.",
+          nome_verde: "ACESSAR BIBLIOTECA",
+          link: "../comprar-slides/index.html",
+          ativo: "x"
+        },
+        {
+          icone: "siren",
+          nome_cima: "Guia Intra-Hospitalar",
+          subtitulo: "Consulte protocolos de emergencia, sedacao, drogas vasoativas e sala vermelha.",
+          nome_verde: "ABRIR GUIA",
+          link: "#",
+          ativo: "x"
+        },
+        {
+          icone: "calculator",
+          nome_cima: "Calculadoras Medicas",
+          subtitulo: "Ferramentas de calculo clinico para rotina de internato e ambulatorio.",
+          nome_verde: "ACESSAR CALCULADORAS",
+          link: "#",
+          ativo: "x"
+        }
+      ];
 
-    function parseCSV(text){
-      const rows = [];
-      let row = [];
-      let cur = "";
-      let inQuotes = false;
+      if (brandLogo) {
+        brandLogo.src = LOGO_URL;
+      }
 
-      for(let i=0;i<text.length;i++){
-        const ch = text[i];
-        const next = text[i+1];
+      function setStatus(text, mode) {
+        statusEl.textContent = text;
+        statusEl.className = "status" + (mode ? " " + mode : "");
+      }
 
-        if(ch === '"' ){
-          if(inQuotes && next === '"'){
-            cur += '"';
-            i++;
-          }else{
-            inQuotes = !inQuotes;
+      function normalizeKey(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^\w\s]/g, "")
+          .replace(/\s+/g, "_");
+      }
+
+      function pick(obj, keys) {
+        for (var i = 0; i < keys.length; i += 1) {
+          var key = keys[i];
+          var val = obj[key];
+          if (val !== undefined && val !== null && String(val).trim() !== "") {
+            return String(val).trim();
           }
-          continue;
+        }
+        return "";
+      }
+
+      function isActive(value) {
+        if (!value) return true;
+        var v = String(value).trim().toLowerCase();
+        return v === "x" || v === "1" || v === "sim" || v === "true" || v === "ativo";
+      }
+
+      function sanitizeUrl(url) {
+        var value = String(url || "").trim();
+        if (!value) return "#";
+        if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(value) && value !== "#") {
+          if (/^[\w.-]+\.[a-z]{2,}(\/.*)?$/i.test(value)) {
+            value = "https://" + value;
+          }
+        }
+        try {
+          var parsed = new URL(value, window.location.href);
+          if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+            return parsed.href;
+          }
+        } catch (_) {}
+        return "#";
+      }
+
+      function parseGvizEnvelope(raw) {
+        var start = raw.indexOf("{");
+        var end = raw.lastIndexOf("}");
+        if (start < 0 || end < 0) {
+          throw new Error("Resposta da planilha invalida.");
+        }
+        return JSON.parse(raw.slice(start, end + 1));
+      }
+
+      function rowsFromTable(table) {
+        var cols = (table.cols || []).map(function (c, idx) {
+          var label = c && c.label ? c.label.trim() : "";
+          return label || "col_" + idx;
+        });
+
+        var rawRows = (table.rows || []).map(function (r) {
+          var out = {};
+          cols.forEach(function (col, idx) {
+            var cell = r && r.c ? r.c[idx] : null;
+            out[normalizeKey(col)] = cell && cell.v !== null ? String(cell.v).trim() : "";
+          });
+          return out;
+        });
+
+        var missingHeaders = cols.every(function (c) { return /^col_\d+$/.test(c); });
+        if (!missingHeaders || rawRows.length === 0) return rawRows;
+
+        var headerRow = rawRows[0];
+        var headerKeys = Object.keys(headerRow);
+        var dynamicHeaders = headerKeys.map(function (key, idx) {
+          return normalizeKey(headerRow[key]) || "col_" + idx;
+        });
+
+        return rawRows.slice(1).map(function (row) {
+          var out = {};
+          headerKeys.forEach(function (key, idx) {
+            out[dynamicHeaders[idx]] = row[key];
+          });
+          return out;
+        });
+      }
+
+      function parseCsv(text) {
+        var lines = text.split(/\r?\n/).filter(function (l) { return l.trim() !== ""; });
+        if (!lines.length) return [];
+
+        function splitCsvLine(line) {
+          var result = [];
+          var cur = "";
+          var inQuotes = false;
+          for (var i = 0; i < line.length; i += 1) {
+            var ch = line[i];
+            var next = line[i + 1];
+            if (ch === "\"" && inQuotes && next === "\"") {
+              cur += "\"";
+              i += 1;
+            } else if (ch === "\"") {
+              inQuotes = !inQuotes;
+            } else if (ch === "," && !inQuotes) {
+              result.push(cur);
+              cur = "";
+            } else {
+              cur += ch;
+            }
+          }
+          result.push(cur);
+          return result.map(function (v) { return v.trim(); });
         }
 
-        if(!inQuotes && (ch === "," || ch === "\n" || ch === "\r")){
-          if(ch === "," ){
-            row.push(cur);
-            cur = "";
-            continue;
-          }
+        var headers = splitCsvLine(lines[0]).map(normalizeKey);
+        var rows = [];
 
-          if(ch === "\r" && next === "\n"){ i++; }
-          row.push(cur);
-          cur = "";
-
-          if(row.some(v => (v || "").trim() !== "")){
-            rows.push(row);
-          }
-          row = [];
-          continue;
+        for (var i = 1; i < lines.length; i += 1) {
+          var cells = splitCsvLine(lines[i]);
+          var row = {};
+          headers.forEach(function (h, idx) {
+            row[h || ("col_" + idx)] = cells[idx] || "";
+          });
+          rows.push(row);
         }
 
-        cur += ch;
+        return rows;
       }
 
-      if(cur.length || row.length){
-        row.push(cur);
-        if(row.some(v => (v || "").trim() !== "")) rows.push(row);
-      }
-      return rows;
-    }
+      function loadGvizJsonp(sheetId, gid, sheetName) {
+        return new Promise(function (resolve, reject) {
+          var callbackName = "__inicioSheetCb_" + Math.random().toString(36).slice(2);
+          var script = document.createElement("script");
 
-    function isHeaderRow(r){
-      const a = (r[0]||"").toLowerCase();
-      const b = (r[1]||"").toLowerCase();
-      const c = (r[2]||"").toLowerCase();
-      return (
-        a.includes("nome") || a.includes("name") ||
-        b.includes("imagem") || b.includes("image") ||
-        c.includes("link") || c.includes("url")
-      );
-    }
-
-    function normalizeSection(v){
-      const s = (v||"").toString().trim().toLowerCase();
-      if(!s) return "";
-      if(["top","cima","superior","1","a"].includes(s)) return "top";
-      if(["bottom","baixo","inferior","2","b"].includes(s)) return "bottom";
-      return "";
-    }
-
-    function buildTile(item){
-      const a = document.createElement("a");
-      a.className = "tile";
-      a.href = item.href || "#";
-      a.target = "_blank";
-      a.rel = "noopener";
-
-      const icon = document.createElement("div");
-      icon.className = "iconBox";
-
-      const img = document.createElement("img");
-      img.alt = item.name || "Atalho";
-      img.loading = "lazy";
-      img.src = item.img || "";
-      img.onerror = () => {
-        icon.style.background = "#f8fafc";
-        icon.style.display = "grid";
-        icon.style.placeItems = "center";
-        img.remove();
-        const fallback = document.createElement("div");
-        fallback.style.fontWeight = "800";
-        fallback.style.color = "#94a3b8";
-        fallback.style.fontSize = "22px";
-        fallback.textContent = (item.name || "?").slice(0,1).toUpperCase();
-        icon.appendChild(fallback);
-      };
-
-      icon.appendChild(img);
-
-      const label = document.createElement("div");
-      label.className = "tileLabel";
-      label.textContent = item.name || "";
-
-      a.appendChild(icon);
-      a.appendChild(label);
-      return a;
-    }
-
-    function renderGrids(items){
-      const gridTop = $("#gridTop");
-      const gridBottom = $("#gridBottom");
-      gridTop.innerHTML = "";
-      gridBottom.innerHTML = "";
-
-      const q = ($("#q").value || "").trim().toLowerCase();
-      const filtered = !q ? items : items.filter(it => (it.name||"").toLowerCase().includes(q));
-
-      const hasSection = filtered.some(it => it.section === "top" || it.section === "bottom");
-      let top = [];
-      let bottom = [];
-
-      if(hasSection){
-        top = filtered.filter(it => it.section !== "bottom");
-        bottom = filtered.filter(it => it.section === "bottom");
-      }else{
-        const sepIdx = filtered.findIndex(it => it.separator === true);
-        if(sepIdx >= 0){
-          top = filtered.slice(0, sepIdx);
-          bottom = filtered.slice(sepIdx + 1);
-        }else{
-          top = filtered.slice(0, SPLIT_AFTER);
-          bottom = filtered.slice(SPLIT_AFTER);
-        }
-      }
-
-      top.forEach(it => gridTop.appendChild(buildTile(it)));
-      bottom.forEach(it => gridBottom.appendChild(buildTile(it)));
-
-      gridBottom.parentElement.style.display = bottom.length ? "" : "none";
-    }
-
-    async function loadSheet(){
-      setStatus("Carregando atalhos...");
-      try{
-        const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
-        if(!res.ok) throw new Error("Falha ao carregar CSV");
-        const text = await res.text();
-        const rows = parseCSV(text);
-
-        const out = [];
-        for(let i=0;i<rows.length;i++){
-          const r = rows[i].map(v => (v ?? "").trim());
-          if(!r.length) continue;
-          if(i === 0 && isHeaderRow(r)) continue;
-
-          const name = r[0] || "";
-          const img  = r[1] || "";
-          const href = r[2] || "";
-          const section = normalizeSection(r[3] || "");
-
-          if(!name && !img && !href){
-            out.push({ separator:true });
-            continue;
+          function cleanup() {
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
           }
 
-          if(!name && !img && !href) continue;
+          window[callbackName] = function (payload) {
+            cleanup();
+            resolve(payload);
+          };
 
-          out.push({ name, img, href, section });
+          script.onerror = function () {
+            cleanup();
+            reject(new Error("Falha ao carregar JSONP."));
+          };
+
+          var base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
+          var query = gid
+            ? "?gid=" + encodeURIComponent(gid) + "&headers=1&tqx=responseHandler:" + callbackName
+            : "?sheet=" + encodeURIComponent(sheetName) + "&headers=1&tqx=responseHandler:" + callbackName;
+          script.src = base + query;
+          document.head.appendChild(script);
+        });
+      }
+
+      function loadWithFetch(url) {
+        return fetch(url).then(function (res) {
+          if (!res.ok) {
+            throw new Error("Falha ao buscar planilha (" + res.status + ").");
+          }
+          return res.text();
+        });
+      }
+
+      function loadRowsFromSheet(sheetId, gid, sheetName) {
+        var gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
+        var gvizUrl = gid
+          ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
+          : gvizBase + "?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName);
+
+        return loadWithFetch(gvizUrl)
+          .then(function (raw) {
+            return rowsFromTable(parseGvizEnvelope(raw).table || {});
+          })
+          .catch(function () {
+            return loadGvizJsonp(sheetId, gid, sheetName)
+              .then(function (payload) {
+                return rowsFromTable(payload.table || {});
+              })
+              .catch(function () {
+                var csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
+                  "/export?format=csv&gid=" + encodeURIComponent(gid || "");
+                return loadWithFetch(csvUrl).then(parseCsv);
+              });
+          });
+      }
+
+      function mapIcon(name) {
+        var key = normalizeKey(name);
+        var icons = {
+          clipboard: "<rect width='8' height='4' x='8' y='2' rx='1'></rect><path d='M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'></path><path d='M12 11h4'></path><path d='M12 16h4'></path><path d='M8 11h.01'></path><path d='M8 16h.01'></path>",
+          pen: "<path d='M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'></path>",
+          siren: "<path d='M7 18v-6a5 5 0 1 1 10 0v6'></path><path d='M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z'></path><path d='M21 12h1'></path><path d='M2 12h1'></path>",
+          calculator: "<rect width='16' height='20' x='4' y='2' rx='2'></rect><line x1='8' x2='16' y1='6' y2='6'></line><line x1='16' x2='16' y1='14' y2='18'></line><path d='M16 10h.01'></path><path d='M12 10h.01'></path><path d='M8 10h.01'></path><path d='M12 14h.01'></path><path d='M8 14h.01'></path>"
+        };
+        return icons[key] || icons.clipboard;
+      }
+
+      function mapRow(row) {
+        var keys = Object.keys(row);
+        var byIndex = function (idx) {
+          if (idx < 0 || idx >= keys.length) return "";
+          return String(row[keys[idx]] || "").trim();
+        };
+
+        var icon = pick(row, ["icone", "icon", "icone_nome"]) || byIndex(1);
+        var title = pick(row, ["nome_cima", "titulo", "title", "nome"]) || byIndex(2);
+        var subtitle = pick(row, ["subtitulo", "descricao", "description"]) || byIndex(3);
+        var cta = pick(row, ["nome_verde", "cta", "texto_verde", "link_texto"]) || byIndex(4);
+        var link = pick(row, ["link", "url", "href"]) || byIndex(5);
+        var active = pick(row, ["ativo", "status"]) || byIndex(0);
+
+        return {
+          active: isActive(active),
+          icon: icon || "clipboard",
+          title: title || "Titulo do card",
+          subtitle: subtitle || "Descricao curta do recurso.",
+          cta: cta || "ACESSAR",
+          link: sanitizeUrl(link)
+        };
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function renderCards(cards) {
+        cardsEl.innerHTML = "";
+        if (!cards.length) {
+          var empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "Nenhum card ativo encontrado na planilha.";
+          cardsEl.appendChild(empty);
+          return;
         }
 
-        setStatus("");
-        window.__UJ_ITEMS__ = out;
-        renderGrids(out);
-      }catch(err){
-        console.error(err);
-        setStatus("Não foi possível carregar a planilha (CSV). Verifique se ela está publicada e acessível.");
+        cards.forEach(function (item) {
+          var card = document.createElement(item.link !== "#" ? "a" : "article");
+          card.className = "card";
+          if (item.link !== "#") {
+            card.href = item.link;
+            card.target = "_blank";
+            card.rel = "noopener noreferrer";
+          }
+          card.innerHTML = [
+            "<span class='card-icon'>",
+            "  <svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>",
+            mapIcon(item.icon),
+            "  </svg>",
+            "</span>",
+            "<h3>" + escapeHtml(item.title) + "</h3>",
+            "<p>" + escapeHtml(item.subtitle) + "</p>",
+            "<span class='cta'>" + escapeHtml(item.cta) + " <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><line x1='5' y1='12' x2='19' y2='12'></line><polyline points='12 5 19 12 12 19'></polyline></svg></span>"
+          ].join("\n");
+          cardsEl.appendChild(card);
+        });
       }
-    }
 
-    window.addEventListener("keydown", (e) => {
-      const k = e.key.toLowerCase();
-      if((e.ctrlKey || e.metaKey) && k === "k"){
-        e.preventDefault();
-        $("#q").focus();
+      function applyTheme(theme) {
+        if (theme === "dark") {
+          document.body.classList.add("dark");
+          return;
+        }
+        document.body.classList.remove("dark");
       }
-    });
 
-    $("#q").addEventListener("input", () => {
-      renderGrids(window.__UJ_ITEMS__ || []);
-    });
+      function initTheme() {
+        var saved = localStorage.getItem(STORAGE_THEME) || "light";
+        applyTheme(saved);
+      }
 
-    $("#toggleTheme").addEventListener("click", () => {
-      $("#q").focus();
-    });
+      function initMenu() {
+        if (!menuBtn || !menu) return;
+        menuBtn.addEventListener("click", function () {
+          menu.classList.toggle("open");
+        });
+      }
 
-    // extra: garante que nada do header seja "selecionável" ao clicar/arrastar
-    document.querySelector(".brand")?.addEventListener("mousedown", (e)=> e.preventDefault());
+      function initDarkToggle() {
+        if (!darkToggle) return;
+        darkToggle.addEventListener("click", function () {
+          var isDark = document.body.classList.contains("dark");
+          var next = isDark ? "light" : "dark";
+          localStorage.setItem(STORAGE_THEME, next);
+          applyTheme(next);
+        });
+      }
 
-    loadSheet();
+      function initCards() {
+        setStatus("Carregando cards da planilha...", "");
+        loadRowsFromSheet(SHEET_ID, SHEET_GID, SHEET_NAME)
+          .then(function (rows) {
+            var mapped = rows.map(mapRow).filter(function (item) { return item.active; });
+            if (!mapped.length) {
+              setStatus("Sem cards ativos na planilha. Exibindo cards padrao.", "error");
+              renderCards(FALLBACK_CARDS.map(mapRow));
+              return;
+            }
+            setStatus(mapped.length + " cards carregados da planilha.", "ok");
+            renderCards(mapped);
+          })
+          .catch(function (err) {
+            setStatus("Falha ao carregar planilha. Exibindo cards padrao. " + String(err.message || err), "error");
+            renderCards(FALLBACK_CARDS.map(mapRow));
+          });
+      }
+
+      initTheme();
+      initMenu();
+      initDarkToggle();
+      initCards();
+    })();
   </script>
 </body>
 </html>
