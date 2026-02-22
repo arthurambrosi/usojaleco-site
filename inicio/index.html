@@ -397,6 +397,7 @@
       Planilha recomendada: aba <strong>Inicio</strong> com colunas
       <code>ativo</code>, <code>icone</code>, <code>nome_cima</code>, <code>subtitulo</code>, <code>nome_verde</code>, <code>link</code>.
       Tambem aceita aliases: <code>titulo</code>, <code>descricao</code>, <code>cta</code>, <code>url</code>.
+      Pode usar planilha publicada (<code>/spreadsheets/d/e/.../pub</code>) por <code>sheetPubKey</code>.
     </p>
   </main>
 
@@ -404,6 +405,7 @@
     (function () {
       var LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
       var DEFAULT_SHEET_ID = "1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ";
+      var DEFAULT_SHEET_PUB_KEY = "2PACX-1vRQDciPTEMkWCfOglnUubyxp6yME-99y-0fvKnumoq8ZdkG7HvKiWI7y7W17VVMjT_99zPAnH3PZ_Yx";
       var DEFAULT_SHEET_NAME = "Inicio";
       var STORAGE_THEME = "usojaleco_inicio_dark_mode";
 
@@ -411,6 +413,8 @@
       var SHEET_ID = params.get("sheetId") || DEFAULT_SHEET_ID;
       var SHEET_GID = params.get("gid");
       var SHEET_NAME = params.get("sheet") || DEFAULT_SHEET_NAME;
+      var SHEET_PUB_KEY = params.get("sheetPubKey") || params.get("pubKey") || DEFAULT_SHEET_PUB_KEY;
+      var SHEET_PUB_URL = params.get("sheetPubUrl") || "";
 
       var brandLogo = document.getElementById("brandLogo");
       var cardsEl = document.getElementById("cards");
@@ -595,6 +599,27 @@
         return rows;
       }
 
+      function isPublishedKey(value) {
+        return /^2PACX-/i.test(String(value || "").trim());
+      }
+
+      function extractPublishedKey(url) {
+        var value = String(url || "").trim();
+        if (!value) return "";
+        var match = value.match(/spreadsheets\/d\/e\/([^/]+)/i);
+        return match && match[1] ? match[1] : "";
+      }
+
+      function buildPublishedCsvUrl(pubKey, gid) {
+        var key = String(pubKey || "").trim();
+        if (!key) return "";
+        var url = "https://docs.google.com/spreadsheets/d/e/" + encodeURIComponent(key) + "/pub?output=csv";
+        if (gid) {
+          url += "&gid=" + encodeURIComponent(gid);
+        }
+        return url;
+      }
+
       function loadGvizJsonp(sheetId, gid, sheetName) {
         return new Promise(function (resolve, reject) {
           var callbackName = "__inicioSheetCb_" + Math.random().toString(36).slice(2);
@@ -633,44 +658,75 @@
         });
       }
 
-      function loadRowsFromSheet(sheetId, gid, sheetName) {
-        var gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
-        var gvizUrl = gid
-          ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
-          : gvizBase + "?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName);
-
+      function loadRowsFromSheet(sheetId, gid, sheetName, sheetPubKey) {
+        var normalizedSheetId = String(sheetId || "").trim();
+        var normalizedPubKey = String(sheetPubKey || "").trim();
         var lastError = null;
 
-        return loadWithFetch(gvizUrl)
-          .then(function (raw) {
-            return rowsFromTable(parseGvizEnvelope(raw).table || {});
-          })
-          .catch(function (err) {
-            lastError = err;
-            return loadGvizJsonp(sheetId, gid, sheetName)
-              .then(function (payload) {
-                return rowsFromTable(payload.table || {});
-              })
-              .catch(function (err2) {
-                lastError = err2;
-                var csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
-                  "/export?format=csv&gid=" + encodeURIComponent(gid || "");
-                return loadWithFetch(csvUrl)
-                  .then(parseCsv)
-                  .catch(function (err3) {
-                    lastError = err3;
-                    var pubCsvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) +
-                      "/pub?gid=" + encodeURIComponent(gid || "") + "&single=true&output=csv";
-                    return loadWithFetch(pubCsvUrl)
-                      .then(parseCsv)
-                      .catch(function (err4) {
-                        var finalMessage = String((err4 && err4.message) || err4 || "");
-                        var previous = String((lastError && lastError.message) || lastError || "");
-                        throw new Error(finalMessage || previous || "Nao foi possivel carregar a planilha.");
-                      });
-                  });
+        if (!normalizedPubKey && isPublishedKey(normalizedSheetId)) {
+          normalizedPubKey = normalizedSheetId;
+          normalizedSheetId = "";
+        }
+
+        function loadPublishedCsv(pubKey) {
+          var pubCsvUrl = buildPublishedCsvUrl(pubKey, gid);
+          if (!pubCsvUrl) {
+            return Promise.reject(new Error("URL publicada nao configurada."));
+          }
+          return loadWithFetch(pubCsvUrl).then(parseCsv);
+        }
+
+        function loadRegularSheet(id) {
+          if (!id) {
+            return Promise.reject(new Error("ID de planilha nao configurado."));
+          }
+
+          var gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(id) + "/gviz/tq";
+          var gvizUrl = gid
+            ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
+            : gvizBase + "?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName);
+
+          return loadWithFetch(gvizUrl)
+            .then(function (raw) {
+              return rowsFromTable(parseGvizEnvelope(raw).table || {});
+            })
+            .catch(function (err) {
+              lastError = err;
+              return loadGvizJsonp(id, gid, sheetName)
+                .then(function (payload) {
+                  return rowsFromTable(payload.table || {});
+                })
+                .catch(function (err2) {
+                  lastError = err2;
+                  var csvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(id) +
+                    "/export?format=csv&gid=" + encodeURIComponent(gid || "");
+                  return loadWithFetch(csvUrl)
+                    .then(parseCsv)
+                    .catch(function (err3) {
+                      lastError = err3;
+                      var legacyPubCsvUrl = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(id) +
+                        "/pub?gid=" + encodeURIComponent(gid || "") + "&single=true&output=csv";
+                      return loadWithFetch(legacyPubCsvUrl).then(parseCsv);
+                    });
+                });
+            });
+        }
+
+        if (normalizedPubKey) {
+          return loadPublishedCsv(normalizedPubKey).catch(function (errPub) {
+            lastError = errPub;
+            if (normalizedSheetId) {
+              return loadRegularSheet(normalizedSheetId).catch(function (errRegular) {
+                var pubMsg = String((lastError && lastError.message) || lastError || "");
+                var regularMsg = String((errRegular && errRegular.message) || errRegular || "");
+                throw new Error(regularMsg || pubMsg || "Nao foi possivel carregar a planilha.");
               });
+            }
+            throw errPub;
           });
+        }
+
+        return loadRegularSheet(normalizedSheetId);
       }
 
       function mapIcon(name) {
@@ -774,7 +830,10 @@
 
       function initCards() {
         setStatus("Carregando cards da planilha...", "");
-        loadRowsFromSheet(SHEET_ID, SHEET_GID, SHEET_NAME)
+        var pubKeyFromUrl = extractPublishedKey(SHEET_PUB_URL);
+        var finalPubKey = pubKeyFromUrl || SHEET_PUB_KEY || "";
+
+        loadRowsFromSheet(SHEET_ID, SHEET_GID, SHEET_NAME, finalPubKey)
           .then(function (rows) {
             var mapped = rows.map(mapRow).filter(function (item) { return item.active; });
             if (!mapped.length) {
