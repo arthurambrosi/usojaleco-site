@@ -281,7 +281,8 @@
 
     .thumbWrap {
       width: 100%;
-      height: 180px;
+      aspect-ratio: 16 / 9;
+      height: auto;
       background: #e9edf3;
       position: relative;
       overflow: hidden;
@@ -291,12 +292,13 @@
     .thumbWrap img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
+      object-fit: contain;
+      background: #ffffff;
+      transition: opacity 0.2s ease;
     }
 
     .card:hover .thumbWrap img {
-      transform: scale(1.03);
+      opacity: 0.98;
     }
 
     .areaTag {
@@ -480,13 +482,47 @@
       position: relative;
       background: #dbe2ea;
       height: min(78vh, 860px);
+      overflow: auto;
     }
 
-    .pdf-frame {
-      width: 100%;
-      height: 100%;
-      border: 0;
+    .pdf-preview-status {
+      margin: 16px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cfd7e2;
+      background: #f7fafc;
+      color: #2e3a4d;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .pdf-preview-status.error {
+      border-color: #f5c2c2;
+      background: #fff5f5;
+      color: #a22828;
+    }
+
+    .pdf-preview-pages {
+      min-height: 100%;
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .pdf-preview-page {
+      background: #fff;
+      border: 1px solid #cfd7e2;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(12, 20, 34, 0.05);
+    }
+
+    .pdf-preview-page canvas {
       display: block;
+      width: 100%;
+      height: auto;
       background: #fff;
     }
 
@@ -605,7 +641,8 @@
         <button id="pdfModalClose" class="pdf-modal-close" type="button">Fechar</button>
       </div>
       <div class="pdf-frame-wrap">
-        <iframe id="pdfFrame" class="pdf-frame" src="about:blank" title="Prévia do PDF"></iframe>
+        <div id="pdfPreviewStatus" class="pdf-preview-status">Carregando prévia do PDF...</div>
+        <div id="pdfPreviewPages" class="pdf-preview-pages" aria-live="polite"></div>
         <div class="pdf-watermark"></div>
       </div>
     </div>
@@ -630,13 +667,15 @@
       const searchInput = document.getElementById("searchInput");
       const brandLogo = document.getElementById("brandLogo");
       const pdfModalEl = document.getElementById("pdfModal");
-      const pdfFrameEl = document.getElementById("pdfFrame");
+      const pdfPreviewStatusEl = document.getElementById("pdfPreviewStatus");
+      const pdfPreviewPagesEl = document.getElementById("pdfPreviewPages");
       const pdfModalCloseEl = document.getElementById("pdfModalClose");
 
       let allSlides = [];
       let activeCategory = "Todas";
       let searchTerm = "";
       const pdfThumbCache = new Map();
+      let activePdfRenderToken = 0;
 
       if (window.pdfjsLib && window.pdfjsLib.GlobalWorkerOptions) {
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -650,29 +689,117 @@
         return /\.pdf(?:$|[?#])/i.test(String(url || "").trim());
       }
 
+      function normalizePdfSourceUrl(url) {
+        const safe = sanitizeUrl(url);
+        if (safe === "#") return "#";
+
+        try {
+          const parsed = new URL(safe);
+          const host = parsed.hostname.toLowerCase();
+          const parts = parsed.pathname.split("/").filter(Boolean);
+
+          if (host === "raw.githubusercontent.com" && parts.length >= 4) {
+            const owner = parts[0];
+            const repo = parts[1];
+            const ref = parts[2];
+            const filePath = parts.slice(3).join("/");
+            return "https://cdn.jsdelivr.net/gh/" + owner + "/" + repo + "@" + ref + "/" + filePath;
+          }
+
+          if (host === "github.com" && parts.length >= 5 && parts[2] === "blob") {
+            const owner = parts[0];
+            const repo = parts[1];
+            const ref = parts[3];
+            const filePath = parts.slice(4).join("/");
+            return "https://cdn.jsdelivr.net/gh/" + owner + "/" + repo + "@" + ref + "/" + filePath;
+          }
+
+          return parsed.href;
+        } catch (_) {
+          return safe;
+        }
+      }
+
+      function setPdfPreviewStatus(message, mode) {
+        if (!pdfPreviewStatusEl) return;
+        pdfPreviewStatusEl.textContent = message || "";
+        pdfPreviewStatusEl.className = "pdf-preview-status" + (mode ? " " + mode : "");
+        pdfPreviewStatusEl.style.display = message ? "block" : "none";
+      }
+
       function closePdfModal() {
         if (!pdfModalEl) return;
+        activePdfRenderToken += 1;
         pdfModalEl.classList.remove("open");
         pdfModalEl.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
-        if (pdfFrameEl) pdfFrameEl.src = "about:blank";
+        if (pdfPreviewPagesEl) pdfPreviewPagesEl.innerHTML = "";
+        setPdfPreviewStatus("");
       }
 
-      function openPdfModal(pdfUrl) {
-        if (!pdfModalEl || !pdfFrameEl || !pdfUrl || pdfUrl === "#") return;
-        const sep = pdfUrl.includes("#") ? "&" : "#";
-        pdfFrameEl.src = pdfUrl + sep + "toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+      async function openPdfModal(pdfUrl) {
+        if (!pdfModalEl || !pdfPreviewPagesEl || !pdfUrl || pdfUrl === "#") return;
+        const sourceUrl = normalizePdfSourceUrl(pdfUrl);
+        if (sourceUrl === "#" || !isPdfLikeUrl(sourceUrl)) {
+          setPdfPreviewStatus("Link de prévia inválido.", "error");
+          return;
+        }
+
         pdfModalEl.classList.add("open");
         pdfModalEl.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
+        pdfPreviewPagesEl.innerHTML = "";
+        setPdfPreviewStatus("Carregando prévia do PDF...");
+
+        if (!window.pdfjsLib || typeof window.pdfjsLib.getDocument !== "function") {
+          setPdfPreviewStatus("Não foi possível carregar o visualizador de PDF.", "error");
+          return;
+        }
+
+        const token = ++activePdfRenderToken;
+        try {
+          const loadingTask = window.pdfjsLib.getDocument({ url: sourceUrl, withCredentials: false });
+          const pdfDoc = await loadingTask.promise;
+          if (token !== activePdfRenderToken) return;
+
+          const pageLimit = Math.min(pdfDoc.numPages, 12);
+          for (let pageNum = 1; pageNum <= pageLimit; pageNum += 1) {
+            const page = await pdfDoc.getPage(pageNum);
+            if (token !== activePdfRenderToken) return;
+
+            const baseViewport = page.getViewport({ scale: 1 });
+            const targetWidth = 920;
+            const scale = Math.min(2.2, Math.max(0.7, targetWidth / Math.max(1, baseViewport.width)));
+            const viewport = page.getViewport({ scale: scale });
+
+            const pageWrap = document.createElement("div");
+            pageWrap.className = "pdf-preview-page";
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d", { alpha: false });
+            canvas.width = Math.ceil(viewport.width);
+            canvas.height = Math.ceil(viewport.height);
+            pageWrap.appendChild(canvas);
+            pdfPreviewPagesEl.appendChild(pageWrap);
+
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+          }
+
+          if (token !== activePdfRenderToken) return;
+          setPdfPreviewStatus("");
+        } catch (error) {
+          console.warn("Falha ao abrir prévia do PDF:", error);
+          if (token !== activePdfRenderToken) return;
+          setPdfPreviewStatus("Não foi possível abrir este PDF. Verifique o link e permissões do arquivo.", "error");
+        }
       }
 
       async function getPdfFirstPageThumb(pdfUrl) {
-        if (!isPdfLikeUrl(pdfUrl) || !window.pdfjsLib) return null;
-        if (pdfThumbCache.has(pdfUrl)) return pdfThumbCache.get(pdfUrl);
+        const sourceUrl = normalizePdfSourceUrl(pdfUrl);
+        if (!isPdfLikeUrl(sourceUrl) || !window.pdfjsLib) return null;
+        if (pdfThumbCache.has(sourceUrl)) return pdfThumbCache.get(sourceUrl);
 
         try {
-          const loadingTask = window.pdfjsLib.getDocument({ url: pdfUrl, withCredentials: false });
+          const loadingTask = window.pdfjsLib.getDocument({ url: sourceUrl, withCredentials: false });
           const pdfDoc = await loadingTask.promise;
           const page = await pdfDoc.getPage(1);
           const viewport = page.getViewport({ scale: 1.35 });
@@ -683,11 +810,11 @@
 
           await page.render({ canvasContext: context, viewport: viewport }).promise;
           const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
-          pdfThumbCache.set(pdfUrl, dataUrl);
+          pdfThumbCache.set(sourceUrl, dataUrl);
           return dataUrl;
         } catch (error) {
           console.warn("Falha ao renderizar thumbnail do PDF:", error);
-          pdfThumbCache.set(pdfUrl, null);
+          pdfThumbCache.set(sourceUrl, null);
           return null;
         }
       }
