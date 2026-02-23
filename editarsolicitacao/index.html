@@ -81,6 +81,44 @@
         .upload-area p { font-size: 12px; color: #666; }
         .upload-icon { font-size: 32px; margin-bottom: 5px; }
 
+        .page-tools {
+            background: #ffffff;
+            border: 1px solid #dbe1ef;
+            border-radius: 8px;
+            padding: 10px;
+            display: grid;
+            gap: 8px;
+        }
+        .page-nav {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 6px;
+            align-items: center;
+        }
+        .page-nav .mini-btn {
+            padding: 7px 8px;
+            font-size: 11px;
+        }
+        .page-indicator {
+            font-size: 12px;
+            text-align: center;
+            color: #1f2937;
+            font-weight: 700;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: #f8fafc;
+            padding: 7px 8px;
+            white-space: nowrap;
+        }
+        .detect-btn {
+            margin-bottom: 0;
+            padding: 9px;
+            font-size: 12px;
+        }
+        .detect-status {
+            margin-top: 0;
+        }
+
         .field-types h3 { font-size: 14px; margin-bottom: 10px; color: #333; }
         
         .grid-buttons {
@@ -114,8 +152,63 @@
         }
         .field-config.active { display: block; animation: fadeIn 0.3s; }
 
+        .field-config-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .field-config-header h4{
+            margin: 0;
+            font-size: 14px;
+            color: #1f2937;
+        }
+        .icon-danger{
+            border: 1px solid #fecaca;
+            background: #fff5f5;
+            color: #dc2626;
+            border-radius: 6px;
+            height: 30px;
+            min-width: 30px;
+            padding: 0 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .icon-danger:hover{
+            background: #fee2e2;
+        }
+
+        .cfg-intro{
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+            font-size: 11px;
+            line-height: 1.35;
+            color: #4b5563;
+        }
+
+        .cfg-sections{
+            display: grid;
+            gap: 10px;
+        }
+        .cfg-card{
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .cfg-card h5{
+            margin: 0 0 8px;
+            font-size: 12px;
+            color: #111827;
+        }
+
         .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 4px; color: #374151; }
         .form-group input, .form-group select {
             width: 100%;
             padding: 6px;
@@ -220,13 +313,13 @@
             color: white;
         }
 
-        /* TEXT ANCHOR GRID (9 posições) */
+        /* TEXT ANCHOR GRID (9 posiÃ§Ãµes) */
         .anchor-block{
             border: 1px solid #e5e7eb;
-            background:#fafafa;
+            background:#ffffff;
             border-radius: 6px;
             padding: 10px;
-            margin-top: 8px;
+            margin-top: 0;
         }
         .anchor-title{
             font-size: 11px;
@@ -341,7 +434,7 @@
             box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
         }
 
-        /* ✅ Campo Segmentado (Comb): linhas verticais internas */
+        /* âœ… Campo Segmentado (Comb): linhas verticais internas */
         .field-overlay.comb {
             background-image: repeating-linear-gradient(
                 to right,
@@ -385,7 +478,7 @@
             justify-content: center;
         }
 
-        /* ✅ Handles de resize (aparecem só quando selecionado) */
+        /* âœ… Handles de resize (aparecem sÃ³ quando selecionado) */
         .resize-handle{
             position:absolute;
             width:10px; height:10px;
@@ -414,38 +507,48 @@
 <body cz-shortcut-listen="true">
     <div class="container">
         <div class="header">
-            <h1>📝 Editor de Templates Pro</h1>
-            <p>Mapeamento com suporte a PDF e Zoom de Alta Precisão</p>
+            <h1>ðŸ“ Editor de Templates Pro</h1>
+            <p>Mapeamento com suporte a PDF e Zoom de Alta PrecisÃ£o</p>
         </div>
 
         <div class="content">
             <div class="sidebar">
                 <div class="upload-area" id="upload-area">
-                    <div class="upload-icon">📄</div>
+                    <div class="upload-icon">ðŸ“„</div>
                     <p><strong>Arraste PDF ou Imagem</strong><br>ou clique para selecionar</p>
                     <input type="file" id="file-input" accept="image/*,application/pdf" style="display: none;">
                 </div>
 
+                <div class="page-tools">
+                    <div class="page-nav">
+                        <button class="mini-btn" id="page-prev" type="button" disabled>Anterior</button>
+                        <span class="page-indicator" id="page-indicator">Pagina 1 / 1</span>
+                        <button class="mini-btn" id="page-next" type="button" disabled>Proxima</button>
+                    </div>
+                    <button class="button btn-primary detect-btn" id="btn-auto-detect" type="button">Auto detectar campos desta pagina</button>
+                    <div class="hint detect-status" id="detect-status">Carregue um arquivo e clique em Auto detectar para criar campos automaticamente.</div>
+                </div>
+
                 <div class="instructions">
-                    <strong>Seleção múltipla:</strong><br>
+                    <strong>SeleÃ§Ã£o mÃºltipla:</strong><br>
                     Use <b>Ctrl + clique</b> para selecionar mais de uma caixa.
                     <br><br>
-                    <strong>Posição do texto:</strong><br>
-                    Configure a direção (LTR/RTL), alinhamento e o “ponto de início” (9 posições).
+                    <strong>PosiÃ§Ã£o do texto:</strong><br>
+                    Configure a direÃ§Ã£o (LTR/RTL), alinhamento e o â€œponto de inÃ­cioâ€ (9 posiÃ§Ãµes).
                     <br><br>
                     <strong>Undo/Redo:</strong><br>
-                    <b>Ctrl+Z</b> (voltar) • <b>Ctrl+Y</b> ou <b>Ctrl+Shift+Z</b> (refazer)
+                    <b>Ctrl+Z</b> (voltar) â€¢ <b>Ctrl+Y</b> ou <b>Ctrl+Shift+Z</b> (refazer)
                 </div>
 
                 <div class="field-types">
                     <h3>Tipo de Campo</h3>
                     <div class="grid-buttons">
                         <button class="field-type-btn" data-type="text">Texto</button>
-                        <button class="field-type-btn active" data-type="number">Número</button>
+                        <button class="field-type-btn active" data-type="number">NÃºmero</button>
                         <button class="field-type-btn" data-type="date">Data</button>
                         <button class="field-type-btn" data-type="cpf">CPF</button>
                         <button class="field-type-btn" data-type="cnpj">CNPJ</button>
-                        <button class="field-type-btn" data-type="money">Monetário</button>
+                        <button class="field-type-btn" data-type="money">MonetÃ¡rio</button>
                         <button class="field-type-btn" data-type="check">Checkbox</button>
                         <button class="field-type-btn" data-type="custom">Custom</button>
                     </div>
@@ -454,143 +557,150 @@
                 <!-- MULTI SELECT TOOLS -->
                 <div class="multi-actions" id="multi-actions">
                     <h4>
-                        🔧 Edição em lote
+                        ðŸ”§ EdiÃ§Ã£o em lote
                         <span class="count-pill" id="multi-count">Selecionadas: 0</span>
                     </h4>
                     <div class="grid-buttons">
                         <button class="mini-btn" id="btn-same-width">Mesma largura</button>
                         <button class="mini-btn" id="btn-same-height">Mesma altura</button>
 
-                        <button class="mini-btn" id="btn-align-left">Alinhar à esquerda</button>
-                        <button class="mini-btn" id="btn-align-right">Alinhar à direita</button>
+                        <button class="mini-btn" id="btn-align-left">Alinhar Ã  esquerda</button>
+                        <button class="mini-btn" id="btn-align-right">Alinhar Ã  direita</button>
 
                         <button class="mini-btn" id="btn-align-vertical">Alinhar vertical</button>
                         <button class="mini-btn" id="btn-align-horizontal">Alinhar horizontal</button>
 
                         <button class="mini-btn danger" id="btn-delete-multi">Remover selecionadas</button>
-                        <button class="mini-btn" id="btn-clear-selection">Limpar seleção</button>
+                        <button class="mini-btn" id="btn-clear-selection">Limpar seleÃ§Ã£o</button>
                     </div>
                     <div class="hint" style="margin-top:8px;">
-                        * “Mesma largura/altura” e “Alinhar vertical/horizontal” usam como referência a <b>última caixa clicada</b> (âncora).
+                        * â€œMesma largura/alturaâ€ e â€œAlinhar vertical/horizontalâ€ usam como referÃªncia a <b>Ãºltima caixa clicada</b> (Ã¢ncora).
                     </div>
                 </div>
 
                 <!-- CONFIG (agora aparece com 1 OU mais selecionadas) -->
                 <div class="field-config" id="field-config">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <h4>Configuração</h4>
-                        <button id="btn-delete-selected" style="border:none; background:none; color:#dc3545; cursor:pointer;">🗑️</button>
+                    <div class="field-config-header">
+                        <h4>Configuracao do campo</h4>
+                        <button id="btn-delete-selected" class="icon-danger" title="Remover campo selecionado">Remover</button>
                     </div>
 
-                    <div class="hint" style="margin-bottom:10px;">
-                        ✅ Em seleção múltipla: <b>Obrigatório</b>, <b>Comb</b> e <b>Posição do texto</b> aplicam a todas. <br>
-                        ✳️ <b>Nome</b> e <b>Rótulo</b> só editam quando houver <b>1</b> caixa selecionada.
+                    <div class="cfg-intro">
+                        Em selecao multipla: <b>Obrigatorio</b>, <b>Comb</b> e <b>Posicao do texto</b> aplicam a todas.
+                        <br>
+                        <b>Nome</b> e <b>Rotulo</b> editam apenas quando houver uma unica caixa selecionada.
                     </div>
 
-                    <div class="form-group">
-                        <label>Nome da Variável (JSON key):</label>
-                        <input type="text" id="field-name" placeholder="— (múltiplos selecionados)">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Rótulo Visível:</label>
-                        <input type="text" id="field-label" placeholder="— (múltiplos selecionados)">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Obrigatório?</label>
-                        <select id="field-required">
-                            <option value="__mixed__" disabled="">(misto)</option>
-                            <option value="false">Não</option>
-                            <option value="true">Sim</option>
-                        </select>
-                    </div>
-
-                    <!-- ✅ Campo Segmentado (Comb) -->
-                    <div class="form-group">
-                        <label class="inline-check">
-                            <input type="checkbox" id="field-comb">
-                            É campo segmentado (Comb)?
-                        </label>
-                        <div class="hint">Ative para desenhar divisões verticais automáticas dentro da caixa.</div>
-                    </div>
-
-                    <div class="form-group" id="comb-cells-group" style="display: block;">
-                        <label>Quantidade de células:</label>
-                        <input type="number" id="field-comb-cells" min="2" step="1" value="10">
-                        <div class="hint" id="comb-cellwidth">Largura por célula: 31.39 px (Total: 62.78 px)</div>
-                    </div>
-
-                    <!-- ✅ NOVO: POSIÇÃO DO TEXTO -->
-                    <div class="anchor-block">
-                        <div class="anchor-title">
-                            🅰️ Posição do texto (preenchimento)
-                            <span style="font-weight:700;color:#6b7280;">padrão: topo + esquerda + LTR</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Direção do texto:</label>
-                            <select id="text-dir">
-                                <option value="__mixed__" disabled="">(misto)</option>
-                                <option value="ltr">Esquerda → Direita (LTR)</option>
-                                <option value="rtl">Direita → Esquerda (RTL)</option>
-                            </select>
-                        </div>
-
-                        <div class="grid-buttons">
-                            <div class="form-group" style="margin-bottom:0;">
-                                <label>Alinhamento horizontal:</label>
-                                <select id="text-halign">
-                                    <option value="__mixed__" disabled="">(misto)</option>
-                                    <option value="left">Esquerda</option>
-                                    <option value="center">Centro</option>
-                                    <option value="right">Direita</option>
-                                </select>
+                    <div class="cfg-sections">
+                        <div class="cfg-card">
+                            <h5>Identificacao</h5>
+                            <div class="form-group">
+                                <label>Nome da variavel (JSON key):</label>
+                                <input type="text" id="field-name" placeholder="-- (multiplos selecionados)">
                             </div>
+
                             <div class="form-group" style="margin-bottom:0;">
-                                <label>Alinhamento vertical:</label>
-                                <select id="text-valign">
-                                    <option value="__mixed__" disabled="">(misto)</option>
-                                    <option value="top">Topo</option>
-                                    <option value="middle">Meio</option>
-                                    <option value="bottom">Base</option>
-                                </select>
+                                <label>Rotulo visivel:</label>
+                                <input type="text" id="field-label" placeholder="-- (multiplos selecionados)">
                             </div>
                         </div>
 
-                        <div class="hint" style="margin-top:8px;">
-                            Se preferir, escolha direto o “ponto de início” (9 posições):
+                        <div class="cfg-card">
+                            <h5>Regras do campo</h5>
+                            <div class="form-group">
+                                <label>Obrigatorio?</label>
+                                <select id="field-required">
+                                    <option value="__mixed__" disabled="">(misto)</option>
+                                    <option value="false">Nao</option>
+                                    <option value="true">Sim</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="inline-check">
+                                    <input type="checkbox" id="field-comb">
+                                    Campo segmentado (Comb)
+                                </label>
+                                <div class="hint">Ative para desenhar divisoes verticais automaticas dentro da caixa.</div>
+                            </div>
+
+                            <div class="form-group" id="comb-cells-group" style="display: block; margin-bottom:0;">
+                                <label>Quantidade de celulas:</label>
+                                <input type="number" id="field-comb-cells" min="2" step="1" value="10">
+                                <div class="hint" id="comb-cellwidth">Largura por celula: 31.39 px (Total: 62.78 px)</div>
+                            </div>
                         </div>
 
-                        <div class="anchor-grid" id="anchor-grid">
-                            <button class="anchor-btn" data-h="left" data-v="top" title="Topo à esquerda">↖</button>
-                            <button class="anchor-btn" data-h="center" data-v="top" title="Topo centralizado">↑</button>
-                            <button class="anchor-btn" data-h="right" data-v="top" title="Topo à direita">↗</button>
+                        <div class="cfg-card anchor-block">
+                            <div class="anchor-title">
+                                Posicao do texto (preenchimento)
+                                <span style="font-weight:700;color:#6b7280;">padrao: topo + esquerda + LTR</span>
+                            </div>
 
-                            <button class="anchor-btn" data-h="left" data-v="middle" title="Meio à esquerda">←</button>
-                            <button class="anchor-btn active" data-h="center" data-v="middle" title="Meio centralizado">•</button>
-                            <button class="anchor-btn" data-h="right" data-v="middle" title="Meio à direita">→</button>
+                            <div class="form-group">
+                                <label>Direcao do texto:</label>
+                                <select id="text-dir">
+                                    <option value="__mixed__" disabled="">(misto)</option>
+                                    <option value="ltr">Esquerda -> Direita (LTR)</option>
+                                    <option value="rtl">Direita -> Esquerda (RTL)</option>
+                                </select>
+                            </div>
 
-                            <button class="anchor-btn" data-h="left" data-v="bottom" title="Base à esquerda">↙</button>
-                            <button class="anchor-btn" data-h="center" data-v="bottom" title="Base centralizado">↓</button>
-                            <button class="anchor-btn" data-h="right" data-v="bottom" title="Base à direita">↘</button>
-                        </div>
+                            <div class="grid-buttons">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>Alinhamento horizontal:</label>
+                                    <select id="text-halign">
+                                        <option value="__mixed__" disabled="">(misto)</option>
+                                        <option value="left">Esquerda</option>
+                                        <option value="center">Centro</option>
+                                        <option value="right">Direita</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>Alinhamento vertical:</label>
+                                    <select id="text-valign">
+                                        <option value="__mixed__" disabled="">(misto)</option>
+                                        <option value="top">Topo</option>
+                                        <option value="middle">Meio</option>
+                                        <option value="bottom">Base</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="hint" style="margin-top:8px;">
-                            * Essas opções são salvas no JSON do campo (para seu motor de preenchimento usar depois).
+                            <div class="hint" style="margin-top:8px;">
+                                Se preferir, escolha direto o ponto de inicio (9 posicoes):
+                            </div>
+
+                            <div class="anchor-grid" id="anchor-grid">
+                                <button class="anchor-btn" data-h="left" data-v="top" title="Topo a esquerda">↖</button>
+                                <button class="anchor-btn" data-h="center" data-v="top" title="Topo centralizado">↑</button>
+                                <button class="anchor-btn" data-h="right" data-v="top" title="Topo a direita">↗</button>
+
+                                <button class="anchor-btn" data-h="left" data-v="middle" title="Meio a esquerda">←</button>
+                                <button class="anchor-btn active" data-h="center" data-v="middle" title="Meio centralizado">•</button>
+                                <button class="anchor-btn" data-h="right" data-v="middle" title="Meio a direita">→</button>
+
+                                <button class="anchor-btn" data-h="left" data-v="bottom" title="Base a esquerda">↙</button>
+                                <button class="anchor-btn" data-h="center" data-v="bottom" title="Base centralizado">↓</button>
+                                <button class="anchor-btn" data-h="right" data-v="bottom" title="Base a direita">↘</button>
+                            </div>
+
+                            <div class="hint" style="margin-top:8px;">
+                                Essas opcoes sao salvas no JSON do campo para uso no preenchimento.
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="actions-area">
                     <div class="grid-buttons" style="margin-bottom:8px;">
-                        <button class="button btn-secondary" id="undo-btn">↩️ Voltar</button>
-                        <button class="button btn-secondary" id="redo-btn" disabled="">↪️ Refazer</button>
+                        <button class="button btn-secondary" id="undo-btn">â†©ï¸ Voltar</button>
+                        <button class="button btn-secondary" id="redo-btn" disabled="">â†ªï¸ Refazer</button>
                     </div>
 
-                    <button class="button btn-primary" id="save-json">💾 Baixar JSON</button>
-                    <button class="button btn-secondary" id="copy-json">📋 Copiar JSON</button>
-                    <button class="button btn-secondary" id="load-json-btn">📂 Carregar JSON</button>
+                    <button class="button btn-primary" id="save-json">ðŸ’¾ Baixar JSON</button>
+                    <button class="button btn-secondary" id="copy-json">ðŸ“‹ Copiar JSON</button>
+                    <button class="button btn-secondary" id="load-json-btn">ðŸ“‚ Carregar JSON</button>
                     <input type="file" id="json-input" accept=".json" style="display:none">
                 </div>
             </div>
@@ -606,7 +716,7 @@
                 <div class="canvas-scroll-container">
                     <div id="zoom-wrapper" style="width: 1190px; height: 1684px; transform: scale(1.8);">
                         <canvas id="document-canvas" width="1190" height="1684"></canvas>
-                        <div id="overlays-container"><div class="field-overlay " style="left: 71.5px; top: 184px; width: 812px; height: 25px;"><div class="field-label">campo_1 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 891.905px; top: 182.929px; width: 200px; height: 27.1429px; --comb-step: 28.571428571428555px;"><div class="field-label">campo_2 [7] • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 928.095px; top: 261.905px; width: 159.048px; height: 27.619px;"><div class="field-label">campo_3 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 70.3571px; top: 260.357px; width: 843.571px; height: 30.7143px;"><div class="field-label">campo_4 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 814.643px; top: 309px; width: 23.5714px; height: 22.1429px;"><div class="field-label">campo_5 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 928.214px; top: 310.714px; width: 20.7143px; height: 22.1429px;"><div class="field-label">campo_6 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 71.0714px; top: 1237.86px; width: 507.143px; height: 27.1429px;"><div class="field-label">campo_7 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 101.071px; top: 1285px; width: 20px; height: 22.8571px;"><div class="field-label">campo_8 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 200.357px; top: 1287.14px; width: 20px; height: 22.8571px;"><div class="field-label">campo_9 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 284.643px; top: 1284.29px; width: 455.714px; height: 29.2857px; --comb-step: 30.380952380952376px;"><div class="field-label">campo_10 [15] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 588.929px; top: 1235.71px; width: 37.8571px; height: 31.4286px;"><div class="field-label">campo_11 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 636.071px; top: 1236.43px; width: 36.4286px; height: 31.4286px;"><div class="field-label">campo_12 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 678.214px; top: 1235.71px; width: 63.5714px; height: 31.4286px;"><div class="field-label">campo_13 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 74.6429px; top: 1094.29px; width: 1017.86px; height: 85.7143px;"><div class="field-label">campo_14 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 76.4286px; top: 983.571px; width: 1014.29px; height: 83.5714px;"><div class="field-label">campo_15 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 76.0714px; top: 863.571px; width: 1015px; height: 89.2857px;"><div class="field-label">campo_16 • TL-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 71.7857px; top: 798.214px; width: 580.714px; height: 36.4286px;"><div class="field-label">campo_17 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 658.214px; top: 799.643px; width: 114.286px; height: 36.4286px;"><div class="field-label">campo_18 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 777.5px; top: 798.571px; width: 128.571px; height: 36.4286px;"><div class="field-label">campo_19 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 911.071px; top: 798.571px; width: 177.857px; height: 36.4286px;"><div class="field-label">campo_20 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 423.929px; top: 572.5px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_21 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.143px; top: 628.214px; width: 100px; height: 35.7143px;"><div class="field-label">campo_22 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.143px; top: 687.857px; width: 100px; height: 35.7143px;"><div class="field-label">campo_23 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 972.5px; top: 571.429px; width: 99.2857px; height: 35.7143px;"><div class="field-label">campo_24 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 422.5px; top: 628.214px; width: 537.143px; height: 32.1429px;"><div class="field-label">campo_25 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 423.929px; top: 692.214px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_26 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 63.9286px; top: 687.857px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_27 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 61.7857px; top: 627.143px; width: 350px; height: 36.4286px; --comb-step: 34.999999999999986px;"><div class="field-label">campo_28 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 66.0714px; top: 570.357px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_29 [10] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.357px; top: 492.857px; width: 67.1429px; height: 30.7143px; --comb-step: 33.571428571428555px;"><div class="field-label">campo_30 [2] • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 911.071px; top: 490.714px; width: 180px; height: 34.2857px; --comb-step: 22.499999999999986px;"><div class="field-label">campo_31 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 693.214px; top: 495px; width: 150px; height: 27.1429px;"><div class="field-label">campo_32 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 68.2143px; top: 494.286px; width: 620px; height: 27.8571px;"><div class="field-label">campo_33 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 69.6429px; top: 445.714px; width: 1018.57px; height: 27.1429px;"><div class="field-label">campo_34 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 67.5px; top: 402.143px; width: 708.571px; height: 29.2857px;"><div class="field-label">campo_35 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 69.6429px; top: 354.286px; width: 704.286px; height: 27.8571px;"><div class="field-label">campo_36 • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 65.3571px; top: 306.429px; width: 515px; height: 31.4286px; --comb-step: 34.33333333333332px;"><div class="field-label">campo_37 [15] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.643px; top: 411.429px; width: 244px; height: 25px; --comb-step: 30.499999999999986px;"><div class="field-label">campo_38 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 845.421px; top: 361.627px; width: 244.651px; height: 25px; --comb-step: 30.581349206349202px;"><div class="field-label">campo_39 [8] • ML-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 971.786px; top: 304.286px; width: 117.857px; height: 32.1429px;"><div class="field-label">campo_40 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 596.786px; top: 310px; width: 43.5714px; height: 29.2857px;"><div class="field-label">campo_41 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 648.214px; top: 309.286px; width: 36.4286px; height: 29.2857px;"><div class="field-label">campo_42 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay " style="left: 692.5px; top: 307.857px; width: 74.2857px; height: 29.2857px;"><div class="field-label">campo_43 • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 784.167px; top: 411.667px; width: 62.7778px; height: 25px; --comb-step: 31.388888888888914px;"><div class="field-label">campo_44 [2] • MC-LTR</div><div class="field-delete">×</div></div><div class="field-overlay comb" style="left: 783.056px; top: 360.556px; width: 65px; height: 25px; --comb-step: 32.49999999999994px;"><div class="field-label">campo_45 [2] • MC-LTR</div><div class="field-delete">×</div></div></div>
+                        <div id="overlays-container"><div class="field-overlay " style="left: 71.5px; top: 184px; width: 812px; height: 25px;"><div class="field-label">campo_1 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 891.905px; top: 182.929px; width: 200px; height: 27.1429px; --comb-step: 28.571428571428555px;"><div class="field-label">campo_2 [7] â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 928.095px; top: 261.905px; width: 159.048px; height: 27.619px;"><div class="field-label">campo_3 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 70.3571px; top: 260.357px; width: 843.571px; height: 30.7143px;"><div class="field-label">campo_4 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 814.643px; top: 309px; width: 23.5714px; height: 22.1429px;"><div class="field-label">campo_5 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 928.214px; top: 310.714px; width: 20.7143px; height: 22.1429px;"><div class="field-label">campo_6 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 71.0714px; top: 1237.86px; width: 507.143px; height: 27.1429px;"><div class="field-label">campo_7 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 101.071px; top: 1285px; width: 20px; height: 22.8571px;"><div class="field-label">campo_8 â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 200.357px; top: 1287.14px; width: 20px; height: 22.8571px;"><div class="field-label">campo_9 â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 284.643px; top: 1284.29px; width: 455.714px; height: 29.2857px; --comb-step: 30.380952380952376px;"><div class="field-label">campo_10 [15] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 588.929px; top: 1235.71px; width: 37.8571px; height: 31.4286px;"><div class="field-label">campo_11 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 636.071px; top: 1236.43px; width: 36.4286px; height: 31.4286px;"><div class="field-label">campo_12 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 678.214px; top: 1235.71px; width: 63.5714px; height: 31.4286px;"><div class="field-label">campo_13 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 74.6429px; top: 1094.29px; width: 1017.86px; height: 85.7143px;"><div class="field-label">campo_14 â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 76.4286px; top: 983.571px; width: 1014.29px; height: 83.5714px;"><div class="field-label">campo_15 â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 76.0714px; top: 863.571px; width: 1015px; height: 89.2857px;"><div class="field-label">campo_16 â€¢ TL-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 71.7857px; top: 798.214px; width: 580.714px; height: 36.4286px;"><div class="field-label">campo_17 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 658.214px; top: 799.643px; width: 114.286px; height: 36.4286px;"><div class="field-label">campo_18 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 777.5px; top: 798.571px; width: 128.571px; height: 36.4286px;"><div class="field-label">campo_19 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 911.071px; top: 798.571px; width: 177.857px; height: 36.4286px;"><div class="field-label">campo_20 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 423.929px; top: 572.5px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_21 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 972.143px; top: 628.214px; width: 100px; height: 35.7143px;"><div class="field-label">campo_22 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 972.143px; top: 687.857px; width: 100px; height: 35.7143px;"><div class="field-label">campo_23 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 972.5px; top: 571.429px; width: 99.2857px; height: 35.7143px;"><div class="field-label">campo_24 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 422.5px; top: 628.214px; width: 537.143px; height: 32.1429px;"><div class="field-label">campo_25 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 423.929px; top: 692.214px; width: 534.286px; height: 32.1429px;"><div class="field-label">campo_26 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 63.9286px; top: 687.857px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_27 [10] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 61.7857px; top: 627.143px; width: 350px; height: 36.4286px; --comb-step: 34.999999999999986px;"><div class="field-label">campo_28 [10] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 66.0714px; top: 570.357px; width: 346.429px; height: 36.4286px; --comb-step: 34.64285714285713px;"><div class="field-label">campo_29 [10] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 845.357px; top: 492.857px; width: 67.1429px; height: 30.7143px; --comb-step: 33.571428571428555px;"><div class="field-label">campo_30 [2] â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 911.071px; top: 490.714px; width: 180px; height: 34.2857px; --comb-step: 22.499999999999986px;"><div class="field-label">campo_31 [8] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 693.214px; top: 495px; width: 150px; height: 27.1429px;"><div class="field-label">campo_32 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 68.2143px; top: 494.286px; width: 620px; height: 27.8571px;"><div class="field-label">campo_33 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 69.6429px; top: 445.714px; width: 1018.57px; height: 27.1429px;"><div class="field-label">campo_34 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 67.5px; top: 402.143px; width: 708.571px; height: 29.2857px;"><div class="field-label">campo_35 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 69.6429px; top: 354.286px; width: 704.286px; height: 27.8571px;"><div class="field-label">campo_36 â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 65.3571px; top: 306.429px; width: 515px; height: 31.4286px; --comb-step: 34.33333333333332px;"><div class="field-label">campo_37 [15] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 845.643px; top: 411.429px; width: 244px; height: 25px; --comb-step: 30.499999999999986px;"><div class="field-label">campo_38 [8] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 845.421px; top: 361.627px; width: 244.651px; height: 25px; --comb-step: 30.581349206349202px;"><div class="field-label">campo_39 [8] â€¢ ML-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 971.786px; top: 304.286px; width: 117.857px; height: 32.1429px;"><div class="field-label">campo_40 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 596.786px; top: 310px; width: 43.5714px; height: 29.2857px;"><div class="field-label">campo_41 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 648.214px; top: 309.286px; width: 36.4286px; height: 29.2857px;"><div class="field-label">campo_42 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay " style="left: 692.5px; top: 307.857px; width: 74.2857px; height: 29.2857px;"><div class="field-label">campo_43 â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 784.167px; top: 411.667px; width: 62.7778px; height: 25px; --comb-step: 31.388888888888914px;"><div class="field-label">campo_44 [2] â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div><div class="field-overlay comb" style="left: 783.056px; top: 360.556px; width: 65px; height: 25px; --comb-step: 32.49999999999994px;"><div class="field-label">campo_45 [2] â€¢ MC-LTR</div><div class="field-delete">Ã—</div></div></div>
                     </div>
                 </div>
             </div>
@@ -614,16 +724,16 @@
     </div>
 
     <script>
-        // Estado da aplicação
+        // Estado da aplicaÃ§Ã£o
         const state = {
-            currentFieldType: null,
-            fields: [], // {id, type, x, y, width, height, name, label, required, comb, combCells, textDir, textHAlign, textVAlign}
+            currentFieldType: 'number',
+            fields: [], // {id, type, x, y, width, height, page, name, label, required, comb, combCells, textDir, textHAlign, textVAlign}
 
-            // seleção
+            // seleÃ§Ã£o
             selectedIds: new Set(),
-            anchorId: null, // última caixa clicada (referência)
+            anchorId: null, // Ãºltima caixa clicada (referÃªncia)
 
-            // ações do mouse
+            // aÃ§Ãµes do mouse
             action: null, // 'draw' | 'move' | 'resize' | null
             startX: 0,
             startY: 0,
@@ -636,8 +746,12 @@
             scale: 1.0,
             imgOriginalWidth: 0,
             imgOriginalHeight: 0,
+            isPdf: false,
+            totalPages: 1,
+            currentPage: 1,
+            pageImages: [], // [{dataUrl,width,height}]
 
-            // histórico (undo/redo)
+            // histÃ³rico (undo/redo)
             history: {
                 stack: [],
                 index: -1,
@@ -654,8 +768,13 @@
 
         const multiActionsEl = document.getElementById('multi-actions');
         const multiCountEl = document.getElementById('multi-count');
+        const pagePrevBtn = document.getElementById('page-prev');
+        const pageNextBtn = document.getElementById('page-next');
+        const pageIndicatorEl = document.getElementById('page-indicator');
+        const detectStatusEl = document.getElementById('detect-status');
+        const autoDetectBtn = document.getElementById('btn-auto-detect');
 
-        // Inputs de configuração
+        // Inputs de configuraÃ§Ã£o
         const inpName = document.getElementById('field-name');
         const inpLabel = document.getElementById('field-label');
         const inpRequired = document.getElementById('field-required');
@@ -674,23 +793,47 @@
 
         const undoBtn = document.getElementById('undo-btn');
         const redoBtn = document.getElementById('redo-btn');
+        const fieldTypeButtons = Array.from(document.querySelectorAll('.field-type-btn'));
 
         // Helpers
         function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
         function isCtrlMulti(e){ return !!(e && (e.ctrlKey || e.metaKey)); }
+        function setCurrentFieldType(type){
+            const normalized = type || null;
+            state.currentFieldType = normalized;
+            fieldTypeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === normalized);
+            });
+        }
+        function isTypingContext(target){
+            if (!target) return false;
+            const tag = (target.tagName || '').toLowerCase();
+            return tag === 'input' || tag === 'textarea' || tag === 'select' || !!target.isContentEditable;
+        }
+        function currentPageOf(field){
+            const p = Number.parseInt(field && field.page, 10);
+            return Number.isFinite(p) && p >= 1 ? p : 1;
+        }
+        function getFieldsForCurrentPage(){
+            return state.fields.filter(f => currentPageOf(f) === state.currentPage);
+        }
 
         function getSelectedFields(){
-            return state.fields.filter(f => state.selectedIds.has(f.id));
+            return state.fields.filter(f => state.selectedIds.has(f.id) && currentPageOf(f) === state.currentPage);
         }
         function getPrimarySelectedId(){
-            if (state.selectedIds.size !== 1) return null;
-            return Array.from(state.selectedIds)[0];
+            const selected = getSelectedFields();
+            if (selected.length !== 1) return null;
+            return selected[0].id;
         }
         function ensureAnchor(){
-            if (state.anchorId && state.selectedIds.has(state.anchorId)) return state.anchorId;
+            if (state.anchorId && state.selectedIds.has(state.anchorId)) {
+                const anchorField = state.fields.find(f => f.id === state.anchorId);
+                if (anchorField && currentPageOf(anchorField) === state.currentPage) return state.anchorId;
+            }
             const any = getPrimarySelectedId();
             if (any) { state.anchorId = any; return any; }
-            const arr = Array.from(state.selectedIds);
+            const arr = getSelectedFields().map(f => f.id);
             state.anchorId = arr.length ? arr[arr.length-1] : null;
             return state.anchorId;
         }
@@ -733,7 +876,7 @@
             if (a.fields.length !== b.fields.length) return false;
             for (let i=0;i<a.fields.length;i++){
                 const x = a.fields[i], y = b.fields[i];
-                const keys = ["id","type","x","y","width","height","name","label","required","comb","combCells","textDir","textHAlign","textVAlign"];
+                const keys = ["id","type","x","y","width","height","page","name","label","required","comb","combCells","textDir","textHAlign","textVAlign"];
                 for (const k of keys){
                     if (x[k] !== y[k]) return false;
                 }
@@ -804,6 +947,30 @@
             historyDebounce = setTimeout(() => saveHistory(), 350);
         }
 
+        function setDetectStatus(message){
+            if (detectStatusEl) detectStatusEl.textContent = message;
+        }
+
+        function updatePageControls(){
+            if (pageIndicatorEl) pageIndicatorEl.textContent = `Pagina ${state.currentPage} / ${state.totalPages}`;
+            if (pagePrevBtn) pagePrevBtn.disabled = state.currentPage <= 1;
+            if (pageNextBtn) pageNextBtn.disabled = state.currentPage >= state.totalPages;
+        }
+
+        async function renderCurrentPage(){
+            const pageData = state.pageImages[state.currentPage - 1];
+            if (!pageData) return;
+            await drawDataUrlToCanvas(pageData.dataUrl, { resetFields: false, fitZoom: true, clearSelectionOnDraw: true });
+            updatePageControls();
+        }
+
+        async function changePage(delta){
+            const nextPage = clamp(state.currentPage + delta, 1, state.totalPages);
+            if (nextPage === state.currentPage) return;
+            state.currentPage = nextPage;
+            await renderCurrentPage();
+        }
+
         // =========================
         // INIT
         // =========================
@@ -822,14 +989,13 @@
                 if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
             });
 
-            // Seleção de Tipo
-            document.querySelectorAll('.field-type-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.field-type-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    state.currentFieldType = e.target.dataset.type;
+            // SeleÃ§Ã£o de Tipo
+            fieldTypeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setCurrentFieldType(btn.dataset.type);
                 });
             });
+            setCurrentFieldType(state.currentFieldType);
 
             // Eventos do Canvas (Desenho)
             zoomWrapper.addEventListener('mousedown', startDrawing);
@@ -840,8 +1006,11 @@
             document.getElementById('zoom-in').addEventListener('click', () => updateZoom(0.1));
             document.getElementById('zoom-out').addEventListener('click', () => updateZoom(-0.1));
             document.getElementById('zoom-reset').addEventListener('click', () => setZoom(1.0));
+            pagePrevBtn.addEventListener('click', () => changePage(-1));
+            pageNextBtn.addEventListener('click', () => changePage(1));
+            autoDetectBtn.addEventListener('click', autoDetectCurrentPage);
 
-            // Configuração dos campos
+            // ConfiguraÃ§Ã£o dos campos
             inpName.addEventListener('input', updateFieldData);
             inpLabel.addEventListener('input', updateFieldData);
             inpRequired.addEventListener('change', updateFieldData);
@@ -873,7 +1042,7 @@
             });
 
             document.getElementById('btn-delete-selected').addEventListener('click', () => {
-                if(state.selectedIds.size) deleteSelected();
+                if(getSelectedFields().length) deleteSelected();
             });
 
             // JSON Load/Save/Copy
@@ -892,7 +1061,7 @@
             document.getElementById('btn-delete-multi').addEventListener('click', () => deleteSelected());
             document.getElementById('btn-clear-selection').addEventListener('click', () => clearSelection());
 
-            // Undo/Redo botões
+            // Undo/Redo botÃµes
             undoBtn.addEventListener('click', undo);
             redoBtn.addEventListener('click', redo);
 
@@ -900,7 +1069,27 @@
             window.addEventListener('keydown', (e) => {
                 const k = (e.key || '').toLowerCase();
                 const ctrl = e.ctrlKey || e.metaKey;
-                if (!ctrl) return;
+                if (!ctrl){
+                    if (isTypingContext(e.target)) return;
+
+                    if (k === 'delete' || k === 'backspace'){
+                        if (getSelectedFields().length){
+                            e.preventDefault();
+                            deleteSelected();
+                        }
+                        return;
+                    }
+
+                    if (k === 'escape'){
+                        if (getSelectedFields().length){
+                            e.preventDefault();
+                            clearSelection();
+                        }
+                        return;
+                    }
+
+                    return;
+                }
 
                 if (k === 'z' && !e.shiftKey){
                     e.preventDefault();
@@ -916,6 +1105,7 @@
             });
 
             refreshSelectionUI();
+            updatePageControls();
             saveHistory(); // estado inicial
         }
 
@@ -927,65 +1117,104 @@
         }
 
         function loadFile(file) {
+            setDetectStatus('Carregando arquivo...');
             if (file.type === 'application/pdf') loadPDF(file);
             else if (file.type.startsWith('image/')) loadImage(file);
-            else alert('Formato não suportado. Use PDF ou Imagem.');
+            else alert('Formato nÃ£o suportado. Use PDF ou Imagem.');
         }
 
         function loadImage(file) {
             const reader = new FileReader();
-            reader.onload = (e) => renderImageToCanvas(e.target.result);
+            reader.onload = async (e) => {
+                state.isPdf = false;
+                state.totalPages = 1;
+                state.currentPage = 1;
+                state.pageImages = [{ dataUrl: e.target.result }];
+                updatePageControls();
+                setDetectStatus('Imagem carregada. Clique em Auto detectar para sugerir campos.');
+                await drawDataUrlToCanvas(e.target.result, { resetFields: true, fitZoom: true, clearSelectionOnDraw: true });
+                saveHistory();
+            };
             reader.readAsDataURL(file);
         }
 
         async function loadPDF(file) {
             const arrayBuffer = await file.arrayBuffer();
-            const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-            
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+
             try {
+                setDetectStatus('Processando PDF...');
                 const pdf = await loadingTask.promise;
-                const page = await pdf.getPage(1);
-                
-                const scale = 2.0; 
-                const viewport = page.getViewport({ scale: scale });
 
-                const tempCanvas = document.createElement('canvas');
-                const tempCtx = tempCanvas.getContext('2d');
-                tempCanvas.height = viewport.height;
-                tempCanvas.width = viewport.width;
+                state.isPdf = true;
+                state.totalPages = pdf.numPages;
+                state.currentPage = 1;
+                state.pageImages = [];
 
-                const renderContext = { canvasContext: tempCtx, viewport: viewport };
-                await page.render(renderContext).promise;
-                renderImageToCanvas(tempCanvas.toDataURL());
+                const renderScale = 2.0;
+                for (let i = 1; i <= pdf.numPages; i += 1) {
+                    setDetectStatus(`Renderizando pagina ${i} de ${pdf.numPages}...`);
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: renderScale });
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = Math.ceil(viewport.width);
+                    tempCanvas.height = Math.ceil(viewport.height);
+                    await page.render({ canvasContext: tempCtx, viewport: viewport }).promise;
+                    state.pageImages.push({
+                        dataUrl: tempCanvas.toDataURL('image/png'),
+                        width: tempCanvas.width,
+                        height: tempCanvas.height
+                    });
+                }
 
+                state.fields = [];
+                clearSelection(true);
+                await renderCurrentPage();
+                saveHistory();
+                setDetectStatus(`PDF carregado com ${state.totalPages} paginas. Voce pode navegar e auto-detectar campos por pagina.`);
             } catch (error) {
                 console.error('Erro ao ler PDF:', error);
                 alert('Erro ao processar o PDF.');
+                setDetectStatus('Falha ao processar o PDF.');
             }
         }
 
-        function renderImageToCanvas(dataUrl) {
-            const img = new Image();
-            img.onload = function() {
-                state.imgOriginalWidth = img.width;
-                state.imgOriginalHeight = img.height;
-                
-                canvas.width = img.width;
-                canvas.height = img.height;
-                
-                ctx.drawImage(img, 0, 0);
-                
-                zoomWrapper.style.width = img.width + 'px';
-                zoomWrapper.style.height = img.height + 'px';
-                
-                state.fields = [];
-                clearSelection(true);
-                renderOverlays();
-                setZoom(calculateFitZoom(img.width));
-
-                saveHistory();
+        function drawDataUrlToCanvas(dataUrl, options = {}) {
+            const opts = {
+                resetFields: false,
+                fitZoom: true,
+                clearSelectionOnDraw: true,
+                ...options
             };
-            img.src = dataUrl;
+
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = function() {
+                    state.imgOriginalWidth = img.width;
+                    state.imgOriginalHeight = img.height;
+
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+
+                    zoomWrapper.style.width = img.width + 'px';
+                    zoomWrapper.style.height = img.height + 'px';
+
+                    if (opts.resetFields) {
+                        state.fields = [];
+                    }
+
+                    if (opts.clearSelectionOnDraw) clearSelection(true);
+                    renderOverlays();
+
+                    if (opts.fitZoom) setZoom(calculateFitZoom(img.width));
+                    resolve();
+                };
+                img.onerror = reject;
+                img.src = dataUrl;
+            });
         }
 
         // =========================
@@ -1068,7 +1297,7 @@
             if (count >= 1){
                 fieldConfig.classList.add('active');
 
-                // Nome/Label só com 1 selecionada
+                // Nome/Label sÃ³ com 1 selecionada
                 const single = (count === 1);
                 inpName.disabled = !single;
                 inpLabel.disabled = !single;
@@ -1079,8 +1308,8 @@
                 } else {
                     inpName.value = '';
                     inpLabel.value = '';
-                    inpName.placeholder = '— (múltiplos selecionados)';
-                    inpLabel.placeholder = '— (múltiplos selecionados)';
+                    inpName.placeholder = 'â€” (mÃºltiplos selecionados)';
+                    inpLabel.placeholder = 'â€” (mÃºltiplos selecionados)';
                 }
 
                 // Required (misto/igual)
@@ -1092,7 +1321,7 @@
                 inpComb.indeterminate = (commonComb === null);
                 inpComb.checked = (commonComb === null) ? !!(selected[0].comb) : !!commonComb;
 
-                // Comb cells: usa âncora/primeiro (se quiser, muda e aplica a todos)
+                // Comb cells: usa Ã¢ncora/primeiro (se quiser, muda e aplica a todos)
                 const anchorId = ensureAnchor();
                 const anchor = state.fields.find(f => f.id === anchorId) || selected[0];
                 const anyComb = !!(anchor.comb);
@@ -1107,14 +1336,14 @@
                 setSelectValueWithMixed(inpTextHAlign, commonH === null ? null : commonH);
                 setSelectValueWithMixed(inpTextVAlign, commonV === null ? null : commonV);
 
-                // Grid 9 posições: só marca se não estiver misto
+                // Grid 9 posiÃ§Ãµes: sÃ³ marca se nÃ£o estiver misto
                 if (commonH !== null && commonV !== null){
                     setAnchorActive(commonH, commonV);
                 } else {
                     clearAnchorActive();
                 }
 
-                // Hint de comb com base na âncora
+                // Hint de comb com base na Ã¢ncora
                 syncCombUI(anchor);
             } else {
                 fieldConfig.classList.remove('active');
@@ -1130,7 +1359,7 @@
             // Se clicou em overlay existente, ele vai tratar no handler do overlay
             if (e.target.closest('.field-overlay')) return;
 
-            // clique vazio sem tipo: só limpa seleção
+            // clique vazio sem tipo: sÃ³ limpa seleÃ§Ã£o
             if (!state.currentFieldType) {
                 if (!isCtrlMulti(e)) clearSelection();
                 return;
@@ -1215,6 +1444,7 @@
                 y: clamp(y, 0, canvas.height - 10),
                 width: clamp(w, 10, canvas.width),
                 height: clamp(h, 10, canvas.height),
+                page: state.currentPage,
                 name: `campo_${state.fields.length + 1}`,
                 label: `Campo ${state.fields.length + 1}`,
                 required: false,
@@ -1222,7 +1452,7 @@
                 comb: false,
                 combCells: 0,
 
-                // ✅ NOVO: texto (padrão topo + esquerda + LTR)
+                // âœ… NOVO: texto (padrÃ£o topo + esquerda + LTR)
                 textDir: "ltr",
                 textHAlign: "left",
                 textVAlign: "top"
@@ -1357,8 +1587,9 @@
 
             const primary = getPrimarySelectedId();
             const allowResize = (primary !== null);
+            const pageFields = getFieldsForCurrentPage();
 
-            state.fields.forEach(field => {
+            pageFields.forEach(field => {
                 const isSelected = state.selectedIds.has(field.id);
 
                 const el = document.createElement('div');
@@ -1376,20 +1607,20 @@
                     el.style.setProperty('--comb-step', step + 'px');
                 }
 
-                // Label (inclui um mini-indicador de âncora do texto)
+                // Label (inclui um mini-indicador de Ã¢ncora do texto)
                 const lbl = document.createElement('div');
                 lbl.className = 'field-label';
                 const h = field.textHAlign || 'left';
                 const v = field.textVAlign || 'top';
                 const dir = field.textDir || 'ltr';
                 const anchorTag = `${v[0].toUpperCase()}${h[0].toUpperCase()}-${dir.toUpperCase()}`;
-                lbl.textContent = (field.name || field.type) + (field.comb && field.combCells >= 2 ? ` [${field.combCells}]` : '') + ` • ${anchorTag}`;
+                lbl.textContent = (field.name || field.type) + (field.comb && field.combCells >= 2 ? ` [${field.combCells}]` : '') + ` â€¢ ${anchorTag}`;
                 el.appendChild(lbl);
 
-                // Botão Delete
+                // BotÃ£o Delete
                 const btnDel = document.createElement('div');
                 btnDel.className = 'field-delete';
-                btnDel.innerHTML = '×';
+                btnDel.innerHTML = 'Ã—';
                 btnDel.onclick = (e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -1403,7 +1634,7 @@
                 };
                 el.appendChild(btnDel);
 
-                // Resize handles (apenas se selecionado E seleção única)
+                // Resize handles (apenas se selecionado E seleÃ§Ã£o Ãºnica)
                 if (allowResize && primary === field.id) {
                     const dirs = ["n","s","e","w","nw","ne","sw","se"];
                     dirs.forEach(d => {
@@ -1435,7 +1666,7 @@
                     if (!state.selectedIds.has(field.id)) {
                         setSelection([field.id], field.id);
                     } else {
-                        state.anchorId = field.id; // ancora = último clique
+                        state.anchorId = field.id; // ancora = Ãºltimo clique
                         refreshSelectionUI();
                     }
 
@@ -1454,24 +1685,24 @@
 
             const anySelected = getSelectedFields().length > 0;
             if (!anySelected) {
-                combCellWidthEl.textContent = 'Largura por célula: —';
+                combCellWidthEl.textContent = 'Largura por cÃ©lula: â€”';
                 return;
             }
 
-            // Se o checkbox está indeterminate, não forçamos display do grupo aqui.
+            // Se o checkbox estÃ¡ indeterminate, nÃ£o forÃ§amos display do grupo aqui.
             const activeComb = inpComb.checked && !inpComb.indeterminate;
 
             if (activeComb) {
                 const cells = parseInt(inpCombCells.value, 10);
                 if (Number.isFinite(cells) && cells >= 2 && field.width) {
                     const cellW = field.width / cells;
-                    combCellWidthEl.textContent = `Largura por célula: ${cellW.toFixed(2)} px (Total: ${field.width.toFixed(2)} px)`;
+                    combCellWidthEl.textContent = `Largura por cÃ©lula: ${cellW.toFixed(2)} px (Total: ${field.width.toFixed(2)} px)`;
                 } else {
-                    combCellWidthEl.textContent = 'Largura por célula: —';
+                    combCellWidthEl.textContent = 'Largura por cÃ©lula: â€”';
                 }
             } else {
-                // se comb estiver desativado ou misto, mantém neutro
-                combCellWidthEl.textContent = 'Largura por célula: —';
+                // se comb estiver desativado ou misto, mantÃ©m neutro
+                combCellWidthEl.textContent = 'Largura por cÃ©lula: â€”';
             }
         }
 
@@ -1499,7 +1730,7 @@
         }
 
         // =========================
-        // UPDATE FIELD DATA (aplica em lote quando múltiplas)
+        // UPDATE FIELD DATA (aplica em lote quando mÃºltiplas)
         // =========================
         function updateFieldData() {
             const selected = getSelectedFields();
@@ -1507,27 +1738,27 @@
 
             const single = (selected.length === 1);
 
-            // Nome/Label só se seleção única
+            // Nome/Label sÃ³ se seleÃ§Ã£o Ãºnica
             if (single) {
                 selected[0].name = inpName.value;
                 selected[0].label = inpLabel.value;
             }
 
-            // Required: aplica a todas se não estiver em "misto"
+            // Required: aplica a todas se nÃ£o estiver em "misto"
             if (inpRequired.value !== "__mixed__") {
                 const req = (inpRequired.value === "true");
                 selected.forEach(f => f.required = req);
             }
 
-            // Comb: se estava misto e usuário clicou, o indeterminate vira false (naturalmente),
-            // então aplicamos o estado atual do checkbox.
-            // Observação: ao marcar comb=true, também aplicamos combCells.
+            // Comb: se estava misto e usuÃ¡rio clicou, o indeterminate vira false (naturalmente),
+            // entÃ£o aplicamos o estado atual do checkbox.
+            // ObservaÃ§Ã£o: ao marcar comb=true, tambÃ©m aplicamos combCells.
             const combChecked = !!inpComb.checked;
             const combInd = !!inpComb.indeterminate;
 
-            // Se estiver indeterminate e o usuário não mexeu, não aplicamos (evita sobrescrever estados diferentes sem intenção).
-            // Como o evento 'change' do checkbox só dispara quando mexe, aqui o indeterminate já vai estar false.
-            // Mesmo assim, mantemos uma proteção.
+            // Se estiver indeterminate e o usuÃ¡rio nÃ£o mexeu, nÃ£o aplicamos (evita sobrescrever estados diferentes sem intenÃ§Ã£o).
+            // Como o evento 'change' do checkbox sÃ³ dispara quando mexe, aqui o indeterminate jÃ¡ vai estar false.
+            // Mesmo assim, mantemos uma proteÃ§Ã£o.
             if (!combInd) {
                 selected.forEach(f => f.comb = combChecked);
 
@@ -1542,7 +1773,7 @@
                 }
             }
 
-            // Texto: aplica em lote quando não estiver "misto"
+            // Texto: aplica em lote quando nÃ£o estiver "misto"
             if (inpTextDir.value !== "__mixed__") {
                 selected.forEach(f => f.textDir = inpTextDir.value);
             }
@@ -1611,7 +1842,7 @@
                 });
             }
             else if (mode === 'vertical'){
-                // mesma linha vertical (mesmo centro X) usando âncora
+                // mesma linha vertical (mesmo centro X) usando Ã¢ncora
                 const targetCx = anchor.x + anchor.width / 2;
                 selected.forEach(f => {
                     const nx = targetCx - f.width / 2;
@@ -1619,7 +1850,7 @@
                 });
             }
             else if (mode === 'horizontal'){
-                // mesma linha horizontal (mesmo centro Y) usando âncora
+                // mesma linha horizontal (mesmo centro Y) usando Ã¢ncora
                 const targetCy = anchor.y + anchor.height / 2;
                 selected.forEach(f => {
                     const ny = targetCy - f.height / 2;
@@ -1632,17 +1863,405 @@
         }
 
         function deleteSelected(){
-            const count = state.selectedIds.size;
+            const selected = getSelectedFields();
+            const selectedIds = new Set(selected.map(f => f.id));
+            const count = selectedIds.size;
             if (!count) return;
 
-            const msg = count === 1 ? 'Remover este campo?' : `Remover ${count} campos selecionados?`;
-            if (!confirm(msg)) return;
+            if (count > 1) {
+                const msg = `Remover ${count} campos selecionados?`;
+                if (!confirm(msg)) return;
+            }
 
-            state.fields = state.fields.filter(f => !state.selectedIds.has(f.id));
+            state.fields = state.fields.filter(f => !selectedIds.has(f.id));
             clearSelection();
             renderOverlays();
 
             saveHistory();
+        }
+
+        // =========================
+        // AUTO DETECCAO DE CAMPOS
+        // =========================
+        function isDarkMask(mask, width, height, x, y) {
+            if (x < 0 || y < 0 || x >= width || y >= height) return false;
+            return mask[(y * width) + x] === 1;
+        }
+
+        function darkAround(mask, width, height, x, y) {
+            return (
+                isDarkMask(mask, width, height, x, y) ||
+                isDarkMask(mask, width, height, x - 1, y) ||
+                isDarkMask(mask, width, height, x + 1, y) ||
+                isDarkMask(mask, width, height, x, y - 1) ||
+                isDarkMask(mask, width, height, x, y + 1)
+            );
+        }
+
+        function buildBinaryMask() {
+            const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const { data, width, height } = img;
+            const totalPx = width * height;
+            const grayValues = new Uint8Array(totalPx);
+            let sum = 0;
+
+            for (let i = 0, p = 0; i < data.length; i += 4, p += 1) {
+                const gray = Math.round((data[i] * 0.299) + (data[i + 1] * 0.587) + (data[i + 2] * 0.114));
+                grayValues[p] = gray;
+                sum += gray;
+            }
+
+            const avg = sum / totalPx;
+            const threshold = Math.max(90, Math.min(205, avg * 0.78));
+            const mask = new Uint8Array(totalPx);
+            for (let p = 0; p < totalPx; p += 1) {
+                mask[p] = grayValues[p] < threshold ? 1 : 0;
+            }
+            return { mask, width, height };
+        }
+
+        function overlapRatio(a1, a2, b1, b2) {
+            const inter = Math.max(0, Math.min(a2, b2) - Math.max(a1, b1));
+            const minSize = Math.max(1, Math.min(a2 - a1, b2 - b1));
+            return inter / minSize;
+        }
+
+        function detectHorizontalLines(mask, width, height) {
+            const runs = [];
+            const minRun = Math.max(70, Math.round(width * 0.04));
+
+            for (let y = 2; y < height - 2; y += 1) {
+                let x = 0;
+                while (x < width) {
+                    while (x < width && !darkAround(mask, width, height, x, y)) x += 1;
+                    if (x >= width) break;
+
+                    const start = x;
+                    let darkCount = 0;
+                    let gap = 0;
+                    while (x < width) {
+                        if (darkAround(mask, width, height, x, y)) {
+                            darkCount += 1;
+                            gap = 0;
+                            x += 1;
+                            continue;
+                        }
+                        if (gap < 2) {
+                            gap += 1;
+                            x += 1;
+                            continue;
+                        }
+                        break;
+                    }
+
+                    const end = x - gap - 1;
+                    const len = end - start + 1;
+                    if (len >= minRun && (darkCount / len) >= 0.22) {
+                        runs.push({ y, x1: start, x2: end });
+                    }
+                }
+            }
+
+            const merged = [];
+            runs.forEach(run => {
+                let target = null;
+                for (const m of merged) {
+                    if (Math.abs(run.y - m.yMax) <= 2 && overlapRatio(run.x1, run.x2, m.x1, m.x2) >= 0.65) {
+                        target = m;
+                        break;
+                    }
+                }
+                if (!target) {
+                    merged.push({ x1: run.x1, x2: run.x2, yMin: run.y, yMax: run.y, count: 1 });
+                } else {
+                    target.x1 = Math.min(target.x1, run.x1);
+                    target.x2 = Math.max(target.x2, run.x2);
+                    target.yMin = Math.min(target.yMin, run.y);
+                    target.yMax = Math.max(target.yMax, run.y);
+                    target.count += 1;
+                }
+            });
+
+            return merged
+                .map(m => ({
+                    x1: m.x1,
+                    x2: m.x2,
+                    y: Math.round((m.yMin + m.yMax) / 2),
+                    thickness: (m.yMax - m.yMin) + 1
+                }))
+                .filter(line => (line.x2 - line.x1) >= minRun);
+        }
+
+        function detectTicksForLine(mask, width, height, lineY, x1, x2) {
+            const top = Math.max(0, lineY - 22);
+            const bottom = Math.min(height - 1, lineY + 1);
+            const raw = [];
+
+            for (let x = x1; x <= x2; x += 1) {
+                let dark = 0;
+                for (let y = top; y <= bottom; y += 1) {
+                    if (darkAround(mask, width, height, x, y)) dark += 1;
+                }
+                if (dark >= 5) raw.push(x);
+            }
+
+            if (!raw.length) return [];
+
+            const ticks = [];
+            let groupStart = raw[0];
+            let prev = raw[0];
+            for (let i = 1; i < raw.length; i += 1) {
+                const curr = raw[i];
+                if (curr - prev <= 2) {
+                    prev = curr;
+                    continue;
+                }
+                ticks.push(Math.round((groupStart + prev) / 2));
+                groupStart = curr;
+                prev = curr;
+            }
+            ticks.push(Math.round((groupStart + prev) / 2));
+
+            const filtered = [];
+            ticks.forEach(t => {
+                if (!filtered.length || (t - filtered[filtered.length - 1]) >= 6) {
+                    filtered.push(t);
+                }
+            });
+
+            return filtered;
+        }
+
+        function hasVerticalEdge(mask, width, height, x, yTop, yBottom) {
+            let dark = 0;
+            let total = 0;
+            for (let y = yTop; y <= yBottom; y += 1) {
+                total += 1;
+                if (
+                    darkAround(mask, width, height, x, y) ||
+                    darkAround(mask, width, height, x - 1, y) ||
+                    darkAround(mask, width, height, x + 1, y)
+                ) {
+                    dark += 1;
+                }
+            }
+            if (!total) return false;
+            return (dark / total) >= 0.55;
+        }
+
+        function darkRatio(mask, width, height, left, top, right, bottom) {
+            const l = Math.max(0, Math.floor(left));
+            const t = Math.max(0, Math.floor(top));
+            const r = Math.min(width - 1, Math.floor(right));
+            const b = Math.min(height - 1, Math.floor(bottom));
+            let dark = 0;
+            let total = 0;
+            for (let y = t; y <= b; y += 1) {
+                for (let x = l; x <= r; x += 1) {
+                    total += 1;
+                    if (mask[(y * width) + x] === 1) dark += 1;
+                }
+            }
+            if (!total) return 0;
+            return dark / total;
+        }
+
+        function iou(a, b) {
+            const ax2 = a.x + a.width;
+            const ay2 = a.y + a.height;
+            const bx2 = b.x + b.width;
+            const by2 = b.y + b.height;
+
+            const interW = Math.max(0, Math.min(ax2, bx2) - Math.max(a.x, b.x));
+            const interH = Math.max(0, Math.min(ay2, by2) - Math.max(a.y, b.y));
+            const interArea = interW * interH;
+            if (!interArea) return 0;
+            const areaA = a.width * a.height;
+            const areaB = b.width * b.height;
+            return interArea / (areaA + areaB - interArea);
+        }
+
+        function pushUniqueFieldCandidate(list, candidate) {
+            for (const existing of list) {
+                if (iou(existing, candidate) >= 0.72) return;
+            }
+            list.push(candidate);
+        }
+
+        function detectFieldsFromCanvas() {
+            const { mask, width, height } = buildBinaryMask();
+            const lines = detectHorizontalLines(mask, width, height)
+                .filter(line => line.y > 20 && line.y < (height - 10));
+
+            const candidates = [];
+            const coveredLineIdx = new Set();
+
+            // 1) Campos fechados (retangulos simples)
+            for (let i = 0; i < lines.length; i += 1) {
+                const top = lines[i];
+                for (let j = i + 1; j < lines.length; j += 1) {
+                    const bottom = lines[j];
+                    const dy = bottom.y - top.y;
+                    if (dy < 12) continue;
+                    if (dy > 52) break;
+
+                    const x1 = Math.max(top.x1, bottom.x1);
+                    const x2 = Math.min(top.x2, bottom.x2);
+                    const w = x2 - x1;
+                    if (w < 70) continue;
+
+                    const alignedStarts = Math.abs(top.x1 - bottom.x1) <= 28;
+                    const alignedEnds = Math.abs(top.x2 - bottom.x2) <= 28;
+                    if (!alignedStarts && !alignedEnds) continue;
+
+                    if (!hasVerticalEdge(mask, width, height, x1, top.y, bottom.y)) continue;
+                    if (!hasVerticalEdge(mask, width, height, x2, top.y, bottom.y)) continue;
+
+                    pushUniqueFieldCandidate(candidates, {
+                        kind: 'closed',
+                        x: clamp(x1, 0, width - 10),
+                        y: clamp(top.y, 0, height - 10),
+                        width: clamp(w, 20, width),
+                        height: clamp(dy, 12, height)
+                    });
+                    coveredLineIdx.add(i);
+                    coveredLineIdx.add(j);
+                }
+            }
+
+            // 1b) Checkboxes (quadrados pequenos fechados)
+            for (let i = 0; i < lines.length; i += 1) {
+                const top = lines[i];
+                for (let j = i + 1; j < lines.length; j += 1) {
+                    const bottom = lines[j];
+                    const dy = bottom.y - top.y;
+                    if (dy < 8) continue;
+                    if (dy > 42) break;
+
+                    const x1 = Math.max(top.x1, bottom.x1);
+                    const x2 = Math.min(top.x2, bottom.x2);
+                    const w = x2 - x1;
+                    if (w < 10 || w > 44) continue;
+
+                    const ratio = w / Math.max(1, dy);
+                    if (ratio < 0.55 || ratio > 1.8) continue;
+
+                    const alignedStarts = Math.abs(top.x1 - bottom.x1) <= 12;
+                    const alignedEnds = Math.abs(top.x2 - bottom.x2) <= 12;
+                    if (!alignedStarts && !alignedEnds) continue;
+
+                    if (!hasVerticalEdge(mask, width, height, x1, top.y, bottom.y)) continue;
+                    if (!hasVerticalEdge(mask, width, height, x2, top.y, bottom.y)) continue;
+
+                    const inner = darkRatio(mask, width, height, x1 + 2, top.y + 2, x2 - 2, bottom.y - 2);
+                    if (inner > 0.52) continue;
+
+                    pushUniqueFieldCandidate(candidates, {
+                        kind: 'check',
+                        x: clamp(x1, 0, width - 10),
+                        y: clamp(top.y, 0, height - 10),
+                        width: clamp(w, 10, width),
+                        height: clamp(dy, 10, height)
+                    });
+                }
+            }
+
+            // 2) Campos por linha e comb
+            for (let i = 0; i < lines.length; i += 1) {
+                if (coveredLineIdx.has(i)) continue;
+                const line = lines[i];
+                const lineWidth = line.x2 - line.x1;
+                if (lineWidth < 70) continue;
+
+                const ticks = detectTicksForLine(mask, width, height, line.y, line.x1, line.x2);
+                const spacings = [];
+                for (let k = 1; k < ticks.length; k += 1) spacings.push(ticks[k] - ticks[k - 1]);
+                const avgSpacing = spacings.length ? spacings.reduce((a, b) => a + b, 0) / spacings.length : 0;
+
+                const looksComb = ticks.length >= 3 && avgSpacing >= 7 && avgSpacing <= 64;
+                if (looksComb) {
+                    const combX1 = ticks[0];
+                    const combX2 = ticks[ticks.length - 1];
+                    const combWidth = combX2 - combX1;
+                    if (combWidth >= 38) {
+                        pushUniqueFieldCandidate(candidates, {
+                            kind: 'comb',
+                            x: clamp(combX1, 0, width - 10),
+                            y: clamp(line.y - 18, 0, height - 10),
+                            width: clamp(combWidth, 20, width),
+                            height: clamp(22, 12, height),
+                            combCells: Math.max(2, ticks.length - 1)
+                        });
+                    }
+                    continue;
+                }
+
+                pushUniqueFieldCandidate(candidates, {
+                    kind: 'line',
+                    x: clamp(line.x1, 0, width - 10),
+                    y: clamp(line.y - 16, 0, height - 10),
+                    width: clamp(lineWidth, 20, width),
+                    height: clamp(20, 12, height)
+                });
+            }
+
+            return candidates
+                .filter(c => c.kind === 'check' ? (c.width >= 10 && c.height >= 10) : (c.width >= 20 && c.height >= 12))
+                .sort((a, b) => (a.y - b.y) || (a.x - b.x));
+        }
+
+        function autoDetectCurrentPage() {
+            if (!canvas.width || !canvas.height) {
+                alert('Carregue um PDF ou imagem antes de detectar campos.');
+                return;
+            }
+
+            setDetectStatus(`Detectando campos na pagina ${state.currentPage}...`);
+
+            const detected = detectFieldsFromCanvas();
+            if (!detected.length) {
+                setDetectStatus(`Nenhum campo identificado automaticamente na pagina ${state.currentPage}.`);
+                alert('Nao encontrei campos automaticamente nesta pagina. Ajuste o zoom e tente novamente.');
+                return;
+            }
+
+            const nextIndex = state.fields.length + 1;
+            const createdIds = [];
+            const defaultType = state.currentFieldType || 'text';
+
+            detected.forEach((item, idx) => {
+                const id = Date.now() + idx + Math.floor(Math.random() * 1000);
+                createdIds.push(id);
+                const detectedType = item.kind === 'check' ? 'check' : defaultType;
+                const textH = item.kind === 'check' ? 'center' : 'left';
+                const textV = item.kind === 'check' ? 'middle' : 'top';
+
+                state.fields.push({
+                    id,
+                    type: detectedType,
+                    x: clamp(item.x, 0, canvas.width - 10),
+                    y: clamp(item.y, 0, canvas.height - 10),
+                    width: clamp(item.width, 10, canvas.width),
+                    height: clamp(item.height, 10, canvas.height),
+                    page: state.currentPage,
+                    name: `campo_${nextIndex + idx}`,
+                    label: `Campo ${nextIndex + idx}`,
+                    required: false,
+                    comb: item.kind === 'comb',
+                    combCells: item.kind === 'comb' ? Math.max(2, item.combCells || 2) : 0,
+                    textDir: 'ltr',
+                    textHAlign: textH,
+                    textVAlign: textV
+                });
+            });
+
+            const lastId = createdIds[createdIds.length - 1];
+            setSelection([lastId], lastId);
+            setCurrentFieldType(null);
+            renderOverlays();
+            saveHistory();
+
+            setDetectStatus(`${detected.length} campos detectados. Clique em um campo e pressione Delete para remover os incorretos.`);
         }
 
         // =========================
@@ -1694,10 +2313,10 @@
                     document.execCommand('copy');
                     ta.remove();
                 }
-                alert('JSON copiado para a área de transferência ✅');
+                alert('JSON copiado para a Ã¡rea de transferÃªncia âœ…');
             } catch(err){
                 console.error(err);
-                alert('Não foi possível copiar automaticamente. (Seu navegador bloqueou a cópia.)');
+                alert('NÃ£o foi possÃ­vel copiar automaticamente. (Seu navegador bloqueou a cÃ³pia.)');
             }
         }
 
@@ -1716,25 +2335,34 @@
                             y: Number(f.y) || 0,
                             width: Math.max(10, Number(f.width) || 10),
                             height: Math.max(10, Number(f.height) || 10),
+                            page: Math.max(1, Number.parseInt(f.page, 10) || 1),
                             name: f.name ?? 'campo',
                             label: f.label ?? '',
                             required: !!f.required,
                             comb: !!f.comb,
                             combCells: (Number.isFinite(parseInt(f.combCells,10)) ? parseInt(f.combCells,10) : 0),
 
-                            // ✅ NOVO: texto (defaults para JSON antigo)
+                            // âœ… NOVO: texto (defaults para JSON antigo)
                             textDir: f.textDir ?? "ltr",
                             textHAlign: f.textHAlign ?? "left",
                             textVAlign: f.textVAlign ?? "top"
                         }));
 
                         clearSelection(true);
+                        if (state.isPdf) {
+                            const maxPageInFields = Math.max(1, ...state.fields.map(field => currentPageOf(field)));
+                            state.currentPage = clamp(state.currentPage, 1, Math.max(state.totalPages, maxPageInFields));
+                        } else {
+                            state.currentPage = 1;
+                            state.totalPages = 1;
+                        }
+                        updatePageControls();
                         renderOverlays();
                         refreshSelectionUI();
                         saveHistory();
                         alert('Campos carregados com sucesso!');
                     } else {
-                        alert('JSON inválido: "fields" não encontrado.');
+                        alert('JSON invÃ¡lido: "fields" nÃ£o encontrado.');
                     }
                 } catch(err) {
                     alert('Erro ao ler JSON.');
