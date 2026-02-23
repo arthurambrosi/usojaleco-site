@@ -5,33 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>UsoJaleco | Comprar Slides</title>
   <meta name="description" content="Vitrine de slides e templates de medicina organizados por especialidade.">
-  <meta name="theme-color" content="#0a0b0f">
+  <meta name="theme-color" content="#f3f5f8">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0b0f;
-      --card-bg: #12141b;
-      --card-bg-2: #171a24;
-      --text: #e6e9ef;
-      --muted: #9aa4b2;
+      --bg: #f1f4f7;
+      --panel: #ffffff;
+      --panel-2: #f8fafc;
+      --line: #d9e0e8;
+      --text: #121920;
+      --muted: #576273;
       --accent: #ff7a18;
       --accent-2: #ffb703;
-      --line: #232838;
-      --ok: #67d8a8;
-      --error: #ff8c8c;
+      --ok: #2f9d72;
+      --error: #d54a4a;
       --tap: 44px;
-      --radius: 18px;
+      --radius: 14px;
       --radius-sm: 12px;
+      --radius-lg: 18px;
+      --shadow: 0 10px 24px rgba(12, 20, 34, 0.08);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
     html,
@@ -40,12 +42,8 @@
     }
 
     body {
-      background:
-        radial-gradient(1100px 600px at 90% -10%, rgba(255, 122, 24, 0.12), transparent 62%),
-        radial-gradient(900px 500px at -10% 10%, rgba(255, 183, 3, 0.08), transparent 58%),
-        var(--bg);
+      background: var(--bg);
       color: var(--text);
-      padding: 18px;
     }
 
     a {
@@ -54,21 +52,23 @@
     }
 
     .wrap {
-      width: min(1200px, 100%);
+      max-width: 1220px;
       margin: 0 auto;
+      padding: 0 16px 24px;
     }
 
     .navBar {
-      background: linear-gradient(180deg, rgba(18, 20, 27, 0.92), rgba(10, 11, 15, 0.88));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+      margin-top: 12px;
+      margin-bottom: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 10px 12px;
       display: flex;
       gap: 12px;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 22px;
     }
 
     .navLeft {
@@ -78,41 +78,24 @@
     }
 
     .logoBox {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      border-radius: 0;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      border: 0;
       overflow: hidden;
       flex: 0 0 auto;
     }
 
     .logoBox img {
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
-      background: #fff;
-      border-radius: 8px;
-      padding: 3px;
-    }
-
-    .brandName {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 0.2px;
-      color: #fff;
-      line-height: 1.02;
-    }
-
-    .brandSub {
-      margin-top: 4px;
-      color: rgba(230, 233, 239, 0.78);
-      font-size: 11px;
-      font-weight: 500;
-      display: block;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
     }
 
     .social {
@@ -121,19 +104,21 @@
     }
 
     .social a {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
-      transition: border-color 0.15s ease, background 0.15s ease;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: var(--panel);
+      transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
     }
 
     .social a:hover {
-      border-color: var(--accent);
-      background: rgba(255, 122, 24, 0.1);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+      color: var(--accent);
     }
 
     .social svg {
@@ -144,24 +129,21 @@
     }
 
     .hero {
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      background: linear-gradient(150deg, rgba(24, 27, 38, 0.96), rgba(16, 18, 27, 0.95));
-      border-radius: var(--radius);
-      padding: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border-radius: var(--radius-lg);
+      padding: clamp(18px, 3vw, 30px);
       margin-bottom: 18px;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+      box-shadow: var(--shadow);
     }
 
     .hero h1 {
-      font-size: clamp(1.7rem, 4.6vw, 2.45rem);
-      font-weight: 800;
-      line-height: 1.08;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
+      font-size: clamp(2rem, 5.2vw, 3.5rem);
+      font-family: "Kaushan Script", "Brush Script MT", "Segoe Script", cursive;
+      font-weight: 400;
+      line-height: 1.05;
+      margin-bottom: 6px;
+      color: var(--accent);
     }
 
     .hero p {
@@ -187,7 +169,7 @@
       font-size: 1.2rem;
       font-weight: 800;
       margin-bottom: 4px;
-      color: #fff;
+      color: var(--text);
     }
 
     .headerText p {
@@ -205,16 +187,17 @@
       min-height: var(--tap);
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.03);
-      color: #fff;
+      background: var(--panel);
+      color: var(--text);
       padding: 11px 14px 11px 44px;
       outline: none;
       font-size: 0.94rem;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .searchInput:focus {
-      border-color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+      box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.12);
     }
 
     .searchIcon {
@@ -251,10 +234,10 @@
 
     .chip {
       min-height: 36px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      color: #edf1f9;
+      background: var(--panel);
+      color: var(--text);
       padding: 0 12px;
       font-size: 0.83rem;
       font-weight: 700;
@@ -267,9 +250,9 @@
     }
 
     .chip.active {
-      border-color: var(--accent);
-      background: linear-gradient(135deg, rgba(255, 122, 24, 0.9), rgba(255, 183, 3, 0.85));
-      color: #16110d;
+      border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+      background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+      color: var(--accent);
     }
 
     .grid {
@@ -279,39 +262,40 @@
     }
 
     .card {
-      background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
       transition: transform 0.2s ease, border-color 0.2s ease;
       display: flex;
       flex-direction: column;
       min-height: 100%;
+      box-shadow: 0 4px 12px rgba(12, 20, 34, 0.04);
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255, 122, 24, 0.82);
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
     }
 
     .thumbWrap {
       width: 100%;
       height: 180px;
-      background: #0e1118;
+      background: #e9edf3;
       position: relative;
       overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--line);
     }
 
     .thumbWrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.45s ease;
+      transition: transform 0.35s ease;
     }
 
     .card:hover .thumbWrap img {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     .areaTag {
@@ -319,9 +303,9 @@
       top: 10px;
       left: 10px;
       z-index: 1;
-      border: 1px solid rgba(255, 183, 3, 0.62);
-      background: rgba(22, 18, 10, 0.72);
-      color: #ffd48f;
+      border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+      background: rgba(255, 255, 255, 0.85);
+      color: #a45510;
       padding: 4px 8px;
       border-radius: 999px;
       font-size: 0.7rem;
@@ -346,7 +330,7 @@
       font-size: 1.05rem;
       line-height: 1.28;
       font-weight: 800;
-      color: #fff;
+      color: var(--text);
     }
 
     .desc {
@@ -362,14 +346,14 @@
       align-items: center;
       margin-top: 2px;
       padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      border-top: 1px solid var(--line);
       gap: 8px;
     }
 
     .price {
       font-size: 1.22rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--text);
       white-space: nowrap;
     }
 
@@ -405,9 +389,9 @@
     }
 
     .btnVideo {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 255, 255, 0.11);
-      color: #edf1f9;
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--text);
     }
 
     .btnBuy {
@@ -417,30 +401,30 @@
     }
 
     .empty {
-      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border: 1px dashed var(--line);
       border-radius: var(--radius);
       padding: 18px;
       text-align: center;
       color: var(--muted);
+      background: var(--panel);
     }
 
     .foot {
       margin-top: 16px;
-      color: #8d95ac;
-      font-size: 0.8rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      font-size: 0.84rem;
+      border-top: 1px solid var(--line);
       padding-top: 10px;
     }
 
-    @media (max-width: 760px) {
-      body {
-        padding: 12px;
-      }
+    .foot a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
 
-      .navBar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
+    @media (max-width: 760px) {
+      .wrap {
+        padding: 0 12px 20px;
       }
 
       .showcaseHeader {
@@ -460,10 +444,6 @@
         <a class="logoBox" href="../index.html" aria-label="Ir para inicio">
           <img id="brandLogo" alt="Logo UsoJaleco" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
         </a>
-        <div>
-          <div class="brandName">UsoJaleco</div>
-          <span class="brandSub">Vitrine de Slides</span>
-        </div>
       </div>
 
       <div class="social">
@@ -499,8 +479,7 @@
     <section class="hero">
       <h1>Slides premium para medicina</h1>
       <p>
-        Design inspirado na vitrine de templates do repositorio `usojaleco-site`.
-        Conteudos carregados da sua planilha e separados por area do tema.
+        Catalogo de apresentacoes com atualizacao automatica da planilha publica.
       </p>
     </section>
 
@@ -523,16 +502,17 @@
     <div id="categoryFilters" class="filters" aria-label="Filtros por categoria"></div>
     <div id="grid" class="grid" aria-live="polite"></div>
     <div class="foot">
-      Origem: planilha Google ID <strong>1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ</strong> (gid <strong>1847176508</strong>).
+      Origem: planilha publica
+      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx/pubhtml" target="_blank" rel="noopener noreferrer">2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx</a>.
     </div>
   </div>
 
   <script>
     (function () {
       const LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
-      const DEFAULT_SHEET_ID = "1HRZzC3GWSi8DQC45y0HwmbMjyFpY_0mX5PQsvDZ3-tQ";
-      const DEFAULT_GID = "1847176508";
-      const DEFAULT_SHEET_NAME = "Slides";
+      const DEFAULT_SHEET_ID = "2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx";
+      const DEFAULT_GID = "0";
+      const DEFAULT_SHEET_NAME = "Pagina1";
 
       const params = new URLSearchParams(window.location.search);
       const SHEET_ID = params.get("sheetId") || DEFAULT_SHEET_ID;
@@ -835,6 +815,14 @@
       }
 
       async function loadRowsFromSheet(sheetId, gid, sheetName) {
+        const isPublishedSheet = /^2PACX-/i.test(String(sheetId || ""));
+        if (isPublishedSheet) {
+          const pubCsvUrl = "https://docs.google.com/spreadsheets/d/e/" + encodeURIComponent(sheetId) +
+            "/pub?gid=" + encodeURIComponent(gid || "0") + "&single=true&output=csv";
+          const csvRawPubOnly = await loadWithFetch(pubCsvUrl);
+          return parseCsv(csvRawPubOnly);
+        }
+
         const gvizBase = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(sheetId) + "/gviz/tq";
         const gvizUrl = gid
           ? gvizBase + "?tqx=out:json&headers=1&gid=" + encodeURIComponent(gid)
