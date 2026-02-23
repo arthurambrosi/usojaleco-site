@@ -1928,7 +1928,7 @@
 
         function detectHorizontalLines(mask, width, height) {
             const runs = [];
-            const minRun = Math.max(70, Math.round(width * 0.04));
+            const minRun = Math.max(95, Math.round(width * 0.06));
 
             for (let y = 2; y < height - 2; y += 1) {
                 let x = 0;
@@ -1946,7 +1946,7 @@
                             x += 1;
                             continue;
                         }
-                        if (gap < 2) {
+                        if (gap < 1) {
                             gap += 1;
                             x += 1;
                             continue;
@@ -1956,7 +1956,7 @@
 
                     const end = x - gap - 1;
                     const len = end - start + 1;
-                    if (len >= minRun && (darkCount / len) >= 0.22) {
+                    if (len >= minRun && (darkCount / len) >= 0.36) {
                         runs.push({ y, x1: start, x2: end });
                     }
                 }
@@ -1966,7 +1966,7 @@
             runs.forEach(run => {
                 let target = null;
                 for (const m of merged) {
-                    if (Math.abs(run.y - m.yMax) <= 2 && overlapRatio(run.x1, run.x2, m.x1, m.x2) >= 0.65) {
+                    if (Math.abs(run.y - m.yMax) <= 1 && overlapRatio(run.x1, run.x2, m.x1, m.x2) >= 0.75) {
                         target = m;
                         break;
                     }
@@ -2081,9 +2081,31 @@
             return interArea / (areaA + areaB - interArea);
         }
 
+        function stdDev(values) {
+            if (!values || values.length <= 1) return 0;
+            const mean = values.reduce((acc, v) => acc + v, 0) / values.length;
+            const variance = values.reduce((acc, v) => {
+                const d = v - mean;
+                return acc + (d * d);
+            }, 0) / values.length;
+            return Math.sqrt(variance);
+        }
+
         function pushUniqueFieldCandidate(list, candidate) {
             for (const existing of list) {
-                if (iou(existing, candidate) >= 0.72) return;
+                if (iou(existing, candidate) >= 0.72) {
+                    const areaExisting = existing.width * existing.height;
+                    const areaCandidate = candidate.width * candidate.height;
+                    if (areaCandidate > areaExisting) {
+                        existing.x = candidate.x;
+                        existing.y = candidate.y;
+                        existing.width = candidate.width;
+                        existing.height = candidate.height;
+                        existing.kind = candidate.kind;
+                        if (candidate.combCells) existing.combCells = candidate.combCells;
+                    }
+                    return;
+                }
             }
             list.push(candidate);
         }
@@ -2103,12 +2125,15 @@
                     const bottom = lines[j];
                     const dy = bottom.y - top.y;
                     if (dy < 12) continue;
-                    if (dy > 52) break;
+                    if (dy > 46) break;
 
                     const x1 = Math.max(top.x1, bottom.x1);
                     const x2 = Math.min(top.x2, bottom.x2);
                     const w = x2 - x1;
-                    if (w < 70) continue;
+                    if (w < 90) continue;
+                    if (w > width * 0.9) continue;
+                    const ratio = w / Math.max(1, dy);
+                    if (ratio < 2.4) continue;
 
                     const alignedStarts = Math.abs(top.x1 - bottom.x1) <= 28;
                     const alignedEnds = Math.abs(top.x2 - bottom.x2) <= 28;
@@ -2116,6 +2141,21 @@
 
                     if (!hasVerticalEdge(mask, width, height, x1, top.y, bottom.y)) continue;
                     if (!hasVerticalEdge(mask, width, height, x2, top.y, bottom.y)) continue;
+
+                    let hasInnerParallelLine = false;
+                    for (let k = i + 1; k < j; k += 1) {
+                        const mid = lines[k];
+                        if (mid.y <= (top.y + 2) || mid.y >= (bottom.y - 2)) continue;
+                        const overlap = overlapRatio(x1, x2, mid.x1, mid.x2);
+                        if (overlap >= 0.9) {
+                            hasInnerParallelLine = true;
+                            break;
+                        }
+                    }
+                    if (hasInnerParallelLine) continue;
+
+                    const inner = darkRatio(mask, width, height, x1 + 2, top.y + 2, x2 - 2, bottom.y - 2);
+                    if (inner > 0.20) continue;
 
                     pushUniqueFieldCandidate(candidates, {
                         kind: 'closed',
@@ -2136,15 +2176,15 @@
                     const bottom = lines[j];
                     const dy = bottom.y - top.y;
                     if (dy < 8) continue;
-                    if (dy > 42) break;
+                    if (dy > 34) break;
 
                     const x1 = Math.max(top.x1, bottom.x1);
                     const x2 = Math.min(top.x2, bottom.x2);
                     const w = x2 - x1;
-                    if (w < 10 || w > 44) continue;
+                    if (w < 10 || w > 34) continue;
 
                     const ratio = w / Math.max(1, dy);
-                    if (ratio < 0.55 || ratio > 1.8) continue;
+                    if (ratio < 0.72 || ratio > 1.4) continue;
 
                     const alignedStarts = Math.abs(top.x1 - bottom.x1) <= 12;
                     const alignedEnds = Math.abs(top.x2 - bottom.x2) <= 12;
@@ -2153,8 +2193,12 @@
                     if (!hasVerticalEdge(mask, width, height, x1, top.y, bottom.y)) continue;
                     if (!hasVerticalEdge(mask, width, height, x2, top.y, bottom.y)) continue;
 
+                    const topEdgeDark = darkRatio(mask, width, height, x1, top.y - 1, x2, top.y + 1);
+                    const bottomEdgeDark = darkRatio(mask, width, height, x1, bottom.y - 1, x2, bottom.y + 1);
+                    if (topEdgeDark < 0.4 || bottomEdgeDark < 0.4) continue;
+
                     const inner = darkRatio(mask, width, height, x1 + 2, top.y + 2, x2 - 2, bottom.y - 2);
-                    if (inner > 0.52) continue;
+                    if (inner > 0.28) continue;
 
                     pushUniqueFieldCandidate(candidates, {
                         kind: 'check',
@@ -2171,19 +2215,33 @@
                 if (coveredLineIdx.has(i)) continue;
                 const line = lines[i];
                 const lineWidth = line.x2 - line.x1;
-                if (lineWidth < 70) continue;
+                if (lineWidth < 95) continue;
+
+                const lineCore = darkRatio(mask, width, height, line.x1, line.y - 1, line.x2, line.y + 1);
+                if (lineCore < 0.36) continue;
+                const aboveNoise = darkRatio(mask, width, height, line.x1, line.y - 22, line.x2, line.y - 7);
+                const belowNoise = darkRatio(mask, width, height, line.x1, line.y + 2, line.x2, line.y + 10);
+                if (belowNoise > 0.18) continue;
+                if (aboveNoise > 0.30) continue;
 
                 const ticks = detectTicksForLine(mask, width, height, line.y, line.x1, line.x2);
                 const spacings = [];
                 for (let k = 1; k < ticks.length; k += 1) spacings.push(ticks[k] - ticks[k - 1]);
                 const avgSpacing = spacings.length ? spacings.reduce((a, b) => a + b, 0) / spacings.length : 0;
+                const spacingStd = stdDev(spacings);
 
-                const looksComb = ticks.length >= 3 && avgSpacing >= 7 && avgSpacing <= 64;
+                const looksComb = ticks.length >= 3
+                    && ticks.length <= 24
+                    && avgSpacing >= 8
+                    && avgSpacing <= 60
+                    && spacingStd <= Math.max(5, avgSpacing * 0.55);
                 if (looksComb) {
                     const combX1 = ticks[0];
                     const combX2 = ticks[ticks.length - 1];
                     const combWidth = combX2 - combX1;
-                    if (combWidth >= 38) {
+                    if (combWidth >= 44) {
+                        const combInner = darkRatio(mask, width, height, combX1 + 2, line.y - 18, combX2 - 2, line.y - 2);
+                        if (combInner > 0.24) continue;
                         pushUniqueFieldCandidate(candidates, {
                             kind: 'comb',
                             x: clamp(combX1, 0, width - 10),
@@ -2196,6 +2254,13 @@
                     continue;
                 }
 
+                if (lineWidth < 120) continue;
+                const leftEdge = hasVerticalEdge(mask, width, height, line.x1, line.y - 16, line.y + 5);
+                const rightEdge = hasVerticalEdge(mask, width, height, line.x2, line.y - 16, line.y + 5);
+                if (leftEdge && rightEdge) continue;
+                const lineInner = darkRatio(mask, width, height, line.x1 + 2, line.y - 16, line.x2 - 2, line.y - 2);
+                if (lineInner > 0.30) continue;
+
                 pushUniqueFieldCandidate(candidates, {
                     kind: 'line',
                     x: clamp(line.x1, 0, width - 10),
@@ -2205,9 +2270,40 @@
                 });
             }
 
-            return candidates
+            const kindWeight = { check: 4, comb: 3, closed: 2, line: 1 };
+            const ranked = candidates
                 .filter(c => c.kind === 'check' ? (c.width >= 10 && c.height >= 10) : (c.width >= 20 && c.height >= 12))
-                .sort((a, b) => (a.y - b.y) || (a.x - b.x));
+                .sort((a, b) => {
+                    const wa = kindWeight[a.kind] || 0;
+                    const wb = kindWeight[b.kind] || 0;
+                    if (wa !== wb) return wb - wa;
+                    return (b.width * b.height) - (a.width * a.height);
+                });
+
+            const finalList = [];
+            ranked.forEach(candidate => {
+                const overlaps = finalList.some(existing => {
+                    if (iou(existing, candidate) >= 0.55) return true;
+                    const yClose = Math.abs(existing.y - candidate.y) <= 4;
+                    const xOverlap = overlapRatio(existing.x, existing.x + existing.width, candidate.x, candidate.x + candidate.width);
+                    if (yClose && xOverlap >= 0.9) return true;
+
+                    const contained = (
+                        candidate.x >= (existing.x - 2) &&
+                        candidate.y >= (existing.y - 2) &&
+                        (candidate.x + candidate.width) <= (existing.x + existing.width + 2) &&
+                        (candidate.y + candidate.height) <= (existing.y + existing.height + 2)
+                    );
+                    if (!contained) return false;
+
+                    const existingKind = kindWeight[existing.kind] || 0;
+                    const candidateKind = kindWeight[candidate.kind] || 0;
+                    return existingKind >= candidateKind;
+                });
+                if (!overlaps) finalList.push(candidate);
+            });
+
+            return finalList.sort((a, b) => (a.y - b.y) || (a.x - b.x));
         }
 
         function autoDetectCurrentPage() {
@@ -2225,11 +2321,19 @@
                 return;
             }
 
+            const existingPageFields = getFieldsForCurrentPage();
+            const detectedNew = detected.filter(item => !existingPageFields.some(field => iou(field, item) >= 0.55));
+            if (!detectedNew.length) {
+                setDetectStatus(`Nenhum campo novo detectado na pagina ${state.currentPage}.`);
+                alert('Nao encontrei novos campos. Se quiser, apague alguns e detecte novamente.');
+                return;
+            }
+
             const nextIndex = state.fields.length + 1;
             const createdIds = [];
             const defaultType = state.currentFieldType || 'text';
 
-            detected.forEach((item, idx) => {
+            detectedNew.forEach((item, idx) => {
                 const id = Date.now() + idx + Math.floor(Math.random() * 1000);
                 createdIds.push(id);
                 const detectedType = item.kind === 'check' ? 'check' : defaultType;
@@ -2261,7 +2365,8 @@
             renderOverlays();
             saveHistory();
 
-            setDetectStatus(`${detected.length} campos detectados. Clique em um campo e pressione Delete para remover os incorretos.`);
+            const skipped = detected.length - detectedNew.length;
+            setDetectStatus(`${detectedNew.length} campos detectados (${skipped} ignorados por sobreposicao). Clique em um campo e pressione Delete para remover os incorretos.`);
         }
 
         // =========================
