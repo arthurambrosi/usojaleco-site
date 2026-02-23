@@ -646,6 +646,35 @@
         }
 
         const headerRow = rawRows[0];
+        const headerRowValues = Object.values(headerRow).map(function (v) {
+          return normalizeKey(v);
+        });
+        const knownHeaderKeys = new Set([
+          "ativo",
+          "active",
+          "publicar",
+          "status",
+          "titulo",
+          "slide",
+          "nome",
+          "tema",
+          "preco",
+          "valor",
+          "descricao",
+          "imagem",
+          "video",
+          "link_compra",
+          "area"
+        ]);
+        const headerHints = headerRowValues.filter(function (v) {
+          return knownHeaderKeys.has(v);
+        }).length;
+
+        // Se a primeira linha nao parece cabecalho, mantemos tudo como dado para nao perder itens.
+        if (headerHints < 2) {
+          return rawRows;
+        }
+
         const headerKeys = Object.keys(headerRow);
         const dynamicHeaders = headerKeys.map(function (key, idx) {
           return normalizeKey(headerRow[key]) || "col_" + idx;
@@ -706,9 +735,29 @@
         };
       }
 
+      function detectCsvDelimiter(headerLine) {
+        const commaCount = (headerLine.match(/,/g) || []).length;
+        const semicolonCount = (headerLine.match(/;/g) || []).length;
+        const tabCount = (headerLine.match(/\t/g) || []).length;
+
+        if (semicolonCount > commaCount && semicolonCount >= tabCount) return ";";
+        if (tabCount > commaCount && tabCount > semicolonCount) return "\t";
+        return ",";
+      }
+
       function parseCsv(text) {
-        const lines = text.split(/\r?\n/).filter(function (l) { return l.trim() !== ""; });
+        const normalizedText = String(text || "").replace(/^\uFEFF/, "");
+        const maybeLoginHtml =
+          /<(?:!doctype\s+html|html|head|body)\b/i.test(normalizedText) &&
+          /(accounts\.google\.com|servicelogin|signin|fazer login|login)/i.test(normalizedText);
+        if (maybeLoginHtml) {
+          throw new Error("401 unauthorized: planilha privada ou nao publicada.");
+        }
+
+        const lines = normalizedText.split(/\r?\n/).filter(function (l) { return l.trim() !== ""; });
         if (!lines.length) return [];
+
+        const delimiter = detectCsvDelimiter(lines[0]);
 
         const splitCsvLine = function (line) {
           const result = [];
@@ -722,7 +771,7 @@
               i++;
             } else if (ch === "\"") {
               inQuotes = !inQuotes;
-            } else if (ch === "," && !inQuotes) {
+            } else if (ch === delimiter && !inQuotes) {
               result.push(cur);
               cur = "";
             } else {
