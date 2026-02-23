@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UsoJaleco | Simulador ACLS</title>
+  <meta name="description" content="Simulador ACLS do UsoJaleco com cenarios deterministas, monitor e passos de instrutor.">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" href="../imagens/Design sem nome (28) copiar.png">
+  <link rel="stylesheet" href="./acls.css">
+  <script defer src="/analytics-config.js"></script>
+  <script defer src="/analytics.js"></script>
+  <script defer src="./acls.js"></script>
+</head>
+<body>
+  <div class="topbarWrap">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="UsoJaleco">
+        <img
+          alt="Logo UsoJaleco"
+          src="../imagens/Design sem nome (28) copiar.png"
+          draggable="false"
+        >
+        <div class="brandName"><span>uso</span><b>jaleco</b></div>
+      </a>
+
+      <div class="headRight">
+        <button class="headBtn" id="btn-back-to-picker" type="button">Escolher cenario</button>
+        <button class="headBtn" id="btn-top-restart" type="button">Reiniciar</button>
+        <a class="headBtn headBtnPrimary" href="/">Voltar ao menu</a>
+      </div>
+    </header>
+  </div>
+
+  <div class="wrap">
+    <div class="main">
+      <aside class="sideNav" aria-label="Resumo ACLS">
+        <div class="sideBlock">
+          <h2>ACLS</h2>
+          <p>Treino passo a passo, sem IA, guiado por JSON.</p>
+        </div>
+
+        <div class="sideBlock">
+          <h3>Cenarios</h3>
+          <div id="scenario-quick-list" class="quickList" aria-live="polite"></div>
+        </div>
+
+        <div class="sideBlock">
+          <h3>Status</h3>
+          <p id="side-status">Escolha um cenario para iniciar.</p>
+        </div>
+      </aside>
+
+      <section class="contentCol">
+        <section class="card pickerCard" id="scenario-picker" aria-live="polite">
+          <div class="cardHeader">
+            <div>
+              <h1>Escolha o cenario</h1>
+              <p>Selecione um caso para iniciar a simulacao ACLS.</p>
+            </div>
+          </div>
+          <div class="scenarioGrid" id="scenario-grid"></div>
+        </section>
+
+        <section class="simShell is-hidden" id="simulation-shell" aria-live="polite">
+          <div class="simGrid">
+            <section class="card panel leftPanel" aria-label="Controles da simulacao">
+              <div class="panelHeader">
+                <h2>Controles</h2>
+                <p id="scenario-title">-</p>
+              </div>
+
+              <div class="block">
+                <label class="label" for="scenario-select">Cenario ativo</label>
+                <select class="field" id="scenario-select"></select>
+              </div>
+
+              <div class="block">
+                <span class="label">Modo</span>
+                <div class="modeSwitch" role="group" aria-label="Modo de simulacao">
+                  <button type="button" class="modeBtn active" id="mode-treino">Modo Treino</button>
+                  <button type="button" class="modeBtn" id="mode-instrutor">Modo Instrutor</button>
+                </div>
+              </div>
+
+              <div class="block">
+                <span class="label">Progresso</span>
+                <div class="progressRow">
+                  <strong id="progress-text">Passo 0/0</strong>
+                  <span id="step-kind-badge" class="kindBadge">-</span>
+                </div>
+                <div class="mini" id="step-id-text">Step: -</div>
+              </div>
+
+              <div class="block controlsBlock">
+                <button type="button" class="headBtn" id="btn-prev-step">Voltar</button>
+                <button type="button" class="headBtn headBtnPrimary" id="btn-next-step">Proximo passo</button>
+                <button type="button" class="headBtn" id="btn-pause">Pausar</button>
+                <button type="button" class="headBtn" id="btn-restart">Reiniciar</button>
+                <button type="button" class="headBtn" id="btn-toggle-respostas">Ocultar respostas</button>
+              </div>
+
+              <div class="block branchBlock is-hidden" id="branch-box">
+                <span class="label">Selector de conduta</span>
+                <p class="mini" id="branch-prompt"></p>
+                <div id="branch-choices" class="branchChoices"></div>
+                <p class="mini">Se nenhuma opcao for marcada, o fluxo segue a opcao A por padrao.</p>
+              </div>
+
+              <div class="block">
+                <span class="label">Anotacao do usuario</span>
+                <textarea id="user-note" class="textarea" rows="4" placeholder="Registre o que voce faria neste passo."></textarea>
+                <button type="button" class="headBtn" id="btn-add-note">Registrar no log</button>
+              </div>
+
+              <div class="block">
+                <span class="label">Log</span>
+                <ul id="log-list" class="logList"></ul>
+              </div>
+            </section>
+
+            <section class="card panel centerPanel" aria-label="Instrutor e roteiro">
+              <div class="panelHeader">
+                <h2>Instrutor</h2>
+                <p id="step-position">-</p>
+              </div>
+
+              <article class="instrutorCard">
+                <h3 id="step-title">-</h3>
+                <p id="instrutor-text">Selecione um cenario para comecar.</p>
+                <div class="eventBanner is-hidden" id="event-banner"></div>
+              </article>
+
+              <article class="respostasCard" id="respostas-card">
+                <div class="cardHeader small">
+                  <div>
+                    <h3>Respostas esperadas</h3>
+                    <p id="respostas-subtitle">Checklist manual (sem validacao automatica).</p>
+                  </div>
+                </div>
+                <p class="mini is-hidden" id="respostas-hidden-msg">Respostas ocultas no modo treino.</p>
+                <ul class="checklist" id="respostas-list"></ul>
+              </article>
+
+              <article class="timelineCard">
+                <div class="cardHeader small">
+                  <div>
+                    <h3>Linha do tempo</h3>
+                    <p>Passos do caso em ordem.</p>
+                  </div>
+                </div>
+                <ol class="timelineList" id="timeline-list"></ol>
+              </article>
+            </section>
+
+            <section class="card panel rightPanel" aria-label="Monitor e ECG">
+              <div class="panelHeader">
+                <h2>Painel do paciente</h2>
+                <p id="monitor-phase">-</p>
+              </div>
+
+              <article class="monitorCard">
+                <div class="monitorTop">
+                  <strong>Monitor multiparametrico</strong>
+                  <span id="monitor-warning" class="warningBadge is-hidden">SEM PULSO</span>
+                </div>
+                <canvas id="monitor-canvas" width="720" height="240" aria-label="Tracado do monitor"></canvas>
+
+                <div class="vitalsGrid">
+                  <div class="vitalItem">
+                    <span>FC</span>
+                    <strong id="vital-fc">-</strong>
+                  </div>
+                  <div class="vitalItem">
+                    <span>SpO2</span>
+                    <strong id="vital-spo2">-</strong>
+                  </div>
+                  <div class="vitalItem">
+                    <span>PA</span>
+                    <strong id="vital-pa">-</strong>
+                  </div>
+                  <div class="vitalItem">
+                    <span>ETCO2</span>
+                    <strong id="vital-etco2">-</strong>
+                  </div>
+                </div>
+              </article>
+
+              <article class="ecgCard">
+                <div class="cardHeader small">
+                  <div>
+                    <h3>ECG / Imagens</h3>
+                    <p id="ecg-source">Sem ECG neste passo.</p>
+                  </div>
+                </div>
+
+                <div class="ecgViewport" id="ecg-viewport">
+                  <img id="ecg-image" alt="ECG do passo atual" class="is-hidden">
+                  <div id="ecg-placeholder" class="placeholder">Sem ECG neste passo.</div>
+                </div>
+
+                <div class="ecgActions">
+                  <button type="button" class="headBtn" id="btn-ecg-upload">Upload ECG (teste)</button>
+                  <button type="button" class="headBtn" id="btn-ecg-clear-upload">Remover upload</button>
+                  <input type="file" id="ecg-upload-input" accept="image/png,image/jpeg,image/webp" hidden>
+                </div>
+
+                <div class="ecgActions compact">
+                  <button type="button" class="headBtn" id="btn-ecg-zoom-out">-</button>
+                  <button type="button" class="headBtn" id="btn-ecg-zoom-reset">100%</button>
+                  <button type="button" class="headBtn" id="btn-ecg-zoom-in">+</button>
+                  <button type="button" class="headBtn" id="btn-ecg-full">Tela cheia</button>
+                </div>
+              </article>
+
+              <article class="patientCard">
+                <h3>Dados do caso</h3>
+                <p><strong id="patient-title">-</strong></p>
+                <p id="patient-note">Selecione um cenario para iniciar.</p>
+              </article>
+            </section>
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <div class="modalMask is-hidden" id="ecg-modal" role="dialog" aria-modal="true" aria-labelledby="ecg-modal-title">
+    <div class="modalCard">
+      <div class="modalTop">
+        <strong id="ecg-modal-title">ECG em tela cheia</strong>
+        <button class="headBtn" id="ecg-modal-close" type="button">Fechar</button>
+      </div>
+      <div class="modalBody">
+        <img id="ecg-modal-image" alt="ECG em tela cheia">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
