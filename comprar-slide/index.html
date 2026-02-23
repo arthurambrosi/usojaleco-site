@@ -423,6 +423,100 @@
       text-decoration: underline;
     }
 
+    .pdf-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 18, 24, 0.62);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1200;
+    }
+
+    .pdf-modal.open {
+      display: flex;
+    }
+
+    .pdf-modal-dialog {
+      width: min(1080px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .pdf-modal-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    .pdf-modal-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .pdf-modal-close {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pdf-frame-wrap {
+      position: relative;
+      background: #dbe2ea;
+      height: min(78vh, 860px);
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    .pdf-watermark {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-color: rgba(255, 255, 255, 0.16);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='190'%3E%3Ctext x='14' y='108' fill='%23ff7a18' fill-opacity='0.2' font-family='Montserrat%2CArial' font-size='28' transform='rotate(-18 170 95)'%3EUSOJALECO%20%E2%80%A2%20PR%C3%89VIA%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 340px 190px;
+    }
+
+    .pdf-watermark::after {
+      content: "Prévia protegida";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 122, 24, 0.35);
+      background: rgba(255, 255, 255, 0.78);
+      color: #9d4f0f;
+      font-weight: 800;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
     @media (max-width: 760px) {
       .wrap {
         padding: 0 12px 20px;
@@ -504,6 +598,20 @@
     <div id="grid" class="grid" aria-live="polite"></div>
   </div>
 
+  <div id="pdfModal" class="pdf-modal" aria-hidden="true">
+    <div class="pdf-modal-dialog" role="dialog" aria-modal="true" aria-label="Prévia do PDF">
+      <div class="pdf-modal-topbar">
+        <div class="pdf-modal-title">Prévia do PDF</div>
+        <button id="pdfModalClose" class="pdf-modal-close" type="button">Fechar</button>
+      </div>
+      <div class="pdf-frame-wrap">
+        <iframe id="pdfFrame" class="pdf-frame" src="about:blank" title="Prévia do PDF"></iframe>
+        <div class="pdf-watermark"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     (function () {
       const LOGO_URL = "https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png";
@@ -521,13 +629,87 @@
       const gridEl = document.getElementById("grid");
       const searchInput = document.getElementById("searchInput");
       const brandLogo = document.getElementById("brandLogo");
+      const pdfModalEl = document.getElementById("pdfModal");
+      const pdfFrameEl = document.getElementById("pdfFrame");
+      const pdfModalCloseEl = document.getElementById("pdfModalClose");
 
       let allSlides = [];
       let activeCategory = "Todas";
       let searchTerm = "";
+      const pdfThumbCache = new Map();
+
+      if (window.pdfjsLib && window.pdfjsLib.GlobalWorkerOptions) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      }
 
       if (brandLogo) {
         brandLogo.src = LOGO_URL;
+      }
+
+      function isPdfLikeUrl(url) {
+        return /\.pdf(?:$|[?#])/i.test(String(url || "").trim());
+      }
+
+      function closePdfModal() {
+        if (!pdfModalEl) return;
+        pdfModalEl.classList.remove("open");
+        pdfModalEl.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        if (pdfFrameEl) pdfFrameEl.src = "about:blank";
+      }
+
+      function openPdfModal(pdfUrl) {
+        if (!pdfModalEl || !pdfFrameEl || !pdfUrl || pdfUrl === "#") return;
+        const sep = pdfUrl.includes("#") ? "&" : "#";
+        pdfFrameEl.src = pdfUrl + sep + "toolbar=0&navpanes=0&scrollbar=0&view=FitH";
+        pdfModalEl.classList.add("open");
+        pdfModalEl.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      async function getPdfFirstPageThumb(pdfUrl) {
+        if (!isPdfLikeUrl(pdfUrl) || !window.pdfjsLib) return null;
+        if (pdfThumbCache.has(pdfUrl)) return pdfThumbCache.get(pdfUrl);
+
+        try {
+          const loadingTask = window.pdfjsLib.getDocument({ url: pdfUrl, withCredentials: false });
+          const pdfDoc = await loadingTask.promise;
+          const page = await pdfDoc.getPage(1);
+          const viewport = page.getViewport({ scale: 1.35 });
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d", { alpha: false });
+          canvas.width = Math.ceil(viewport.width);
+          canvas.height = Math.ceil(viewport.height);
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+          pdfThumbCache.set(pdfUrl, dataUrl);
+          return dataUrl;
+        } catch (error) {
+          console.warn("Falha ao renderizar thumbnail do PDF:", error);
+          pdfThumbCache.set(pdfUrl, null);
+          return null;
+        }
+      }
+
+      async function applyCardThumbnail(slide, imgEl) {
+        if (!imgEl) return;
+        const fallbackThumb = "https://via.placeholder.com/960x540/e9edf3/6f7790?text=Sem+thumbnail";
+        const imageUrl = slide.image && slide.image !== "#" ? slide.image : "";
+
+        if (!imageUrl) {
+          imgEl.src = fallbackThumb;
+          return;
+        }
+
+        if (isPdfLikeUrl(imageUrl)) {
+          imgEl.src = fallbackThumb;
+          const thumb = await getPdfFirstPageThumb(imageUrl);
+          imgEl.src = thumb || fallbackThumb;
+          return;
+        }
+
+        imgEl.src = imageUrl;
       }
 
       function normalizeKey(value) {
@@ -685,7 +867,7 @@
         const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]) || byIndex(2);
         const description = pick(row, ["descricao", "descricao_do_slide", "resumo", "subtitulo"]) || byIndex(3);
         const image = pick(row, ["imagem", "thumb", "thumbnail", "capa", "foto"]) || byIndex(4);
-        const video = pick(row, ["video", "link_video", "video_link", "reel"]) || byIndex(5);
+        const previewPdf = pick(row, ["video", "link_video", "video_link", "reel", "pdf", "link_pdf", "preview_pdf"]) || byIndex(5);
         const buyLink = pick(row, ["link_compra", "link_de_compra", "link_de_pagamento", "link", "url"]) || byIndex(6);
 
         let area = pick(row, ["area_do_tema", "area_tema", "area", "especialidade", "categoria"]);
@@ -705,7 +887,8 @@
           description: description || "Apresentação pronta para estudo, aula ou plantão.",
           price: price || "",
           buyLink: sanitizeUrl(buyLink),
-          video: sanitizeUrl(video),
+          previewPdf: sanitizeUrl(previewPdf),
+          video: sanitizeUrl(previewPdf),
           image: normalizeImageUrl(image),
           area: area || "Sem categoria",
           active: isActiveValue(active)
@@ -951,15 +1134,15 @@
         const card = document.createElement("article");
         card.className = "card";
 
-        const image = slide.image && slide.image !== "#" ? slide.image : "https://via.placeholder.com/960x540/0f1118/6f7790?text=Slide+UsoJaleco";
-        const hasVideo = slide.video && slide.video !== "#";
+        const previewPdf = slide.previewPdf && slide.previewPdf !== "#" ? slide.previewPdf : (slide.video && slide.video !== "#" ? slide.video : "#");
+        const hasPreviewPdf = previewPdf && previewPdf !== "#";
         const hasBuy = slide.buyLink && slide.buyLink !== "#";
         const priceText = slide.price ? slide.price : "A consultar";
 
         card.innerHTML = [
           "<div class=\"thumbWrap\">",
           "  <span class=\"areaTag\" style=\"" + escapeAttr(getAreaTagStyle(slide.area)) + "\">" + escapeHtml(slide.area) + "</span>",
-          "  <img loading=\"lazy\" src=\"" + escapeAttr(image) + "\" alt=\"" + escapeAttr(slide.title) + "\">",
+          "  <img loading=\"lazy\" src=\"https://via.placeholder.com/960x540/e9edf3/6f7790?text=Carregando\" alt=\"" + escapeAttr(slide.title) + "\">",
           "</div>",
           "<div class=\"cardBody\">",
           "  <h3 class=\"title\">" + escapeHtml(slide.title) + "</h3>",
@@ -968,15 +1151,24 @@
           "    <div class=\"price\"><small>R$</small>" + escapeHtml(priceText) + "</div>",
           "  </div>",
           "  <div class=\"actions\">",
-          hasVideo
-            ? "    <a class=\"btn btnVideo\" href=\"" + escapeAttr(slide.video) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Ver vídeo</a>"
-            : "    <span class=\"btn btnVideo\" style=\"opacity:.55;pointer-events:none;\">Sem vídeo</span>",
+          hasPreviewPdf
+            ? "    <button class=\"btn btnVideo js-open-pdf\" type=\"button\" data-pdf=\"" + escapeAttr(previewPdf) + "\">Prévia PDF</button>"
+            : "    <span class=\"btn btnVideo\" style=\"opacity:.55;pointer-events:none;\">Sem prévia</span>",
           hasBuy
             ? "    <a class=\"btn btnBuy\" href=\"" + escapeAttr(slide.buyLink) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Comprar</a>"
             : "    <span class=\"btn btnBuy\" style=\"opacity:.55;pointer-events:none;\">Sem link</span>",
           "  </div>",
           "</div>"
         ].join("\n");
+
+        applyCardThumbnail(slide, card.querySelector(".thumbWrap img"));
+
+        const btnOpenPdf = card.querySelector(".js-open-pdf");
+        if (btnOpenPdf) {
+          btnOpenPdf.addEventListener("click", function () {
+            openPdfModal(btnOpenPdf.dataset.pdf || "");
+          });
+        }
 
         return card;
       }
@@ -1044,6 +1236,22 @@
       searchInput.addEventListener("input", function (event) {
         searchTerm = String(event.target.value || "").trim().toLowerCase();
         renderGrid();
+      });
+
+      if (pdfModalCloseEl) {
+        pdfModalCloseEl.addEventListener("click", closePdfModal);
+      }
+
+      if (pdfModalEl) {
+        pdfModalEl.addEventListener("click", function (event) {
+          if (event.target === pdfModalEl) closePdfModal();
+        });
+      }
+
+      window.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && pdfModalEl && pdfModalEl.classList.contains("open")) {
+          closePdfModal();
+        }
       });
 
       init();
