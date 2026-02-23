@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.cdnfonts.com/css/coolvetica" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -139,7 +140,7 @@
 
     .hero h1 {
       font-size: clamp(2rem, 5.2vw, 3.5rem);
-      font-family: "Kaushan Script", "Brush Script MT", "Segoe Script", cursive;
+      font-family: "Cooveltica", "Coolvetica", "Kaushan Script", "Brush Script MT", "Segoe Script", cursive;
       font-weight: 400;
       line-height: 1.05;
       margin-bottom: 6px;
@@ -303,9 +304,9 @@
       top: 10px;
       left: 10px;
       z-index: 1;
-      border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
-      background: rgba(255, 255, 255, 0.85);
-      color: #a45510;
+      border: 1px solid var(--tag-border, color-mix(in srgb, var(--accent) 38%, var(--line)));
+      background: var(--tag-bg, rgba(255, 255, 255, 0.85));
+      color: var(--tag-text, #a45510);
       padding: 4px 8px;
       border-radius: 999px;
       font-size: 0.7rem;
@@ -479,14 +480,14 @@
     <section class="hero">
       <h1>Slides premium para medicina</h1>
       <p>
-        Catalogo de apresentacoes com atualizacao automatica da planilha publica.
+        Catálogo de apresentações com atualização automática da planilha pública.
       </p>
     </section>
 
     <section class="showcaseHeader">
       <div class="headerText">
-        <h2>Catalogo de apresentacoes</h2>
-        <p>Filtre por especialidade ou busque por titulo.</p>
+        <h2>Catálogo de apresentações</h2>
+        <p>Filtre por especialidade ou busque por título.</p>
       </div>
 
       <div class="searchBox">
@@ -501,10 +502,6 @@
     <p id="status" class="status">Carregando slides...</p>
     <div id="categoryFilters" class="filters" aria-label="Filtros por categoria"></div>
     <div id="grid" class="grid" aria-live="polite"></div>
-    <div class="foot">
-      Origem: planilha publica
-      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx/pubhtml" target="_blank" rel="noopener noreferrer">2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx</a>.
-    </div>
   </div>
 
   <script>
@@ -597,7 +594,7 @@
         const start = raw.indexOf("{");
         const end = raw.lastIndexOf("}");
         if (start < 0 || end < 0) {
-          throw new Error("Resposta de planilha invalida.");
+          throw new Error("Resposta de planilha inválida.");
         }
         return JSON.parse(raw.slice(start, end + 1));
       }
@@ -650,7 +647,7 @@
           return knownHeaderKeys.has(v);
         }).length;
 
-        // Se a primeira linha nao parece cabecalho, mantemos tudo como dado para nao perder itens.
+        // Se a primeira linha não parece cabeçalho, mantemos tudo como dado para não perder itens.
         if (headerHints < 2) {
           return rawRows;
         }
@@ -682,7 +679,7 @@
           return String(row[keys[idx]] || "").trim();
         };
 
-        // Mapeamento por nome + fallback por posicao (A-H do print enviado).
+        // Mapeamento por nome + fallback por posição (A-H do print enviado).
         const active = pick(row, ["ativo", "active", "publicar", "status"]) || byIndex(0);
         const title = pick(row, ["titulo", "slide", "nome", "tema", "titulo_do_slide", "assunto"]) || byIndex(1);
         const price = pick(row, ["preco", "valor", "preco_r$", "preco_r", "preco_em_reais"]) || byIndex(2);
@@ -704,8 +701,8 @@
         }
 
         return {
-          title: title || "Slide sem titulo",
-          description: description || "Apresentacao pronta para estudo, aula ou plantao.",
+          title: title || "Slide sem título",
+          description: description || "Apresentação pronta para estudo, aula ou plantão.",
           price: price || "",
           buyLink: sanitizeUrl(buyLink),
           video: sanitizeUrl(video),
@@ -731,7 +728,7 @@
           /<(?:!doctype\s+html|html|head|body)\b/i.test(normalizedText) &&
           /(accounts\.google\.com|servicelogin|signin|fazer login|login)/i.test(normalizedText);
         if (maybeLoginHtml) {
-          throw new Error("401 unauthorized: planilha privada ou nao publicada.");
+          throw new Error("401 unauthorized: planilha privada ou não publicada.");
         }
 
         const lines = normalizedText.split(/\r?\n/).filter(function (l) { return l.trim() !== ""; });
@@ -856,7 +853,7 @@
           }
         }
 
-        throw lastError || new Error("Nao foi possivel carregar a planilha.");
+        throw lastError || new Error("Não foi possível carregar a planilha.");
       }
 
       function getCategories(slides) {
@@ -893,6 +890,63 @@
         });
       }
 
+      const AREA_TAG_PALETTES = [
+        { border: "#f59e0b", bg: "#fff7e6", text: "#b45309" },
+        { border: "#ef4444", bg: "#fff1f2", text: "#b91c1c" },
+        { border: "#06b6d4", bg: "#ecfeff", text: "#0e7490" },
+        { border: "#8b5cf6", bg: "#f5f3ff", text: "#6d28d9" },
+        { border: "#22c55e", bg: "#f0fdf4", text: "#15803d" },
+        { border: "#3b82f6", bg: "#eff6ff", text: "#1d4ed8" },
+        { border: "#ec4899", bg: "#fdf2f8", text: "#be185d" },
+        { border: "#14b8a6", bg: "#f0fdfa", text: "#0f766e" },
+        { border: "#f97316", bg: "#fff7ed", text: "#c2410c" }
+      ];
+
+      const AREA_TAG_BY_KEY = {
+        cardiologia: 0,
+        neurologia: 1,
+        infectologia: 2,
+        pediatria: 3,
+        ginecologia: 4,
+        obstetricia: 4,
+        ortopedia: 5,
+        cirurgia: 6,
+        emergencias: 7,
+        emergencia: 7,
+        clinica_medica: 8,
+        clinica: 8
+      };
+
+      function normalizeAreaKey(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^\w\s]/g, "")
+          .replace(/\s+/g, "_");
+      }
+
+      function hashString(value) {
+        let hash = 0;
+        const input = String(value || "");
+        for (let i = 0; i < input.length; i += 1) {
+          hash = ((hash << 5) - hash) + input.charCodeAt(i);
+          hash |= 0;
+        }
+        return Math.abs(hash);
+      }
+
+      function getAreaTagStyle(area) {
+        const key = normalizeAreaKey(area);
+        let paletteIndex = AREA_TAG_BY_KEY[key];
+        if (!Number.isInteger(paletteIndex)) {
+          paletteIndex = hashString(key || area || "area") % AREA_TAG_PALETTES.length;
+        }
+        const palette = AREA_TAG_PALETTES[paletteIndex];
+        return "--tag-border:" + palette.border + ";--tag-bg:" + palette.bg + ";--tag-text:" + palette.text + ";";
+      }
+
       function buildCard(slide) {
         const card = document.createElement("article");
         card.className = "card";
@@ -904,7 +958,7 @@
 
         card.innerHTML = [
           "<div class=\"thumbWrap\">",
-          "  <span class=\"areaTag\">" + escapeHtml(slide.area) + "</span>",
+          "  <span class=\"areaTag\" style=\"" + escapeAttr(getAreaTagStyle(slide.area)) + "\">" + escapeHtml(slide.area) + "</span>",
           "  <img loading=\"lazy\" src=\"" + escapeAttr(image) + "\" alt=\"" + escapeAttr(slide.title) + "\">",
           "</div>",
           "<div class=\"cardBody\">",
@@ -915,8 +969,8 @@
           "  </div>",
           "  <div class=\"actions\">",
           hasVideo
-            ? "    <a class=\"btn btnVideo\" href=\"" + escapeAttr(slide.video) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Ver video</a>"
-            : "    <span class=\"btn btnVideo\" style=\"opacity:.55;pointer-events:none;\">Sem video</span>",
+            ? "    <a class=\"btn btnVideo\" href=\"" + escapeAttr(slide.video) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Ver vídeo</a>"
+            : "    <span class=\"btn btnVideo\" style=\"opacity:.55;pointer-events:none;\">Sem vídeo</span>",
           hasBuy
             ? "    <a class=\"btn btnBuy\" href=\"" + escapeAttr(slide.buyLink) + "\" target=\"_blank\" rel=\"noopener noreferrer\">Comprar</a>"
             : "    <span class=\"btn btnBuy\" style=\"opacity:.55;pointer-events:none;\">Sem link</span>",
@@ -980,8 +1034,8 @@
           const unauthorized = /401|unauthorized|nao autorizado|não autorizado/i.test(msg);
           setStatus(
             unauthorized
-              ? "A planilha esta privada. Em Compartilhar, habilite 'Qualquer pessoa com o link: Leitor' ou publique a aba Slides."
-              : "Falha ao carregar a planilha. Verifique permissao publica e aba/gid. Erro: " + msg,
+              ? "A planilha está privada. Em Compartilhar, habilite 'Qualquer pessoa com o link: Leitor' ou publique a aba Slides."
+              : "Falha ao carregar a planilha. Verifique permissão pública e aba/gid. Erro: " + msg,
             "error"
           );
         }
