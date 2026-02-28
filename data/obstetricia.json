@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Obstetrícia",
+  "slug": "obstetricia",
+  "assuntos": [
+    {
+      "titulo": "Geral",
+      "slug": "geral",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": ""
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-uw42gkb",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-8lj9szo",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-vmn9hui",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "items": [
+                  {
+                    "id": "item-tohy9n2",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
