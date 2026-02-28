@@ -948,7 +948,7 @@ body {
   .sidebar {
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    max-height: 260px;
+    max-height: none;
   }
 
   .panel-head {
@@ -971,6 +971,93 @@ body {
 
   .med-prescription-line {
     gap: 4px;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-overlay {
+    padding: 6px;
+  }
+
+  .app-modal {
+    border-radius: 10px;
+  }
+
+  .sidebar-head,
+  .system-filters,
+  .area-filters,
+  .panel-head,
+  .search-wrap {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .panel-head h2 {
+    font-size: 1.25rem;
+    line-height: 1.08;
+  }
+
+  .panel-head-actions,
+  .head-btn,
+  .cta-btn {
+    width: 100%;
+  }
+
+  .head-btn,
+  .cta-btn {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .protocol-list {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .protocol-summary {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "avatar main"
+      "actions actions";
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .protocol-avatar {
+    grid-area: avatar;
+  }
+
+  .protocol-main {
+    grid-area: main;
+  }
+
+  .protocol-actions {
+    grid-area: actions;
+    justify-content: flex-end;
+  }
+
+  .detail-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .detail-actions .copy-btn,
+  .detail-actions .copy-check {
+    width: 100%;
+  }
+
+  .detail-actions .copy-check {
+    justify-content: flex-start;
+  }
+
+  .group-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .group-actions {
+    justify-content: space-between;
   }
 }
 

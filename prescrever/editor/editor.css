@@ -848,6 +848,26 @@ body {
 @media (max-width: 1120px) {
   .app-shell {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "main"
+      "sidebar"
+      "preview";
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .main {
+    grid-area: main;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    overflow: visible;
+  }
+
+  .preview-pane {
+    grid-area: preview;
+    overflow: visible;
   }
 
   .meta-grid,
@@ -857,6 +877,112 @@ body {
 
   .sidebar,
   .preview-pane {
-    max-height: 340px;
+    max-height: none;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px;
+  }
+
+  #jsonPreview {
+    min-height: 170px;
+    max-height: 45vh;
+  }
+}
+
+@media (max-width: 780px) {
+  .app-shell {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .content-header {
+    padding: 6px 8px;
+  }
+
+  .tab-pills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tab-pill {
+    text-align: center;
+  }
+
+  .tab-actions,
+  .preview-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .tab-actions .btn,
+  .preview-actions .btn {
+    width: 100%;
+    min-height: 34px;
+  }
+
+  .mode-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .mode-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .toolbar {
+    display: grid;
+    gap: 6px;
+  }
+
+  .toolbar-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .toolbar-group label {
+    grid-column: 1 / -1;
+  }
+
+  .toolbar-group select,
+  .toolbar-group input[type="color"] {
+    width: 100%;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .panel-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+}
+
+@media (max-width: 520px) {
+  .tab-actions,
+  .preview-actions,
+  .panel-actions,
+  .toolbar-group {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .btn-small {
+    min-height: 36px;
   }
 }

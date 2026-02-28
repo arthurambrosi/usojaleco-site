@@ -932,6 +932,10 @@ function buildGithubContentUrl(config, filePath) {
   )}/contents/${safePath}`;
 }
 
+function buildGithubRepoUrl(config) {
+  return `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
+}
+
 function buildGithubHeaders(config, withJsonBody = false) {
   const headers = {
     Accept: "application/vnd.github+json",
@@ -968,6 +972,53 @@ async function fetchGithubFileSha(config, filePath) {
   return isNonEmptyString(payload?.sha) ? payload.sha : null;
 }
 
+async function ensureGithubRepoAndBranch(config) {
+  const repoResponse = await fetch(buildGithubRepoUrl(config), {
+    method: "GET",
+    headers: buildGithubHeaders(config, false)
+  });
+  let repoPayload = null;
+  try {
+    repoPayload = await repoResponse.json();
+  } catch (_error) {}
+
+  if (!repoResponse.ok) {
+    if (repoResponse.status === 401) {
+      throw new Error("Token inválido ou expirado (401). Gere um novo token e tente novamente.");
+    }
+    if (repoResponse.status === 403) {
+      throw new Error("Token sem permissão no repositório (403). Dê permissão Contents: Read and write.");
+    }
+    if (repoResponse.status === 404) {
+      throw new Error(
+        "Repositório não encontrado (404). Verifique Usuário/Org, Repositório e se o token tem acesso a este repositório."
+      );
+    }
+    throw new Error(
+      `Falha ao validar repositório (${repoResponse.status})${repoPayload?.message ? ` - ${repoPayload.message}` : ""}`
+    );
+  }
+
+  const branchUrl = `${buildGithubRepoUrl(config)}/branches/${encodeURIComponent(config.branch)}`;
+  const branchResponse = await fetch(branchUrl, {
+    method: "GET",
+    headers: buildGithubHeaders(config, false)
+  });
+  let branchPayload = null;
+  try {
+    branchPayload = await branchResponse.json();
+  } catch (_error) {}
+
+  if (!branchResponse.ok) {
+    if (branchResponse.status === 404) {
+      throw new Error(`Branch "${config.branch}" não encontrada no repositório.`);
+    }
+    throw new Error(
+      `Falha ao validar branch (${branchResponse.status})${branchPayload?.message ? ` - ${branchPayload.message}` : ""}`
+    );
+  }
+}
+
 async function upsertGithubJsonFile(config, remoteFilePath, payload) {
   const sha = await fetchGithubFileSha(config, remoteFilePath);
   const url = buildGithubContentUrl(config, remoteFilePath);
@@ -997,7 +1048,13 @@ async function upsertGithubJsonFile(config, remoteFilePath, payload) {
     throw new Error(`Falha ao gravar ${remoteFilePath} no GitHub (${response.status})${msg}`);
   }
 
-  return { created: response.status === 201, updated: response.status === 200 };
+  return {
+    created: response.status === 201,
+    updated: response.status === 200,
+    commitSha: asString(result?.commit?.sha).trim(),
+    commitUrl: asString(result?.commit?.html_url).trim(),
+    contentPath: asString(result?.content?.path).trim()
+  };
 }
 
 function openHandleDb() {
@@ -3070,22 +3127,34 @@ async function syncGithubJsonFiles() {
 
   let createdCount = 0;
   let updatedCount = 0;
+  const commitUrls = new Set();
 
   if (dom.btnSyncGithub) {
     dom.btnSyncGithub.disabled = true;
   }
 
   try {
+    setStatus("Validando acesso ao repositório no GitHub...");
+    await ensureGithubRepoAndBranch(config);
+
     for (let index = 0; index < queue.length; index += 1) {
       const item = queue[index];
       setStatus(`Sincronizando no GitHub (${index + 1}/${queue.length}): ${item.remoteFilePath}`);
       const result = await upsertGithubJsonFile(config, item.remoteFilePath, item.payload);
       if (result.created) createdCount += 1;
       if (result.updated) updatedCount += 1;
+      if (isNonEmptyString(result.commitUrl)) {
+        commitUrls.add(result.commitUrl);
+      }
       state.lastSyncedSignatures.set(item.signatureKey, item.signature);
     }
 
-    setStatus(`Sincronização GitHub concluída: ${updatedCount} atualizado(s), ${createdCount} criado(s).`);
+    const successMessage = `Sincronização GitHub concluída em ${config.owner}/${config.repo} (${config.branch}): ${updatedCount} atualizado(s), ${createdCount} criado(s).`;
+    setStatus(successMessage);
+    const commitHint = commitUrls.size
+      ? `\nÚltimo commit: ${[...commitUrls][commitUrls.size - 1]}`
+      : "";
+    window.alert(`${successMessage}${commitHint}`);
   } catch (error) {
     console.error(error);
     const message = String(error?.message || "Falha desconhecida na sincronização com GitHub.");

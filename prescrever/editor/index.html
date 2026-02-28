@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./editor.css?v=20260228-20" />
+  <link rel="stylesheet" href="./editor.css?v=20260228-21" />
 </head>
 <body>
   <div class="app-shell">
@@ -154,7 +154,7 @@
 
     <aside class="preview-pane">
       <div class="preview-actions">
-        <button id="btnSyncJson" class="btn btn-small">Sincronizar JSONs</button>
+        <button id="btnSyncJson" class="btn btn-small">Sincronizar local (pasta)</button>
         <button id="btnSyncGithub" class="btn btn-small">Sincronizar no GitHub</button>
         <button id="btnLinkDataFolder" class="btn btn-small btn-ghost">Vincular pasta data (1x)</button>
         <button id="btnDownloadArea" class="btn btn-small">Download Área JSON</button>
@@ -181,7 +181,7 @@
         </div>
         <p class="status-help">O token não é salvo automaticamente. A sincronização atualiza/cria <code>data/*.json</code> e <code>data/index.json</code>.</p>
       </section>
-      <p class="status-bar">Sincronização direta usa a pasta vinculada uma vez (ideal: Prescrever\data).</p>
+      <p class="status-bar">Botão local salva na pasta vinculada. Botão GitHub grava direto no repositório.</p>
 
       <h2>JSON Preview</h2>
       <pre id="jsonPreview"></pre>
@@ -211,7 +211,8 @@
     </div>
   </div>
 
-  <script type="module" src="./editor.js?v=20260228-20"></script>
+  <script type="module" src="./editor.js?v=20260228-22"></script>
 </body>
 </html>
+
 
