@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Ginecologia",
+  "slug": "ginecologia",
+  "assuntos": [
+    {
+      "titulo": "Tricomoníase",
+      "slug": "tricomoniase",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "Tratar parceiros concomitantemente\nTratamento em gestantes é igual\nOrientar evitar atividade sexual até o término do tratamento",
+        "alertas": "",
+        "notas": ""
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-8xfw3rn",
+                "type": "or",
+                "rotulo": "ANTIBIOTICOTERAPIA",
+                "titulo": "Escolha uma das opções abaixo :",
+                "items": [
+                  {
+                    "id": "item-h36cy4x",
+                    "nome": "Metronidazol 250mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 02 comprimidos, via oral, de 12 em 15 horas por 07 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-78cpoba",
+                    "nome": "Tinidazol 2g",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "Está contraindicado em gestantes por apresentar potencial teratogênico",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-jl0nhe3",
+                "type": "add",
+                "rotulo": "TRATAMENTO DO PARCEIRO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "items": [
+                  {
+                    "id": "item-ebopgr1",
+                    "nome": "Metronidazol 250mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 08 comprimidos, via oral, em dose única",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-jh9k760",
+                    "nome": "Metronidazol 400mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 05 comprimidos, via oral, em dose única",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-3zg005y",
+                    "nome": "Tinidazol 2g",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "titulo": "Vaginose bacteriana",
+      "slug": "vaginose-bacteriana",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": ""
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-510dl2t",
+                "type": "or",
+                "rotulo": "PRIMEIRA LINHA DE TRATAMENTO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "items": [
+                  {
+                    "id": "item-2359enh",
+                    "nome": "Metronidazol 250 mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 02 comprimidos, via oral, de 12 em 12 horas por 7 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-aetfo0a",
+                    "nome": "Metronidazol 100mg/g",
+                    "apresentacao": "01 bisnaga",
+                    "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal uma vez ao dia por 5 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-rb4njml",
+                    "nome": "Clindamicina creme 2%",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, ao deitar, uma vez ao dia por 7 dias",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-v5g5mwn",
+                "type": "add",
+                "rotulo": "SEGUNDA LINHA DE TRATAMENTO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "items": [
+                  {
+                    "id": "item-afq5b6z",
+                    "nome": "Clindamicina 300mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral, de 12 em 12 horas por 7 dias",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-3lpfnef",
+                    "nome": "Secnidazol 2g",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-5hcziwz",
+                    "nome": "Tinidazol 2g",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral,por 02 dias",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "Está contraindicado em gestantes por apresentar potencial teratogênico",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "VB recorrente",
+          "slug": "vb-recorrente",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-08spdgz",
+                "type": "or",
+                "rotulo": "TRATAMENTO EMPÍRICO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "items": [
+                  {
+                    "id": "item-u42usx0",
+                    "nome": "Metronidazol 100mg/g",
+                    "apresentacao": "02 bisnagas",
+                    "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, duas vezes ao dia por 10 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-y2ase9c",
+                    "nome": "Metronidazol 250 mg",
+                    "apresentacao": "",
+                    "posologia": "Tomar 02 comprimidos, via oral, de 12 em 12 horas por 10 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-r453frf",
+                "type": "add",
+                "rotulo": "FALHA DO TRATAMENTO EMPÍRICO",
+                "titulo": "Associar os medicamentos abaixo :",
+                "items": [
+                  {
+                    "id": "item-z929eus",
+                    "nome": "Ácido bórico intravaginal 600mg",
+                    "apresentacao": "21 cápsulas",
+                    "posologia": "Aplicar intravaginalmente, uma cápsula ao dia, por 21 dias. Preferencialmente durante à noite",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-im2der0",
+                    "nome": "Metronidazol 100mg/g",
+                    "apresentacao": "04 bisnagas",
+                    "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, duas vezes por semana por 4 meses. Iniciar apenas após finalização do tratamento com Ácido Bórico",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-e1m949f",
+                "type": "or",
+                "rotulo": "TRATAMENTO DO PARCEIRO",
+                "titulo": "Associar os medicamentos abaixo :",
+                "items": [
+                  {
+                    "id": "item-vmmokmf",
+                    "nome": "Metronidazol 400mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar 01 comprimido, via oral, de 12 em 12 horas por 07 dias",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-ewu24ny",
+                    "nome": "Clindamicina creme 2%",
+                    "apresentacao": "01 tubo",
+                    "posologia": "Aplicar de 12 em 12 horas, em região de prepúcio e glande do pênis, por 07 dias",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "titulo": "Candidíase Vulvovaginal",
+      "slug": "candidiase-vulvovaginal",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": ""
+      },
+      "tabs": [
+        {
+          "titulo": "Resumo",
+          "slug": "resumo",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-6usn6mc",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opcoes abaixo:",
+                "items": [
+                  {
+                    "id": "item-eg1x16e",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-w7rldiv",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "items": [
+                  {
+                    "id": "item-2ea5tfy",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
