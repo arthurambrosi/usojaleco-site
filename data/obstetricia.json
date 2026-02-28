@@ -35,14 +35,14 @@
           "structured": {
             "groups": [
               {
-                "id": "group-uw42gkb",
+                "id": "group-tpvagrk",
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo:",
                 "items": [
                   {
-                    "id": "item-8lj9szo",
-                    "nome": "Novo medicamentoasa",
+                    "id": "item-37j77cd",
+                    "nome": "Novo medicamento",
                     "apresentacao": "",
                     "posologia": "",
                     "sus": false,
@@ -55,13 +55,13 @@
                 ]
               },
               {
-                "id": "group-vmn9hui",
+                "id": "group-1kfq9yl",
                 "type": "add",
                 "rotulo": "ASSOCIAR",
                 "titulo": "Associar / adicionar",
                 "items": [
                   {
-                    "id": "item-tohy9n2",
+                    "id": "item-qggazep",
                     "nome": "Novo medicamento",
                     "apresentacao": "",
                     "posologia": "",
