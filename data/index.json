@@ -2,19 +2,9 @@
   "schemaVersion": "1.0.0",
   "areas": [
     {
-      "slug": "infectologia",
-      "file": "infectologia.json",
-      "area": "Infectologia"
-    },
-    {
       "slug": "cardiologia",
       "file": "cardiologia.json",
       "area": "Cardiologia"
-    },
-    {
-      "slug": "pneumologia",
-      "file": "pneumologia.json",
-      "area": "Pneumologia"
     },
     {
       "slug": "ginecologia",
@@ -22,9 +12,14 @@
       "area": "Ginecologia"
     },
     {
-      "slug": "obstetricia",
-      "file": "obstetricia.json",
-      "area": "Obstetrícia"
+      "slug": "infectologia",
+      "file": "infectologia.json",
+      "area": "Infectologia"
+    },
+    {
+      "slug": "pneumologia",
+      "file": "pneumologia.json",
+      "area": "Pneumologia"
     }
   ]
 }
