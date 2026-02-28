@@ -126,6 +126,70 @@
       },
       "tabs": [
         {
+          "titulo": "Diagnóstico",
+          "slug": "diagnostico",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-6v18c19",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-tzvbhrn",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-kgvrb1n",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "items": [
+                  {
+                    "id": "item-z76pxmx",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
           "titulo": "Conduta inicial",
           "slug": "conduta-inicial",
           "mode": "structured",
