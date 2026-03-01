@@ -1,0 +1,264 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cronograma Premium de Estudos</title>
+  <meta name="description" content="Acompanhamento premium de estudos com calendário, revisões, estatísticas e pendências." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <div>
+        <strong>Cronograma Premium</strong>
+        <small id="sourceMeta">Carregando base...</small>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button id="quickSyncBtn" class="top-btn"><i class="fa-solid fa-arrows-rotate"></i> Sincronizar</button>
+      <button id="quickBackupBtn" class="top-btn primary"><i class="fa-solid fa-floppy-disk"></i> Backup</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h1>Painel</h1>
+        <p>Estudo, revisões, pendências e performance.</p>
+      </div>
+      <nav id="menuNav" class="menu-nav" aria-label="Menu principal">
+        <button class="menu-btn" data-section="overview"><i class="fa-solid fa-compass"></i> Resumo Geral</button>
+        <button class="menu-btn" data-section="today"><i class="fa-solid fa-bolt"></i> Hoje</button>
+        <button class="menu-btn active" data-section="calendar"><i class="fa-solid fa-calendar-days"></i> Calendário</button>
+        <button class="menu-btn" data-section="list"><i class="fa-solid fa-table-list"></i> Lista Semanal</button>
+        <button class="menu-btn" data-section="reviews"><i class="fa-solid fa-clock-rotate-left"></i> Revisões</button>
+        <button class="menu-btn" data-section="pendencias"><i class="fa-solid fa-triangle-exclamation"></i> Pendências</button>
+        <button class="menu-btn" data-section="stats"><i class="fa-solid fa-chart-line"></i> Estatísticas</button>
+        <button class="menu-btn" data-section="priority"><i class="fa-solid fa-siren-on"></i> Pontos Críticos</button>
+        <button class="menu-btn" data-section="timeline"><i class="fa-solid fa-timeline"></i> Linha do Tempo</button>
+        <button class="menu-btn" data-section="settings"><i class="fa-solid fa-gear"></i> Configurações</button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="toolbar">
+        <label class="search-box" for="globalSearch">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="globalSearch" type="search" placeholder="Busca global: assunto, área, semana, bloco..." autocomplete="off" />
+        </label>
+
+        <div class="filters">
+          <select id="filterArea">
+            <option value="all">Todas as áreas</option>
+          </select>
+          <select id="filterWeek">
+            <option value="all">Todas as semanas</option>
+          </select>
+          <select id="filterStatus">
+            <option value="all">Todos os status</option>
+            <option value="done">Concluídos</option>
+            <option value="pending">Pendentes</option>
+            <option value="overdue">Atrasados</option>
+            <option value="partial">Parciais</option>
+          </select>
+          <select id="filterType">
+            <option value="all">Todos os tipos</option>
+            <option value="study">Somente estudo inicial</option>
+            <option value="review">Somente revisões</option>
+          </select>
+          <button id="clearFiltersBtn" class="ghost-btn">Limpar filtros</button>
+        </div>
+      </section>
+
+      <section id="overviewSection" class="app-section" hidden>
+        <div id="overviewWrap" class="section-wrap"></div>
+      </section>
+
+      <section id="todaySection" class="app-section" hidden>
+        <div id="todayWrap" class="section-wrap"></div>
+      </section>
+
+      <section id="calendarSection" class="app-section">
+        <div class="section-head-inline">
+          <h2>Calendário do Cronograma</h2>
+          <div class="calendar-nav">
+            <button id="calendarPrevBtn" class="ghost-btn" aria-label="Mês anterior"><i class="fa-solid fa-chevron-left"></i></button>
+            <strong id="calendarMonthLabel"></strong>
+            <button id="calendarNextBtn" class="ghost-btn" aria-label="Próximo mês"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+        <div id="calendarWrap" class="calendar-wrap"></div>
+      </section>
+
+      <section id="listSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Lista por Semana (Tudo Expandido)</h2>
+          <p>Estudo inicial + revisões + questões/acertos.</p>
+        </div>
+        <div id="listTableWrap" class="table-shell"></div>
+      </section>
+
+      <section id="reviewsSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Painel de Revisões</h2>
+          <p>Etapas minimizadas; clique para expandir cada bloco.</p>
+        </div>
+        <div id="reviewsWrap" class="section-wrap"></div>
+      </section>
+
+      <section id="pendenciasSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Pendências</h2>
+          <p>Tudo o que ficou incompleto no estudo, revisão e questões.</p>
+        </div>
+        <div id="pendenciasWrap" class="section-wrap"></div>
+      </section>
+
+      <section id="statsSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Estatísticas e Rankings</h2>
+          <p>Desempenho absoluto e evolução real entre etapas.</p>
+        </div>
+        <div id="statsWrap" class="section-wrap stats-grid">
+          <div id="statsKpis" class="kpi-grid"></div>
+          <article class="chart-card"><h3>Acertos x Erros (Total)</h3><canvas id="overallDoughnutChart"></canvas></article>
+          <article class="chart-card"><h3>Taxa de Acerto por Área</h3><canvas id="areaAccuracyChart"></canvas></article>
+          <article class="chart-card"><h3>Volume de Questões por Área</h3><canvas id="areaVolumeChart"></canvas></article>
+          <article class="chart-card"><h3>Evolução de Retenção por Etapa</h3><canvas id="retentionLineChart"></canvas></article>
+          <article class="chart-card full"><h3>Dashboard Comparativo por Área</h3><canvas id="areaCompareChart"></canvas></article>
+          <article class="chart-card full ranking-grid">
+            <div>
+              <h3>Maior Taxa de Erro</h3>
+              <ol id="rankErrorRate" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Pior Desempenho Total</h3>
+              <ol id="rankWorstTotal" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Pior na Revisão 1 Semana</h3>
+              <ol id="rankRev1w" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Pior na Revisão 1 Mês</h3>
+              <ol id="rankRev1m" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Pior na Revisão 3 Meses</h3>
+              <ol id="rankRev3m" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Pior na Revisão 6 Meses</h3>
+              <ol id="rankRev6m" class="ranking-list"></ol>
+            </div>
+            <div>
+              <h3>Assuntos Mais Frágeis (Score)</h3>
+              <ol id="rankFragile" class="ranking-list"></ol>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="prioritySection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Pontos Críticos e Priorização</h2>
+          <p>Atrasos relevantes, pior desempenho e foco da semana.</p>
+        </div>
+        <div id="priorityWrap" class="section-wrap"></div>
+      </section>
+
+      <section id="timelineSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Linha do Tempo e Consistência</h2>
+          <p>Histórico de atividade e mapa de calor de rotina.</p>
+        </div>
+        <div class="section-wrap timeline-grid">
+          <article class="chart-card full"><h3>Atividade Diária (Estudo/Revisão/Questões)</h3><canvas id="timelineLineChart"></canvas></article>
+          <article class="chart-card full">
+            <h3>Mapa de Calor</h3>
+            <div id="heatmapLegend" class="heatmap-legend"></div>
+            <div id="heatmapGrid" class="heatmap-grid"></div>
+          </article>
+          <article class="chart-card full">
+            <h3>Histórico de Atividade</h3>
+            <div id="activityLogWrap" class="activity-log"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="settingsSection" class="app-section" hidden>
+        <div class="section-head-inline">
+          <h2>Configurações, Backup e Sincronização</h2>
+          <p>Persistência local + sincronização online opcional (GitHub Pages + Supabase).</p>
+        </div>
+        <div class="section-wrap settings-grid">
+          <article class="panel-card">
+            <h3>Metas Semanais</h3>
+            <div class="field-grid">
+              <label>Assuntos por semana<input id="goalTopicsInput" type="number" min="0" step="1" /></label>
+              <label>Questões por semana<input id="goalQuestionsInput" type="number" min="0" step="1" /></label>
+              <label>Revisões por semana<input id="goalRevisionsInput" type="number" min="0" step="1" /></label>
+            </div>
+            <button id="saveGoalsBtn" class="top-btn primary">Salvar metas</button>
+          </article>
+
+          <article class="panel-card">
+            <h3>Sincronização (Supabase REST)</h3>
+            <div class="field-grid">
+              <label>URL do projeto<input id="syncUrlInput" type="url" placeholder="https://SEU-PROJETO.supabase.co" /></label>
+              <label>Anon Key<input id="syncKeyInput" type="text" placeholder="cole sua anon key" /></label>
+              <label>Tabela<input id="syncTableInput" type="text" placeholder="study_state" /></label>
+              <label>Profile ID<input id="syncProfileInput" type="text" placeholder="arthur" /></label>
+              <label class="toggle-line"><input id="syncAutoInput" type="checkbox" /> Auto-sync após alterações</label>
+            </div>
+            <div class="inline-actions">
+              <button id="syncTestBtn" class="top-btn">Testar</button>
+              <button id="syncUploadBtn" class="top-btn">Enviar</button>
+              <button id="syncDownloadBtn" class="top-btn">Baixar</button>
+            </div>
+            <p id="syncStatus" class="sync-status">Sincronização não configurada.</p>
+          </article>
+
+          <article class="panel-card">
+            <h3>Backup e Segurança</h3>
+            <div class="inline-actions">
+              <button id="exportBtn" class="top-btn"><i class="fa-solid fa-file-export"></i> Exportar JSON</button>
+              <button id="importBtn" class="top-btn"><i class="fa-solid fa-file-import"></i> Importar JSON</button>
+              <button id="resetBtn" class="top-btn danger"><i class="fa-solid fa-trash"></i> Resetar dados locais</button>
+            </div>
+            <p class="hint">Use exportação regular para segurança total dos dados.</p>
+          </article>
+
+          <article class="panel-card full">
+            <h3>Arquitetura Recomendada</h3>
+            <p>
+              Frontend estático (GitHub Pages) + persistência local + sincronização opcional via Supabase.
+              Assim você mantém praticidade de deploy e pode ter os mesmos dados no celular e no computador.
+            </p>
+            <ul class="flat-list">
+              <li>GitHub Pages para hospedar o site.</li>
+              <li>Supabase para guardar um único JSON do seu estado.</li>
+              <li>Backup/restore manual em JSON para contingência.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <input id="importFileInput" type="file" accept="application/json" hidden />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
+
+
