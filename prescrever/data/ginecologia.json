@@ -925,6 +925,529 @@
           }
         }
       ]
+    },
+    {
+      "titulo": "Doença inflamatória pélvica",
+      "slug": "doenca-inflamatoria-pelvica",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "Tratar parceiros sexuais",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Critérios de tratamento",
+          "slug": "criterios-de-tratamento",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Leve → Ambulatorial"
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "list",
+              "style": "unordered",
+              "items": [
+                {
+                  "content": [
+                    {
+                      "text": "Ausência de sinais de infecção sistêmica/sepse"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Ausência de sinais de peritonite ou massa anexial"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Complicada → Hospitalar"
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "list",
+              "style": "unordered",
+              "items": [
+                {
+                  "content": [
+                    {
+                      "text": "Abscesso tubo ovariano"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Imunossupressão"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Falha de ATB via oral após 72h"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Instável ou Sepse"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Gestação"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Dúvida diagnóstica ( apendicite? gravidez ectopica? )"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-7j9x9jj",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-zc7jmlr",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-o7odyot",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-xnn1qn3",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section-oq1dop3",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-lyt5s1i",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Ambulatorial",
+          "slug": "ambulatorial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "Reavaliar paciente em 48-72h",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-x2fgaa3",
+                "type": "or",
+                "rotulo": "DIP LEVE",
+                "titulo": "Tratamento ambulatorial",
+                "sections": [
+                  {
+                    "id": "section-hy0vg7z",
+                    "titulo": "Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-5fsf2rc",
+                        "nome": "Ceftriaxona 500 mg",
+                        "apresentacao": "01 ampola",
+                        "posologia": "Aplicar 01 dose via intramuscular, dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-tlzaaj1",
+                        "nome": "Cefotaxima 500 mg",
+                        "apresentacao": "01 ampola",
+                        "posologia": "Aplicar 01 dose via intramuscular, dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-iqjmdag",
+                    "titulo": "Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-7mxilm4",
+                        "nome": "Doxicilina 100mg",
+                        "apresentacao": "28cp",
+                        "posologia": "Tomar 01 comprimido via oral de 12/12 horas durante 14 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-nrgs096",
+                        "nome": "Azitromicina 1g",
+                        "apresentacao": "01cp",
+                        "posologia": "Tomar 01 comprimido via oral, dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-s3k2892",
+                    "titulo": "Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-vsfjvvn",
+                        "nome": "Metronidazol 500 mg",
+                        "apresentacao": "28cp",
+                        "posologia": "Tomar 01 comprimido via oral de 12/12 horas durante 14 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Hospitalar",
+          "slug": "hospitalar",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-h3q6qqb",
+                "type": "or",
+                "rotulo": "DIP COMPLICADA",
+                "titulo": "1º ALTERNATIVA",
+                "sections": [
+                  {
+                    "id": "section-8cytfxa",
+                    "titulo": "Associar as seguintes medicações :",
+                    "items": [
+                      {
+                        "id": "item-hv5ph3w",
+                        "nome": "Ceftriaxona 1g",
+                        "apresentacao": "",
+                        "posologia": "Administrar 01 g por via intravenosa a cada 24 horas durante 14 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-3cbi00u",
+                        "nome": "Metronidazol 400mg",
+                        "apresentacao": "",
+                        "posologia": "Administrar 400 mg por via intravenosa a cada 12 horas durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-n75zlt9",
+                        "nome": "Doxiciclina 100mg",
+                        "apresentacao": "28caps",
+                        "posologia": "Tomar 01 cápsula via oral a cada 12 horas durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-tyi1d0y",
+                "type": "add",
+                "rotulo": "DIP COMPLICADA",
+                "titulo": "2º ALTERNATIVA",
+                "sections": [
+                  {
+                    "id": "section-fcp2b5l",
+                    "titulo": "Associar as seguintes medicações :",
+                    "items": [
+                      {
+                        "id": "item-d27wzan",
+                        "nome": "Clindamicina 900mg",
+                        "apresentacao": "",
+                        "posologia": "Administrar 900 mg por via intravenosa a cada 08 horas durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-6acte7p",
+                        "nome": "Gentamicina 3 a 5 mg/kg",
+                        "apresentacao": "",
+                        "posologia": "Administrar 03 a 05 mg/kg por via intravenosa ou via intramuscular a cada 24 horas durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-mbriy5w",
+                "type": "or",
+                "rotulo": "DIP COMPLICADA",
+                "titulo": "3º ALTERNATIVA",
+                "sections": [
+                  {
+                    "id": "section-1xfqvu1",
+                    "titulo": "Associar as seguintes medicações :",
+                    "items": [
+                      {
+                        "id": "item-lce70k5",
+                        "nome": "Ampicilina + sulbactam 3g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Administrar 03 g por via intravenosa a cada 06 horas durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-1j73l2x",
+                        "nome": "Doxiciclina 100mg",
+                        "apresentacao": "28caps",
+                        "posologia": "Tomar 01 cápsula via oral a cada 12 horas durante 14 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Parceiro sexual",
+          "slug": "parceiro-sexual",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-u4x9rhk",
+                "type": "or",
+                "rotulo": "PARCEIRO SEXUAL",
+                "titulo": "Associar as seguintes medicações :",
+                "sections": [
+                  {
+                    "id": "section-23g1vef",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-1w83sk5",
+                        "nome": "Ceftriaxona 500mg",
+                        "apresentacao": "01 amp",
+                        "posologia": "Aplicar 500 mg por via intramuscular em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-7a2yol4",
+                    "titulo": "Escolher 01 das opções abaixo :",
+                    "items": [
+                      {
+                        "id": "item-886z40i",
+                        "nome": "Doxiciclina 100mg",
+                        "apresentacao": "14caps",
+                        "posologia": "Tomar 01 cápsula via oral a cada 12 horas durante 07 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-furs218",
+                        "nome": "Azitromicina 1g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 dose via oral em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }
