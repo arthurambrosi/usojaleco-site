@@ -10,7 +10,8 @@
       "meta": {
         "orientacoes": "",
         "alertas": "",
-        "notas": ""
+        "notas": "",
+        "revisadoEspecialista": false
       },
       "tabs": [
         {
@@ -20,7 +21,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -52,25 +54,32 @@
               ]
             }
           ],
+          "tagDefs": [],
           "structured": {
             "groups": [
               {
-                "id": "group-eh7emsw",
+                "id": "group-2cy1wrq",
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-1en4gl8",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section-8r6rxvv",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-pz6pofk",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -84,7 +93,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -103,25 +113,32 @@
               ]
             }
           ],
+          "tagDefs": [],
           "structured": {
             "groups": [
               {
-                "id": "group-5ouu1oe",
+                "id": "group-fryn7lo",
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-5seq6vc",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section-aafpc9v",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-t6cwx5e",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
