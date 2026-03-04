@@ -10,7 +10,8 @@
       "meta": {
         "orientacoes": "",
         "alertas": "",
-        "notas": ""
+        "notas": "",
+        "revisadoEspecialista": false
       },
       "tabs": [
         {
@@ -20,7 +21,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -126,18 +128,24 @@
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-lda9gx8",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-gu9d68j",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-lda9gx8",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               },
@@ -146,18 +154,24 @@
                 "type": "add",
                 "rotulo": "ASSOCIAR",
                 "titulo": "Associar / adicionar",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-emehesr",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-z5p387z",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-emehesr",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -171,7 +185,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -191,42 +206,48 @@
                 "type": "or",
                 "rotulo": "ANTI-HISTAMÍNICOS ORAIS",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-bof6374",
-                    "nome": "Dexclorfeniramina 2mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido de 08 em 08 horas por 07 dias.",
-                    "sus": true,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": "Sonolência leve a moderada"
-                    }
-                  },
-                  {
-                    "id": "item-2r3d78m",
-                    "nome": "Loratadina 10mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
-                    "sus": true,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  },
-                  {
-                    "id": "item-wvc2bry",
-                    "nome": "Desloratadina 5mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-a7fjj3d",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-bof6374",
+                        "nome": "Dexclorfeniramina 2mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido de 08 em 08 horas por 07 dias.",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": "Sonolência leve a moderada"
+                        }
+                      },
+                      {
+                        "id": "item-2r3d78m",
+                        "nome": "Loratadina 10mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-wvc2bry",
+                        "nome": "Desloratadina 5mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               },
@@ -235,42 +256,48 @@
                 "type": "add",
                 "rotulo": "CORTICOESTEROIDES NASAIS",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-y5gd2r4",
-                    "nome": "Budesonida spray nasal 32mcg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  },
-                  {
-                    "id": "item-cjhjy62",
-                    "nome": "Budesonida spray nasal 64mcg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  },
-                  {
-                    "id": "item-hl3yrxt",
-                    "nome": "Fluticasona spray nasal 50mcg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-4wmzwg5",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-y5gd2r4",
+                        "nome": "Budesonida spray nasal 32mcg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-cjhjy62",
+                        "nome": "Budesonida spray nasal 64mcg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-hl3yrxt",
+                        "nome": "Fluticasona spray nasal 50mcg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -284,7 +311,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -304,18 +332,24 @@
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-mww8hhv",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-4ts6ydp",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-mww8hhv",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               },
@@ -324,18 +358,24 @@
                 "type": "add",
                 "rotulo": "ASSOCIAR",
                 "titulo": "Associar / adicionar",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-cma6bsf",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-50w7fqh",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-cma6bsf",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
