@@ -1,5 +1,5 @@
-﻿{
-  "schemaVersion": "1.0.0",
+{
+  "schemaVersion": "1.1.0",
   "area": "Pneumologia",
   "slug": "pneumologia",
   "assuntos": [
@@ -7,10 +7,23 @@
       "titulo": "Pneumonia comunitaria",
       "slug": "pneumonia-comunitaria",
       "descricaoCurta": "Estratificacao de gravidade e esquema empirico.",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
       "tabs": [
         {
           "titulo": "Ambulatorio",
           "slug": "ambulatorio",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
           "blocks": [
             {
               "type": "paragraph",
@@ -40,11 +53,49 @@
                 }
               ]
             }
-          ]
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-dgx1nq9",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-iikn4do",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-wfoih1r",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "titulo": "Internacao",
           "slug": "internacao",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
           "blocks": [
             {
               "type": "callout",
@@ -61,7 +112,38 @@
                 }
               ]
             }
-          ]
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-rqd2b4g",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-lnznvqp",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-8nsqmfn",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     }
