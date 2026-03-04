@@ -532,23 +532,23 @@ body {
 }
 
 .structured-block.is-or .structured-section:nth-child(odd) {
-  background: #f5f9ff;
-  border-color: #c5d8f1;
+  background: #f8fcff;
+  border-color: #d5e4f7;
 }
 
 .structured-block.is-or .structured-section:nth-child(even) {
-  background: #eaf2ff;
-  border-color: #b5cceb;
+  background: #d8e9ff;
+  border-color: #abc7ea;
 }
 
 .structured-block.is-add .structured-section:nth-child(odd) {
-  background: #fff7f7;
-  border-color: #efd0d0;
+  background: #fffafa;
+  border-color: #f3d7d7;
 }
 
 .structured-block.is-add .structured-section:nth-child(even) {
-  background: #ffefef;
-  border-color: #e8c0c0;
+  background: #ffdede;
+  border-color: #e7b0b0;
 }
 
 .structured-section-head {
