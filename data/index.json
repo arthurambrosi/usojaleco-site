@@ -20,6 +20,11 @@
       "slug": "pneumologia",
       "file": "pneumologia.json",
       "area": "Pneumologia"
+    },
+    {
+      "slug": "otorrinolaringologia",
+      "file": "otorrinolaringologia.json",
+      "area": "Otorrinolaringologia"
     }
   ]
 }
