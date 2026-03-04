@@ -1,0 +1,930 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Ginecologia",
+  "slug": "ginecologia",
+  "assuntos": [
+    {
+      "titulo": "Tricomoníase",
+      "slug": "tricomoniase",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "Tratar parceiros concomitantemente\nTratamento em gestantes é igual\nOrientar evitar atividade sexual até o término do tratamento",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-8xfw3rn",
+                "type": "or",
+                "rotulo": "ANTIBIOTICOTERAPIA",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-fpb5gyc",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-h36cy4x",
+                        "nome": "Metronidazol 250mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 02 comprimidos, via oral, de 12 em 15 horas por 07 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-78cpoba",
+                        "nome": "Tinidazol 2g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "Está contraindicado em gestantes por apresentar potencial teratogênico",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-jl0nhe3",
+                "type": "add",
+                "rotulo": "TRATAMENTO DO PARCEIRO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-9vcsb1m",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-ebopgr1",
+                        "nome": "Metronidazol 250mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 08 comprimidos, via oral, em dose única",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-jh9k760",
+                        "nome": "Metronidazol 400mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 05 comprimidos, via oral, em dose única",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-3zg005y",
+                        "nome": "Tinidazol 2g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "titulo": "Vaginose bacteriana",
+      "slug": "vaginose-bacteriana",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-510dl2t",
+                "type": "or",
+                "rotulo": "PRIMEIRA LINHA DE TRATAMENTO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-u398fco",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-2359enh",
+                        "nome": "Metronidazol 250 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 02 comprimidos, via oral, de 12 em 12 horas por 7 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-aetfo0a",
+                        "nome": "Metronidazol 100mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal uma vez ao dia por 5 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-rb4njml",
+                        "nome": "Clindamicina creme 2%",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, ao deitar, uma vez ao dia por 7 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-v5g5mwn",
+                "type": "add",
+                "rotulo": "SEGUNDA LINHA DE TRATAMENTO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-wkutgrp",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-afq5b6z",
+                        "nome": "Clindamicina 300mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral, de 12 em 12 horas por 7 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-3lpfnef",
+                        "nome": "Secnidazol 2g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral, em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-5hcziwz",
+                        "nome": "Tinidazol 2g",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral,por 02 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "Está contraindicado em gestantes por apresentar potencial teratogênico",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "VB recorrente",
+          "slug": "vb-recorrente",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-08spdgz",
+                "type": "or",
+                "rotulo": "TRATAMENTO EMPÍRICO",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-8vdb0cb",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-u42usx0",
+                        "nome": "Metronidazol 100mg/g",
+                        "apresentacao": "02 bisnagas",
+                        "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, duas vezes ao dia por 10 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-y2ase9c",
+                        "nome": "Metronidazol 250 mg",
+                        "apresentacao": "",
+                        "posologia": "Tomar 02 comprimidos, via oral, de 12 em 12 horas por 10 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-r453frf",
+                "type": "add",
+                "rotulo": "FALHA DO TRATAMENTO EMPÍRICO",
+                "titulo": "Associar os medicamentos abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-390ildm",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-z929eus",
+                        "nome": "Ácido bórico intravaginal 600mg",
+                        "apresentacao": "21 cápsulas",
+                        "posologia": "Aplicar intravaginalmente, uma cápsula ao dia, por 21 dias. Preferencialmente durante à noite",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-im2der0",
+                        "nome": "Metronidazol 100mg/g",
+                        "apresentacao": "04 bisnagas",
+                        "posologia": "Aplicar 5g (um aplicador cheio) em região intravaginal, duas vezes por semana por 4 meses. Iniciar apenas após finalização do tratamento com Ácido Bórico",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-e1m949f",
+                "type": "or",
+                "rotulo": "TRATAMENTO DO PARCEIRO",
+                "titulo": "Associar os medicamentos abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-70e7v5v",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-vmmokmf",
+                        "nome": "Metronidazol 400mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido, via oral, de 12 em 12 horas por 07 dias",
+                        "sus": true,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-ewu24ny",
+                        "nome": "Clindamicina creme 2%",
+                        "apresentacao": "01 tubo",
+                        "posologia": "Aplicar de 12 em 12 horas, em região de prepúcio e glande do pênis, por 07 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "titulo": "Candidíase Vulvovaginal",
+      "slug": "candidiase-vulvovaginal",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "Tratamento pode ser por via vaginal ou sistêmica. Eficácias semelhantes\nDeve-se orientar utilizar um aplicador por dia, que deve ser descartado após o uso\nPara gestantes, usar somente tratamento vaginal/intravaginal",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Não complicada",
+          "slug": "nao-complicada",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-6usn6mc",
+                "type": "or",
+                "rotulo": "INTRAVAGINAL",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-lyod1x8",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-eg1x16e",
+                        "nome": "Fenticonazol creme vaginal (0,02 g/g)",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Inserir, via intravaginal, 01 aplicador (5g) ao deitar, durante 07 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-ejo3uub",
+                        "nome": "Miconazol creme vaginal (20 mg/g)",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Inserir, via intravaginal, 01 aplicador (5g) ao deitar, durante 07 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-zhxb9oj",
+                        "nome": "Nistatina creme vaginal (25.000 unidades/g)",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Inserir, via intravaginal, 01 aplicador (5g) ao deitar, durante 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-ahz6rdt",
+                        "nome": "Butoconazol creme vaginal (20 mg/g)",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Inserir, via intravaginal, 01 aplicador (5g) ao deitar. Dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-oshecf3",
+                        "nome": "Clotrimazol creme vaginal (20 mg/g)",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Inserir, via intravaginal, 01 aplicador (5g) ao deitar, durante 03 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-w7rldiv",
+                "type": "add",
+                "rotulo": "ORAL",
+                "titulo": "Escolha uma das opções abaixo :",
+                "sections": [
+                  {
+                    "id": "section1-71dqbgp",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-2ea5tfy",
+                        "nome": "Fluconazol 150mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido em dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-dqzd4rx",
+                        "nome": "Itraconazol 100mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido pela manhã e 01 comprimido pela noite, por apenas 01 dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Complicada",
+          "slug": "complicada",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-5o1grv1",
+                "type": "or",
+                "rotulo": "SINTOMAS INTENSOS",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section1-b3kytry",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-aatevuj",
+                        "nome": "Fluconazol 150 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 1 comprimido por via oral nos dias 01, 04 e 07.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-9aaknjd",
+                        "nome": "Miconazol creme vaginal 20 mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 5 g (1 aplicador cheio), por via intravaginal, à noite, por 10 a 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-rnm7r8r",
+                "type": "add",
+                "rotulo": "RECORRENTE",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section1-tkfv23v",
+                    "titulo": "Indução - Escolha uma das opções abaixo :",
+                    "items": [
+                      {
+                        "id": "item-28rshdr",
+                        "nome": "Fluconazol 150 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 1 comprimido por via oral nos dias 1, 4 e 7",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-373aafb",
+                        "nome": "Itraconazol 100 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 2 comprimidos/cápsulas por via oral a cada 12 horas, por 1 dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-z828cok",
+                        "nome": "Miconazol creme vaginal 20 mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Utilizar 1 aplicador cheio (5 g) por via intravaginal, à noite, por 10 a 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-r0x272m",
+                    "titulo": "Manutenção - Após o tratamento de indução, escolha uma das opções abaixo :",
+                    "items": [
+                      {
+                        "id": "item-1w62yt7",
+                        "nome": "Fluconazol 150 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 1 comprimido por via oral, 1 vez por semana, por 6 meses",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-crggp2g",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Utilizar 1 aplicador cheio (5 g) por via intravaginal, 2 vezes por semana, por 6 meses",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-hdx0m50",
+                "type": "or",
+                "rotulo": "CANDIDA NÃO ALBICANS",
+                "titulo": "Escolha conforme o agente etiológico :",
+                "sections": [
+                  {
+                    "id": "section1-t518vb9",
+                    "titulo": "Se C. glabrata - Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-q0kirn0",
+                        "nome": "Ácido bórico 600 mg óvulo/cápsula vaginal",
+                        "apresentacao": "14-21 óvulos/cápsulas vaginais",
+                        "posologia": "Aplicar 1 óvulo/cápsula por via intravaginal, à noite, por 14 a 21 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "Medicamento manipulado",
+                          "alertas": "Alertar sobre gravidade caso ingerido!"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-r9d49i2",
+                    "titulo": "Se C. glabrata (falha na 1º linha) - Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-3jc7vhs",
+                        "nome": "Nistatina creme vaginal 25.000 UI/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 1 aplicador cheio por via intravaginal, por 14 a 28 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-4yncpzg",
+                        "nome": "Anfotericina B 10% creme tópico",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 5 g, por via intravaginal/vaginal, à noite, por 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-gvt6rif",
+                    "titulo": "Se C. krusei - Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-ehzt71j",
+                        "nome": "Miconazol creme vaginal 20 mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Utilizar 01 aplicador cheio (5 g) por via intravaginal, por 7 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-si0k7x0",
+                        "nome": "Miconazol supositório vaginal 200 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 01 supositório por via intravaginal, por 3 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-k5cdntt",
+                        "nome": "Miconazol supositório vaginal 100 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 01 supositório por via intravaginal, por 7 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-iogt0i7",
+                        "nome": "Miconazol supositório vaginal 1.200mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 01 supositório por via intravaginal. Dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-d05j6v0",
+                    "titulo": "Todas as outras espécies",
+                    "items": [
+                      {
+                        "id": "item-jdl6i0z",
+                        "nome": "Fluconazol 150 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 1 comprimido por via oral. Dose única",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-k5e1sct",
+                "type": "add",
+                "rotulo": "COMORBIDADES",
+                "titulo": "Comorbidades / imunossupressão / situações especiais",
+                "sections": [
+                  {
+                    "id": "section1-jdcqgqp",
+                    "titulo": "Comorbidades/Imunossuprimidos - Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-i3kuaqn",
+                        "nome": "Fluconazol 150 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 1 comprimido por via oral nos dias 01, 04 e 07.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-pji2wqv",
+                        "nome": "Miconazol creme vaginal 20 mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 5 g (1 aplicador cheio), por via intravaginal, à noite, por 10 a 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "section-imw7zfn",
+                    "titulo": "Gestantes - Escolha uma das opções abaixo:",
+                    "items": [
+                      {
+                        "id": "item-pydn99z",
+                        "nome": "Miconazol creme vaginal 20 mg/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Aplicar 5 g (1 aplicador cheio), por via intravaginal, à noite, por 10 a 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-wy6tms4",
+                "type": "or",
+                "rotulo": "RESISTÊNCIA À AZÓIS",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-ba06w5p",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-s2m664v",
+                        "nome": "Ácido bórico 600 mg óvulo/cápsula vaginal",
+                        "apresentacao": "14-21 óvulos/cápsulas vaginais",
+                        "posologia": "Aplicar 1 óvulo/cápsula por via intravaginal, à noite, por 14 a 21 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "Deve ser prescrito com cautela. Não há segurança no uso em longo prazo desse medicamento!",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-q0v4385",
+                        "nome": "Nistatina 25.000 UI/g",
+                        "apresentacao": "01 bisnaga",
+                        "posologia": "Utilizar 01 aplicador cheio por via intravaginal, por 14-28 dias.",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

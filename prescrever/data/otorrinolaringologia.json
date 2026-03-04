@@ -1,0 +1,348 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Otorrinolaringologia",
+  "slug": "otorrinolaringologia",
+  "assuntos": [
+    {
+      "titulo": "Rinite Alérgica",
+      "slug": "rinite-alergica",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": ""
+      },
+      "tabs": [
+        {
+          "titulo": "TTO não farmacológico",
+          "slug": "tto-nao-farmacologico",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Orientações ao paciente",
+                  "marks": [
+                    "bold"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "list",
+              "style": "unordered",
+              "items": [
+                {
+                  "content": [
+                    {
+                      "text": "Evitar exposição a alérgenos e manter higiene ambiental: "
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Controle de ácaros: uso de capas impermeáveis para colchões e travesseiros, lavagem de roupas com água quente e secagem em secadora; aspiração semanal de tapetes e estofados; "
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Em caso de alergia a animais de estimação, mantê-los fora do quarto do paciente e usar purificadores de ar de alta potência e com filtros HEPA "
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Controle de fungos: ambientes com boa ventilação e ensolarados, e com controle da umidade intradomiciliar."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Orientar lavagem nasal com solução salina isotônica",
+                  "marks": [
+                    "bold"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Soro fisiológico 0,9%"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "style": "unordered",
+              "items": [
+                {
+                  "content": [
+                    {
+                      "text": "Uso : 1-2 vezes por dia"
+                    }
+                  ]
+                },
+                {
+                  "content": [
+                    {
+                      "text": "Utilizar seringas de 10 a 20ml; spray nasal ou dispostivos em jato"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-06mlb5v",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-lda9gx8",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-lt9pnbh",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "items": [
+                  {
+                    "id": "item-emehesr",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Sintomas leves/episódicos",
+          "slug": "sintomas-leves-episodicos",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-wl182ga",
+                "type": "or",
+                "rotulo": "ANTI-HISTAMÍNICOS ORAIS",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-bof6374",
+                    "nome": "Dexclorfeniramina 2mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar, via oral, 01 comprimido de 08 em 08 horas por 07 dias.",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": "Sonolência leve a moderada"
+                    }
+                  },
+                  {
+                    "id": "item-2r3d78m",
+                    "nome": "Loratadina 10mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
+                    "sus": true,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-wvc2bry",
+                    "nome": "Desloratadina 5mg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Tomar, via oral, 01 comprimido por dia, durante 07 dias. Uso à noite",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-05qeq1c",
+                "type": "add",
+                "rotulo": "CORTICOESTEROIDES NASAIS",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-y5gd2r4",
+                    "nome": "Budesonida spray nasal 32mcg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-cjhjy62",
+                    "nome": "Budesonida spray nasal 64mcg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  },
+                  {
+                    "id": "item-hl3yrxt",
+                    "nome": "Fluticasona spray nasal 50mcg",
+                    "apresentacao": "01 caixa",
+                    "posologia": "Aplicar 1-2 jatos nas duas narinas por dia, durante 30 dias. Uso pela manhã",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "titulo": "Sintomas moderados/graves",
+          "slug": "sintomas-moderados-graves",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": ""
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-0qygl5h",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "items": [
+                  {
+                    "id": "item-mww8hhv",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "group-h7jh0uc",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "items": [
+                  {
+                    "id": "item-cma6bsf",
+                    "nome": "Novo medicamento",
+                    "apresentacao": "",
+                    "posologia": "",
+                    "sus": false,
+                    "meta": {
+                      "contraindicacoes": "",
+                      "orientacoes": "",
+                      "alertas": ""
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
