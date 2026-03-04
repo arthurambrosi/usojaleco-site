@@ -466,16 +466,6 @@ body {
   background: #fff0f0;
 }
 
-.structured-blocks .structured-block:nth-of-type(odd) {
-  background: #edf4ff;
-  border-color: #b7cdee;
-}
-
-.structured-blocks .structured-block:nth-of-type(even) {
-  background: #fff0f0;
-  border-color: #efc1c1;
-}
-
 .structured-block-header {
   display: flex;
   justify-content: space-between;

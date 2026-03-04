@@ -734,16 +734,6 @@ input {
   color: #7f3f3f;
 }
 
-.section-card .group-block:nth-of-type(odd) {
-  background: #eef5ff;
-  border-color: #a7c3ea;
-}
-
-.section-card .group-block:nth-of-type(even) {
-  background: #ffefef;
-  border-color: #eab2b2;
-}
-
 .group-head {
   display: flex;
   align-items: center;
