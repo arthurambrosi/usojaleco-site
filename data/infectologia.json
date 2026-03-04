@@ -10,7 +10,8 @@
       "meta": {
         "orientacoes": "Tratar parceiro, mesmo que sorologicamente negativo",
         "alertas": "",
-        "notas": ""
+        "notas": "",
+        "revisadoEspecialista": false
       },
       "tabs": [
         {
@@ -20,7 +21,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -32,6 +34,7 @@
               ]
             }
           ],
+          "tagDefs": [],
           "structured": {
             "groups": [
               {
@@ -39,30 +42,36 @@
                 "type": "or",
                 "rotulo": "ANTIBIOTICOTERAPIA",
                 "titulo": "Escolha uma das opções abaixo :",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-0fijtxq",
-                    "nome": "Penicilina G benzatina 2.400.000 UI",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Aplicar 1.200.000 UI em cada glúteo",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  },
-                  {
-                    "id": "item-e46ks7a",
-                    "nome": "Doxacilina 100mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido de 12 em 12 horas. Período : 14 dias",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-jwrxlzc",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-0fijtxq",
+                        "nome": "Penicilina G benzatina 2.400.000 UI",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Aplicar 1.200.000 UI em cada glúteo",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-e46ks7a",
+                        "nome": "Doxacilina 100mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido de 12 em 12 horas. Período : 14 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               },
@@ -71,18 +80,24 @@
                 "type": "add",
                 "rotulo": "ANTIBIOTICOTERAPIA",
                 "titulo": "Associar / adicionar ( se Sífilis Primária )",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-ba9s1u8",
-                    "nome": "Azitromicina 500mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido diário. Período : 07 dias",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-cwntz4d",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-ba9s1u8",
+                        "nome": "Azitromicina 500mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido diário. Período : 07 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -96,7 +111,8 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
@@ -108,6 +124,7 @@
               ]
             }
           ],
+          "tagDefs": [],
           "structured": {
             "groups": [
               {
@@ -115,30 +132,36 @@
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opções abaixo :",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-9gvdhw1",
-                    "nome": "Penicilina G benzatina, 2.400.000 UI",
-                    "apresentacao": "03 caixas",
-                    "posologia": "Aplicar 1.200.000 UI em cada glúteo. Realizar aplicação 03 vezes em um período de 07 a 10 dias",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  },
-                  {
-                    "id": "item-bjzme7b",
-                    "nome": "Doxacilina 100mg",
-                    "apresentacao": "01 caixa",
-                    "posologia": "Tomar, via oral, 01 comprimido de 12 em 12 horas. Período : 28 dias",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-u4p96kx",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-9gvdhw1",
+                        "nome": "Penicilina G benzatina, 2.400.000 UI",
+                        "apresentacao": "03 caixas",
+                        "posologia": "Aplicar 1.200.000 UI em cada glúteo. Realizar aplicação 03 vezes em um período de 07 a 10 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-bjzme7b",
+                        "nome": "Doxacilina 100mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar, via oral, 01 comprimido de 12 em 12 horas. Período : 28 dias",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
