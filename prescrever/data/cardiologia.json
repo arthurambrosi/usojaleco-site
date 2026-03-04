@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Cardiologia",
+  "slug": "cardiologia",
+  "assuntos": [
+    {
+      "titulo": "Hipertensão Arterial",
+      "slug": "hipertensao-arterial",
+      "descricaoCurta": "Conduta inicial e estratificacao de risco.",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Admissao",
+          "slug": "admissao",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            }
+          ],
+          "tagDefs": [
+            {
+              "id": "tag-9kro2mv",
+              "label": "Monitorizacao continua e ECG imediato.",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "text": "sasasas"
+                }
+              ]
+            }
+          ],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-i7t35x7",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opcoes abaixo:",
+                "sections": [
+                  {
+                    "id": "section1-aph60xz",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-rs54sv1",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
