@@ -4,13 +4,14 @@
   "slug": "cardiologia",
   "assuntos": [
     {
-      "titulo": "SCA sem supra",
-      "slug": "sca-sem-supra",
+      "titulo": "Hipertensão Arterial",
+      "slug": "hipertensao-arterial",
       "descricaoCurta": "Conduta inicial e estratificacao de risco.",
       "meta": {
         "orientacoes": "",
         "alertas": "",
-        "notas": ""
+        "notas": "",
+        "revisadoEspecialista": false
       },
       "tabs": [
         {
@@ -20,52 +21,29 @@
           "meta": {
             "orientacoes": "",
             "alertas": "",
-            "notas": ""
+            "notas": "",
+            "revisadoEspecialista": false
           },
           "blocks": [
             {
-              "type": "heading",
-              "level": 2,
+              "type": "paragraph",
               "content": [
                 {
-                  "text": "Primeiros 10 minutos"
+                  "text": "Admissão"
                 }
               ]
-            },
+            }
+          ],
+          "tagDefs": [
             {
-              "type": "list",
-              "style": "ordered",
-              "items": [
+              "id": "tag-9kro2mv",
+              "label": "Monitorizacao continua e ECG imediato.",
+              "content": [
                 {
-                  "content": [
-                    {
-                      "text": "Monitorizacao continua e ECG imediato."
-                    }
-                  ]
-                },
-                {
-                  "content": [
-                    {
-                      "text": "AAS 160-325 mg mastigavel, salvo contraindicacoes."
-                    }
-                  ]
-                },
-                {
-                  "content": [
-                    {
-                      "text": "Dosar troponina e repetir em 1-3 horas."
-                    }
-                  ]
+                  "type": "paragraph",
+                  "text": "sasasas"
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": []
-            },
-            {
-              "type": "paragraph",
-              "content": []
             }
           ],
           "structured": {
@@ -75,62 +53,24 @@
                 "type": "or",
                 "rotulo": "OU",
                 "titulo": "Escolha uma das opcoes abaixo:",
-                "items": [
+                "sections": [
                   {
-                    "id": "item-rs54sv1",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "titulo": "Manutencao",
-          "slug": "manutencao",
-          "mode": "free",
-          "meta": {
-            "orientacoes": "",
-            "alertas": "",
-            "notas": ""
-          },
-          "blocks": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "text": "Definir estrategia invasiva precoce conforme escore de risco e disponibilidade local."
-                }
-              ]
-            }
-          ],
-          "structured": {
-            "groups": [
-              {
-                "id": "group-incfrum",
-                "type": "or",
-                "rotulo": "OU",
-                "titulo": "Escolha uma das opcoes abaixo:",
-                "items": [
-                  {
-                    "id": "item-4ao60el",
-                    "nome": "Novo medicamento",
-                    "apresentacao": "",
-                    "posologia": "",
-                    "sus": false,
-                    "meta": {
-                      "contraindicacoes": "",
-                      "orientacoes": "",
-                      "alertas": ""
-                    }
+                    "id": "section1-aph60xz",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-rs54sv1",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
                   }
                 ]
               }
