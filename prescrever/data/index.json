@@ -25,6 +25,11 @@
       "slug": "otorrinolaringologia",
       "file": "otorrinolaringologia.json",
       "area": "Otorrinolaringologia"
+    },
+    {
+      "slug": "psiquiatria",
+      "file": "psiquiatria.json",
+      "area": "Psiquiatria"
     }
   ]
 }
