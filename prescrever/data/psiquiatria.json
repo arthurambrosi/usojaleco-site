@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Psiquiatria",
+  "slug": "psiquiatria",
+  "assuntos": [
+    {
+      "titulo": "Geral",
+      "slug": "geral",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-mxxtf12",
+                "type": "or",
+                "rotulo": "ISRS /  ISRNS",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-l2uu0zt",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-9bgt0vi",
+                        "nome": "Sertralina 50 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 200 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-ovaeu29",
+                        "nome": "Escitalopram 10 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 20 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-4il3jbc",
+                        "nome": "Paroxetina 20 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 comprimido via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 60 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-fcju2xe",
+                        "nome": "Fluoxetina 20 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 cápsula via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 60 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-1pqz3yj",
+                        "nome": "Duloxetina 60 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 cápsula via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 120 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-9upudkl",
+                        "nome": "Pregabalina 25 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 cápsula via oral à noite",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser ajustada conforme resposta e tolerância, podendo ser usada 01 a 02 vezes ao dia, sem ultrapassar 600 mg por dia",
+                          "alertas": ""
+                        }
+                      },
+                      {
+                        "id": "item-aa9y63n",
+                        "nome": "Venlafaxina 37,5 mg",
+                        "apresentacao": "01 caixa",
+                        "posologia": "Tomar 01 cápsula via oral ao dia durante 07 dias. Após os 07 dias iniciais, tomar 02 cápsulas via oral ao dia",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "A dose pode ser aumentada conforme resposta e tolerância, sem ultrapassar 225 mg por dia",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
