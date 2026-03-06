@@ -4458,6 +4458,73 @@ async function loadAreasFromDataFolder() {
       .replace(/^data\//i, "");
   }
 
+  function normalizeDataBasePath(basePath) {
+    return String(basePath || "")
+      .trim()
+      .replace(/\\/g, "/")
+      .replace(/\/+$/, "");
+  }
+
+  function makeDataFileUrl(basePath, relativePath) {
+    const safeBase = normalizeDataBasePath(basePath);
+    const safeFile = String(relativePath || "")
+      .trim()
+      .replace(/\\/g, "/")
+      .replace(/^\/+/, "");
+    return `${safeBase}/${safeFile}`;
+  }
+
+  async function loadAreasFromIndexAtBase(basePath) {
+    const safeBase = normalizeDataBasePath(basePath);
+    if (!safeBase) {
+      return [];
+    }
+
+    const response = await fetch(makeDataFileUrl(safeBase, "index.json"), { cache: "no-store" });
+    if (!response.ok) {
+      return [];
+    }
+
+    const indexPayload = await response.json();
+    const entries = Array.isArray(indexPayload)
+      ? indexPayload
+      : Array.isArray(indexPayload?.areas)
+        ? indexPayload.areas
+        : [];
+
+    if (!entries.length) {
+      return [];
+    }
+
+    const dataFiles = entries
+      .map((entry) => {
+        if (typeof entry === "string") {
+          return entry;
+        }
+        if (entry && typeof entry === "object" && typeof entry.file === "string") {
+          return entry.file;
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    const payloads = await Promise.all(
+      dataFiles.map(async (file) => {
+        const normalizedFile = String(file).replace(/^\/+/, "");
+        const fileResponse = await fetch(makeDataFileUrl(safeBase, normalizedFile), { cache: "no-store" });
+        if (!fileResponse.ok) {
+          throw new Error(`Falha ao carregar ${normalizedFile} (${fileResponse.status})`);
+        }
+        return {
+          fileName: normalizeFileName(normalizedFile, "area.json"),
+          payload: await fileResponse.json()
+        };
+      })
+    );
+
+    return payloads;
+  }
+
   function isExternalHref(href) {
     return /^(https?:|mailto:|tel:|javascript:|data:|\/\/)/i.test(href);
   }
@@ -4544,49 +4611,35 @@ async function loadAreasFromDataFolder() {
   }
 
   async function loadAreasFromIndexFile() {
-    const response = await fetch("../data/index.json", { cache: "no-store" });
-    if (!response.ok) {
-      return [];
+    const baseCandidates = [
+      "../data",
+      "./data",
+      "../prescrever/data",
+      "/prescrever/data",
+      "/data"
+    ];
+
+    for (const basePath of baseCandidates) {
+      try {
+        const payloads = await loadAreasFromIndexAtBase(basePath);
+        if (payloads.length) {
+          return payloads;
+        }
+      } catch (error) {
+        console.warn(`Falha ao carregar index.json em ${basePath}.`, error);
+      }
     }
 
-    const indexPayload = await response.json();
-    const entries = Array.isArray(indexPayload)
-      ? indexPayload
-      : Array.isArray(indexPayload?.areas)
-        ? indexPayload.areas
-        : [];
+    return [];
+  }
 
-    if (!entries.length) {
-      return [];
+  try {
+    const fromIndex = await loadAreasFromIndexFile();
+    if (fromIndex.length) {
+      return fromIndex;
     }
-
-    const dataFiles = entries
-      .map((entry) => {
-        if (typeof entry === "string") {
-          return entry;
-        }
-        if (entry && typeof entry === "object" && typeof entry.file === "string") {
-          return entry.file;
-        }
-        return null;
-      })
-      .filter(Boolean);
-
-    const payloads = await Promise.all(
-      dataFiles.map(async (file) => {
-        const normalizedFile = file.replace(/^\/+/, "");
-        const fileResponse = await fetch(`../data/${normalizedFile}`, { cache: "no-store" });
-        if (!fileResponse.ok) {
-          throw new Error(`Falha ao carregar ${normalizedFile} (${fileResponse.status})`);
-        }
-        return {
-          fileName: normalizeFileName(normalizedFile, "area.json"),
-          payload: await fileResponse.json()
-        };
-      })
-    );
-
-    return payloads;
+  } catch (error) {
+    console.warn("Falha ao carregar index.json de /data.", error);
   }
 
   try {
@@ -4609,15 +4662,6 @@ async function loadAreasFromDataFolder() {
     }
   } catch (error) {
     console.warn("Falha ao descobrir JSONs automaticamente em /data.", error);
-  }
-
-  try {
-    const fromIndex = await loadAreasFromIndexFile();
-    if (fromIndex.length) {
-      return fromIndex;
-    }
-  } catch (error) {
-    console.warn("Falha ao carregar index.json de /data.", error);
   }
 
   console.warn("Falha ao carregar /data, iniciando com estrutura padrao.");
