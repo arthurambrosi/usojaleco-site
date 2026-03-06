@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./editor.css?v=20260306-01" />
+  <link rel="stylesheet" href="./editor.css?v=20260306-03" />
 </head>
 <body>
   <div class="app-shell">
@@ -180,11 +180,8 @@
 
           <label for="ghDataPath">Pasta no repo</label>
           <input id="ghDataPath" type="text" value="prescrever/data" autocomplete="off" readonly />
-
-          <label for="ghToken">Token (Contents write)</label>
-          <input id="ghToken" type="password" placeholder="ghp_..." autocomplete="off" />
         </div>
-        <p class="status-help">A sincronização no GitHub usa sempre <code>prescrever/data</code>. O token não é salvo automaticamente.</p>
+        <p class="status-help">A sincronização no GitHub usa sempre <code>prescrever/data</code> e lê o token da variável de ambiente <code>GITHUB_TOKEN</code>.</p>
       </section>
       <p class="status-bar">Sincronização direta usa a pasta vinculada (ideal: C:\Users\Arthur\Documents\prescrever\data).</p>
 
@@ -236,7 +233,8 @@
     </div>
   </div>
 
-  <script type="module" src="./editor.js?v=20260306-01"></script>
+  <script src="./env.js?v=20260306-03"></script>
+  <script type="module" src="./editor.js?v=20260306-03"></script>
 </body>
 </html>
 

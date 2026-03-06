@@ -157,7 +157,6 @@ const dom = {
   ghRepo: document.getElementById("ghRepo"),
   ghBranch: document.getElementById("ghBranch"),
   ghDataPath: document.getElementById("ghDataPath"),
-  ghToken: document.getElementById("ghToken"),
   jsonPreview: document.getElementById("jsonPreview"),
   validationList: document.getElementById("validationList"),
   statusBar: document.getElementById("statusBar"),
@@ -1227,13 +1226,17 @@ function applyGithubConfigToInputs(config) {
   dom.ghDataPath.readOnly = true;
 }
 
+function getEnvGithubToken() {
+  return asString(window?.PRESCREVER_ENV?.GITHUB_TOKEN).trim();
+}
+
 function getGithubConfigFromInputs() {
   return {
     owner: asString(dom.ghOwner?.value).trim(),
     repo: asString(dom.ghRepo?.value).trim(),
     branch: isNonEmptyString(dom.ghBranch?.value) ? asString(dom.ghBranch.value).trim() : "main",
     dataPath: GITHUB_SYNC_DATA_PATH,
-    token: asString(dom.ghToken?.value).trim()
+    token: getEnvGithubToken()
   };
 }
 
@@ -4172,8 +4175,8 @@ async function syncGithubJsonFiles() {
 
   const config = getGithubConfigFromInputs();
   if (!isNonEmptyString(config.owner) || !isNonEmptyString(config.repo) || !isNonEmptyString(config.token)) {
-    window.alert("Preencha Usuário/Org, Repositório e Token para sincronizar no GitHub.");
-    setStatus("Sincronização GitHub cancelada: dados de autenticação incompletos.");
+    window.alert("Preencha Usuário/Org e Repositório, e configure GITHUB_TOKEN no Windows antes de sincronizar.");
+    setStatus("Sincronização GitHub cancelada: GITHUB_TOKEN ausente ou dados incompletos.");
     return;
   }
   persistGithubConfigInputs();
