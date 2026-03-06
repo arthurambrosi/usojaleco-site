@@ -1055,13 +1055,18 @@ function renderStructuredGroupBlock({
       itemSelector.className = "copy-check item-check";
       const itemCheck = document.createElement("input");
       itemCheck.type = "checkbox";
-      itemCheck.checked = state.selectedItems.has(itemKey);
-      itemCheck.addEventListener("change", () => {
-        if (itemCheck.checked) {
+      const setItemSelected = (selected) => {
+        const next = Boolean(selected);
+        itemCheck.checked = next;
+        if (next) {
           state.selectedItems.add(itemKey);
         } else {
           state.selectedItems.delete(itemKey);
         }
+      };
+      setItemSelected(state.selectedItems.has(itemKey));
+      itemCheck.addEventListener("change", () => {
+        setItemSelected(itemCheck.checked);
       });
       const itemCheckText = document.createElement("span");
       itemCheckText.textContent = "";
@@ -1101,6 +1106,14 @@ function renderStructuredGroupBlock({
       });
       line.appendChild(copyItemBtn);
       medCard.appendChild(line);
+
+      medCard.addEventListener("click", (event) => {
+        const target = event.target instanceof Element ? event.target : null;
+        if (target?.closest("button, input, label, a")) {
+          return;
+        }
+        setItemSelected(!itemCheck.checked);
+      });
 
       const use = document.createElement("p");
       use.className = "med-use";
