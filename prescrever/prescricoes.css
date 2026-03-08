@@ -836,15 +836,17 @@ input {
 .med-card.sus-item .med-pres-inline,
 .med-card.sus-item .med-use,
 .med-card.sus-item .med-use strong,
-.med-card.sus-item .med-meta li,
-.med-card.sus-item .med-meta strong,
-.med-card.sus-item .med-meta-topics li,
-.med-card.sus-item .meta-attention-icon {
+.med-card.sus-item .med-meta-line,
+.med-card.sus-item .med-meta-line strong {
   color: #fff;
 }
 
 .med-card.sus-item .med-dashes {
   color: rgba(255, 255, 255, 0.72);
+}
+
+.med-card.sus-item .med-meta-divider {
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .med-card.sus-item .copy-btn-mini {
@@ -921,37 +923,26 @@ input {
   line-height: 1.24;
 }
 
+.med-meta-divider {
+  height: 1px;
+  background: #d9e1e6;
+  margin: 1px 0 2px;
+}
+
 .med-meta {
   margin: 0;
-  padding-left: 16px;
-  display: grid;
-  gap: 3px;
-}
-
-.med-meta li {
-  font-size: 0.83rem;
-  line-height: 1.24;
-}
-
-.meta-title-icon,
-.meta-attention-icon {
-  font-weight: 400;
-}
-
-.meta-attention-icon {
-  margin-right: 3px;
-}
-
-.med-meta-topics {
-  margin: 2px 0 0;
-  padding-left: 14px;
   display: grid;
   gap: 2px;
 }
 
-.med-meta-topics li {
-  font-size: 0.82rem;
-  line-height: 1.22;
+.med-meta-line {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.24;
+}
+
+.meta-title-icon {
+  font-weight: 400;
 }
 
 .free-blocks {

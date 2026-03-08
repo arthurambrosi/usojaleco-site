@@ -322,16 +322,6 @@ function buildPrescriptionEntryLines(item, number) {
   lines.push(`${number}. ${name} ${buildDashSeparator()} ${presentation}`);
   lines.push(`Uso : ${usage}`);
 
-  if (isNonEmptyString(item.meta.contraindicacoes)) {
-    lines.push(`Contraindicações: ${item.meta.contraindicacoes}`);
-  }
-  if (isNonEmptyString(item.meta.orientacoes)) {
-    lines.push(`Orientações ao profissional: ${item.meta.orientacoes}`);
-  }
-  if (isNonEmptyString(item.meta.alertas)) {
-    lines.push(`Alertas: ${item.meta.alertas}`);
-  }
-
   return lines;
 }
 
@@ -919,7 +909,7 @@ function medicationMetaEntries(item) {
     out.push({ label: "Contraindicações", value: item.meta.contraindicacoes });
   }
   if (isNonEmptyString(item.meta.orientacoes)) {
-    out.push({ label: "⚠ Orientações ao profissional", value: item.meta.orientacoes });
+    out.push({ label: "Orientações ao profissional", value: item.meta.orientacoes });
   }
   if (isNonEmptyString(item.meta.alertas)) {
     out.push({ label: "Alertas", value: item.meta.alertas });
@@ -1125,36 +1115,22 @@ function renderStructuredGroupBlock({
 
       const metaEntries = medicationMetaEntries(item);
       if (metaEntries.length) {
-        const ul = document.createElement("ul");
-        ul.className = "med-meta";
-        metaEntries.forEach((entryMeta) => {
-          const li = document.createElement("li");
-          if (entryMeta.label.startsWith("⚠")) {
-            const icon = document.createElement("span");
-            icon.className = "meta-attention-icon";
-            icon.textContent = "⚠";
-            li.appendChild(icon);
-          }
-          const strong = document.createElement("strong");
-          strong.textContent = `${entryMeta.label.replace(/^⚠\s*/, "")}:`;
-          li.appendChild(strong);
+        const divider = document.createElement("div");
+        divider.className = "med-meta-divider";
+        medCard.appendChild(divider);
 
-          if (entryMeta.label.includes("Orientações ao profissional")) {
-            const topics = splitTopicLines(entryMeta.value);
-            const topicList = document.createElement("ul");
-            topicList.className = "med-meta-topics";
-            (topics.length ? topics : [entryMeta.value]).forEach((topic) => {
-              const topicLi = document.createElement("li");
-              topicLi.textContent = topic;
-              topicList.appendChild(topicLi);
-            });
-            li.appendChild(topicList);
-          } else {
-            li.appendChild(document.createTextNode(` ${entryMeta.value}`));
-          }
-          ul.appendChild(li);
+        const metaBox = document.createElement("div");
+        metaBox.className = "med-meta";
+        metaEntries.forEach((entryMeta) => {
+          const lineMeta = document.createElement("p");
+          lineMeta.className = "med-meta-line";
+          const strong = document.createElement("strong");
+          strong.textContent = `${entryMeta.label}:`;
+          lineMeta.appendChild(strong);
+          lineMeta.appendChild(document.createTextNode(` ${entryMeta.value}`));
+          metaBox.appendChild(lineMeta);
         });
-        medCard.appendChild(ul);
+        medCard.appendChild(metaBox);
       }
 
       medList.appendChild(medCard);
@@ -1359,7 +1335,7 @@ function renderProtocolDetail(protocol) {
   detail.appendChild(head);
 
   if (isNonEmptyString(protocol.meta.orientacoes)) {
-    detail.appendChild(renderMetaBox("⚠ Orientações ao profissional", protocol.meta.orientacoes, "orient", true));
+    detail.appendChild(renderMetaBox("⚠ Orientações ao profissional", protocol.meta.orientacoes, "orient"));
   }
   if (isNonEmptyString(protocol.meta.alertas)) {
     detail.appendChild(renderMetaBox("Alertas gerais", protocol.meta.alertas, "warn"));
@@ -1426,7 +1402,7 @@ function renderProtocolDetail(protocol) {
     sectionCard.className = "section-card";
 
     if (isNonEmptyString(section.meta.orientacoes)) {
-      sectionCard.appendChild(renderMetaBox("⚠ Orientações ao profissional", section.meta.orientacoes, "orient", true));
+      sectionCard.appendChild(renderMetaBox("⚠ Orientações ao profissional", section.meta.orientacoes, "orient"));
     }
     if (isNonEmptyString(section.meta.alertas)) {
       sectionCard.appendChild(renderMetaBox("Alertas da seção", section.meta.alertas, "warn"));
@@ -1466,28 +1442,8 @@ function protocolToText(protocol) {
   const lines = [];
   lines.push(`${protocol.title} (${protocol.areaName})`);
 
-  if (isNonEmptyString(protocol.meta.orientacoes)) {
-    lines.push(`Orientações ao profissional: ${protocol.meta.orientacoes}`);
-  }
-  if (isNonEmptyString(protocol.meta.alertas)) {
-    lines.push(`Alertas gerais: ${protocol.meta.alertas}`);
-  }
-  if (isNonEmptyString(protocol.meta.notas)) {
-    lines.push(`Notas gerais: ${protocol.meta.notas}`);
-  }
-
   protocol.sections.forEach((section) => {
     lines.push(`\n[Seção] ${section.title}`);
-
-    if (isNonEmptyString(section.meta.orientacoes)) {
-      lines.push(`- Orientações ao profissional: ${section.meta.orientacoes}`);
-    }
-    if (isNonEmptyString(section.meta.alertas)) {
-      lines.push(`- Alertas da seção: ${section.meta.alertas}`);
-    }
-    if (isNonEmptyString(section.meta.notas)) {
-      lines.push(`- Notas da seção: ${section.meta.notas}`);
-    }
 
     if (section.mode === "structured") {
       const counter = { value: 1 };

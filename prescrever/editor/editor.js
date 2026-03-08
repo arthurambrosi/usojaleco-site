@@ -13,6 +13,9 @@ const VALID_BLOCK_TYPES = ["heading", "paragraph", "list", "callout", "divider",
 const CALLOUT_TONES = ["info", "warning", "danger", "success"];
 const TAB_MODES = ["free", "structured"];
 const STRUCTURED_GROUP_TYPES = ["or", "add"];
+const SUBJECT_STATUS_BUILDING = "building";
+const SUBJECT_STATUS_DONE = "done";
+const SUBJECT_STATUSES = [SUBJECT_STATUS_BUILDING, SUBJECT_STATUS_DONE];
 const DEFAULT_EDITOR_FONT_SIZE = 0.93;
 const MIN_EDITOR_FONT_SIZE = 0.72;
 const MAX_EDITOR_FONT_SIZE = 1.35;
@@ -140,6 +143,8 @@ const dom = {
   fileImportArea: document.getElementById("fileImportArea"),
   btnNewSubject: document.getElementById("btnNewSubject"),
   btnRenameSubject: document.getElementById("btnRenameSubject"),
+  btnDeleteSubject: document.getElementById("btnDeleteSubject"),
+  btnToggleSubjectStatus: document.getElementById("btnToggleSubjectStatus"),
   btnNewTab: document.getElementById("btnNewTab"),
   btnConvertToNotes: document.getElementById("btnConvertToNotes"),
   btnRenameTab: document.getElementById("btnRenameTab"),
@@ -157,6 +162,7 @@ const dom = {
   ghRepo: document.getElementById("ghRepo"),
   ghBranch: document.getElementById("ghBranch"),
   ghDataPath: document.getElementById("ghDataPath"),
+  ghToken: document.getElementById("ghToken"),
   jsonPreview: document.getElementById("jsonPreview"),
   validationList: document.getElementById("validationList"),
   statusBar: document.getElementById("statusBar"),
@@ -349,6 +355,21 @@ function normalizeItemMeta(rawMeta) {
     orientacoes: asString(rawMeta?.orientacoes).trim(),
     alertas: asString(rawMeta?.alertas).trim()
   };
+}
+
+function normalizeSubjectStatus(rawStatus) {
+  const normalized = asString(rawStatus).trim().toLowerCase();
+  if (["done", "finalizado", "terminado", "concluido", "concluído"].includes(normalized)) {
+    return SUBJECT_STATUS_DONE;
+  }
+  if (SUBJECT_STATUSES.includes(normalized)) {
+    return normalized;
+  }
+  return SUBJECT_STATUS_BUILDING;
+}
+
+function getSubjectStatusLabel(status) {
+  return status === SUBJECT_STATUS_DONE ? "Terminado" : "Em construção";
 }
 
 function createStructuredItem(initialName = "Novo medicamento") {
@@ -856,6 +877,7 @@ function createDefaultSubject(title = "Geral") {
   return {
     titulo: title,
     slug: slugify(title) || "geral",
+    status: SUBJECT_STATUS_BUILDING,
     descricaoCurta: "",
     meta: createEntityMeta(),
     tabs: [createDefaultTab("Conduta inicial", "conduta-inicial")]
@@ -895,6 +917,7 @@ function normalizeSubject(rawSubject, subjectIndex = 0) {
   return {
     titulo: title,
     slug: slugify(rawSubject?.slug || title || `assunto-${subjectIndex + 1}`),
+    status: normalizeSubjectStatus(rawSubject?.status ?? rawSubject?.situacao ?? rawSubject?.estado),
     descricaoCurta: isNonEmptyString(rawSubject?.descricaoCurta)
       ? rawSubject.descricaoCurta.trim()
       : "",
@@ -1226,17 +1249,13 @@ function applyGithubConfigToInputs(config) {
   dom.ghDataPath.readOnly = true;
 }
 
-function getEnvGithubToken() {
-  return asString(window?.PRESCREVER_ENV?.GITHUB_TOKEN).trim();
-}
-
 function getGithubConfigFromInputs() {
   return {
     owner: asString(dom.ghOwner?.value).trim(),
     repo: asString(dom.ghRepo?.value).trim(),
     branch: isNonEmptyString(dom.ghBranch?.value) ? asString(dom.ghBranch.value).trim() : "main",
     dataPath: GITHUB_SYNC_DATA_PATH,
-    token: getEnvGithubToken()
+    token: asString(dom.ghToken?.value).trim()
   };
 }
 
@@ -1478,9 +1497,9 @@ function markButtonActive(button, active) {
   button.classList.toggle("active", Boolean(active));
 }
 
-function makeEntityListItem(label, subtitle, isActive, onClick) {
+function makeEntityListItem(label, subtitle, isActive, onClick, extraClass = "") {
   const li = document.createElement("li");
-  li.className = `entity-item${isActive ? " active" : ""}`;
+  li.className = `entity-item${extraClass ? ` ${extraClass}` : ""}${isActive ? " active" : ""}`;
 
   const button = document.createElement("button");
   button.type = "button";
@@ -1532,9 +1551,11 @@ function renderSubjectsList() {
   }
 
   for (const subject of area.assuntos) {
+    const subjectStatus = normalizeSubjectStatus(subject.status);
+    subject.status = subjectStatus;
     const subtitle = isNonEmptyString(subject.descricaoCurta)
       ? subject.descricaoCurta
-      : `${subject.tabs.length} secao(oes)`;
+      : `${subject.tabs.length} secao(oes) · ${getSubjectStatusLabel(subjectStatus)}`;
 
     const item = makeEntityListItem(
       subject.titulo,
@@ -1548,7 +1569,8 @@ function renderSubjectsList() {
         ensureActiveSelection();
         renderAll();
         loadActiveTabIntoEditor();
-      }
+      },
+      subjectStatus === SUBJECT_STATUS_DONE ? "subject-done" : "subject-building"
     );
 
     dom.subjectsList.appendChild(item);
@@ -1689,6 +1711,8 @@ function toggleActionButtons() {
 
   dom.btnNewSubject.disabled = !hasArea;
   if (dom.btnRenameSubject) dom.btnRenameSubject.disabled = !hasSubject;
+  if (dom.btnDeleteSubject) dom.btnDeleteSubject.disabled = !hasSubject;
+  if (dom.btnToggleSubjectStatus) dom.btnToggleSubjectStatus.disabled = !hasSubject;
   dom.btnNewTab.disabled = !hasSubject;
   if (dom.btnConvertToNotes) dom.btnConvertToNotes.disabled = !hasTab;
   dom.btnRenameTab.disabled = !hasTab;
@@ -1717,6 +1741,15 @@ function toggleActionButtons() {
   dom.sectionMetaOrientacoes.disabled = disableSectionMeta;
   dom.sectionMetaAlertas.disabled = disableSectionMeta;
   dom.sectionMetaNotas.disabled = disableSectionMeta;
+
+  if (dom.btnToggleSubjectStatus) {
+    const activeSubject = getActiveSubject();
+    const nextLabel =
+      normalizeSubjectStatus(activeSubject?.status) === SUBJECT_STATUS_DONE
+        ? "Marcar em construção"
+        : "Marcar terminado";
+    dom.btnToggleSubjectStatus.textContent = nextLabel;
+  }
 }
 
 function setInputValue(inputEl, value) {
@@ -2047,6 +2080,7 @@ function renderStructuredGroupNode(group, depth = 0) {
 
       itemCard.appendChild(itemTop);
       itemCard.appendChild(fieldsGrid);
+      itemCard.appendChild(createEl("div", "item-meta-divider"));
       itemCard.appendChild(renderItemMetaSummary(item));
       itemsWrap.appendChild(itemCard);
     });
@@ -3633,6 +3667,11 @@ function validateArea(area) {
     }
     usedSubjects.add(subject.slug);
 
+    const rawStatus = asString(subject.status).trim();
+    if (rawStatus && !SUBJECT_STATUSES.includes(rawStatus)) {
+      errors.push(`${subjectPath}.status invalido.`);
+    }
+
     validateEntityMeta(subject.meta, `${subjectPath}.meta`, errors);
 
     if (!Array.isArray(subject.tabs) || !subject.tabs.length) {
@@ -3911,6 +3950,58 @@ function renameSubject() {
   renderAll();
 }
 
+function deleteSubject() {
+  const area = getActiveArea();
+  const subject = getActiveSubject();
+  if (!area || !subject) {
+    return;
+  }
+
+  if (area.assuntos.length <= 1) {
+    window.alert("Cada área precisa ter pelo menos 1 assunto.");
+    return;
+  }
+
+  const confirmed = window.confirm(`Excluir o assunto \"${subject.titulo}\"?`);
+  if (!confirmed) {
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+  closeItemMetaModal(true);
+  closeTagMetaModal(true);
+
+  const index = area.assuntos.findIndex((item) => item.slug === subject.slug);
+  if (index < 0) {
+    return;
+  }
+
+  area.assuntos.splice(index, 1);
+  const safeIndex = Math.max(0, index - 1);
+  const nextSubject = area.assuntos[safeIndex] || area.assuntos[0];
+  state.activeSubjectSlug = nextSubject?.slug || "";
+  state.activeTabSlug = nextSubject?.tabs?.[0]?.slug || "";
+
+  renderAll();
+  loadActiveTabIntoEditor();
+}
+
+function toggleSubjectStatus() {
+  const subject = getActiveSubject();
+  if (!subject) {
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+  subject.status =
+    normalizeSubjectStatus(subject.status) === SUBJECT_STATUS_DONE
+      ? SUBJECT_STATUS_BUILDING
+      : SUBJECT_STATUS_DONE;
+
+  renderAll();
+  refreshPreviewAndValidation();
+}
+
 function createTab() {
   const subject = getActiveSubject();
   if (!subject) {
@@ -4175,8 +4266,8 @@ async function syncGithubJsonFiles() {
 
   const config = getGithubConfigFromInputs();
   if (!isNonEmptyString(config.owner) || !isNonEmptyString(config.repo) || !isNonEmptyString(config.token)) {
-    window.alert("Preencha Usuário/Org e Repositório, e configure GITHUB_TOKEN no Windows antes de sincronizar.");
-    setStatus("Sincronização GitHub cancelada: GITHUB_TOKEN ausente ou dados incompletos.");
+    window.alert("Preencha Usuário/Org, Repositório e Token para sincronizar no GitHub.");
+    setStatus("Sincronização GitHub cancelada: dados de autenticação incompletos.");
     return;
   }
   persistGithubConfigInputs();
@@ -4679,6 +4770,7 @@ function fallbackArea() {
       {
         titulo: "Geral",
         slug: "geral",
+        status: SUBJECT_STATUS_BUILDING,
         descricaoCurta: "",
         meta: {
           orientacoes: "",
@@ -4759,6 +4851,12 @@ function bindEvents() {
   dom.btnNewSubject.addEventListener("click", createSubject);
   if (dom.btnRenameSubject) {
     dom.btnRenameSubject.addEventListener("click", renameSubject);
+  }
+  if (dom.btnDeleteSubject) {
+    dom.btnDeleteSubject.addEventListener("click", deleteSubject);
+  }
+  if (dom.btnToggleSubjectStatus) {
+    dom.btnToggleSubjectStatus.addEventListener("click", toggleSubjectStatus);
   }
   dom.btnNewTab.addEventListener("click", createTab);
   if (dom.btnConvertToNotes) {
