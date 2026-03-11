@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Banco de Questões</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbarWrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Banco de Questões">
+        <span class="brandMark">Q</span>
+        <span class="brandName">Uso<b>Jaleco</b> Questões</span>
+      </div>
+      <button id="homeShortcut" class="headBtn">Tela inicial</button>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="heroCard">
+      <h1>Treino de Questões</h1>
+      <p>Escolha uma prova para começar seu estudo.</p>
+    </section>
+
+    <section id="homeView" class="view">
+      <div id="homeState" class="state-panel">
+        <h2>Carregando provas...</h2>
+        <p>Preparando o conteúdo.</p>
+      </div>
+      <div id="examGrid" class="exam-grid" hidden></div>
+    </section>
+
+    <section id="examView" class="view is-hidden">
+      <div class="examShell">
+        <div class="examToolbar">
+          <button id="backButton" class="backBtn" aria-label="Voltar para seleção de provas">&lt;</button>
+          <div class="examHeadline">
+            <p class="breadcrumb">Banco de Questões</p>
+            <h2 id="examTitle">Prova</h2>
+            <p id="examMeta" class="examMeta"></p>
+          </div>
+          <div class="toolbarActions">
+            <button id="printPdfButton" class="printBtn" type="button" disabled>Imprimir PDF</button>
+            <div id="examHeaderScore" class="scoreboard scorebox" hidden>
+              <span class="scoreTag hit"><strong id="headerHits">0</strong> acertos</span>
+              <span class="scoreTag miss"><strong id="headerMisses">0</strong> erros</span>
+            </div>
+          </div>
+        </div>
+        <div id="questionList" class="question-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js?v=20260311-04" defer></script>
+</body>
+</html>

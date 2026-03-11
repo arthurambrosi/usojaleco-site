@@ -1,0 +1,354 @@
+===QUESTAO===
+
+Você encontra um paciente que não responde e não está respirando. Depois de ativar o sistema de resposta a emergências, você determina que não há pulso. Qual é a sua próxima ação?
+A) Abra as vias aéreas com inclinação da cabeça e elevação do queixo.
+B) Administrar epinefrina na dose de 1 mg/kg.
+C) Aplique 2 respirações de resgate cada uma durante 1 segundo.
+D) Iniciar compressões torácicas a uma frequência de pelo menos 100/min.
+
+===QUESTAO===
+2) Você está avaliando um homem de 58 anos com dor no peito. A pressão arterial é 92/50 mm Hg, a frequência cardíaca é 92/min, a frequência respiratória sem esforço respiratório é 14 respirações/min e a leitura da oximetria de pulso é 97%. Qual etapa da avaliação é mais importante agora?
+A) PETCO2
+B) Radiografia de tórax
+C) Exames laboratoriais
+D) Obtenção de um ECG de 12 derivações
+
+===QUESTAO===
+3) Qual é o método preferencial de acesso para administração de epinefrina durante parada cardíaca na maioria dos pacientes?
+A) Intraósseo
+B) Endotraqueal
+C) Central intravenosa
+D) Periférica intravenosa
+
+===QUESTAO===
+4) Um DEA ativado não analisa prontamente o ritmo. Qual é a sua próxima ação?
+A) Comece as compressões torácicas.
+B) Interrompa a tentativa de reanimação.
+C) Verifique todas as conexões do DEA e analise novamente.
+D) Gire os eletrodos do DEA para uma posição alternativa.
+
+===QUESTAO===
+5) Você completou 2 minutos de RCP. O monitor de ECG exibe o ritmo da derivação II abaixo e o paciente não tem pulso. Outro membro da sua equipe retoma as compressões torácicas e uma intravenosa é colocada. Qual etapa de gerenciamento é sua próxima prioridade?
+
+A) Administre 0,5 mg de atropina.
+B) Insira uma via aérea avançada.
+C) Administrar 1 mg de epinefrina.
+D) Administre uma infusão de dopamina.
+
+===QUESTAO===
+6) Durante uma pausa na RCP, você vê este ritmo de ECG da derivação II no monitor. O paciente não tem pulso. Qual é a próxima ação?
+
+A) Estabeleça acesso vascular.
+B) Obtenha o histórico do paciente.
+C) Retomar as compressões torácicas.
+D) Encerre o esforço de ressuscitação.
+
+===QUESTAO===
+7) Qual é o erro comum, mas às vezes fatal, no tratamento da parada cardíaca?
+A) Falha na obtenção de acesso vascular
+B) Periodos prolongados sem ventilações
+C) Falha na realização de intubação endotraqueal
+D) Interrupções prolongadas nas compressões torácicas
+
+===QUESTAO===
+8) Qual ação é um componente das compressões torácicas de alta qualidade?
+A) Permitir retração torácica completa
+B) Compressões torácicas sem ventilação
+C) 60 a 100 compressões por minuto com proporção de 15:2
+D) Compressões ininterruptas a uma profundidade de 1½ polegada
+
+===QUESTAO===
+9) Qual ação aumenta a chance de conversão bem-sucedida da fibrilação ventricular?
+A) Pausar as compressões torácicas imediatamente após uma tentativa de desfibrilação
+B) Administrar 4 ventilações rápidas imediatamente antes de uma tentativa de desfibrilação
+C) Usar pás manuais do desfibrilador com leve pressão contra o tórax
+D) Fornecer compressões de qualidade imediatamente antes de uma tentativa de desfibrilação
+
+===QUESTAO===
+10) Qual situação descreve MELHOR a atividade elétrica sem pulso?
+A) Assistolia sem pulso
+B) Ritmo sinusal sem pulso
+C) Torsades de pointes com pulso
+D) Taquicardia ventricular com pulso
+
+===QUESTAO===
+11) Qual é a MELHOR estratégia para realizar RCP de alta qualidade em um paciente com via aérea avançada instalada?
+A) Forneça compressões e ventilações na proporção de 15:2.
+B) Fornecer compressões e ventilações na proporção de 30:2.
+C) Forneça uma ventilação única a cada 6 segundos durante a pausa de compressão.
+D) Forneça compressões torácicas contínuas sem pausas e 10 ventilações por minuto.
+
+===QUESTAO===
+12) Três minutos depois de testemunhar uma parada cardíaca, um membro da sua equipe insere um tubo endotraqueal enquanto outro realiza compressões torácicas contínuas. Durante a ventilação subsequente, você percebe a presença de uma forma de onda na tela da capnografia e um nível de PETCO2 de 8 mm Hg. Qual é o significado desta descoberta?
+A) As compressões torácicas podem não ser eficazes.
+B) O tubo endotraqueal não está mais na traqueia.
+C) O paciente atende aos critérios para término dos esforços.
+D) A equipe está ventilando o paciente com muita frequência (hiperventilação).
+
+===QUESTAO===
+13) O uso da capnografia quantitativa em pacientes intubados
+A) permite o monitoramento da qualidade da RCP.
+B) mede os níveis de oxigênio no nível dos alvéolos.
+C) determina o dióxido de carbono inspirado em relação ao débito cardíaco.
+D) detecta anormalidades eletrolíticas precocemente no gerenciamento do código.
+
+===QUESTAO===
+14) Nos últimos 25 minutos, uma equipe do EMS tentou ressuscitar um paciente que originalmente apresentava fibrilação ventricular. Após o primeiro choque, a tela do ECG exibiu assistolia, que persistiu apesar de 2 doses de epinefrina, bolus de fluidos e RCP de alta qualidade. Qual é o seu próximo tratamento?
+A) Aplique um marca-passo transcutâneo.
+B) Administrar 1 mg de atropina intravenosa.
+C) Administrar 40 unidades de vasopressina intravenosa.
+D) Considere encerrar os esforços de ressuscitação após consultar o controle médico.
+
+===QUESTAO===
+15) Qual é a prática segura e eficaz na sequência de desfibrilação?
+A) Pare as compressões torácicas enquanto carrega o desfibrilador.
+B) Certifique-se de que o oxigênio não esteja soprando sobre o tórax do paciente durante o choque.
+C) Avaliar a presença de pulso imediatamente após o choque.
+D) Anuncie "limpo" de maneira imponente após aplicar o choque de desfibrilação.
+
+===QUESTAO===
+16) Durante a sua avaliação, o seu paciente perde subitamente a consciência. Depois de pedir ajuda e determinar que o paciente não está respirando, você não tem certeza se o paciente tem pulso. Qual é a sua próxima ação?
+A) Saia e pegue um DEA.
+B) Comece as compressões torácicas.
+C) Faça 2 ventilações rápidas.
+D) Verifique a boca do paciente quanto à presença de corpo estranho.
+
+===QUESTAO===
+17) Qual é a vantagem de usar eletrodos de desfibrilação adesivos em vez de pás de desfibrilação?
+A) As almofadas adesivas fornecem mais energia do que as pás.
+B) As almofadas adesivas aumentam o arco elétrico.
+C) Os eletrodos adesivos permitem uma desfibrilação mais rápida.
+D) As almofadas adesivas possuem adaptadores universais que podem funcionar com qualquer máquina.
+
+===QUESTAO===
+18) Quais ações são recomendadas para ajudar a minimizar as interrupções nas compressões torácicas durante a RCP?
+A) Continue a RCP enquanto carrega o desfibrilador.
+B) Realize verificações de pulso imediatamente após a desfibrilação.
+C) Administre medicamentos intravenosos somente durante a respiração.
+D) Continuar a usar o DEA mesmo após a chegada do desfibrilador manual.
+
+===QUESTAO===
+19) Qual ação está incluída na Pesquisa BLS?
+A) Desfibrilação precoce
+B) Manejo avançado das vias aéreas
+C) Administração rápida de medicamentos
+D) Preparação para hipotermia terapêutica
+
+===QUESTAO===
+20) Qual medicamento e dose são recomendados para o manejo de um paciente com fibrilação ventricular refratária?
+A) Atropina 2 mg
+B) Amiodarona 300 mg
+C) Vasopressina 1 mg/kg
+D) Dopamina 2 mg/kg por minuto
+
+===QUESTAO===
+21) Qual o intervalo adequado para interrupção das compressões torácicas?
+A) 10 segundos ou menos
+B) 10 a 15 segundos
+C) 15 a 20 segundos
+D) Interrupções nunca são aceitáveis
+
+===QUESTAO===
+22) Qual das alternativas a seguir é um sinal de RCP eficaz?
+A) PETCO2 >= 10 mm Hg
+B) Débito urinário medido de 1 mL/kg por hora
+C) Temperatura do paciente >32°C (89,6°F)
+D) Pressão intra-arterial diastólica <20 mm Hg
+
+===QUESTAO===
+23) Qual é o objetivo principal de uma equipe de emergência médica (MET) ou de uma equipe de resposta rápida (RRT)?
+A) Identificação e tratamento da deterioração clínica precoce
+B) Intervenção rápida com pacientes admitidos através da triagem do departamento de emergência
+C) Resposta aos pacientes durante uma situação de desastre ou com vários pacientes
+D) Resposta aos pacientes após a ativação do sistema de resposta a emergências
+
+===QUESTAO===
+24) Qual ação melhora a qualidade das compressões torácicas aplicadas durante uma tentativa de reanimação?
+A) Observe o ritmo do ECG para determinar a profundidade das compressões.
+B) Não permita que o tórax recue totalmente a cada compressão.
+C) Comprima a metade superior do esterno a uma frequência de 150 compressões por minuto.
+D) Troque de provedor a cada 2 minutos ou a cada 5 ciclos de compressão.
+
+===QUESTAO===
+25) Qual é a estratégia de ventilação adequada para um adulto em parada respiratória com frequência de pulso de 80/min?
+A) 1 respiração a cada 3 a 4 segundos
+B) 1 respiração a cada 5 a 6 segundos
+C) 2 respirações a cada 5 a 6 segundos
+D) 2 respirações a cada 6 a 8 segundos
+
+===QUESTAO===
+26) Um paciente chega ao pronto-socorro com novo início de tontura e fadiga. No exame, a frequência cardíaca do paciente é de 35/min, a pressão arterial é de 70/50 mm Hg, a frequência respiratória é de 22 respirações/min e a saturação de oxigênio é de 95%. Qual é a primeira medicação apropriada?
+A) Atropina 0,5 mg
+B) Oxigênio 12 a 15 L/min
+C) Epinefrina 0,5 mg
+D) Aspirina 160 mg mastigada
+
+===QUESTAO===
+27) Um paciente chega ao pronto-socorro com tontura e falta de ar com bradicardia sinusal de 40/min. A dose inicial de atropina foi ineficaz e seu monitor/desfibrilador não está equipado com marca-passo transcutâneo. Qual é a dose apropriada de dopamina para este paciente?
+A) 2 a 10 mg/min
+B) 2 a 10 mcg/kg por minuto
+C) 10 a 15 mg/min
+D) 10 a 5 mcg/kg por minuto
+
+===QUESTAO===
+28) Um paciente apresenta tontura súbita. A frequência cardíaca do paciente é 180/min, a pressão arterial é 110/70 mm Hg, a frequência respiratória é 18 respirações/min e a oximetria de pulso leitura é de 98% no ar ambiente. O ECG da derivação II é mostrado abaixo: Qual é a próxima intervenção apropriada?
+[QUESTAO_COM_IMAGEM]
+A) Manobras vagais
+B) Metoprolol 5 mg IV
+C) Adenosina 6 mg IV
+D) Solução salina normal em bolus de 1 L
+
+===QUESTAO===
+29) Um paciente monitorado na UTI desenvolveu um início súbito de taquicardia de complexo estreito a uma frequência de 220/min. A pressão arterial do paciente é 128/58 mm Hg, o PETCO2 é 38 mm Hg e a leitura da oximetria de pulso é 98%. Há acesso vascular pela veia jugular interna esquerda e o paciente não recebeu nenhuma droga vasoativa. Um ECG de 12 derivações confirma taquicardia supraventricular sem evidência de isquemia ou infarto. A frequência cardíaca não respondeu às manobras vagais. Qual é a próxima intervenção recomendada?
+A) Adenosina 6 mg IV push
+B) Amiodarona 300 mg IV push
+C) Cardioversão sincronizada a 50 J
+D) Cardioversão sincronizada a 200 J
+
+===QUESTAO===
+30) Você está recebendo um relatório de rádio de uma equipe do EMS a caminho de um paciente que pode estar tendo um acidente vascular cerebral agudo. O tomógrafo computadorizado do hospital não está funcionando neste momento. O que você deve fazer nesta situação?
+A) Entre em contato com a família do paciente para saber o que eles preferem.
+B) Faça com que a equipe do EMS escolha uma disposição apropriada para o paciente.
+C) Aceite o relatório e preste cuidados dentro de sua capacidade atual.
+D) Encaminhar o paciente para um hospital a 15 minutos de distância com recursos de tomografia computadorizada.
+
+===QUESTAO===
+31) Escolha uma indicação apropriada para interromper ou suspender os esforços de ressuscitação.
+A) Parada não testemunhada
+B) Provas de rigor mortis
+C) Idade do paciente superior a 85 anos
+D) Sem retorno da circulação espontânea após 10 minutos de RCP
+
+===QUESTAO===
+32) Uma mulher de 49 anos chega ao pronto-socorro com dor epigástrica persistente. Ela estava tomando antiácidos orais nas últimas 6 horas porque achava que estava com azia. A pressão arterial inicial é de 118/72 mm Hg, a frequência cardíaca é de 92/min e regular, a frequência respiratória sem esforço respiratório é de 14 respirações/min e a leitura da oximetria de pulso é de 96%. Qual é a intervenção mais adequada a realizar a seguir?
+A) Administre oxigênio.
+B) Obtenha um ECG de 12 derivações.
+C) Avaliar a elegibilidade fibrinolítica.
+D) Administrar nitroglicerina sublingual.
+
+===QUESTAO===
+33) Um paciente com insuficiência respiratória fica apneico, mas continua com pulso forte. A frequência cardíaca está caindo rapidamente e agora mostra bradicardia sinusal a uma frequência de 30/min. Qual intervenção tem a maior prioridade?
+A) Injeção de atropina IV
+B) Infusão de epinefrina IV
+C) Aplicação de marca-passo transcutâneo
+D) Manobras simples de vias aéreas e ventilação assistida
+
+===QUESTAO===
+34) Qual o procedimento adequado para aspiração do tubo endotraqueal após o cateter apropriado foi selecionado?
+A) Sucção durante a inserção, mas por não mais que 30 segundos.
+B) Aspire a boca e o nariz por no máximo 30 segundos.
+C) Sucção durante a retirada, mas por não mais que 10 segundos.
+D) Hiperventilar antes da inserção do cateter e depois aspirar durante a retirada.
+
+===QUESTAO===
+35) Ao tratar um paciente com tontura, pressão arterial de 68/30 mm Hg e frio, pele úmida, você vê este ritmo de ECG da derivação II: Qual é a primeira intervenção mais adequada?
+[QUESTAO_COM_IMAGEM]
+A) Aspirina
+B) Atropina
+C) Lidocaína
+D) Nitroglicerina
+
+===QUESTAO===
+36) Uma mulher de 68 anos apresentou um início súbito de fraqueza no braço direito. O pessoal do EMS mede uma pressão arterial de 140/90 mm Hg, uma frequência cardíaca de 78/min, uma frequência respiratória sem esforço respiratório de 14 respirações/min e uma leitura de oximetria de pulso de 97%. O ECG da derivação II exibe ritmo sinusal. Qual é a ação mais apropriada para a equipe do EMS realizar a seguir?
+A) Avaliação de ECG de 12 derivações
+B) Administração de oxigênio suplementar a 100%
+C) Avaliação da Escala Pré-hospitalar de AVC de Cincinnati
+D) Administração de aspirina em dose baixa
+
+===QUESTAO===
+37) O EMS está transportando um paciente com avaliação pré-hospitalar positiva de AVC. Ao chegar ao pronto-socorro, a pressão arterial inicial é de 138/78 mm Hg, a frequência de pulso é de 80/min, a frequência respiratória é de 12 respirações/min e a leitura da oximetria de pulso é de 95% em ar ambiente. O ECG da derivação II exibe ritmo sinusal. O nível de glicose no sangue está dentro dos limites normais. Que intervenção você deve realizar a seguir?
+A) Tomografia computadorizada de crânio
+B) Transferência para a unidade de AVC
+C) Administração imediata de rtPA
+D) Administração de oxigênio a 100%
+
+===QUESTAO===
+38) Qual é a taxa de ventilação adequada para um paciente em parada cardíaca que possui uma via aérea avançada instalada?
+A) 4 a 6 respirações por minuto
+B) 8 a 10 respirações por minuto
+C) 12 a 14 respirações por minuto
+D) 16 a 18 respirações por minuto
+
+===QUESTAO===
+39) Um homem de 62 anos no pronto-socorro diz que seu coração está batendo rápido. Ele diz que não sente dor no peito nem falta de ar. A pressão arterial é 142/98 mm Hg, o pulso é 200/min, a frequência respiratória é 14 respirações/min e a oximetria de pulso é 95% em ar ambiente. Que intervenção você deve realizar a seguir?
+A) Obtenha um ECG de 12 derivações.
+B) Administre 150 mg de amiodarona.
+C) Administrar 160 mg de aspirina.
+D) Administrar 6 mg de adenosina.
+
+===QUESTAO===
+40) Você está avaliando um homem de 48 anos com forte dor torácica subesternal. O paciente está pálido, diaforético, frio ao toque e lento para responder às suas perguntas. A pressão arterial é 58/32 mm Hg, a frequência cardíaca é 190/min, a frequência respiratória é 18 respirações/min e o oxímetro de pulso não consegue obter uma leitura porque não há pulso radial. O ECG da derivação II mostra uma taquicardia regular de complexos largos. Que intervenção você deve realizar a seguir?
+A) Sedação processual
+B) ECG de 12 derivações
+C) Administração de amiodarona
+D) Cardioversão sincronizada
+
+===QUESTAO===
+41) Qual é a prioridade inicial para um paciente inconsciente com qualquer taquicardia no monitor?
+A) Revise os medicamentos caseiros do paciente.
+B) Avalie os sons respiratórios.
+C) Determine se os pulsos estão presentes.
+D) Administrar medicamentos sedativos.
+
+===QUESTAO===
+42) Qual ritmo requer cardioversão sincronizada?
+A) Taquicardia supraventricular instável
+B) Fibrilação atrial
+C) Taquicardia sinusal
+D) NSR no monitor, mas sem pulso
+
+===QUESTAO===
+43) Qual é a segunda dose recomendada de adenosina para pacientes com taquicardia de complexo estreito refratária, mas estável?
+A) 3 mg
+B) 6 mg
+C) 9 mg
+D) 12 mg
+
+===QUESTAO===
+44) Qual é o intervalo alvo usual pós-parada cardíaca para PETCO2 ao ventilar um paciente que atinge o retorno da circulação espontânea (RCE)?
+A) 30 a 35 mm Hg
+B) 35 a 40 mm Hg
+C) 40 a 45 mm Hg
+D) 45 a 50 mm Hg
+
+===QUESTAO===
+45) Qual condição é contraindicação à hipotermia terapêutica durante o período pós-parada cardíaca para pacientes que alcançam retorno da circulação espontânea RCE?
+A) Ritmo inicial de assistolia
+B) Resposta a comandos verbais
+C) Idade do paciente maior que 60 anos
+D) Desejo de realizar reperfusão coronariana (por exemplo, ICP)
+
+===QUESTAO===
+46) Qual é o perigo potencial de usar laços que passam circunferencialmente ao redor do pescoço do paciente ao proteger uma via aérea avançada?
+A) Pode interferir na ventilação eficaz
+B) Coloca em risco a coluna cervical do paciente
+C) Obstrução do retorno venoso do cérebro
+D) Não fixa adequadamente o dispositivo de vias aéreas
+
+===QUESTAO===
+47) Qual é o método mais confiável para confirmar e monitorar o posicionamento correto de um tubo endotraqueal?
+A) Ausculta de 5 pontos
+B) Capnografia colorimétrica
+C) Capnografia de forma de onda contínua
+D) Uso de dispositivos de detecção esofágica
+
+===QUESTAO===
+48) Qual é a dose recomendada em bolus de fluido intravenoso (solução salina normal ou Ringer com lactato) para um paciente que atinge RCE, mas está hipotenso durante o período pós-parada cardíaca?
+A) 250 a 500 mL
+B) 500 a 1000 mL
+C) 1 a 2 L
+D) 2 a 3 L
+
+===QUESTAO===
+49) Qual é a pressão arterial sistólica mínima que se deve tentar atingir com administração de fluidos, inotrópicos ou vasopressores em um paciente hipotenso pós-parada cardíaca que atinge RCE?
+A) 90 mm Hg
+B) 85 mm Hg
+C) 80 mm Hg
+D) 75 mm Hg
+
+===QUESTAO===
+50) Qual é a primeira prioridade de tratamento para um paciente que atinge o RCE?
+A) Reperfusão coronariana
+B) Hipotermia terapêutica
+C) Manutenção da glicemia <185 mg/dL
+D) Otimização da ventilação e oxigenação
