@@ -534,6 +534,38 @@ async function fetchText(url) {
   return response.text();
 }
 
+function parseManifestPayload(rawText) {
+  const text = String(rawText || "").trim();
+  if (!text) {
+    return { provas: [] };
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (parseError) {
+    const provasBlockMatch = text.match(/"provas"\s*:\s*\[([\s\S]*?)\]/i);
+    const fallbackTarget = provasBlockMatch ? provasBlockMatch[1] : text;
+    const detectedExamIds = [];
+    const regex = /"([^"]+)"/g;
+    let match = null;
+
+    while ((match = regex.exec(fallbackTarget))) {
+      const value = match[1].trim();
+      if (!value || value.toLowerCase() === "provas") {
+        continue;
+      }
+      detectedExamIds.push(value);
+    }
+
+    if (detectedExamIds.length > 0) {
+      console.warn("provas.json com JSON inválido; usando leitura tolerante de IDs.");
+      return { provas: detectedExamIds };
+    }
+
+    throw parseError;
+  }
+}
+
 async function fetchTextOptional(url, fallback = "") {
   try {
     const response = await fetch(url, { cache: "no-store" });
@@ -694,7 +726,8 @@ async function loadExamsFromManifest() {
 
   for (const root of rootsToTry) {
     try {
-      payload = await fetchJson(`./${root}/provas.json`);
+      const rawManifest = await fetchText(`./${root}/provas.json`);
+      payload = parseManifestPayload(rawManifest);
       resolvedRoot = root;
       break;
     } catch (error) {
