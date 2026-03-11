@@ -6,7 +6,8 @@ const state = {
   provaAtual: null,
   respostas: new Map(),
   riscos: new Map(),
-  imageMapCache: new Map()
+  imageMapCache: new Map(),
+  imageProbeCache: new Map()
 };
 
 const dom = {
@@ -737,6 +738,43 @@ function buildImageUrl(examId, fileName) {
   return `./${state.dataRoot}/${encodedExamId}/${encodeURIComponent(fileName)}`;
 }
 
+async function canAccessUrl(url) {
+  try {
+    let response = await fetch(url, { method: "HEAD", cache: "no-store" });
+    if (response.ok) {
+      return true;
+    }
+    if (response.status === 405 || response.status === 403) {
+      response = await fetch(url, { method: "GET", cache: "no-store" });
+      return response.ok;
+    }
+    return false;
+  } catch (_error) {
+    return false;
+  }
+}
+
+async function probeImageUrl(examId, questionNumber) {
+  const cacheKey = `${examId}::${questionNumber}`;
+  if (state.imageProbeCache.has(cacheKey)) {
+    return state.imageProbeCache.get(cacheKey);
+  }
+
+  const encodedExamId = encodeURIComponent(examId);
+  const baseName = String(questionNumber);
+
+  for (const extension of IMAGE_EXTENSIONS) {
+    const candidate = `./${state.dataRoot}/${encodedExamId}/${baseName}.${extension}`;
+    if (await canAccessUrl(candidate)) {
+      state.imageProbeCache.set(cacheKey, candidate);
+      return candidate;
+    }
+  }
+
+  state.imageProbeCache.set(cacheKey, null);
+  return null;
+}
+
 async function scanExamImages(examId) {
   if (state.imageMapCache.has(examId)) {
     return state.imageMapCache.get(examId);
@@ -795,13 +833,24 @@ async function loadExam(examId) {
     fetchTextOptional(`${basePath}/gabarito.txt`, "")
   ]);
   const imageMap = await scanExamImages(examId);
+  const shouldProbeFallback = Object.keys(imageMap).length === 0;
 
   return buildExamPayload({
     examId,
     meta,
     questionsText,
     gabaritoTxt,
-    imageResolver: (questionNumber) => Promise.resolve(imageMap[String(questionNumber)] || null)
+    imageResolver: (questionNumber) => {
+      const questionKey = String(questionNumber);
+      const mapped = imageMap[questionKey] || null;
+      if (mapped) {
+        return Promise.resolve(mapped);
+      }
+      if (shouldProbeFallback) {
+        return probeImageUrl(examId, questionNumber);
+      }
+      return Promise.resolve(null);
+    }
   });
 }
 
