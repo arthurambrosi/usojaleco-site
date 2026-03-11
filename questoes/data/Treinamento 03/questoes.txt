@@ -1,0 +1,416 @@
+===QUESTAO===
+
+1. Os profissionais do SME estão tratando um paciente com suspeita de AVC. De acordo com o Algoritmo para Suspeita de AVC em Adultos, que ação crítica da equipe do SME agilizará o tratamento desse paciente na entrada e reduzirá o tempo de tratamento?
+
+A) Estabelecer acesso IV
+B) Alertar o hospital
+C) Tratar a hipertensão
+D) Examinar o histórico do paciente
+
+===QUESTAO===
+2) O que melhor descreve a medida tomada pelo líder para evitar ineficiências durante uma tentativa de ressuscitação?
+
+A) Delegar claramente as tarefas
+B) Atribuir mais tarefas aos membros mais experientes da equipe
+C) Executar as tarefas mais complexas
+D) Atribuir as mesmas tarefas a mais de um membro
+
+===QUESTAO===
+3) Você está administrando compressões torácicas durante uma tentativa de ressuscitação. Que frequência você deve usar para administrar as compressões?
+
+A) 80 a 100/min
+B) 100 a 120/min
+C) Inferior a 80/min
+D) Superior a 120/min
+
+===QUESTAO===
+4) Qual das opções melhor descreve esse ritmo?
+
+A) Bloqueio atrioventricular de terceiro grau
+B) Bloqueio atrioventricular de segundo grau tipo II
+C) Bloqueio atrioventricular de segundo grau tipo I
+D) Bloqueio atrioventricular de primeiro grau
+
+===QUESTAO===
+5) Durante cuidados pós-PCR, qual é a duração recomendada do controle direcionado de temperatura depois que se consegue alcançar o intervalo correto de temperatura?
+
+A) 0 a 8 horas
+B) Pelo menos 24 horas
+C) Pelo menos 36 horas
+D) Pelo menos 48 horas
+
+===QUESTAO===
+6) Supondo que um membro está prestes a cometer um erro durante uma tentativa de ressuscitação, o que melhor descreve a medida que o líder ou outros membros devem tomar?
+
+A) Reatribuir as tarefas da equipe
+B) Afastar o membro do local
+C) Dirigir-se ao membro imediatamente
+D) Conduzir uma desfibrilação após a tentativa de ressuscitação
+
+===QUESTAO===
+7) Um atendente está cuidando de um paciente com um histórico de insuficiência cardíaca congestiva. O paciente está apresentando falta de ar, pressão arterial de 68/50 mmHg e frequência cardíaca de 190/min. O ECG da derivação II do paciente é mostrado aqui. O que melhor caracteriza o ritmo desse paciente?
+
+A) Taquicardia supraventricular estável
+B) Taquicardia supraventricular instável
+C) Taquicardia ventricular com pulso
+D) Taquicardia sinusal
+
+===QUESTAO===
+8) Você está cuidando de um paciente com suspeita de AVC cujos sintomas começaram 2 horas atrás. A tomografia computadorizada estava normal, sem sinais de hemorragia. O paciente não apresenta nenhuma contraindicação ao tratamento fibrinolítico. Que abordagem de tratamento é melhor para esse paciente?
+
+A) Iniciar o tratamento fibrinolítico o mais cedo possível
+B) Manter o tratamento fibrinolítico por 24 horas
+C) Solicitar um ecocardiograma antes da administração de fibrinolíticos
+D) Aguardar os resultados da ressonância magnética
+
+===QUESTAO===
+9) Qual das opções melhor descreve esse ritmo?
+
+A) Taquicardia supraventricular
+B) Fibrilação ventricular
+C) Taquicardia ventricular monomórfica
+D) Taquicardia ventricular polimórfica
+
+===QUESTAO===
+10) Um paciente sofre uma perda de consciência presenciada. O ECG da derivação II revela este ritmo. Qual o tratamento apropriado?
+
+A) Desfibrilação
+B) Cardioversão sincronizada
+C) Administração de adenosina 6 mg por bolus IV
+D) Administração de epinefrina 1 mg por bolus IV
+
+===QUESTAO===
+11) Você realizou 2 minutos de RCP. O monitor de ECG exibe o ritmo da derivação II mostrada aqui e o paciente não tem pulso. Outro membro reinicia as compressões torácicas e o acesso IV é estabelecido. O que você faz em seguida?
+
+A) Obter uma via aérea avançada
+B) Iniciar uma infusão de dopamina
+C) Administrar atropina 0,5 mg
+D) Administrar epinefrina 1 mg IV
+
+===QUESTAO===
+12) Seu paciente encontra-se em PCR e foi intubado. Para avaliar a qualidade da RCP, o que você deve fazer?
+
+A) Verificar o pulso do paciente
+B) Monitorar o PETCO2 do paciente
+C) Obter um ECG de 12 derivações
+D) Obter uma radiografia do tórax
+
+===QUESTAO===
+13) Um paciente com taquicardia de complexos estreitos estável, com acesso periférico IV já estabelecido, está refratário à primeira dose de adenosina. Que dose você deve administrar em seguida?
+
+A) 3 mg
+B) 12 mg
+C) 20 mg
+D) 40 mg
+
+===QUESTAO===
+14) Em paciente com IAMST, o que melhor descreve o tempo máximo recomendado com relação ao tempo entre a porta e a insuflação do balão no departamento de emergência para uma intervenção coronária percutânea?
+
+A) 90 minutos
+B) 120 minutos
+C) 150 minutos
+D) 180 minutos
+
+===QUESTAO===
+15) Que intervalo máximo você deve permitir para uma interrupção nas compressões torácicas?
+A) 10 segundos
+B) 15 segundos
+C) 20 segundos
+D) 25 a 30 segundos
+
+===QUESTAO===
+16) Que tipo de bloqueio atrioventricular melhor descreve esse ritmo?
+[QUESTAO_COM_IMAGEM]
+A) Primeiro grau
+B) Terceiro grau
+C) Segundo grau tipo I
+D) Segundo grau tipo II
+
+===QUESTAO===
+17) Qual seria uma forma de minimizar as interrupções nas compressões torácicas durante a RCP?
+A) Continuar a RCP ao carregar o desfibrilador
+B) Administrar medicamentos IV somente durante a administração de ventilações
+C) Verificar o pulso imediatamente após a desfibrilação
+D) Usar um DEA para monitorar o ritmo do paciente
+
+===QUESTAO===
+18) Que tipo de bloqueio atrioventricular melhor descreve esse ritmo?
+
+A) Bloqueio atrioventricular de terceiro grau
+B) Bloqueio atrioventricular de segundo grau tipo I
+C) Bloqueio atrioventricular de primeiro grau
+D) Bloqueio atrioventricular de segundo grau tipo II
+
+===QUESTAO===
+19) Como líder, quando você instrui uma troca de profissional nas compressões torácicas?
+
+A) Somente quando eles dizem a você que estão fatigados
+B) A cada 2 minutos
+C) A cada 5 minutos
+D) A cada 7 minutos
+
+===QUESTAO===
+20) Você está avaliando um homem de 58 anos com desconforto torácico. A pressão arterial é 92/50 mmHg, a frequência cardíaca é 92/min, a frequência respiratória não forçada é 14 respirações/min e a leitura de oximetria de pulso é 97%. Que etapa de avaliação é mais importante agora?
+
+A) Avaliar a leitura de PETCO2
+B) Solicitar uma radiografia do tórax
+C) Solicitar exames laboratoriais
+D) Obter um ECG de 12 derivações
+
+===QUESTAO===
+21) Que opção melhor descreve o tempo recomendado de uma verificação de pulso durante a avaliação de SBV?
+
+A) 1 a 4 segundos
+B) 5 a 10 segundos
+C) 11 a 15 segundos
+D) 16 a 20 segundos
+
+===QUESTAO===
+22) Que método é aceitável para a escolha de uma via aérea orofaríngea de tamanho adequado?
+
+A) Fazer uma estimativa usando a fórmula peso (kg)/8+2
+B) Fazer uma estimativa usando o tamanho do dedo do paciente
+C) Medir da cartilagem tireoidea até a parte inferior do lóbulo da orelha
+D) Medir do canto da boca até o ângulo da mandíbula
+
+===QUESTAO===
+23) Aos três minutos de uma tentativa de ressuscitação de PCR, um membro insere um tubo endotraqueal, enquanto outro aplica compressões torácicas. A capnografia mostra uma forma de onda persistente e PETCO2 de 8 mmHg. Qual o significado dessa descoberta?
+
+A) O paciente atende aos critérios para encerramento dos esforços
+B) A equipe está ventilando o paciente com muita frequência (hiperventilação)
+C) As compressões torácicas talvez não estejam sendo eficazes
+D) O tubo endotraqueal está no esôfago
+
+===QUESTAO===
+24) Qual desses exames deve ser realizado no caso de um paciente com suspeita de AVC 25 minutos após a chegada ao hospital?
+
+A) Enzimas cardíacas
+B) Estudos de coagulação
+C) ECG de 12 derivações
+D) Tomografia computadorizada sem contraste da cabeça
+
+===QUESTAO===
+25) O ECG de um paciente com desconforto respiratório e pressão arterial de 70/50 mmHg apresenta o ritmo da derivação II mostrado aqui. Qual o tratamento apropriado?
+
+A) Realizar cardioversão sincronizada
+B) Realizar manobras vagais
+C) Realizar desfibrilação
+D) Administrar 6 mg de adenosina por bolus IV
+
+===QUESTAO===
+26) Para ventilar apropriadamente um paciente com pulso, com que frequência você pressiona a bolsa?
+
+A) Uma vez a cada 10 segundos
+B) Uma vez a cada 12 segundos
+C) Uma vez a cada 3 a 4 segundos
+D) Uma vez a cada 5 a 6 segundos
+
+===QUESTAO===
+27) Qual a dose oral recomendada de aspirina para um paciente com suspeita de síndrome coronária aguda?
+
+A) 160 a 325 mg
+B) 350 a 650 mg
+C) 40 mg
+D) 81 mg
+
+===QUESTAO===
+28) Qual dos seguintes sinais é uma provável indicação de PCR em um paciente inconsciente/sem resposta?
+
+A) Frequência de pulso irregular e fraca
+B) Frequência do pulso lenta e fraca
+C) (Nem ideia do que tava escrito, foto apagada)
+D) Gasping
+
+===QUESTAO===
+29) Além da avaliação clínica, qual o meio mais confiável para confirmar e monitorar a correta inserção de um tubo endotraqueal?
+
+A) Radiografia de tórax
+B) Capnografia de forma de onda contínua
+C) Gasometria arterial
+D) Níveis de hemoglobina
+
+===QUESTAO===
+30) Qual é a primeira dose endovenosa recomendada de amiodarona para um paciente com fibrilação ventricular refratária?
+A) 100 mg
+B) 150 mg
+C) 250 mg
+D) 300 mg
+
+===QUESTAO===
+31) Com relação à escolha e manutenção constante de uma temperatura, que intervalo é recomendado para obter um controle direcionado de temperatura pós-PCR?
+
+A) 29°C a 31°C
+B) 32°C a 36°C
+C) 26°C a 28°C
+D) 35°C a 37°C
+
+===QUESTAO===
+32) Você instrui um membro a administrar 0,5 mg de atropina IV. Que resposta é um exemplo de comunicação em circuito fechado?
+
+A) OK.
+B) Você tem certeza de que é isso o que você deseja administrar?
+C) Vou administrá-la daqui a alguns minutos.
+D) Vou preparar uma dose de 0,5 mg de atropina.
+
+===QUESTAO===
+33) Qual a próxima etapa recomendável após uma tentativa de desfibrilação?
+
+A) Reiniciar a RCP pelas compressões torácicas
+B) Determinar se há pulso carotídeo
+C) Verificar se há evidências de ritmo no ECG
+D) Abrir a via aérea do paciente
+
+===QUESTAO===
+34) Qual é um dos efeitos da ventilação excessiva?
+
+A) Diminuição da pressão intratorácica
+B) Elevação das pressões de perfusão
+C) Diminuição do débito cardíaco
+D) Elevação do retorno venoso
+
+===QUESTAO===
+35) Um paciente está sendo ressuscitado em um ambiente bastante barulhento. Um membro acredita ter ouvido uma ordem de 500 mg de amiodarona IV. Qual a melhor resposta do membro?
+
+A) OK.
+B) Tem certeza?
+C) Repetir a ordem para administrar 500 mg de amiodarona IV. Está correto?
+D) Amiodarona 500 mg IV administrada.
+
+===QUESTAO===
+36) Qual a pressão arterial sistólica mínima que se deve tentar alcançar com a administração de fluidos ou de agentes vasoativos em um paciente hipotenso pós-PCR que obtém retorno da circulação espontânea?
+
+A) 80 mmHg
+B) 90 mmHg
+C) 75 mmHg
+D) 85 mmHg
+
+===QUESTAO===
+37) Qual o objetivo principal de uma equipe de emergência médica ou um time de resposta rápida (TRR)?
+
+A) Aprimorar o atendimento para pacientes hospitalizados em unidades de tratamento intensivo
+B) Fornecer consulta de diagnóstico para os pacientes do departamento de emergência
+C) Aprimorar a evolução do paciente identificando e tratando a deterioração clínica precoce
+D) Fornecer consulta on-line com o pessoal do SME em campo
+
+===QUESTAO===
+38) Que instituição é um destino mais apropriado para o SME no caso de um paciente em PCR que obteve retorno da circulação espontânea em campo?
+
+A) Centro médico com competência para tratamento de reperfusão coronária
+B) Unidade completa de tratamento de AVC
+C) Unidade de tratamento de reabilitação aguda
+D) Unidade de tratamento agudo de longo prazo
+
+===QUESTAO===
+39) Sua equipe de resgate encontra um homem de 59 anos deitado no chão da cozinha. Você verifica que ele não está respondendo. Qual é a próxima etapa em sua avaliação e tratamento desse paciente?
+
+A) Usar o DEA/DAE
+B) Abrir a via aérea do paciente
+C) Verificar se o paciente está usando algum bracelete de alerta médico
+D) Verificar respiração e pulso do paciente
+
+===QUESTAO===
+40) Um membro não consegue realizar uma tarefa que lhe foi atribuída porque está além de seu escopo de atuação. Que medida o membro deve tomar?
+
+A) Realizá-la assim mesmo
+B) Consultar um especialista
+C) Pedir uma nova tarefa ou função
+D) Atribuir essa tarefa a outro membro
+
+===QUESTAO===
+41) Use este cenário para responder as quatro perguntas a seguir: Uma mulher de 68 anos de idade apresenta sensação de desfalecimento, náusea e desconforto torácico. Em sua avaliação, você a encontra acordada e consciente, mas com aparência doente, pálida e excessivamente diaforética. Seu pulso radial é fraco, imperceptível e rápido. Você não consegue obter a pressão arterial. Ela não apresenta nenhum edema aparente e as veias do pescoço estão normais. Os sons pulmonares parecem equalizados, com crepitações moderadas presentes bilateralmente. O monitor cardíaco evidencia o ritmo mostrado aqui. 
+
+Com base na avaliação inicial desse paciente, que algoritmo de SAVC para adultos deve ser seguido?
+
+A) Taquicardia
+B) Síndromes coronárias agudas
+C) Suspeita de AVC
+D) Parada cardíaca
+
+===QUESTAO===
+42) Use este cenário para responder as quatro perguntas a seguir: Uma mulher de 68 anos de idade apresenta sensação de desfalecimento, náusea e desconforto torácico. Em sua avaliação, você a encontra acordada e consciente, mas com aparência doente, pálida e excessivamente diaforética. Seu pulso radial é fraco, imperceptível e rápido. Você não consegue obter a pressão arterial. Ela não apresenta nenhum edema aparente e as veias do pescoço estão normais. Os sons pulmonares parecem equalizados, com crepitações moderadas presentes bilateralmente. O monitor cardíaco evidencia o ritmo mostrado aqui. 
+
+O oxímetro de pulso do paciente mostra uma leitura de 84% em ar ambiente. Que medida inicial você deve tomar?
+
+A) Realizar ventilação com bolsa-máscara
+B) Administrar oxigênio
+C) Verificar a sonda do oxímetro de pulso
+D) Intubar o paciente
+
+===QUESTAO===
+43) Use este cenário para responder as quatro perguntas a seguir: Uma mulher de 68 anos de idade apresenta sensação de desfalecimento, náusea e desconforto torácico. Em sua avaliação, você a encontra acordada e consciente, mas com aparência doente, pálida e excessivamente diaforética. Seu pulso radial é fraco, imperceptível e rápido. Você não consegue obter a pressão arterial. Ela não apresenta nenhum edema aparente e as veias do pescoço estão normais. Os sons pulmonares parecem equalizados, com crepitações moderadas presentes bilateralmente. O monitor cardíaco evidencia o ritmo mostrado aqui. 
+
+Após a avaliação inicial do paciente, que intervenção você deve fazer em seguida?
+
+A) Intubação endotraqueal
+B) Desfibrilação imediata
+C) Cardioversão sincronizada
+D) Administração de amiodarona 150 mg IV
+
+===QUESTAO===
+44) Use este cenário para responder as quatro perguntas a seguir: Uma mulher de 68 anos de idade apresenta sensação de desfalecimento, náusea e desconforto torácico. Em sua avaliação, você a encontra acordada e consciente, mas com aparência doente, pálida e excessivamente diaforética. Seu pulso radial é fraco, imperceptível e rápido. Você não consegue obter a pressão arterial. Ela não apresenta nenhum edema aparente e as veias do pescoço estão normais. Os sons pulmonares parecem equalizados, com crepitações moderadas presentes bilateralmente. O monitor cardíaco evidencia o ritmo mostrado aqui.
+
+Se o paciente ficar apneico e sem pulso, mas o ritmo permanecer o mesmo, o que teria prioridade mais alta?
+
+A) Obter uma via aérea avançada
+B) Realizar desfibrilação
+C) Administrar amiodarona 300 mg
+D) Administrar atropina 0,5 mg
+
+===QUESTAO===
+45) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. 
+
+Com base na apresentação inicial desse paciente, que quadro clínico você acredita que tenha desencadeado a PCR?
+
+A) Taquicardia supraventricular com dor torácica isquêmica
+B) Insuficiência cardíaca aguda
+C) Síndrome coronária aguda
+D) AVC isquêmico agudo
+
+===QUESTAO===
+46) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. 
+
+Além da desfibrilação, que intervenção deve ser realizada imediatamente?
+
+A) Compressões torácicas
+B) Obtenção de via aérea avançada
+C) Administração de medicação vasoativa
+D) Acesso vascular
+
+===QUESTAO===
+47) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. Não obstante duas tentativas de desfibrilação, o paciente continua em fibrilação ventricular. 
+
+Que medicamento e que dose devem ser administrados primeiro ao paciente?
+
+A) Lidocaína 1 mg/kg
+B) Epinefrina 1 mg
+C) Amiodarona 300 mg
+D) Atropina 1 mg
+
+===QUESTAO===
+48) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. 
+
+Não obstante o medicamento administrado anteriormente e a continuação da RCP, o paciente continua em fibrilação ventricular. Que outro medicamento deve ser administrado em seguida?
+
+A) Atropina 1 mg
+B) Sulfato de magnésio 1 g
+C) Amiodarona 300 mg
+D) Epinefrina 1 mg
+
+===QUESTAO===
+49) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. 
+
+O paciente tem retorno da circulação espontânea e não consegue responder a comandos. Que intervenção pós-PCR imediata você escolhe para esse paciente?
+
+B) Iniciar controle direcionado de temperatura
+C) Verificar o nível de glicemia
+D) Administrar epinefrina
+
+===QUESTAO===
+50) Use este cenário para responder as seis perguntas a seguir: há 2 dias, um homem de 45 anos recebeu stents em artéria coronária. Hoje, ele está sentindo dor intensa e relatando um desconforto esmagamento no tórax. Ele está pálido e diaforético e com a pele fria. O pulso radial está bastante fraco, a pressão arterial é 64/40 mmHg, a frequência respiratória é 28 respirações/min e a saturação de oxigênio é 89% no ar ambiente. No momento em que foi conectado, o monitor cardíaco evidenciou a princípio uma taquicardia ventricular, que rapidamente mudou para fibrilação ventricular. 
+
+O que você teria feito primeiro se o paciente não tivesse entrado em fibrilação ventricular?
+
+A) Realizado cardioversão sincronizada
+B) Estabelecido o acesso IV
+C) Obtido um ECG de 12 derivações
+D) Administrado atropina 1 mg
