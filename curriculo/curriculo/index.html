@@ -997,7 +997,7 @@
           </svg>
         </a>
 
-        <button class="headBtn headBtnPrimary" id="goPayBtn" type="button">Ir para pagamento</button>
+        <button class="headBtn headBtnPrimary" id="goPayBtn" type="button">Ir para envio</button>
       </div>
     </header>
   </div>
@@ -1056,7 +1056,7 @@
       nome:"", nascimento:"", crm:"", faculdade:"", email:"", telefone:"",
       outrasFormacoes:"", atuacaoProf:"", estagiosCurriculares:"", outrasInfo:""
     },
-    leadSource: "",
+    leadSource: "1",
     announcerName: "",
     groupSize: 1,
     groupResponsable: "",
@@ -1082,6 +1082,7 @@
   if (!("atuacaoProf" in state.person)) state.person.atuacaoProf = "";
   if (!("estagiosCurriculares" in state.person)) state.person.estagiosCurriculares = "";
   if (!("outrasInfo" in state.person)) state.person.outrasInfo = "";
+  if (state.leadSource !== "4") state.leadSource = "1";
 
   const stepsEl = document.getElementById("steps");
   const screenEl = document.getElementById("screen");
@@ -1225,9 +1226,7 @@
   // =========================
   const stepList = [
     { key:"DADOS",      title:"Dados",        sub:"Cadastro",   icon:"doc" },
-    { key:"ORIGEM",     title:"Origem",       sub:"Desconto",   icon:"megaphone" },
     { key:"PRODUTOS",   title:"Currículos",   sub:"Seleção",    icon:"file" },
-    { key:"PAGAMENTO",  title:"Pagamento",    sub:"Pix/Cartão", icon:"card" },
     { key:"CERTS",      title:"Certificados", sub:"Envio",      icon:"upload" },
     { key:"RESUMO",     title:"Enviar",       sub:"WhatsApp",   icon:"check" },
   ];
@@ -1267,7 +1266,7 @@
   }
 
   if (goPayBtn){
-    goPayBtn.addEventListener("click", ()=> go("PAGAMENTO"));
+    goPayBtn.addEventListener("click", ()=> go("CERTS"));
   }
 
   function nextStep(){
@@ -1301,6 +1300,7 @@
     return (n - 1) * 10;
   }
   function currentDiscountPercent(){
+    if (state.leadSource === "4") return 100;
     if (state.leadSource === "3") return groupDiscountPercent(state.groupSize);
     return 0;
   }
@@ -1404,12 +1404,12 @@
 
   function enforceParceriaDefaults(){
     if (!isParceria()) return;
-    const must = ["VITAE_COMPLETO"];
-    const same = (state.produtos && state.produtos.length === 1 && state.produtos[0] === "VITAE_COMPLETO");
-    if (!same) state.produtos = must;
+    const allowed = ["VITAE_COMPLETO", "VITAE_SINT"];
+    const selected = (state.produtos || []).find((k)=> allowed.includes(k));
+    state.produtos = [selected || "VITAE_COMPLETO"];
     state.paymentMethod = "";
     state.cardInstallments = "";
-    if (!state.previewKey) state.previewKey = "VITAE_COMPLETO";
+    if (!allowed.includes(state.previewKey)) state.previewKey = state.produtos[0];
   }
 
   function requiredDadosOk(){
@@ -1427,7 +1427,7 @@
     return true;
   }
   function requiredProdutosOk(){
-    if (isParceria()) return true;
+    if (isParceria()) return state.produtos.some((k)=>k === "VITAE_COMPLETO" || k === "VITAE_SINT");
     return state.produtos.length > 0;
   }
 
@@ -1500,9 +1500,31 @@
     const box = document.createElement("div");
     box.className = "miniResumo";
 
-    const vSub = isParceria() ? "Gratuito" : moneyBRL(subtotal);
-    const vDesc = isParceria() ? "Gratuito" : ("-" + moneyBRL(desconto));
-    const vTot = isParceria() ? "<strong>Gratuito</strong>" : ("<strong>" + moneyBRL(total) + "</strong>");
+    if (isParceria()){
+      const parceriaKey = (state.produtos || []).find((k)=>k === "VITAE_COMPLETO" || k === "VITAE_SINT");
+      const parceriaLabel = parceriaKey && PRICES[parceriaKey] ? PRICES[parceriaKey].label : "Vitae";
+
+      const i1 = document.createElement("div");
+      i1.className = "item";
+      i1.innerHTML = `<div class="k">Modalidade</div><div class="v">Parceria</div>`;
+
+      const i2 = document.createElement("div");
+      i2.className = "item";
+      i2.innerHTML = `<div class="k">Desconto</div><div class="v">100%</div>`;
+
+      const i3 = document.createElement("div");
+      i3.className = "item";
+      i3.innerHTML = `<div class="k">Currículo</div><div class="v"><strong>${parceriaLabel}</strong></div>`;
+
+      box.appendChild(i1);
+      box.appendChild(i2);
+      box.appendChild(i3);
+      return box;
+    }
+
+    const vSub = moneyBRL(subtotal);
+    const vDesc = "-" + moneyBRL(desconto);
+    const vTot = "<strong>" + moneyBRL(total) + "</strong>";
 
     const i1 = document.createElement("div");
     i1.className = "item";
@@ -1510,7 +1532,7 @@
 
     const i2 = document.createElement("div");
     i2.className = "item";
-    i2.innerHTML = `<div class="k">Desconto ${!isParceria() && pct ? "(" + pct + "%)" : ""}</div><div class="v">${vDesc}</div>`;
+    i2.innerHTML = `<div class="k">Desconto ${pct ? "(" + pct + "%)" : ""}</div><div class="v">${vDesc}</div>`;
 
     const i3 = document.createElement("div");
     i3.className = "item";
@@ -1533,7 +1555,7 @@
 
     if (isParceria()){
       lines.push("• Subtotal: Gratuito");
-      lines.push("• Desconto: Gratuito");
+      lines.push("• Desconto: 100% (Parceria)");
       lines.push("• Total: Gratuito");
     } else {
       lines.push("• Subtotal: " + moneyBRL(subtotal));
@@ -1545,7 +1567,9 @@
     lines.push("ITENS SELECIONADOS");
 
     if (isParceria()){
-      lines.push("• " + PRICES.VITAE_COMPLETO.label + ": Gratuito");
+      const parceriaKey = (state.produtos || []).find((k)=>k === "VITAE_COMPLETO" || k === "VITAE_SINT");
+      const parceriaLabel = parceriaKey && PRICES[parceriaKey] ? PRICES[parceriaKey].label : "Vitae";
+      lines.push("• " + parceriaLabel + ": Gratuito");
     } else if (!state.produtos.length){
       lines.push("• —");
     } else {
@@ -1581,40 +1605,6 @@
       if ((opt.outrasInfo || "").trim()) lines.push("• Outras informações: " + opt.outrasInfo.trim());
     }
 
-    const srcMap = { "1":"Redes sociais", "2":"Grupos da faculdade", "3":"Grupo Curricular", "4":"Parceria" };
-    lines.push("");
-    lines.push("ORIGEM");
-    lines.push("• Como conheceu: " + (srcMap[state.leadSource] || "—"));
-    if (state.leadSource === "2"){
-      lines.push("• Quem anunciou: " + (state.announcerName || "—"));
-    }
-    if (state.leadSource === "3"){
-      lines.push("• Tamanho do grupo: " + (state.groupSize || "—"));
-      lines.push("• Responsável pelo grupo: " + (state.groupResponsable || "—"));
-    }
-
-    lines.push("");
-    lines.push("PAGAMENTO");
-    if (state.leadSource === "4"){
-      lines.push("• Forma: Parceria (pagamento não necessário nesta etapa).");
-    } else {
-      lines.push("• Forma: " + (state.paymentMethod || "—"));
-    }
-
-    if (state.paymentMethod === "pix"){
-      lines.push("• PIX: " + PIX_KEY);
-      lines.push("• Após pagar, enviarei o comprovante aqui.");
-      lines.push("• Total: " + moneyBRL(total));
-    }
-    if (state.paymentMethod === "cartao"){
-      const cc = cardCalc();
-      if (cc){
-        lines.push("• Parcelamento: " + cc.n + "x de " + moneyBRL(cc.per));
-        lines.push("• Total no cartão: " + moneyBRL(cc.totalCard));
-      }
-      lines.push("• Link: solicitar ao atendente.");
-    }
-
     lines.push("");
     lines.push("CERTIFICADOS");
     lines.push("• Envio (nuvem): feito na etapa Certificados (se você tiver enviado).");
@@ -1645,15 +1635,14 @@
   // =========================
   function render(){
     enforceParceriaDefaults();
+    if (!stepList.some((s)=>s.key === currentStep)) currentStep = stepList[0].key;
 
     renderSteps();
     renderBudget();
     screenEl.innerHTML = "";
 
     if (currentStep === "DADOS") return renderDados();
-    if (currentStep === "ORIGEM") return renderOrigem();
     if (currentStep === "PRODUTOS") return renderProdutos();
-    if (currentStep === "PAGAMENTO") return renderPagamento();
     if (currentStep === "CERTS") return renderCertificados();
     if (currentStep === "RESUMO") return renderResumo();
   }
@@ -2056,22 +2045,60 @@
   // =========================
   function renderProdutos(){
     const pct = currentDiscountPercent();
-    renderHeader("Orçamento do currículo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrão");
+    const parceriaAtiva = isParceria();
 
-    if (isParceria()){
+    if (parceriaAtiva){
+      renderHeader("Orçamento do currículo", "Parceria ativa com 100% de desconto.");
+    } else {
+      renderHeader("Orçamento do currículo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrão");
+    }
+
+    const modeTitle = document.createElement("label");
+    modeTitle.className = "small";
+    modeTitle.innerHTML = 'Tipo de atendimento <span class="req">*</span>';
+    screenEl.appendChild(modeTitle);
+
+    const modeGrid = document.createElement("div");
+    modeGrid.className = "grid";
+
+    const modeOpts = [
+      { v:"NORMAL", t:"Padrão", d:"Escolha livre de currículos com valores exibidos." },
+      { v:"PARCERIA", t:"Parceria", d:"Desconto de 100% com escolha entre Vitae Completo ou Vitae Sintetizado." },
+    ];
+
+    modeOpts.forEach((o)=>{
+      const id = "deal_" + o.v;
+      modeGrid.appendChild(optionCard({
+        type:"radio",
+        name:"dealMode",
+        value:o.v,
+        checked: (o.v === "PARCERIA") ? parceriaAtiva : !parceriaAtiva,
+        title:o.t,
+        desc:o.d,
+        id,
+        onChange:(e)=>{
+          const value = e.target.value;
+          state.leadSource = value === "PARCERIA" ? "4" : "1";
+          if (state.leadSource !== "4") {
+            state.paymentMethod = "";
+            state.cardInstallments = "";
+          }
+          save();
+          render();
+        }
+      }));
+    });
+    screenEl.appendChild(modeGrid);
+
+    if (parceriaAtiva){
       const m = document.createElement("span");
       m.className = "tag orange";
-      m.innerHTML = "<b>Parceria:</b> selecionado automaticamente <b>Vitae (Completo)</b> — <b>Gratuito</b>. Você não pode alterar esta seleção.";
+      m.innerHTML = "<b>Parceria ativa:</b> desconto de <b>100%</b> aplicado automaticamente. Selecione abaixo o modelo de Vitae.";
       const line = document.createElement("div");
       line.className = "row";
       line.style.marginTop = "10px";
       line.appendChild(m);
       screenEl.appendChild(line);
-
-      const note = document.createElement("p");
-      note.className = "muted";
-      note.textContent = "Você pode apenas avançar.";
-      screenEl.appendChild(note);
     }
 
     const details = document.createElement("details");
@@ -2221,10 +2248,14 @@
       save();
       previewBody.style.display = state.previewOpen ? "block" : "none";
       toggleBtn.textContent = state.previewOpen ? "Ocultar pré-visualização" : "Ver pré-visualização";
-      if (state.previewOpen) renderPreviewFor(state.previewKey || (isParceria() ? "VITAE_COMPLETO" : "LATTES"));
+      const defaultPreview = (state.produtos && state.produtos[0]) ? state.produtos[0] : (parceriaAtiva ? "VITAE_COMPLETO" : "LATTES");
+      if (state.previewOpen) renderPreviewFor(state.previewKey || defaultPreview);
     });
 
-    if (state.previewOpen) renderPreviewFor(state.previewKey || (isParceria() ? "VITAE_COMPLETO" : "LATTES"));
+    {
+      const defaultPreview = (state.produtos && state.produtos[0]) ? state.produtos[0] : (parceriaAtiva ? "VITAE_COMPLETO" : "LATTES");
+      if (state.previewOpen) renderPreviewFor(state.previewKey || defaultPreview);
+    }
 
     previewWrap.appendChild(previewBody);
     diff.appendChild(previewWrap);
@@ -2232,20 +2263,19 @@
     details.appendChild(diff);
     screenEl.appendChild(details);
 
-    if (isParceria()){
-      renderActions({ canBack:true, canNext:true, nextLabel:"Próximo" });
-      return;
-    }
-
     const prodTitle = document.createElement("label");
     prodTitle.className = "small";
-    prodTitle.innerHTML = 'Selecione o(s) currículo(s) <span class="req">*</span> <span class="muted">(pode marcar mais de um)</span>';
+    prodTitle.innerHTML = parceriaAtiva
+      ? 'Selecione o modelo de Vitae <span class="req">*</span> <span class="muted">(escolha 1 opção)</span>'
+      : 'Selecione o(s) currículo(s) <span class="req">*</span> <span class="muted">(pode marcar mais de um)</span>';
     screenEl.appendChild(prodTitle);
 
     const grid = document.createElement("div");
     grid.className = "grid";
 
-    const prodList = ["LATTES","VITAE_COMPLETO","VITAE_SINT"];
+    const prodList = parceriaAtiva
+      ? ["VITAE_COMPLETO","VITAE_SINT"]
+      : ["LATTES","VITAE_COMPLETO","VITAE_SINT"];
 
     prodList.forEach((key)=>{
       const p = PRICES[key];
@@ -2254,27 +2284,36 @@
       const disc = discountedPrice(base);
 
       let desc = "";
-      if (pct > 0){
+      if (parceriaAtiva){
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">Incluído na parceria</span>`;
+      } else if (pct > 0){
         desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="priceLine"><span class="oldPrice">${moneyBRL(base)}</span><span class="newPrice">${moneyBRL(disc)}</span></span>`;
       } else {
         desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">${moneyBRL(base)}</span>`;
       }
 
       grid.appendChild(optionCard({
-        type:"checkbox",
-        name:"produtos",
+        type: parceriaAtiva ? "radio" : "checkbox",
+        name: parceriaAtiva ? "produtoParceria" : "produtos",
         value:key,
         checked: state.produtos.includes(key),
         title: p.label,
         desc,
         id,
         onChange:(e)=>{
-          const checked = e.target.checked;
-          const arr = state.produtos.slice();
-          const pos = arr.indexOf(key);
-          if (checked && pos === -1) arr.push(key);
-          if (!checked && pos >= 0) arr.splice(pos, 1);
-          state.produtos = arr;
+          if (parceriaAtiva){
+            if (e.target.checked){
+              state.produtos = [key];
+              state.previewKey = key;
+            }
+          } else {
+            const checked = e.target.checked;
+            const arr = state.produtos.slice();
+            const pos = arr.indexOf(key);
+            if (checked && pos === -1) arr.push(key);
+            if (!checked && pos >= 0) arr.splice(pos, 1);
+            state.produtos = arr;
+          }
 
           state.cardInstallments = "";
           save();
@@ -2295,6 +2334,11 @@
       const t = document.createElement("span");
       t.className = "tag bad";
       t.innerHTML = "<b>Atenção:</b> selecione pelo menos 1 opção";
+      totalLine.appendChild(t);
+    } else if (parceriaAtiva){
+      const t = document.createElement("span");
+      t.className = "tag orange";
+      t.innerHTML = "<b>Parceria:</b> desconto de 100% aplicado. Os valores não são exibidos nesta modalidade.";
       totalLine.appendChild(t);
     } else {
       const t = document.createElement("span");
@@ -2822,7 +2866,7 @@ INSTRUÇÕES:
 
     const p = document.createElement("p");
     p.className = "muted";
-    p.textContent = "Ao abrir o WhatsApp, revise rapidamente e envie. Se pagou via PIX, anexe o comprovante na conversa.";
+    p.textContent = "Ao abrir o WhatsApp, revise rapidamente e envie.";
     screenEl.appendChild(p);
 
     renderActions({
