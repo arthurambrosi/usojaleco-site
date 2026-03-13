@@ -1508,16 +1508,11 @@
       i1.className = "item";
       i1.innerHTML = `<div class="k">Modalidade</div><div class="v">Parceria</div>`;
 
-      const i2 = document.createElement("div");
-      i2.className = "item";
-      i2.innerHTML = `<div class="k">Desconto</div><div class="v">100%</div>`;
-
       const i3 = document.createElement("div");
       i3.className = "item";
-      i3.innerHTML = `<div class="k">Currículo</div><div class="v"><strong>${parceriaLabel}</strong></div>`;
+      i3.innerHTML = `<div class="k">Modelo</div><div class="v"><strong>${parceriaLabel}</strong></div>`;
 
       box.appendChild(i1);
-      box.appendChild(i2);
       box.appendChild(i3);
       return box;
     }
@@ -1554,9 +1549,7 @@
     lines.push("RESUMO");
 
     if (isParceria()){
-      lines.push("• Subtotal: Gratuito");
-      lines.push("• Desconto: 100% (Parceria)");
-      lines.push("• Total: Gratuito");
+      lines.push("• Modalidade: Parceria");
     } else {
       lines.push("• Subtotal: " + moneyBRL(subtotal));
       lines.push("• Desconto: -" + moneyBRL(desconto) + (pct ? " ("+pct+"%)" : ""));
@@ -1569,7 +1562,7 @@
     if (isParceria()){
       const parceriaKey = (state.produtos || []).find((k)=>k === "VITAE_COMPLETO" || k === "VITAE_SINT");
       const parceriaLabel = parceriaKey && PRICES[parceriaKey] ? PRICES[parceriaKey].label : "Vitae";
-      lines.push("• " + parceriaLabel + ": Gratuito");
+      lines.push("• " + parceriaLabel + " (Parceria)");
     } else if (!state.produtos.length){
       lines.push("• —");
     } else {
@@ -2048,7 +2041,7 @@
     const parceriaAtiva = isParceria();
 
     if (parceriaAtiva){
-      renderHeader("Orçamento do currículo", "Parceria ativa com 100% de desconto.");
+      renderHeader("Orçamento do currículo", "Parceria ativa.");
     } else {
       renderHeader("Orçamento do currículo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrão");
     }
@@ -2063,7 +2056,7 @@
 
     const modeOpts = [
       { v:"NORMAL", t:"Padrão", d:"Escolha livre de currículos com valores exibidos." },
-      { v:"PARCERIA", t:"Parceria", d:"Desconto de 100% com escolha entre Vitae Completo ou Vitae Sintetizado." },
+      { v:"PARCERIA", t:"Parceria", d:"Escolha entre Vitae Completo ou Vitae Sintetizado." },
     ];
 
     modeOpts.forEach((o)=>{
@@ -2091,14 +2084,10 @@
     screenEl.appendChild(modeGrid);
 
     if (parceriaAtiva){
-      const m = document.createElement("span");
-      m.className = "tag orange";
-      m.innerHTML = "<b>Parceria ativa:</b> desconto de <b>100%</b> aplicado automaticamente. Selecione abaixo o modelo de Vitae.";
-      const line = document.createElement("div");
-      line.className = "row";
-      line.style.marginTop = "10px";
-      line.appendChild(m);
-      screenEl.appendChild(line);
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = "Selecione abaixo o modelo de Vitae.";
+      screenEl.appendChild(p);
     }
 
     const details = document.createElement("details");
@@ -2285,7 +2274,7 @@
 
       let desc = "";
       if (parceriaAtiva){
-        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">Incluído na parceria</span>`;
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">Opção disponível na parceria</span>`;
       } else if (pct > 0){
         desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="priceLine"><span class="oldPrice">${moneyBRL(base)}</span><span class="newPrice">${moneyBRL(disc)}</span></span>`;
       } else {
@@ -2336,10 +2325,11 @@
       t.innerHTML = "<b>Atenção:</b> selecione pelo menos 1 opção";
       totalLine.appendChild(t);
     } else if (parceriaAtiva){
-      const t = document.createElement("span");
-      t.className = "tag orange";
-      t.innerHTML = "<b>Parceria:</b> desconto de 100% aplicado. Os valores não são exibidos nesta modalidade.";
-      totalLine.appendChild(t);
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.style.marginTop = "12px";
+      p.textContent = "Parceria selecionada.";
+      screenEl.appendChild(p);
     } else {
       const t = document.createElement("span");
       t.className = pct > 0 ? "tag warn" : "tag";
@@ -2349,7 +2339,9 @@
       totalLine.appendChild(t);
     }
 
-    screenEl.appendChild(totalLine);
+    if (!(parceriaAtiva && state.produtos.length > 0)){
+      screenEl.appendChild(totalLine);
+    }
 
     const ok = requiredProdutosOk();
     renderActions({ canBack:true, canNext: ok, nextLabel:"Próximo" });
