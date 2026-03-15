@@ -1209,6 +1209,53 @@
       r.readAsDataURL(file);
     });
   }
+  function certNormalizeSendError(err){
+    const msg = String((err && err.message) ? err.message : "Falha ao enviar");
+    if (/load failed|failed to fetch|networkerror|fetch/i.test(msg)){
+      return "Falha de conexÃ£o ao enviar. Tente novamente em alguns segundos.";
+    }
+    return msg;
+  }
+  async function certSendPayload(payload){
+    const jsonBody = JSON.stringify(payload);
+    const formBody = new URLSearchParams();
+    Object.entries(payload).forEach(([k, v])=>{
+      formBody.append(k, v == null ? "" : String(v));
+    });
+
+    const attempts = [
+      { body: jsonBody, headers: { "Content-Type": "application/json" } },
+      { body: jsonBody, headers: { "Content-Type": "text/plain" } },
+      { body: formBody, headers: {} }
+    ];
+
+    let lastErr = new Error("Falha ao enviar");
+    for (const attempt of attempts){
+      try{
+        const res = await fetch(CERT_ENDPOINT_URL, {
+          method: "POST",
+          headers: attempt.headers,
+          body: attempt.body
+        });
+
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        let ok = true;
+        try{
+          const j = await res.json();
+          if (j && (j.ok === false || j.success === false)) ok = false;
+        }catch(_){
+          // se nÃ£o for JSON, trata como sucesso
+        }
+
+        if (!ok) throw new Error("Resposta do servidor indicou falha.");
+        return;
+      }catch(e){
+        lastErr = e;
+      }
+    }
+    throw lastErr;
+  }
 
   // =========================
   // STEPS
@@ -2461,28 +2508,12 @@
             total: total
           };
 
-          const res = await fetch(CERT_ENDPOINT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
-          if (!res.ok) throw new Error("HTTP " + res.status);
-
-          let ok = true;
-          try{
-            const j = await res.json();
-            if (j && (j.ok === false || j.success === false)) ok = false;
-          }catch(_){
-            // se nÃ£o for JSON, trata como sucesso (muitos GAS respondem texto)
-          }
-
-          if (!ok) throw new Error("Resposta do servidor indicou falha.");
+          await certSendPayload(payload);
 
           it.status = "sent";
         }catch(e){
           it.status = "error";
-          it.errorMsg = (e && e.message) ? e.message : "Falha ao enviar";
+          it.errorMsg = certNormalizeSendError(e);
         }finally{
           done++;
           setProgress();
