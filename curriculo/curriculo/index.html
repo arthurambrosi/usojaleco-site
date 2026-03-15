@@ -1031,9 +1031,9 @@
   const CERT_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbx1wbeC4BXyxX75IlxG64Xi8ozUm2Avgp4uwUjh9V59h5sT7aKEGSQfLDy4XkOHnsRxuA/exec";
 
   const PRICES = {
-    LATTES: { label: "Lattes", price: 99, prazo: "até 48h" },
-    VITAE_COMPLETO: { label: "Vitae (Completo)", price: 229, prazo: "até 10 min" },
-    VITAE_SINT: { label: "Vitae (Sintetizado)", price: 89, prazo: "até 48h" },
+    LATTES: { label: "Lattes", price: 159, prazo: "até 48h" },
+    VITAE_COMPLETO: { label: "Vitae (Completo)", price: 149, prazo: "até 10 min" },
+    VITAE_SINT: { label: "Vitae (Sintetizado)", price: 109, prazo: "até 48h" },
   };
 
   const BASE_REF = 249.00;
@@ -1296,8 +1296,7 @@
   function groupDiscountPercent(groupSize){
     const n = Math.max(1, parseInt(groupSize || 1, 10));
     if (n <= 1) return 0;
-    if (n >= 6) return 50;
-    return (n - 1) * 10;
+    return Math.min((n - 1) * 5, 50);
   }
   function currentDiscountPercent(){
     if (state.leadSource === "4") return 100;
