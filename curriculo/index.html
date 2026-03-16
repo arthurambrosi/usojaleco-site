@@ -252,7 +252,7 @@
     .stepsBar{
       flex:1 1 auto;
       display:grid;
-      grid-template-columns:repeat(6, minmax(0, 1fr));
+      grid-template-columns:repeat(4, minmax(0, 1fr));
       gap: 10px;
       align-items:stretch;
       width:100%;
@@ -316,7 +316,7 @@
     }
 
     .budgetBox{
-      flex:0 0 340px;
+      flex:0 0 380px;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: var(--surface);
@@ -523,6 +523,18 @@
       list-style:none;
     }
     details summary::-webkit-details-marker{ display:none; }
+    .optDetails > summary::before{
+      content: "▸";
+      display:inline-block;
+      margin-right:8px;
+      color: var(--accent);
+      font-weight: 950;
+      transform: rotate(0deg);
+      transition: transform var(--t);
+    }
+    .optDetails[open] > summary::before{
+      transform: rotate(90deg);
+    }
 
     .diffBox{margin-top:10px;font-size:12px;line-height:1.45}
     .diffTitle{
@@ -930,7 +942,7 @@
       .wrap{ padding: 14px var(--edgeR) 22px; padding-left: var(--edgeL); }
       .topPanel{padding:10px;gap:10px;}
       .stepsBar{
-        grid-template-columns:repeat(6, minmax(0, 1fr));
+        grid-template-columns:repeat(4, minmax(0, 1fr));
         gap:6px;
       }
       .stepCard{padding:8px 6px;border-radius:14px;gap:0;min-height:46px;}
@@ -1010,8 +1022,7 @@
     <div class="card" id="screen"></div>
 
     <div class="card">
-      <div class="row">
-        <span class="tag orange"><b>Dica:</b> você pode clicar nas etapas acima para voltar/ir direto.</span>
+      <div class="row" style="justify-content:flex-end;">
         <button class="btn" id="resetBtn" type="button">Limpar tudo</button>
       </div>
     </div>
@@ -1801,6 +1812,7 @@
     screenEl.appendChild(row);
 
     const optDetails = document.createElement("details");
+    optDetails.className = "optDetails";
     const optSum = document.createElement("summary");
     optSum.textContent = "Informações acadêmicas/profissionais (opcional)";
     optDetails.appendChild(optSum);
