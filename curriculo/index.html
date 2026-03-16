@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>UsoJaleco | OrÃ§amento</title>
+  <title>UsoJaleco | Orçamento</title>
 
   <!-- ====== DESIGN KIT: FONTES ====== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@
     *{ box-sizing:border-box }
     html,body{ height:100% }
 
-    /* âœ… mantÃ©m correÃ§Ã£o de scroll mobile (sem travar a pÃ¡gina) */
+    /* ✅ mantém correção de scroll mobile (sem travar a página) */
     html{
       min-height:100%;
       height:auto;
@@ -366,7 +366,7 @@
     }
     .miniResumo .v strong{ color: var(--text); }
 
-    /* ===== ConteÃºdo ===== */
+    /* ===== Conteúdo ===== */
     .h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
     .h h2{
       margin:0;
@@ -503,7 +503,7 @@
     .oldPrice{color:rgba(15,23,42,.40);text-decoration:line-through}
     .newPrice{color:var(--text);font-weight:900}
 
-    /* ===== Details (diferenÃ§as) ===== */
+    /* ===== Details (diferenças) ===== */
     details{
       border:1px solid var(--line);
       border-radius: 18px;
@@ -566,7 +566,7 @@
     }
 
     /* =========================
-       âœ… PRÃ‰VIA DE IMAGENS
+       ✅ PRÉVIA DE IMAGENS
        ========================= */
     .previewWrap{
       margin-top:12px;
@@ -679,7 +679,7 @@
     }
 
     /* =========================
-       âœ… CERTIFICADOS (namespace .cert*)
+       ✅ CERTIFICADOS (namespace .cert*)
        ========================= */
     .certCard{
       border-radius: 22px;
@@ -1011,7 +1011,7 @@
 
     <div class="card">
       <div class="row">
-        <span class="tag orange"><b>Dica:</b> vocÃª pode clicar nas etapas acima para voltar/ir direto.</span>
+        <span class="tag orange"><b>Dica:</b> você pode clicar nas etapas acima para voltar/ir direto.</span>
         <button class="btn" id="resetBtn" type="button">Limpar tudo</button>
       </div>
     </div>
@@ -1029,9 +1029,9 @@
   const CERT_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbx1wbeC4BXyxX75IlxG64Xi8ozUm2Avgp4uwUjh9V59h5sT7aKEGSQfLDy4XkOHnsRxuA/exec";
 
   const PRICES = {
-    LATTES: { label: "Lattes", price: 159, prazo: "atÃ© 48h" },
-    VITAE_COMPLETO: { label: "Vitae (Completo)", price: 149, prazo: "atÃ© 10 min" },
-    VITAE_SINT: { label: "Vitae (Sintetizado)", price: 109, prazo: "atÃ© 48h" },
+    LATTES: { label: "Lattes", price: 159, prazo: "até 48h" },
+    VITAE_COMPLETO: { label: "Vitae (Completo)", price: 149, prazo: "até 10 min" },
+    VITAE_SINT: { label: "Vitae (Sintetizado)", price: 109, prazo: "até 48h" },
   };
 
   const GROUP_DISCOUNT = {
@@ -1142,7 +1142,7 @@
       const img2I = idx("imagem2");
       const img3I = idx("imagem3");
 
-      if (idI < 0) throw new Error("Coluna id nÃ£o encontrada");
+      if (idI < 0) throw new Error("Coluna id não encontrada");
 
       const map = {};
       for (let i = 1; i < lines.length; i++){
@@ -1173,7 +1173,7 @@
   fetchCurriculumImages();
 
   // =========================
-  // CERTIFICADOS (STATE EM MEMÃ“RIA)
+  // CERTIFICADOS (STATE EM MEMÓRIA)
   // =========================
   let certItems = [];
 
@@ -1212,7 +1212,7 @@
   function certNormalizeSendError(err){
     const msg = String((err && err.message) ? err.message : "Falha ao enviar");
     if (/load failed|failed to fetch|networkerror|fetch/i.test(msg)){
-      return "Falha de conexÃ£o ao enviar. Tente novamente em alguns segundos.";
+      return "Falha de conexão ao enviar. Tente novamente em alguns segundos.";
     }
     return msg;
   }
@@ -1245,7 +1245,7 @@
           const j = await res.json();
           if (j && (j.ok === false || j.success === false)) ok = false;
         }catch(_){
-          // se nÃ£o for JSON, trata como sucesso
+          // se não for JSON, trata como sucesso
         }
 
         if (!ok) throw new Error("Resposta do servidor indicou falha.");
@@ -1262,7 +1262,7 @@
   // =========================
   const stepList = [
     { key:"DADOS",      title:"Dados",        sub:"Cadastro",   icon:"doc" },
-    { key:"PRODUTOS",   title:"CurrÃ­culos",   sub:"SeleÃ§Ã£o",    icon:"file" },
+    { key:"PRODUTOS",   title:"Currículos",   sub:"Seleção",    icon:"file" },
     { key:"CERTS",      title:"Certificados", sub:"Envio",      icon:"upload" },
     { key:"RESUMO",     title:"Enviar",       sub:"WhatsApp",   icon:"check" },
   ];
@@ -1542,17 +1542,17 @@
     const pct = currentDiscountPercent();
     const { subtotal, desconto, total } = calcTotals();
 
-    lines.push("ORÃ‡AMENTO - CURRÃCULO");
-    lines.push("â€”");
+    lines.push("ORÇAMENTO - CURRÍCULO");
+    lines.push("—");
     lines.push("RESUMO");
 
     if (isParceria()){
-      lines.push("â€¢ Modalidade: Parceria");
+      lines.push("• Modalidade: Parceria");
     } else {
-      if (isGrupo()) lines.push("â€¢ Modalidade: Grupo (" + state.groupSize + " pessoas)");
-      lines.push("â€¢ Subtotal: " + moneyBRL(subtotal));
-      lines.push("â€¢ Desconto: -" + moneyBRL(desconto) + (pct ? " ("+pct+"%)" : ""));
-      lines.push("â€¢ Total: " + moneyBRL(total));
+      if (isGrupo()) lines.push("• Modalidade: Grupo (" + state.groupSize + " pessoas)");
+      lines.push("• Subtotal: " + moneyBRL(subtotal));
+      lines.push("• Desconto: -" + moneyBRL(desconto) + (pct ? " ("+pct+"%)" : ""));
+      lines.push("• Total: " + moneyBRL(total));
     }
 
     lines.push("");
@@ -1561,25 +1561,25 @@
     if (isParceria()){
       const parceriaKey = (state.produtos || []).find((k)=>k === "VITAE_COMPLETO" || k === "VITAE_SINT");
       const parceriaLabel = parceriaKey && PRICES[parceriaKey] ? PRICES[parceriaKey].label : "Vitae";
-      lines.push("â€¢ " + parceriaLabel + " (Parceria)");
+      lines.push("• " + parceriaLabel + " (Parceria)");
     } else if (!state.produtos.length){
-      lines.push("â€¢ â€”");
+      lines.push("• —");
     } else {
       for (const k of state.produtos){
         const p = PRICES[k];
         const disc = discountedPrice(p.price);
-        lines.push("â€¢ " + p.label + ": " + moneyBRL(p.price) + " â†’ " + moneyBRL(disc));
+        lines.push("• " + p.label + ": " + moneyBRL(p.price) + " → " + moneyBRL(disc));
       }
     }
 
     lines.push("");
     lines.push("DADOS");
-    lines.push("â€¢ Nome completo: " + (state.person.nome || "â€”"));
-    lines.push("â€¢ Data de nascimento: " + (state.person.nascimento || "â€”"));
-    lines.push("â€¢ CRM (se houver): " + (state.person.crm || "â€”"));
-    lines.push("â€¢ Faculdade: " + (state.person.faculdade || "â€”"));
-    lines.push("â€¢ E-mail: " + (state.person.email || "â€”"));
-    lines.push("â€¢ Telefone: " + (state.person.telefone || "â€”"));
+    lines.push("• Nome completo: " + (state.person.nome || "—"));
+    lines.push("• Data de nascimento: " + (state.person.nascimento || "—"));
+    lines.push("• CRM (se houver): " + (state.person.crm || "—"));
+    lines.push("• Faculdade: " + (state.person.faculdade || "—"));
+    lines.push("• E-mail: " + (state.person.email || "—"));
+    lines.push("• Telefone: " + (state.person.telefone || "—"));
 
     const opt = state.person || {};
     const hasOpt = !!(
@@ -1590,22 +1590,22 @@
     );
     if (hasOpt){
       lines.push("");
-      lines.push("INFORMAÃ‡Ã•ES ACADÃŠMICAS/PROFISSIONAIS (OPCIONAL)");
-      if ((opt.outrasFormacoes || "").trim()) lines.push("â€¢ Outras formaÃ§Ãµes acadÃªmicas: " + opt.outrasFormacoes.trim());
-      if ((opt.atuacaoProf || "").trim()) lines.push("â€¢ AtuaÃ§Ã£o profissional: " + opt.atuacaoProf.trim());
-      if ((opt.estagiosCurriculares || "").trim()) lines.push("â€¢ EstÃ¡gios curriculares (Internato): " + opt.estagiosCurriculares.trim());
-      if ((opt.outrasInfo || "").trim()) lines.push("â€¢ Outras informaÃ§Ãµes: " + opt.outrasInfo.trim());
+      lines.push("INFORMAÇÕES ACADÊMICAS/PROFISSIONAIS (OPCIONAL)");
+      if ((opt.outrasFormacoes || "").trim()) lines.push("• Outras formações acadêmicas: " + opt.outrasFormacoes.trim());
+      if ((opt.atuacaoProf || "").trim()) lines.push("• Atuação profissional: " + opt.atuacaoProf.trim());
+      if ((opt.estagiosCurriculares || "").trim()) lines.push("• Estágios curriculares (Internato): " + opt.estagiosCurriculares.trim());
+      if ((opt.outrasInfo || "").trim()) lines.push("• Outras informações: " + opt.outrasInfo.trim());
     }
 
     lines.push("");
     lines.push("CERTIFICADOS");
-    lines.push("â€¢ Envio (nuvem): feito na etapa Certificados (se vocÃª tiver enviado).");
+    lines.push("• Envio (nuvem): feito na etapa Certificados (se você tiver enviado).");
 
     const dlink = (state.certDriveLink || "").trim();
     if (dlink){
-      lines.push("â€¢ Link do Drive: " + dlink);
+      lines.push("• Link do Drive: " + dlink);
     } else {
-      lines.push("â€¢ Se preferir, tambÃ©m pode mandar por Drive/WhatsApp.");
+      lines.push("• Se preferir, também pode mandar por Drive/WhatsApp.");
     }
 
     return lines.join("\n");
@@ -1652,7 +1652,7 @@
     screenEl.appendChild(h);
   }
 
-  function renderActions({canBack=true, canNext=true, nextLabel="PrÃ³ximo", backLabel="Voltar", onNext}){
+  function renderActions({canBack=true, canNext=true, nextLabel="Próximo", backLabel="Voltar", onNext}){
     const a = document.createElement("div");
     a.className = "actions";
 
@@ -1690,7 +1690,7 @@
   // STEP 1: DADOS
   // =========================
   function renderDados(){
-    renderHeader("Seus dados", "Campos com * sÃ£o obrigatÃ³rios.");
+    renderHeader("Seus dados", "Campos com * são obrigatórios.");
 
     const row = document.createElement("div");
     row.className = "grid";
@@ -1802,7 +1802,7 @@
 
     const optDetails = document.createElement("details");
     const optSum = document.createElement("summary");
-    optSum.textContent = "InformaÃ§Ãµes acadÃªmicas/profissionais (opcional)";
+    optSum.textContent = "Informações acadêmicas/profissionais (opcional)";
     optDetails.appendChild(optSum);
 
     const optBox = document.createElement("div");
@@ -1811,7 +1811,7 @@
     const optHint = document.createElement("p");
     optHint.className = "muted";
     optHint.style.marginTop = "0";
-    optHint.textContent = "Se quiser, preencha sÃ³ o que fizer sentido. Isso ajuda a deixar seu currÃ­culo mais completo.";
+    optHint.textContent = "Se quiser, preencha só o que fizer sentido. Isso ajuda a deixar seu currículo mais completo.";
     optBox.appendChild(optHint);
 
     const optGrid = document.createElement("div");
@@ -1836,24 +1836,24 @@
     }
 
     optGrid.appendChild(makeOptField({
-      label: "Outras formaÃ§Ãµes acadÃªmicas",
+      label: "Outras formações acadêmicas",
       key: "outrasFormacoes",
-      placeholder: "Ex.: PÃ³s-graduaÃ§Ã£o, mestrado, outra graduaÃ§Ã£o, cursos longos, etc."
+      placeholder: "Ex.: Pós-graduação, mestrado, outra graduação, cursos longos, etc."
     }));
     optGrid.appendChild(makeOptField({
-      label: "AtuaÃ§Ã£o profissional",
+      label: "Atuação profissional",
       key: "atuacaoProf",
-      placeholder: "Ex.: plantÃµes, clÃ­nica, UBS, preceptoria, empresa, cargos e funÃ§Ãµes."
+      placeholder: "Ex.: plantões, clínica, UBS, preceptoria, empresa, cargos e funções."
     }));
     optGrid.appendChild(makeOptField({
-      label: "EstÃ¡gios curriculares (Internato)",
+      label: "Estágios curriculares (Internato)",
       key: "estagiosCurriculares",
-      placeholder: "Ex.: rodÃ­zios, serviÃ§os, perÃ­odos, locais e principais atividades."
+      placeholder: "Ex.: rodízios, serviços, períodos, locais e principais atividades."
     }));
     optGrid.appendChild(makeOptField({
-      label: "Outras informaÃ§Ãµes",
+      label: "Outras informações",
       key: "outrasInfo",
-      placeholder: "Ex.: idiomas, certificaÃ§Ãµes relevantes, intercÃ¢mbio, prÃªmios, etc."
+      placeholder: "Ex.: idiomas, certificações relevantes, intercâmbio, prêmios, etc."
     }));
 
     optBox.appendChild(optGrid);
@@ -1863,7 +1863,7 @@
     const ok = requiredDadosOk();
     const warn = document.createElement("p");
     warn.className = "muted";
-    warn.textContent = ok ? "Tudo certo â€” vocÃª pode avanÃ§ar." : "Preencha os campos obrigatÃ³rios (*). CRM Ã© opcional.";
+    warn.textContent = ok ? "Tudo certo — você pode avançar." : "Preencha os campos obrigatórios (*). CRM é opcional.";
     screenEl.appendChild(warn);
 
     renderActions({ canBack:false, canNext: ok, nextLabel:"Continuar" });
@@ -1878,11 +1878,11 @@
     const grupoAtivo = isGrupo();
 
     if (parceriaAtiva){
-      renderHeader("OrÃ§amento do currÃ­culo", "Parceria ativa.");
+      renderHeader("Orçamento do currículo", "Parceria ativa.");
     } else if (grupoAtivo){
-      renderHeader("OrÃ§amento do currÃ­culo", "Grupo curricular ativo.");
+      renderHeader("Orçamento do currículo", "Grupo curricular ativo.");
     } else {
-      renderHeader("OrÃ§amento do currÃ­culo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrÃ£o");
+      renderHeader("Orçamento do currículo", pct ? ("Valores com " + pct + "% de desconto aplicados") : "Valores padrão");
     }
 
     const modeTitle = document.createElement("label");
@@ -1894,7 +1894,7 @@
     modeGrid.className = "grid";
 
     const modeOpts = [
-      { v:"NORMAL", t:"PadrÃ£o", d:"Escolha livre de currÃ­culos com valores exibidos." },
+      { v:"NORMAL", t:"Padrão", d:"Escolha livre de currículos com valores exibidos." },
       { v:"GRUPO", t:"Grupo", d:"Desconto progressivo para compras em grupo." },
       { v:"PARCERIA", t:"Parceria", d:"Escolha entre Vitae Completo ou Vitae Sintetizado." },
     ];
@@ -1967,7 +1967,7 @@
 
     const details = document.createElement("details");
     const sum = document.createElement("summary");
-    sum.textContent = "Qual a diferenÃ§a de cada currÃ­culo?";
+    sum.textContent = "Qual a diferença de cada currículo?";
     details.appendChild(sum);
 
     const diff = document.createElement("div");
@@ -1976,20 +1976,20 @@
     const d1 = document.createElement("div");
     d1.innerHTML =
       '<div class="diffTitle">LATTES</div>' +
-      '<div class="diffSub">Ã‰ o padrÃ£o acadÃªmico oficial do Brasil (Plataforma CNPq).</div>' +
-      '<div class="diffDesc">Foca em produÃ§Ã£o cientÃ­fica, pesquisas, artigos e vida universitÃ¡ria. Ã‰ requisito em diversos processos seletivos na Ã¡rea mÃ©dica.</div>';
+      '<div class="diffSub">É o padrão acadêmico oficial do Brasil (Plataforma CNPq).</div>' +
+      '<div class="diffDesc">Foca em produção científica, pesquisas, artigos e vida universitária. É requisito em diversos processos seletivos na área médica.</div>';
 
     const d2 = document.createElement("div");
     d2.innerHTML =
-      '<div class="diffTitle">VITAE COMPLETO <span class="yellowStar">â­</span></div>' +
-      '<div class="diffSub">Emprego e ResidÃªncia MÃ©dica</div>' +
-      '<div class="diffDesc">Ã‰ o histÃ³rico detalhado de toda a sua trajetÃ³ria. Totalmente editÃ¡vel, sendo fÃ¡cil de atualizar! O mais utilizado para vagas de emprego e editais de residÃªncia mÃ©dica.</div>';
+      '<div class="diffTitle">VITAE COMPLETO <span class="yellowStar">⭐</span></div>' +
+      '<div class="diffSub">Emprego e Residência Médica</div>' +
+      '<div class="diffDesc">É o histórico detalhado de toda a sua trajetória. Totalmente editável, sendo fácil de atualizar! O mais utilizado para vagas de emprego e editais de residência médica.</div>';
 
     const d3 = document.createElement("div");
     d3.innerHTML =
       '<div class="diffTitle">VITAE SINTETIZADO</div>' +
-      '<div class="diffSub">RÃ¡pido e prÃ¡tico</div>' +
-      '<div class="diffDesc">Focado na leitura rÃ¡pida de diretores clÃ­nicos, resume em 1 pÃ¡gina o essencial: onde formou, CRM, RQE (se tiver), cursos prÃ¡ticos vigentes (ACLS, ATLS) e experiÃªncia recente.</div>';
+      '<div class="diffSub">Rápido e prático</div>' +
+      '<div class="diffDesc">Focado na leitura rápida de diretores clínicos, resume em 1 página o essencial: onde formou, CRM, RQE (se tiver), cursos práticos vigentes (ACLS, ATLS) e experiência recente.</div>';
 
     diff.appendChild(d1);
     diff.appendChild(d2);
@@ -2001,7 +2001,7 @@
     const top = document.createElement("div");
     top.className = "previewTop";
     top.innerHTML = `
-      <p class="previewTitle">PrÃ©-visualizaÃ§Ã£o dos currÃ­culos</p>
+      <p class="previewTitle">Pré-visualização dos currículos</p>
       <p class="previewHint">Clique nas caixinhas para alternar</p>
     `;
     previewWrap.appendChild(top);
@@ -2011,7 +2011,7 @@
     toggleBtn.className = "btn primary";
     toggleBtn.style.width = "100%";
     toggleBtn.style.marginTop = "2px";
-    toggleBtn.textContent = state.previewOpen ? "Ocultar prÃ©-visualizaÃ§Ã£o" : "Ver prÃ©-visualizaÃ§Ã£o";
+    toggleBtn.textContent = state.previewOpen ? "Ocultar pré-visualização" : "Ver pré-visualização";
     previewWrap.appendChild(toggleBtn);
 
     const previewBody = document.createElement("div");
@@ -2057,14 +2057,14 @@
       if (!CURRICULUM_IMAGES){
         const loading = document.createElement("div");
         loading.className = "previewEmpty";
-        loading.textContent = "Carregando imagens da prÃ©viaâ€¦";
+        loading.textContent = "Carregando imagens da prévia…";
         imgsContainer.appendChild(loading);
         return;
       }
       if (CURRICULUM_IMAGES_ERR){
         const err = document.createElement("div");
         err.className = "previewEmpty";
-        err.textContent = "NÃ£o foi possÃ­vel carregar as imagens no momento. (" + CURRICULUM_IMAGES_ERR + ")";
+        err.textContent = "Não foi possível carregar as imagens no momento. (" + CURRICULUM_IMAGES_ERR + ")";
         imgsContainer.appendChild(err);
         return;
       }
@@ -2073,7 +2073,7 @@
       if (!imgs.length){
         const none = document.createElement("div");
         none.className = "previewEmpty";
-        none.textContent = "Sem imagens cadastradas para este currÃ­culo na planilha.";
+        none.textContent = "Sem imagens cadastradas para este currículo na planilha.";
         imgsContainer.appendChild(none);
         return;
       }
@@ -2116,7 +2116,7 @@
       state.previewOpen = !state.previewOpen;
       save();
       previewBody.style.display = state.previewOpen ? "block" : "none";
-      toggleBtn.textContent = state.previewOpen ? "Ocultar prÃ©-visualizaÃ§Ã£o" : "Ver prÃ©-visualizaÃ§Ã£o";
+      toggleBtn.textContent = state.previewOpen ? "Ocultar pré-visualização" : "Ver pré-visualização";
       const defaultPreview = (state.produtos && state.produtos[0]) ? state.produtos[0] : (parceriaAtiva ? "VITAE_COMPLETO" : "LATTES");
       if (state.previewOpen) renderPreviewFor(state.previewKey || defaultPreview);
     });
@@ -2135,8 +2135,8 @@
     const prodTitle = document.createElement("label");
     prodTitle.className = "small";
     prodTitle.innerHTML = parceriaAtiva
-      ? 'Selecione o modelo de Vitae <span class="req">*</span> <span class="muted">(escolha 1 opÃ§Ã£o)</span>'
-      : 'Selecione o(s) currÃ­culo(s) <span class="req">*</span> <span class="muted">(pode marcar mais de um)</span>';
+      ? 'Selecione o modelo de Vitae <span class="req">*</span> <span class="muted">(escolha 1 opção)</span>'
+      : 'Selecione o(s) currículo(s) <span class="req">*</span> <span class="muted">(pode marcar mais de um)</span>';
     screenEl.appendChild(prodTitle);
 
     const grid = document.createElement("div");
@@ -2154,11 +2154,11 @@
 
       let desc = "";
       if (parceriaAtiva){
-        desc = `${p.prazo ? ("Entrega " + p.prazo + " â€” ") : ""}<span class="newPrice">OpÃ§Ã£o disponÃ­vel na parceria</span>`;
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">Opção disponível na parceria</span>`;
       } else if (pct > 0){
-        desc = `${p.prazo ? ("Entrega " + p.prazo + " â€” ") : ""}<span class="priceLine"><span class="oldPrice">${moneyBRL(base)}</span><span class="newPrice">${moneyBRL(disc)}</span></span>`;
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="priceLine"><span class="oldPrice">${moneyBRL(base)}</span><span class="newPrice">${moneyBRL(disc)}</span></span>`;
       } else {
-        desc = `${p.prazo ? ("Entrega " + p.prazo + " â€” ") : ""}<span class="newPrice">${moneyBRL(base)}</span>`;
+        desc = `${p.prazo ? ("Entrega " + p.prazo + " — ") : ""}<span class="newPrice">${moneyBRL(base)}</span>`;
       }
 
       grid.appendChild(optionCard({
@@ -2201,7 +2201,7 @@
     if (state.produtos.length === 0){
       const t = document.createElement("span");
       t.className = "tag bad";
-      t.innerHTML = "<b>AtenÃ§Ã£o:</b> selecione pelo menos 1 opÃ§Ã£o";
+      t.innerHTML = "<b>Atenção:</b> selecione pelo menos 1 opção";
       totalLine.appendChild(t);
     } else if (parceriaAtiva){
       const p = document.createElement("p");
@@ -2223,7 +2223,7 @@
     }
 
     const ok = requiredProdutosOk();
-    renderActions({ canBack:true, canNext: ok, nextLabel:"PrÃ³ximo" });
+    renderActions({ canBack:true, canNext: ok, nextLabel:"Próximo" });
   }
 
   // =========================
@@ -2241,7 +2241,7 @@
     top.innerHTML = `
       <div>
         <p class="certTitle">Envio de arquivos</p>
-        <p class="certTopHint">Aceita PDF/JPG/PNG (mÃºltiplos arquivos)</p>
+        <p class="certTopHint">Aceita PDF/JPG/PNG (múltiplos arquivos)</p>
       </div>
       <div></div>
     `;
@@ -2284,7 +2284,7 @@
 
     const helper = document.createElement("p");
     helper.className = "certHelper";
-    helper.textContent = "Dica: se vocÃª tiver muitos arquivos, pode subir no Drive e colar o link acima. Se for enviar aqui, pode arrastar e soltar.";
+    helper.textContent = "Dica: se você tiver muitos arquivos, pode subir no Drive e colar o link acima. Se for enviar aqui, pode arrastar e soltar.";
     card.appendChild(helper);
 
     // dropzone + input
@@ -2292,7 +2292,7 @@
     dz.className = "certDropzone";
     dz.innerHTML = `
       <p class="certDzTitle">Clique para selecionar ou arraste os arquivos aqui</p>
-      <p class="certDzSub">PDF, JPG, PNG â€¢ mÃºltiplos arquivos</p>
+      <p class="certDzSub">PDF, JPG, PNG • múltiplos arquivos</p>
     `;
     card.appendChild(dz);
 
@@ -2308,7 +2308,7 @@
     prog.className = "certProgressWrap";
     prog.innerHTML = `
       <div class="certProgressTop">
-        <div class="l" id="certProgL">Enviandoâ€¦</div>
+        <div class="l" id="certProgL">Enviando…</div>
         <div class="r" id="certProgR">0%</div>
       </div>
       <div class="certBar"><div id="certProgBar"></div></div>
@@ -2348,8 +2348,8 @@
     const note = document.createElement("div");
     note.className = "certMiniNote";
     note.innerHTML = `
-      <span class="certPill orange"><b>ObservaÃ§Ã£o:</b> vocÃª pode pular esta etapa e enviar depois.</span>
-      <span class="certPill"><b>Status:</b> <span id="certStatusText">â€”</span></span>
+      <span class="certPill orange"><b>Observação:</b> você pode pular esta etapa e enviar depois.</span>
+      <span class="certPill"><b>Status:</b> <span id="certStatusText">—</span></span>
     `;
     card.appendChild(note);
 
@@ -2398,8 +2398,8 @@
         meta.innerHTML = `
           <div class="certFileName">${certEscapeHtml(item.file.name)}</div>
           <div class="certFileStatus ${item.status === "sent" ? "good" : item.status === "error" ? "bad" : item.status === "sending" ? "warn" : ""}">
-            ${item.status === "sent" ? "Enviado âœ…" : item.status === "error" ? ("Erro âŒ " + (item.errorMsg || "")) : item.status === "sending" ? "Enviandoâ€¦" : "Pronto para enviar"}
-            â€¢ ${humanSize(item.file.size)}
+            ${item.status === "sent" ? "Enviado ✅" : item.status === "error" ? ("Erro ❌ " + (item.errorMsg || "")) : item.status === "sending" ? "Enviando…" : "Pronto para enviar"}
+            • ${humanSize(item.file.size)}
           </div>
         `;
 
@@ -2411,7 +2411,7 @@
       const sent = certItems.filter(i=>i.status==="sent").length;
       const err = certItems.filter(i=>i.status==="error").length;
       const total = certItems.length;
-      statusTextEl.textContent = `${sent}/${total} enviados` + (err ? ` â€¢ ${err} com erro` : "");
+      statusTextEl.textContent = `${sent}/${total} enviados` + (err ? ` • ${err} com erro` : "");
       refreshButtons();
     }
 
@@ -2427,7 +2427,7 @@
       });
 
       renderCertList();
-      toast(filtered.length ? "Arquivos adicionados âœ…" : "Nenhum arquivo vÃ¡lido foi adicionado.");
+      toast(filtered.length ? "Arquivos adicionados ✅" : "Nenhum arquivo válido foi adicionado.");
     }
 
     dz.addEventListener("click", ()=> fileInput.click());
@@ -2473,10 +2473,10 @@
         const pct = Math.round((done / total) * 100);
         progR.textContent = pct + "%";
         progBar.style.width = pct + "%";
-        progL.textContent = (done < total) ? ("Enviando " + (done+1) + " de " + total + "â€¦") : "Finalizado";
+        progL.textContent = (done < total) ? ("Enviando " + (done+1) + " de " + total + "…") : "Finalizado";
       };
 
-      // envia sequencial (mais estÃ¡vel)
+      // envia sequencial (mais estável)
       for (let i = 0; i < certItems.length; i++){
         const it = certItems[i];
         if (it.status === "sent") { done++; setProgress(); continue; }
@@ -2523,16 +2523,16 @@
 
       const err = certItems.filter(x=>x.status==="error").length;
       if (err){
-        toast("Envio finalizado com erros. VocÃª pode tentar novamente.");
+        toast("Envio finalizado com erros. Você pode tentar novamente.");
       } else {
-        toast("Todos os arquivos foram enviados âœ…");
+        toast("Todos os arquivos foram enviados ✅");
       }
     }
 
     sendBtn.addEventListener("click", sendAll);
 
     renderCertList();
-    renderActions({ canBack:true, canNext:true, nextLabel:"PrÃ³ximo" });
+    renderActions({ canBack:true, canNext:true, nextLabel:"Próximo" });
   }
 
   // =========================
@@ -2558,7 +2558,7 @@
       const text = summaryText();
       try{
         await navigator.clipboard.writeText(text);
-        toast("Resumo copiado âœ…");
+        toast("Resumo copiado ✅");
       }catch(e){
         const ta = document.createElement("textarea");
         ta.value = text;
@@ -2566,7 +2566,7 @@
         ta.select();
         document.execCommand("copy");
         document.body.removeChild(ta);
-        toast("Resumo copiado âœ…");
+        toast("Resumo copiado ✅");
       }
     });
     t.appendChild(copyBtn);
