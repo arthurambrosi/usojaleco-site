@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UsoJaleco | Prescrever</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
+  <script defer src="/analytics-config.js"></script>
+  <script defer src="/analytics.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./prescricoes.css?v=20260308-01" />
+  <style>
+    /* ─── RESET & TOKENS ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0b1220;
+      --navy-mid:   #111b2e;
+      --navy-card:  #162034;
+      --navy-border:#1e2d46;
+      --cyan:       #2dd6cc;
+      --cyan-dim:   #1aada4;
+      --cyan-glow:  rgba(45,214,204,.18);
+      --text-hi:    #eef2f9;
+      --text-mid:   #8fa3c0;
+      --text-lo:    #4a607e;
+      --danger:     #f05252;
+      --warn:       #f5a623;
+      --radius-sm:  6px;
+      --radius-md:  12px;
+      --radius-lg:  20px;
+      --shadow-sm:  0 2px 8px rgba(0,0,0,.3);
+      --shadow-md:  0 8px 32px rgba(0,0,0,.4);
+      --shadow-lg:  0 20px 60px rgba(0,0,0,.5);
+      --sidebar-w:  260px;
+      --topbar-h:   64px;
+      --transition: .2s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--text-hi);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── TOPBAR ─────────────────────────────────────────────────────── */
+    .topbarWrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,18,32,.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--navy-border);
+    }
+
+    .topbar {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: var(--topbar-h);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .brandName {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      color: var(--text-hi);
+      letter-spacing: -.01em;
+    }
+
+    .brandName b {
+      font-weight: 400;
+      color: var(--cyan);
+    }
+
+    .headRight {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .headBtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .8125rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--navy-border);
+      background: transparent;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+      white-space: nowrap;
+    }
+
+    .headBtn:hover {
+      color: var(--text-hi);
+      border-color: var(--text-lo);
+      background: var(--navy-card);
+    }
+
+    .headBtnPrimary {
+      color: var(--navy);
+      background: var(--cyan);
+      border-color: var(--cyan);
+      font-weight: 600;
+    }
+
+    .headBtnPrimary:hover {
+      background: var(--cyan-dim);
+      border-color: var(--cyan-dim);
+      color: var(--navy);
+    }
+
+    /* ─── MAIN LAYOUT ────────────────────────────────────────────────── */
+    .page-main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 28px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ─── SEARCH HERO CARD ───────────────────────────────────────────── */
+    .searchCard {
+      position: relative;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-lg);
+      padding: 44px 48px;
+      overflow: hidden;
+      animation: fadeUp .5s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    /* subtle grid pattern overlay */
+    .searchCard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--navy-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--navy-border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    /* cyan glow orb */
+    .searchCard::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -40px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .searchCardHead {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .searchCardHead h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      font-weight: 400;
+      color: var(--text-hi);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+
+    .searchCardHead p {
+      font-size: .9375rem;
+      color: var(--text-mid);
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    /* ─── SEARCH INPUT ───────────────────────────────────────────────── */
+    .search-wrap {
+      position: relative;
+      max-width: 640px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+      color: var(--text-lo);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .search-wrap input[type="search"] {
+      width: 100%;
+      padding: 14px 18px 14px 48px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9375rem;
+      color: var(--text-hi);
+      background: rgba(255,255,255,.04);
+      border: 1.5px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+      -webkit-appearance: none;
+    }
+
+    .search-wrap input[type="search"]::placeholder { color: var(--text-lo); }
+
+    .search-wrap input[type="search"]:focus {
+      background: rgba(45,214,204,.04);
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px var(--cyan-glow);
+    }
+
+    .search-wrap input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--text-lo);
+      border-radius: 50%;
+      cursor: pointer;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18 6L6 18M6 6l12 12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+
+    /* ─── APP MODAL (sidebar + content) ────────────────────────────── */
+    .app-modal {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap: 20px;
+      align-items: start;
+      animation: fadeUp .5s .1s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    /* ─── SIDEBAR ────────────────────────────────────────────────────── */
+    .sidebar {
+      position: sticky;
+      top: calc(var(--topbar-h) + 20px);
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .area-filters {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-height: calc(100vh - var(--topbar-h) - 80px);
+      overflow-y: auto;
+    }
+
+    /* Scrollbar styling */
+    .area-filters::-webkit-scrollbar { width: 4px; }
+    .area-filters::-webkit-scrollbar-track { background: transparent; }
+    .area-filters::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 99px; }
+    .area-filters::-webkit-scrollbar-thumb:hover { background: var(--text-lo); }
+
+    /* sidebar label injected by JS — style via attribute hooks or global selectors */
+    .area-filters .area-label,
+    .area-filters [data-area-label],
+    .area-filters h4,
+    .area-filters .sidebar-label {
+      padding: 10px 12px 4px;
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    .area-filters button,
+    .area-filters a,
+    .area-filters .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .8125rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-align: left;
+      text-decoration: none;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .area-filters button:hover,
+    .area-filters a:hover,
+    .area-filters .filter-btn:hover {
+      color: var(--text-hi);
+      background: rgba(255,255,255,.05);
+    }
+
+    .area-filters button.active,
+    .area-filters a.active,
+    .area-filters .filter-btn.active {
+      color: var(--cyan);
+      background: var(--cyan-glow);
+    }
+
+    /* ─── CONTENT PANEL ──────────────────────────────────────────────── */
+    .content-panel {
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── STATE PANELS ───────────────────────────────────────────────── */
+    .state-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 80px 40px;
+      text-align: center;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+    }
+
+    .state-panel[hidden] { display: none; }
+
+    .state-panel h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--text-hi);
+    }
+
+    .state-panel p {
+      font-size: .875rem;
+      color: var(--text-mid);
+      max-width: 320px;
+      line-height: 1.6;
+    }
+
+    .state-panel code {
+      font-size: .8125rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--navy-border);
+      border-radius: 4px;
+      padding: 2px 7px;
+      color: var(--cyan);
+      font-family: 'DM Mono', 'Fira Mono', monospace;
+    }
+
+    .state-panel.error {
+      border-color: rgba(240,82,82,.3);
+      background: rgba(240,82,82,.05);
+    }
+
+    .state-panel.error h3 { color: var(--danger); }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      color: var(--text-lo);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    /* loading spinner */
+    #loadingState::before {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--navy-border);
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin-bottom: 4px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── PROTOCOL LIST ──────────────────────────────────────────────── */
+    .protocol-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .protocol-list[hidden] { display: none; }
+
+    /* Protocol cards (injected by JS) */
+    .protocol-list .protocol-card,
+    .protocol-list .card,
+    .protocol-list > article,
+    .protocol-list > div {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition), background var(--transition);
+      animation: fadeUp .3s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    .protocol-list .protocol-card:hover,
+    .protocol-list .card:hover,
+    .protocol-list > article:hover,
+    .protocol-list > div:hover {
+      border-color: rgba(45,214,204,.4);
+      background: var(--navy-mid);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Protocol card title */
+    .protocol-list h2,
+    .protocol-list .card-title,
+    .protocol-list .protocol-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--text-hi);
+      margin-bottom: 6px;
+    }
+
+    /* Protocol card meta */
+    .protocol-list .meta,
+    .protocol-list .card-meta,
+    .protocol-list .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .protocol-list .tag,
+    .protocol-list .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      border-radius: 99px;
+      background: var(--cyan-glow);
+      color: var(--cyan);
+      border: 1px solid rgba(45,214,204,.2);
+    }
+
+    .protocol-list p {
+      font-size: .875rem;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+
+    /* ─── CTA BUTTON ─────────────────────────────────────────────────── */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 11px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--navy);
+      background: var(--cyan);
+      border: none;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+
+    .cta-btn:hover {
+      background: var(--cyan-dim);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(45,214,204,.3);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 200px; }
+
+      .page-main { padding: 24px 16px 48px; gap: 20px; }
+
+      .searchCard { padding: 32px 28px; }
+
+      .topbar { padding: 0 16px; }
+
+      .headBtn:first-child { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .app-modal {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .area-filters {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: none;
+        padding: 10px;
+      }
+
+      .area-filters button,
+      .area-filters a,
+      .area-filters .filter-btn {
+        width: auto;
+        padding: 6px 12px;
+        font-size: .75rem;
+        border: 1px solid var(--navy-border);
+        border-radius: 99px;
+      }
+
+      .area-filters button.active,
+      .area-filters a.active,
+      .area-filters .filter-btn.active {
+        border-color: var(--cyan);
+      }
+
+      .area-filters h4,
+      .area-filters .sidebar-label,
+      .area-filters .area-label { display: none; }
+
+      .searchCard { padding: 28px 20px; }
+
+      .brandName { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbarWrap">
+    <div class="topbar">
+      <a class="brand" href="https://www.usojaleco.com.br/inicio/" aria-label="Voltar ao menu">
+        <img src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" alt="UsoJaleco" />
+        <span class="brandName">Uso<b>Jaleco</b></span>
+      </a>
+      <div class="headRight">
+        <a class="headBtn" href="https://www.usojaleco.com.br/inicio/">Voltar ao menu</a>
+        <a class="headBtn headBtnPrimary" href="./editor/?v=20260308-01">Ir para o editor</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="searchCard" aria-label="Buscador de protocolos">
+      <div class="searchCardHead">
+        <h1>Protocolos e Prescrições Rápidas</h1>
+        <p>Busque por doença, sintoma ou protocolo para abrir o conteúdo por área e assunto.</p>
+      </div>
+      <div class="search-wrap search-wrap-card">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" placeholder="Buscar doença, sintoma ou protocolo..." />
+      </div>
+    </section>
+
+    <div class="app-modal">
+      <aside class="sidebar">
+        <div id="areaFilters" class="area-filters" aria-label="Sumário de áreas"></div>
+      </aside>
+      <section class="content-panel">
+        <section id="loadingState" class="state-panel">
+          <h3>Carregando protocolos...</h3>
+          <p>Lendo os arquivos JSON em <code>/data</code>.</p>
+        </section>
+        <section id="errorState" class="state-panel error" hidden></section>
+        <section id="emptyState" class="state-panel" hidden>
+          <div class="empty-icon" aria-hidden="true">▭</div>
+          <h3>Nenhum protocolo encontrado</h3>
+          <p>Tente ajustar a busca ou criar um novo protocolo.</p>
+          <a class="cta-btn" href="./editor/?v=20260308-01">+ Criar Novo Protocolo</a>
+        </section>
+        <section id="protocolList" class="protocol-list" hidden></section>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      if (!("serviceWorker" in navigator)) return;
+      navigator.serviceWorker.getRegistrations()
+        .then(function (regs) {
+          regs.forEach(function (reg) { reg.unregister(); });
+        })
+        .catch(function () {});
+    })();
+  </script>
+  <script src="./prescricoes.js?v=20260308-01" defer></script>
+</body>
+</html>
