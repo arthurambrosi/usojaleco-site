@@ -466,6 +466,62 @@ async function loadModel(modelKey) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
+   DECODIFICAÇÃO DE ÁUDIO → Float32Array 16kHz
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Lê o Blob de áudio, decodifica com a Web Audio API e reamosteia para 16 kHz.
+ * Whisper espera um Float32Array mono a 16 000 Hz — independente do formato original.
+ *
+ * Ao decodificar aqui (em vez de deixar para o Transformers.js), suportamos
+ * qualquer formato que o navegador consiga decodificar:
+ * mp3, wav, ogg/vorbis, ogg/opus, webm, m4a/aac, flac…
+ *
+ * @param {Blob} blob  — blob de áudio em qualquer formato
+ * @returns {Float32Array}
+ */
+async function decodeAudioToFloat32(blob) {
+  const arrayBuffer = await blob.arrayBuffer();
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) throw new Error('Web Audio API não suportada neste navegador.');
+
+  // Pedimos 16kHz direto — alguns navegadores honram isso e poupam reamostragem
+  const ctx = new AudioCtx({ sampleRate: 16000 });
+
+  let audioBuffer;
+  try {
+    audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+  } catch (e) {
+    await ctx.close();
+    throw new Error(
+      `Não foi possível decodificar o áudio. ` +
+      `Formato talvez não suportado pelo navegador. (${e.message})`
+    );
+  }
+
+  // Sempre usa o canal 0 (mono ou canal esquerdo de estéreo)
+  const raw     = audioBuffer.getChannelData(0);
+  const srcRate = audioBuffer.sampleRate;
+  await ctx.close();
+
+  if (srcRate === 16000) return raw; // já no rate correto
+
+  // Reamostragem linear quando o navegador ignorou o sampleRate do construtor
+  const ratio     = srcRate / 16000;
+  const newLength = Math.round(raw.length / ratio);
+  const resampled = new Float32Array(newLength);
+  for (let i = 0; i < newLength; i++) {
+    const pos = i * ratio;
+    const idx = Math.floor(pos);
+    const a   = raw[idx]     ?? 0;
+    const b   = raw[idx + 1] ?? 0;
+    resampled[i] = a + (pos - idx) * (b - a);
+  }
+  return resampled;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
    TRANSCRIÇÃO
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -493,42 +549,44 @@ async function handleTranscribe() {
     // 1. Carrega (ou reutiliza) o modelo
     const transcriber = await loadModel(modelKey);
 
-    // 2. Roda a transcrição
-    setStatus('progress', 'Processando áudio e transcrevendo…');
+    // 2. Decodifica o áudio manualmente via Web Audio API → Float32Array 16kHz
+    //    Isso garante suporte a ogg, mp3, wav, webm, m4a, flac, etc.
+    //    e evita que o Transformers.js tente fazer fetch/decode interno (que falha
+    //    em alguns formatos/navegadores).
+    setStatus('progress', 'Decodificando áudio…');
     showProgress(null); // indeterminate
+
+    const audioData = await decodeAudioToFloat32(state.audioBlob);
+
+    // 3. Roda a transcrição com o Float32Array já decodificado
+    setStatus('progress', 'Transcrevendo…');
 
     /**
      * Opções do pipeline Whisper:
-     *  - language:      código ISO 639-1 ou null para autodetecção
-     *  - task:          'transcribe' (manter idioma) ou 'translate' (traduzir para inglês)
+     *  - language:       código ISO 639-1 ou null para autodetecção
+     *  - task:           'transcribe' (manter idioma)
      *  - chunk_length_s: divide o áudio em chunks para não esgotar memória
-     *  - stride_length_s: sobreposição entre chunks para melhor continuidade
-     *  - return_timestamps: habilita timestamps por palavra (desativado aqui por simplicidade)
-     *  - callback_function: chamada com resultados parciais a cada chunk
+     *  - stride_length_s: sobreposição entre chunks para continuidade
+     *  - return_timestamps: desabilitado para saída limpa
+     *  - callback_function: chamada a cada chunk gerado
      */
     const options = {
       task: 'transcribe',
-      chunk_length_s:   30,
-      stride_length_s:   5,
-      return_timestamps: false,
+      chunk_length_s:    30,
+      stride_length_s:    5,
+      return_timestamps:  false,
     };
 
-    if (langCode) {
-      options.language = langCode;
-    }
+    if (langCode) options.language = langCode;
 
-    // Contador de chunks para progresso aproximado
     let chunkCount = 0;
-    options.callback_function = (beams) => {
-      // beams[0].output_token_ids existe durante a geração token a token.
-      // Aqui apenas atualizamos o status para mostrar atividade.
+    options.callback_function = () => {
       chunkCount++;
-      const partial = beams?.[0]?.output_token_ids?.length ?? 0;
-      setStatus('progress', `Transcrevendo… (${chunkCount} chunks processados)`);
+      setStatus('progress', `Transcrevendo… (${chunkCount} segmentos processados)`);
     };
 
-    // Passa a URL do blob diretamente: Transformers.js faz fetch + decodificação interna
-    const result = await transcriber(state.audioObjectUrl, options);
+    // Passa o Float32Array diretamente — funciona com qualquer formato
+    const result = await transcriber(audioData, options);
 
     // 3. Exibe resultado
     const text = (result?.text ?? '').trim();
