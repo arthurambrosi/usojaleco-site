@@ -100,6 +100,7 @@ const ui = {
   statusText:      $('status-text'),
   statusIconWrap:  $('status-icon-wrap'),
   progressWrap:    $('progress-wrap'),
+  progressBar:     $('progress-bar'),    // ← estava faltando esta linha (causa do erro)
   progressFill:    $('progress-fill'),
   progressLabel:   $('progress-label'),
   transcriptPlaceholder: $('transcript-placeholder'),
