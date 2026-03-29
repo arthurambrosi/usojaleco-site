@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TranscreveAI — Transcritor de áudio gratuito, rápido e local. Sem servidores. Funciona no seu navegador." />
+  <title>TranscreveAI — Transcritor de Áudio</title>
+
+  <!-- Fontes: Syne (display) + Space Mono (código/transcrição) + Outfit (corpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Grade de fundo decorativa -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <!-- Glow decorativo no topo -->
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════ HEADER ═══════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <!-- Ícone de onda sonora SVG inline -->
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1"  y="13" width="3" height="6"  rx="1.5" fill="currentColor" opacity="0.5"/>
+          <rect x="6"  y="9"  width="3" height="14" rx="1.5" fill="currentColor" opacity="0.7"/>
+          <rect x="11" y="4"  width="3" height="24" rx="1.5" fill="currentColor"/>
+          <rect x="16" y="7"  width="3" height="18" rx="1.5" fill="currentColor"/>
+          <rect x="21" y="11" width="3" height="10" rx="1.5" fill="currentColor" opacity="0.7"/>
+          <rect x="26" y="14" width="3" height="4"  rx="1.5" fill="currentColor" opacity="0.5"/>
+        </svg>
+        <span class="logo-text">Transcreve<em>AI</em></span>
+      </div>
+
+      <!-- Badge: funciona localmente -->
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>100% local · sem servidor</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════ MAIN ════════════════════════════════════ -->
+  <main class="main-wrapper">
+
+    <!-- Título hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="hero-title">
+        Transcrição de áudio<br />
+        <span class="gradient-text">no seu navegador</span>
+      </h1>
+      <p class="hero-sub">
+        Powered by Whisper via Transformers.js · WebGPU quando disponível · Privacidade total
+      </p>
+    </section>
+
+    <!-- ─────────── CARD PRINCIPAL ─────────── -->
+    <div class="app-card">
+
+      <!-- ── SEÇÃO 1: Entrada de áudio ── -->
+      <section class="card-section" aria-label="Entrada de áudio">
+        <h2 class="section-label">
+          <span class="section-num">01</span> Entrada de áudio
+        </h2>
+
+        <div class="input-row">
+
+          <!-- Botão gravar -->
+          <button
+            id="btn-record"
+            class="btn btn-record"
+            aria-label="Gravar áudio pelo microfone"
+            title="Gravar pelo microfone"
+          >
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8"  y1="23" x2="16" y2="23"/>
+            </svg>
+            <span id="btn-record-label">Gravar</span>
+            <!-- Anel pulsante quando gravando -->
+            <span class="record-ring" id="record-ring" aria-hidden="true"></span>
+          </button>
+
+          <span class="input-divider" aria-hidden="true">ou</span>
+
+          <!-- Upload de arquivo -->
+          <label class="btn btn-upload" for="file-input" tabindex="0" role="button" aria-label="Enviar arquivo de áudio">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Enviar arquivo</span>
+          </label>
+          <input
+            type="file"
+            id="file-input"
+            accept="audio/*,.mp3,.wav,.m4a,.webm,.ogg,.flac,.aac"
+            class="file-input-hidden"
+            aria-label="Selecionar arquivo de áudio"
+          />
+
+        </div>
+
+        <!-- Preview do áudio carregado/gravado -->
+        <div class="audio-preview" id="audio-preview" hidden>
+          <svg class="preview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="10 8 16 12 10 16 10 8"/>
+          </svg>
+          <div class="preview-info">
+            <span class="preview-name" id="preview-name">arquivo.wav</span>
+            <span class="preview-dur"  id="preview-dur">–</span>
+          </div>
+          <audio id="audio-player" controls class="audio-player" aria-label="Reproduzir áudio carregado"></audio>
+          <button id="btn-clear-audio" class="btn-icon-only" title="Remover áudio" aria-label="Remover áudio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6"  y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ── SEÇÃO 2: Configurações ── -->
+      <section class="card-section" aria-label="Configurações de transcrição">
+        <h2 class="section-label">
+          <span class="section-num">02</span> Configurações
+        </h2>
+
+        <div class="config-row">
+
+          <!-- Modo de qualidade -->
+          <fieldset class="field-group" aria-labelledby="mode-label">
+            <legend id="mode-label" class="field-label">Modo</legend>
+            <div class="radio-group" role="radiogroup">
+              <label class="radio-chip">
+                <input type="radio" name="mode" value="fast" checked />
+                <span class="chip-body">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M13 8L8 3l-5 5M8 3v10"/>
+                  </svg>
+                  Modo Rápido
+                  <small>whisper-tiny (~77 MB)</small>
+                </span>
+              </label>
+              <label class="radio-chip">
+                <input type="radio" name="mode" value="quality" />
+                <span class="chip-body">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M8 2l1.5 4.5H14l-3.75 2.75L11.5 14 8 11.25 4.5 14l1.25-4.75L2 6.5h4.5L8 2z"/>
+                  </svg>
+                  Melhor Qualidade
+                  <small>whisper-small (~244 MB)</small>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Idioma -->
+          <div class="field-group">
+            <label class="field-label" for="lang-select">Idioma do áudio</label>
+            <select id="lang-select" class="select-input" aria-label="Selecionar idioma do áudio">
+              <option value="portuguese" selected>Português (BR)</option>
+              <option value="english">English</option>
+              <option value="spanish">Español</option>
+              <option value="french">Français</option>
+              <option value="german">Deutsch</option>
+              <option value="italian">Italiano</option>
+              <option value="japanese">日本語</option>
+              <option value="chinese">中文</option>
+              <option value="auto">Detectar automaticamente</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Info sobre hardware detectado -->
+        <div class="hw-badge" id="hw-badge" aria-live="polite">
+          <span id="hw-icon" class="hw-dot"></span>
+          <span id="hw-text">Detectando suporte a WebGPU…</span>
+        </div>
+
+      </section>
+
+      <!-- ── SEÇÃO 3: Ação ── -->
+      <section class="card-section action-section" aria-label="Iniciar transcrição">
+        <h2 class="section-label">
+          <span class="section-num">03</span> Transcrever
+        </h2>
+
+        <div class="action-row">
+          <button id="btn-transcribe" class="btn btn-primary" disabled aria-label="Iniciar transcrição">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            Iniciar transcrição
+          </button>
+          <button id="btn-clear" class="btn btn-ghost" aria-label="Limpar tudo">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+              <path d="M9 6V4h6v2"/>
+            </svg>
+            Limpar
+          </button>
+        </div>
+
+        <!-- Barra de status + progresso -->
+        <div class="status-bar" id="status-bar" aria-live="polite" aria-label="Status da transcrição">
+          <div class="status-icon-wrap" id="status-icon-wrap">
+            <!-- Ícone dinâmico via JS -->
+            <svg class="status-icon status-icon--idle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="status-content">
+            <span class="status-text" id="status-text">Aguardando áudio…</span>
+            <div class="progress-wrap" id="progress-wrap" hidden>
+              <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+              <span class="progress-label" id="progress-label">0%</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── SEÇÃO 4: Resultado ── -->
+      <section class="card-section result-section" id="result-section" aria-label="Texto transcrito">
+        <div class="result-header">
+          <h2 class="section-label" style="margin-bottom:0">
+            <span class="section-num">04</span> Transcrição
+          </h2>
+          <div class="result-actions" id="result-actions">
+            <button id="btn-copy" class="btn btn-sm" aria-label="Copiar transcrição para a área de transferência">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              Copiar
+            </button>
+            <button id="btn-download" class="btn btn-sm" aria-label="Baixar transcrição como arquivo .txt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Baixar .txt
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="transcript-box"
+          class="transcript-box"
+          aria-label="Área da transcrição"
+          aria-placeholder="O texto transcrito aparecerá aqui…"
+        >
+          <p class="transcript-placeholder" id="transcript-placeholder">
+            O texto transcrito aparecerá aqui após a transcrição…
+          </p>
+          <div id="transcript-text" class="transcript-text" aria-live="polite"></div>
+        </div>
+
+        <!-- Contador de palavras/caracteres -->
+        <div class="transcript-meta" id="transcript-meta" hidden>
+          <span id="word-count">0 palavras</span>
+          <span id="char-count">0 caracteres</span>
+        </div>
+
+      </section>
+
+    </div><!-- /app-card -->
+
+    <!-- ═══ AVISO DE COMPATIBILIDADE (mostrado se necessário) ═══ -->
+    <div id="compat-warning" class="compat-warning" hidden role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div>
+        <strong>Navegador com suporte limitado</strong>
+        <p id="compat-msg">Use Chrome 113+, Edge 113+ ou Firefox 118+ para melhor desempenho.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════════════════════ FOOTER ══════════════════════════════════ -->
+  <footer class="site-footer">
+    <p>
+      TranscreveAI · Open Source · Powered by
+      <a href="https://huggingface.co/docs/transformers.js" target="_blank" rel="noopener noreferrer">Transformers.js</a>
+      +
+      <a href="https://openai.com/research/whisper" target="_blank" rel="noopener noreferrer">OpenAI Whisper</a>
+      · Nenhum áudio sai do seu dispositivo
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════════════ SCRIPT ══════════════════════════════════ -->
+  <!--
+    Usamos type="module" para poder usar import/export ES6 diretamente no browser.
+    O GitHub Pages serve os arquivos com os headers corretos para ES Modules.
+  -->
+  <script type="module" src="script.js"></script>
+
+</body>
+</html>
