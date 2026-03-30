@@ -37,11 +37,16 @@ import {
 /* ─────────────────────────────────────────────────────────────────────────────
    CONFIGURAÇÃO DO AMBIENTE TRANSFORMERS.JS
    ───────────────────────────────────────────────────────────────────────────── */
+const canUseBrowserCache =
+  typeof window !== 'undefined' &&
+  typeof window.caches !== 'undefined';
+
 // Não tentamos carregar modelos locais (tudo vem do HuggingFace Hub via CDN)
 env.allowLocalModels = false;
 
-// Usa cache do navegador (IndexedDB) para não baixar o modelo toda vez
-env.useBrowserCache = true;
+// Usa o Cache API quando disponível (HTTPS/localhost). Em HTTP comum, o
+// navegador costuma bloquear esse recurso.
+env.useBrowserCache = canUseBrowserCache;
 
 /* ─────────────────────────────────────────────────────────────────────────────
    CONSTANTES
@@ -139,11 +144,17 @@ function checkBrowserSupport() {
   if (!window.MediaRecorder) {
     issues.push('MediaRecorder (gravação de áudio) não é suportado.');
   }
+  if (!navigator.mediaDevices?.getUserMedia) {
+    issues.push('Acesso ao microfone requer HTTPS ou localhost.');
+  }
   if (!window.AudioContext && !window.webkitAudioContext) {
     issues.push('Web Audio API não é suportada.');
   }
   if (!window.Worker) {
     issues.push('Web Workers não são suportados (necessário para Transformers.js).');
+  }
+  if (!window.isSecureContext) {
+    issues.push('Esta página está em HTTP. Cache do modelo e WebGPU podem ficar indisponíveis.');
   }
 
   if (issues.length > 0) {
