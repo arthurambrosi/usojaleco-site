@@ -180,6 +180,29 @@
             </select>
           </div>
 
+          <div class="field-group live-field">
+            <span class="field-label">Gravação inteligente</span>
+            <label class="live-toggle" for="live-toggle">
+              <input
+                type="checkbox"
+                id="live-toggle"
+                class="live-toggle-input"
+                checked
+                aria-label="Ativar transcrição em tempo real durante a gravação"
+              />
+              <span class="live-toggle-body">
+                <strong>Transcrição em tempo real</strong>
+                <small>
+                  Mostra uma prévia enquanto você grava e faz um refino final ao parar.
+                </small>
+              </span>
+              <span class="live-toggle-pill" id="live-toggle-pill">Ativo</span>
+            </label>
+            <p class="field-help" id="live-note">
+              Recomendado em desktop. Em CPU, a prévia pode usar modo rápido e refinar ao final.
+            </p>
+          </div>
+
         </div>
 
         <!-- Info sobre hardware detectado -->

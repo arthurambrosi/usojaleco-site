@@ -521,6 +521,13 @@ img, svg { display: block; }
   color: var(--text-3);
 }
 
+.field-help {
+  margin: .15rem 0 0;
+  font-size: .74rem;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
 /* Radio chips */
 .radio-group {
   display: flex;
@@ -605,6 +612,92 @@ img, svg { display: block; }
   border-color: var(--accent);
   background-color: var(--surface);
   outline: none;
+}
+
+.live-field {
+  min-width: min(100%, 340px);
+}
+
+.live-toggle {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: .85rem .95rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, rgba(34,211,238,.08), rgba(15,23,42,.4)),
+    var(--surface);
+  cursor: pointer;
+  transition: border-color .18s, background .18s, transform .12s;
+}
+
+.live-toggle:hover {
+  border-color: rgba(34,211,238,.35);
+  background:
+    linear-gradient(180deg, rgba(34,211,238,.12), rgba(15,23,42,.45)),
+    var(--surface-hov);
+}
+
+.live-toggle-input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #22d3ee;
+  flex-shrink: 0;
+}
+
+.live-toggle-body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: .22rem;
+}
+
+.live-toggle-body strong {
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.live-toggle-body small {
+  color: var(--text-3);
+  font-size: .74rem;
+  line-height: 1.45;
+}
+
+.live-toggle-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(34,211,238,.32);
+  background: rgba(34,211,238,.1);
+  color: var(--accent);
+  padding: .22rem .6rem;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.live-toggle:not(:has(.live-toggle-input:checked)) {
+  background: var(--surface);
+}
+
+.live-toggle:not(:has(.live-toggle-input:checked)) .live-toggle-pill {
+  border-color: var(--border);
+  background: rgba(255,255,255,.04);
+  color: var(--text-3);
+}
+
+.live-toggle.is-off {
+  background: var(--surface);
+}
+
+.live-toggle.is-off .live-toggle-pill {
+  border-color: var(--border);
+  background: rgba(255,255,255,.04);
+  color: var(--text-3);
 }
 
 /* Badge de hardware detectado */
@@ -788,6 +881,10 @@ img, svg { display: block; }
 .transcript-text .partial {
   color: var(--text-3);
   font-style: italic;
+}
+
+.transcript-text .committed {
+  color: var(--text-1);
 }
 
 .transcript-meta {

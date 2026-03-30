@@ -56,6 +56,13 @@ const MODELS = {
   quality: 'Xenova/whisper-small',  // ~244 MB
 };
 
+const AUDIO_SAMPLE_RATE = 16000;
+const LIVE_PREVIEW_INTERVAL_MS = 3500;
+const LIVE_PREVIEW_MIN_SEC = 4;
+const LIVE_PREVIEW_WINDOW_SEC = 18;
+const LIVE_PREVIEW_COMMIT_LAG_SEC = 2.2;
+const LIVE_PREVIEW_CPU_MODEL_KEY = 'fast';
+
 // Mapeamento de idioma amigável → código aceito pelo Whisper
 const LANG_MAP = {
   portuguese: 'pt',
@@ -74,15 +81,28 @@ const LANG_MAP = {
    ───────────────────────────────────────────────────────────────────────────── */
 const state = {
   audioBlob:       null,   // Blob do áudio (gravado ou carregado)
+  audioDataFloat32: null,  // PCM 16 kHz já pronto para o Whisper
   audioObjectUrl:  null,   // URL de objeto para o blob
   isRecording:     false,  // Se está gravando agora
   mediaRecorder:   null,   // Instância do MediaRecorder
+  mediaRecorderMimeType: '',
   recordedChunks:  [],     // Chunks coletados durante a gravação
   micStream:       null,   // Stream do microfone (para liberar depois)
-  transcriber:     null,   // Pipeline carregado (reutilizado entre transcrições)
-  lastModelKey:    null,   // Modelo atualmente carregado ('fast' | 'quality')
+  transcribers:    {},     // Pipelines carregados por modelo
+  transcriberLoads:{},     // Promises de carga por modelo
   isTranscribing:  false,  // Evita execuções paralelas
   device:          'wasm', // 'webgpu' ou 'wasm'
+  liveAudioContext: null,
+  liveSourceNode: null,
+  liveProcessorNode: null,
+  liveSilenceNode: null,
+  livePcmChunks: [],
+  livePcmLength: 0,
+  livePreviewTimer: null,
+  livePreviewInFlight: false,
+  liveCommittedWords: [],
+  livePreviewWords: [],
+  livePreviewModelKey: null,
 };
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -101,6 +121,9 @@ const ui = {
   btnClearAudio:   $('btn-clear-audio'),
   btnTranscribe:   $('btn-transcribe'),
   btnClear:        $('btn-clear'),
+  liveToggle:      $('live-toggle'),
+  liveTogglePill:  $('live-toggle-pill'),
+  liveNote:        $('live-note'),
   statusBar:       $('status-bar'),
   statusText:      $('status-text'),
   statusIconWrap:  $('status-icon-wrap'),
@@ -133,6 +156,9 @@ async function initApp() {
 
   // 3. Registra event listeners
   registerEvents();
+
+  // 4. Ajusta o texto do modo ao vivo conforme o hardware/modo selecionado
+  updateLiveModeUI();
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -231,6 +257,12 @@ function registerEvents() {
 
   // Baixar transcrição
   ui.btnDownload.addEventListener('click', downloadTranscript);
+
+  // Atualiza o aviso do modo ao vivo
+  ui.liveToggle.addEventListener('change', updateLiveModeUI);
+  document.querySelectorAll('input[name="mode"]').forEach((node) => {
+    node.addEventListener('change', updateLiveModeUI);
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -242,8 +274,13 @@ function registerEvents() {
  * Pede permissão de microfone na primeira vez.
  */
 async function handleRecordToggle() {
+  if (state.isTranscribing) {
+    setStatus('error', 'Aguarde a transcrição atual terminar antes de iniciar uma nova gravação.');
+    return;
+  }
+
   if (state.isRecording) {
-    stopRecording();
+    await stopRecording();
   } else {
     await startRecording();
   }
@@ -251,75 +288,88 @@ async function handleRecordToggle() {
 
 async function startRecording() {
   try {
-    // Solicita acesso ao microfone
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        channelCount: 1,     // Mono: necessário para Whisper
-        sampleRate: 16000,   // Taxa ideal para Whisper
-        echoCancellation: true,
-        noiseSuppression: true,
-      }
-    });
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('Microfone indisponível neste navegador. Use HTTPS e permita acesso ao microfone.');
+    }
 
-    state.micStream    = stream;
+    clearAudio();
+    clearTranscript();
+    resetLiveTranscriptState();
+
+    // Solicita acesso ao microfone com fallbacks de constraints.
+    const stream = await requestMicrophoneStream();
+
+    state.micStream = stream;
     state.recordedChunks = [];
+    state.mediaRecorderMimeType = '';
 
-    // Cria o MediaRecorder. Prefere webm/opus, cai para padrão do navegador
-    const mimeType = getSupportedMimeType();
-    state.mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
+    await startLiveCapture(stream);
 
-    // Coleta chunks de dados
-    state.mediaRecorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) {
-        state.recordedChunks.push(event.data);
-      }
-    };
+    // Tenta usar MediaRecorder quando disponível. Se falhar, mantemos um backup WAV via PCM.
+    const recorder = createMediaRecorderSafely(stream);
+    state.mediaRecorder = recorder;
 
-    // Quando para: processa o áudio gravado
-    state.mediaRecorder.onstop = () => {
-      const blob = new Blob(state.recordedChunks, {
-        type: state.mediaRecorder.mimeType || 'audio/webm',
-      });
-      const filename = `gravacao_${formatDateForFilename()}.webm`;
-      loadAudioBlob(blob, filename);
-    };
+    if (recorder) {
+      state.mediaRecorderMimeType = recorder.mimeType || '';
 
-    // Inicia gravação, solicitando chunks a cada 250ms
-    state.mediaRecorder.start(250);
+      recorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          state.recordedChunks.push(event.data);
+        }
+      };
+
+      recorder.onerror = (event) => {
+        console.error('[TranscreveAI] Erro do MediaRecorder:', event);
+      };
+
+      recorder.onstop = async () => {
+        await finalizeRecording();
+      };
+
+      recorder.start(1000);
+    }
+
     state.isRecording = true;
+    updateRecordButtonUI();
+    updateLiveModeUI();
 
-    // Atualiza UI
-    ui.btnRecord.classList.add('recording');
-    ui.btnRecordLabel.textContent = 'Parar gravação';
-    setStatus('recording', '🔴 Gravando… Clique em "Parar gravação" quando terminar.');
+    if (isLivePreviewEnabled()) {
+      void runLivePreview();
+      state.livePreviewTimer = window.setInterval(() => {
+        void runLivePreview();
+      }, LIVE_PREVIEW_INTERVAL_MS);
+    }
+
+    setStatus('recording', getRecordingStatusMessage());
 
   } catch (err) {
     let msg = 'Não foi possível acessar o microfone.';
-    if (err.name === 'NotAllowedError')  msg = 'Permissão de microfone negada. Verifique as configurações do navegador.';
-    if (err.name === 'NotFoundError')    msg = 'Nenhum microfone encontrado no dispositivo.';
+    if (err.name === 'NotAllowedError')   msg = 'Permissão de microfone negada. Verifique as configurações do navegador.';
+    if (err.name === 'NotFoundError')     msg = 'Nenhum microfone encontrado no dispositivo.';
     if (err.name === 'NotSupportedError') msg = 'Microfone não suportado neste navegador.';
+    if (err.name === 'OverconstrainedError') msg = 'O navegador recusou as configurações do microfone. Tente outro dispositivo ou navegador.';
+    if (err.message) msg = err.message;
+    await teardownLiveCapture();
+    releaseMicrophoneStream();
+    updateRecordButtonUI();
     setStatus('error', msg);
     console.error('[TranscreveAI] Erro ao acessar microfone:', err);
   }
 }
 
-function stopRecording() {
-  if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
-    state.mediaRecorder.stop();
-  }
-
-  // Libera o stream do microfone (apaga o ícone de gravação no navegador)
-  if (state.micStream) {
-    state.micStream.getTracks().forEach(track => track.stop());
-    state.micStream = null;
-  }
+async function stopRecording() {
+  if (!state.isRecording) return;
 
   state.isRecording = false;
+  clearIntervalSafe(state.livePreviewTimer);
+  state.livePreviewTimer = null;
+  updateRecordButtonUI();
 
-  // Restaura UI do botão
-  ui.btnRecord.classList.remove('recording');
-  ui.btnRecordLabel.textContent = 'Gravar';
-  setStatus('idle', 'Gravação concluída. Clique em "Iniciar transcrição" para continuar.');
+  if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+    state.mediaRecorder.stop();
+  } else {
+    await finalizeRecording();
+  }
 }
 
 /**
@@ -334,6 +384,118 @@ function getSupportedMimeType() {
     'audio/mp4',
   ];
   return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
+}
+
+async function requestMicrophoneStream() {
+  const attempts = [
+    {
+      audio: {
+        channelCount: { ideal: 1 },
+        sampleRate: { ideal: AUDIO_SAMPLE_RATE },
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+      },
+    },
+    {
+      audio: {
+        channelCount: 1,
+        echoCancellation: true,
+        noiseSuppression: true,
+      },
+    },
+    { audio: true },
+  ];
+
+  let lastError = null;
+  for (const constraints of attempts) {
+    try {
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Não foi possível iniciar o microfone.');
+}
+
+function createMediaRecorderSafely(stream) {
+  if (!window.MediaRecorder) return null;
+
+  const mimeType = getSupportedMimeType();
+  const tries = mimeType ? [{ mimeType }, {}] : [{}];
+
+  for (const options of tries) {
+    try {
+      return Object.keys(options).length > 0
+        ? new MediaRecorder(stream, options)
+        : new MediaRecorder(stream);
+    } catch (error) {
+      console.warn('[TranscreveAI] Falha ao criar MediaRecorder com opções:', options, error);
+    }
+  }
+
+  return null;
+}
+
+async function startLiveCapture(stream) {
+  await teardownLiveCapture();
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return;
+
+  const ctx = new AudioCtx({ sampleRate: AUDIO_SAMPLE_RATE });
+  await ctx.resume();
+
+  const source = ctx.createMediaStreamSource(stream);
+  const processor = ctx.createScriptProcessor(4096, 1, 1);
+  const silence = ctx.createGain();
+  silence.gain.value = 0;
+
+  processor.onaudioprocess = (event) => {
+    const input = event.inputBuffer.getChannelData(0);
+    enqueueLiveChunk(input, event.inputBuffer.sampleRate || ctx.sampleRate || AUDIO_SAMPLE_RATE);
+  };
+
+  source.connect(processor);
+  processor.connect(silence);
+  silence.connect(ctx.destination);
+
+  state.liveAudioContext = ctx;
+  state.liveSourceNode = source;
+  state.liveProcessorNode = processor;
+  state.liveSilenceNode = silence;
+}
+
+async function teardownLiveCapture() {
+  clearIntervalSafe(state.livePreviewTimer);
+  state.livePreviewTimer = null;
+
+  if (state.liveProcessorNode) {
+    state.liveProcessorNode.disconnect();
+    state.liveProcessorNode.onaudioprocess = null;
+  }
+  if (state.liveSourceNode) state.liveSourceNode.disconnect();
+  if (state.liveSilenceNode) state.liveSilenceNode.disconnect();
+
+  if (state.liveAudioContext) {
+    try {
+      await state.liveAudioContext.close();
+    } catch (error) {
+      console.warn('[TranscreveAI] Falha ao fechar AudioContext:', error);
+    }
+  }
+
+  state.liveAudioContext = null;
+  state.liveSourceNode = null;
+  state.liveProcessorNode = null;
+  state.liveSilenceNode = null;
+}
+
+function releaseMicrophoneStream() {
+  if (state.micStream) {
+    state.micStream.getTracks().forEach((track) => track.stop());
+    state.micStream = null;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -354,16 +516,17 @@ function loadAudioFile(file) {
     return;
   }
 
-  loadAudioBlob(file, file.name);
+  loadAudioBlob(file, file.name, { audioDataFloat32: null });
 }
 
-function loadAudioBlob(blob, filename) {
+function loadAudioBlob(blob, filename, options = {}) {
   // Libera URL anterior se existir
   if (state.audioObjectUrl) {
     URL.revokeObjectURL(state.audioObjectUrl);
   }
 
   state.audioBlob      = blob;
+  state.audioDataFloat32 = options.audioDataFloat32 ?? null;
   state.audioObjectUrl = URL.createObjectURL(blob);
 
   // Configura player
@@ -389,11 +552,18 @@ function isAudioExtension(name) {
 }
 
 function clearAudio() {
-  if (state.isRecording) stopRecording();
+  if (state.isRecording) {
+    void stopRecording();
+  }
   if (state.audioObjectUrl) URL.revokeObjectURL(state.audioObjectUrl);
 
   state.audioBlob      = null;
+  state.audioDataFloat32 = null;
   state.audioObjectUrl = null;
+  state.mediaRecorder = null;
+  state.mediaRecorderMimeType = '';
+  state.recordedChunks = [];
+  resetLiveTranscriptState();
 
   ui.audioPlayer.src   = '';
   ui.audioPreview.hidden = true;
@@ -413,13 +583,12 @@ function clearAudio() {
  */
 async function loadModel(modelKey) {
   // Reutiliza se já carregado
-  if (state.transcriber && state.lastModelKey === modelKey) {
-    return state.transcriber;
+  if (state.transcribers[modelKey]) {
+    return state.transcribers[modelKey];
   }
-
-  // Libera modelo anterior (se houver)
-  state.transcriber = null;
-  state.lastModelKey = null;
+  if (state.transcriberLoads[modelKey]) {
+    return state.transcriberLoads[modelKey];
+  }
 
   const modelId = MODELS[modelKey];
   const device   = state.device;
@@ -455,8 +624,7 @@ async function loadModel(modelKey) {
     }
   };
 
-  try {
-    state.transcriber = await pipeline(
+  const loadPromise = pipeline(
       'automatic-speech-recognition',
       modelId,
       {
@@ -464,16 +632,22 @@ async function loadModel(modelKey) {
         dtype,
         progress_callback: onProgress,
       }
-    );
+    )
+    .then((transcriber) => {
+      state.transcribers[modelKey] = transcriber;
+      hideProgress();
+      return transcriber;
+    })
+    .catch((err) => {
+      hideProgress();
+      throw new Error(`Falha ao carregar o modelo "${modelId}": ${err.message}`);
+    })
+    .finally(() => {
+      delete state.transcriberLoads[modelKey];
+    });
 
-    state.lastModelKey = modelKey;
-    hideProgress();
-    return state.transcriber;
-
-  } catch (err) {
-    hideProgress();
-    throw new Error(`Falha ao carregar o modelo "${modelId}": ${err.message}`);
-  }
+  state.transcriberLoads[modelKey] = loadPromise;
+  return loadPromise;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -498,7 +672,7 @@ async function decodeAudioToFloat32(blob) {
   if (!AudioCtx) throw new Error('Web Audio API não suportada neste navegador.');
 
   // Pedimos 16kHz direto — alguns navegadores honram isso e poupam reamostragem
-  const ctx = new AudioCtx({ sampleRate: 16000 });
+  const ctx = new AudioCtx({ sampleRate: AUDIO_SAMPLE_RATE });
 
   let audioBuffer;
   try {
@@ -516,80 +690,174 @@ async function decodeAudioToFloat32(blob) {
   const srcRate = audioBuffer.sampleRate;
   await ctx.close();
 
-  if (srcRate === 16000) return raw; // já no rate correto
-
-  // Reamostragem linear quando o navegador ignorou o sampleRate do construtor
-  const ratio     = srcRate / 16000;
-  const newLength = Math.round(raw.length / ratio);
-  const resampled = new Float32Array(newLength);
-  for (let i = 0; i < newLength; i++) {
-    const pos = i * ratio;
-    const idx = Math.floor(pos);
-    const a   = raw[idx]     ?? 0;
-    const b   = raw[idx + 1] ?? 0;
-    resampled[i] = a + (pos - idx) * (b - a);
-  }
-  return resampled;
+  return srcRate === AUDIO_SAMPLE_RATE
+    ? new Float32Array(raw)
+    : resampleFloat32(raw, srcRate, AUDIO_SAMPLE_RATE);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    TRANSCRIÇÃO
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-async function handleTranscribe() {
+async function finalizeRecording() {
+  clearIntervalSafe(state.livePreviewTimer);
+  state.livePreviewTimer = null;
+
+  await teardownLiveCapture();
+  releaseMicrophoneStream();
+
+  const pcmData = mergeFloat32Chunks(state.livePcmChunks);
+  const stamp = formatDateForFilename();
+  let blob = null;
+  let filename = `gravacao_${stamp}.${getExtensionFromMimeType(state.mediaRecorderMimeType)}`;
+
+  if (state.recordedChunks.length > 0) {
+    blob = new Blob(state.recordedChunks, {
+      type: state.mediaRecorderMimeType || 'audio/webm',
+    });
+  } else if (pcmData.length > 0) {
+    blob = encodeWaveBlob(pcmData, AUDIO_SAMPLE_RATE);
+    filename = `gravacao_${stamp}.wav`;
+  }
+
+  state.mediaRecorder = null;
+  state.mediaRecorderMimeType = '';
+  updateRecordButtonUI();
+
+  if (!blob) {
+    setStatus('error', 'Nenhum áudio foi capturado. Tente gravar novamente.');
+    return;
+  }
+
+  loadAudioBlob(blob, filename, {
+    audioDataFloat32: pcmData.length > 0 ? pcmData : null,
+  });
+
+  if (isLivePreviewEnabled()) {
+    await finalizeLiveAfterRecording();
+  } else {
+    setStatus('idle', 'Gravação concluída. Clique em "Iniciar transcrição" para continuar.');
+  }
+}
+
+async function finalizeLiveAfterRecording() {
+  await settleLivePreview();
+  await runLivePreview({ force: true });
+
+  const selectedModelKey = getSelectedModelKey();
+  const liveModelKey = getLivePreviewModelKey(selectedModelKey);
+  const refiningFinal = selectedModelKey !== liveModelKey;
+
+  await handleTranscribe({
+    audioData: state.audioDataFloat32,
+    modelKey: selectedModelKey,
+    preStatus: refiningFinal
+      ? 'Refinando a transcrição final em alta qualidade…'
+      : 'Finalizando a transcrição…',
+    successMessage: refiningFinal
+      ? '✓ Transcrição em tempo real refinada em alta qualidade.'
+      : '✓ Transcrição em tempo real concluída com sucesso.',
+  });
+}
+
+async function settleLivePreview() {
+  let attempts = 0;
+  while (state.livePreviewInFlight && attempts < 80) {
+    await wait(100);
+    attempts++;
+  }
+}
+
+async function runLivePreview({ force = false } = {}) {
+  if (!isLivePreviewEnabled() || state.livePreviewInFlight) return;
+  if (state.livePcmLength <= 0) return;
+
+  const totalSec = state.livePcmLength / AUDIO_SAMPLE_RATE;
+  if (!force && totalSec < LIVE_PREVIEW_MIN_SEC) return;
+
+  const selectedModelKey = getSelectedModelKey();
+  const liveModelKey = getLivePreviewModelKey(selectedModelKey);
+
+  state.livePreviewInFlight = true;
+  state.livePreviewModelKey = liveModelKey;
+
+  try {
+    const transcriber = await loadModel(liveModelKey);
+    const endSample = state.livePcmLength;
+    const startSample = force
+      ? 0
+      : Math.max(0, endSample - Math.round(LIVE_PREVIEW_WINDOW_SEC * AUDIO_SAMPLE_RATE));
+
+    const audioData = getAudioSliceFromChunks(state.livePcmChunks, startSample, endSample);
+    const result = await transcriber(
+      audioData,
+      buildTranscriptionOptions({
+        languageCode: getSelectedLanguageCode(),
+        chunkLength: Math.min(18, Math.max(8, totalSec)),
+        strideLength: 2,
+        returnTimestamps: 'word',
+        useProgressCallback: false,
+      })
+    );
+
+    const words = normalizeWordChunks(result, startSample / AUDIO_SAMPLE_RATE);
+    const commitCutoff = force ? Number.POSITIVE_INFINITY : totalSec - LIVE_PREVIEW_COMMIT_LAG_SEC;
+    updateLiveWords(words, commitCutoff);
+    renderLiveTranscript();
+
+    if (state.isRecording) {
+      setStatus('recording', getRecordingStatusMessage());
+    }
+  } catch (err) {
+    console.error('[TranscreveAI] Falha na transcrição ao vivo:', err);
+    if (force) throw err;
+    if (state.isRecording) {
+      setStatus(
+        'recording',
+        'Gravação iniciada. A prévia ao vivo falhou, mas o refino final continuará disponível ao parar.'
+      );
+    }
+  } finally {
+    state.livePreviewInFlight = false;
+  }
+}
+
+async function handleTranscribe(runtimeOptions = {}) {
   if (state.isTranscribing) return;
-  if (!state.audioBlob) {
+  const audioDataFromState = runtimeOptions.audioData ?? state.audioDataFloat32;
+  if (!state.audioBlob && !audioDataFromState) {
     setStatus('error', 'Nenhum áudio carregado. Grave ou envie um arquivo primeiro.');
     return;
   }
 
   state.isTranscribing = true;
   ui.btnTranscribe.disabled = true;
+  clearIntervalSafe(state.livePreviewTimer);
+  state.livePreviewTimer = null;
+  resetLiveTranscriptState({ preservePCM: true });
   clearTranscript();
 
   try {
-    // Identifica o modo escolhido pelo usuário
-    const modeEl  = document.querySelector('input[name="mode"]:checked');
-    const modelKey = modeEl?.value === 'quality' ? 'quality' : 'fast';
-
-    // Identifica o idioma
-    const langSel  = document.getElementById('lang-select');
-    const langKey  = langSel?.value || 'portuguese';
-    const langCode = LANG_MAP[langKey] ?? null; // null = detecção automática
+    const modelKey = runtimeOptions.modelKey || getSelectedModelKey();
+    const langCode = runtimeOptions.languageCode ?? getSelectedLanguageCode();
 
     // 1. Carrega (ou reutiliza) o modelo
     const transcriber = await loadModel(modelKey);
 
-    // 2. Decodifica o áudio manualmente via Web Audio API → Float32Array 16kHz
-    //    Isso garante suporte a ogg, mp3, wav, webm, m4a, flac, etc.
-    //    e evita que o Transformers.js tente fazer fetch/decode interno (que falha
-    //    em alguns formatos/navegadores).
-    setStatus('progress', 'Decodificando áudio…');
+    // 2. Obtém o áudio em PCM 16kHz.
+    const audioData = audioDataFromState ?? await decodeAudioToFloat32(state.audioBlob);
+    state.audioDataFloat32 = audioData;
+
+    setStatus('progress', runtimeOptions.preStatus || 'Transcrevendo…');
     showProgress(null); // indeterminate
 
-    const audioData = await decodeAudioToFloat32(state.audioBlob);
-
-    // 3. Roda a transcrição com o Float32Array já decodificado
-    setStatus('progress', 'Transcrevendo…');
-
-    /**
-     * Opções do pipeline Whisper:
-     *  - language:       código ISO 639-1 ou null para autodetecção
-     *  - task:           'transcribe' (manter idioma)
-     *  - chunk_length_s: divide o áudio em chunks para não esgotar memória
-     *  - stride_length_s: sobreposição entre chunks para continuidade
-     *  - return_timestamps: desabilitado para saída limpa
-     *  - callback_function: chamada a cada chunk gerado
-     */
-    const options = {
-      task: 'transcribe',
-      chunk_length_s:    30,
-      stride_length_s:    5,
-      return_timestamps:  false,
-    };
-
-    if (langCode) options.language = langCode;
-
+    const options = buildTranscriptionOptions({
+      languageCode: langCode,
+      chunkLength: 30,
+      strideLength: 5,
+      returnTimestamps: false,
+      useProgressCallback: true,
+    });
     let chunkCount = 0;
     options.callback_function = () => {
       chunkCount++;
@@ -603,30 +871,14 @@ async function handleTranscribe() {
     const text = (result?.text ?? '').trim();
     if (text) {
       showTranscript(text);
-      setStatus('success', `✓ Transcrição concluída com sucesso.`);
+      setStatus('success', runtimeOptions.successMessage || '✓ Transcrição concluída com sucesso.');
     } else {
       setStatus('error', 'Nenhum texto detectado no áudio. Verifique o idioma e o volume do áudio.');
     }
 
   } catch (err) {
     console.error('[TranscreveAI] Erro na transcrição:', err);
-
-    let msg = `Erro na transcrição: ${err.message}`;
-
-    // Mensagens de erro amigáveis para casos comuns
-    if (err.message.includes('fetch')) {
-      msg = 'Erro ao baixar o modelo. Verifique sua conexão com a internet e tente novamente.';
-    } else if (err.message.includes('memory') || err.message.includes('Memory')) {
-      msg = 'Memória insuficiente. Tente o Modo Rápido ou use um arquivo de áudio menor.';
-    } else if (err.message.includes('WebGPU') || err.message.includes('webgpu')) {
-      msg = 'Erro com WebGPU. Recarregue a página — o sistema tentará usar WASM automaticamente.';
-      // Força fallback para WASM na próxima tentativa
-      state.device = 'wasm';
-      state.transcriber = null;
-      state.lastModelKey = null;
-    }
-
-    setStatus('error', msg);
+    setStatus('error', mapTranscriptionError(err));
   } finally {
     hideProgress();
     state.isTranscribing = false;
@@ -687,20 +939,53 @@ function hideProgress() {
 }
 
 function showTranscript(text) {
-  ui.transcriptPlaceholder.hidden = true;
-  ui.transcriptText.textContent   = text;
-  ui.transcriptMeta.hidden        = false;
+  renderTranscript(text, '');
+}
 
-  // Conta palavras e caracteres
-  const words = text.trim().split(/\s+/).filter(Boolean).length;
-  const chars  = text.length;
+function renderLiveTranscript() {
+  const committed = wordsToText(state.liveCommittedWords);
+  const preview = wordsToText(state.livePreviewWords);
+  renderTranscript(committed, preview);
+}
+
+function renderTranscript(committedText = '', previewText = '') {
+  const finalText = `${committedText}${previewText}`.trim();
+  ui.transcriptText.innerHTML = '';
+
+  if (!finalText) {
+    ui.transcriptPlaceholder.hidden = false;
+    ui.transcriptMeta.hidden = true;
+    ui.wordCount.textContent = '0 palavras';
+    ui.charCount.textContent = '0 caracteres';
+    return;
+  }
+
+  ui.transcriptPlaceholder.hidden = true;
+  ui.transcriptMeta.hidden = false;
+
+  if (committedText) {
+    const committedNode = document.createElement('span');
+    committedNode.className = 'committed';
+    committedNode.textContent = committedText;
+    ui.transcriptText.appendChild(committedNode);
+  }
+
+  if (previewText) {
+    const previewNode = document.createElement('span');
+    previewNode.className = 'partial';
+    previewNode.textContent = previewText;
+    ui.transcriptText.appendChild(previewNode);
+  }
+
+  const words = finalText.split(/\s+/).filter(Boolean).length;
+  const chars = finalText.length;
   ui.wordCount.textContent = `${words} palavra${words !== 1 ? 's' : ''}`;
   ui.charCount.textContent = `${chars} caractere${chars !== 1 ? 's' : ''}`;
 }
 
 function clearTranscript() {
   ui.transcriptPlaceholder.hidden = false;
-  ui.transcriptText.textContent   = '';
+  ui.transcriptText.innerHTML     = '';
   ui.transcriptMeta.hidden        = true;
   ui.wordCount.textContent        = '0 palavras';
   ui.charCount.textContent        = '0 caracteres';
@@ -762,10 +1047,296 @@ function downloadTranscript() {
    ───────────────────────────────────────────────────────────────────────────── */
 
 function clearAll() {
+  if (state.isRecording) {
+    void stopRecording();
+  }
   clearAudio();
   clearTranscript();
   hideProgress();
+  resetLiveTranscriptState();
   setStatus('idle', 'Aguardando áudio…');
+}
+
+function updateRecordButtonUI() {
+  ui.btnRecord.classList.toggle('recording', state.isRecording);
+  ui.btnRecordLabel.textContent = state.isRecording
+    ? (isLivePreviewEnabled() ? 'Parar e finalizar' : 'Parar gravação')
+    : 'Gravar';
+}
+
+function updateLiveModeUI() {
+  const enabled = isLivePreviewEnabled();
+  const selectedModelKey = getSelectedModelKey();
+  const liveModelKey = getLivePreviewModelKey(selectedModelKey);
+  const toggleCard = ui.liveToggle.closest('.live-toggle');
+
+  if (toggleCard) {
+    toggleCard.classList.toggle('is-off', !enabled);
+  }
+
+  ui.liveTogglePill.textContent = enabled ? 'Ativo' : 'Desligado';
+
+  if (!enabled) {
+    ui.liveNote.textContent = 'Ao desligar o modo ao vivo, a gravação continua normal e a transcrição acontece só no final.';
+  } else if (selectedModelKey === 'quality' && liveModelKey !== 'quality') {
+    ui.liveNote.textContent = 'Sem WebGPU, a prévia usa modo rápido para acompanhar sua fala e refina em alta qualidade ao parar.';
+  } else if (selectedModelKey === 'quality') {
+    ui.liveNote.textContent = 'Prévia ao vivo e refino final usam o modo de alta qualidade. Ideal para desktop com WebGPU.';
+  } else {
+    ui.liveNote.textContent = 'Prévia e resultado final usam o modo rápido para priorizar velocidade e resposta imediata.';
+  }
+
+  updateRecordButtonUI();
+}
+
+function isLivePreviewEnabled() {
+  return Boolean(ui.liveToggle?.checked);
+}
+
+function getSelectedModelKey() {
+  const modeEl = document.querySelector('input[name="mode"]:checked');
+  return modeEl?.value === 'quality' ? 'quality' : 'fast';
+}
+
+function getSelectedLanguageCode() {
+  const langKey = document.getElementById('lang-select')?.value || 'portuguese';
+  return LANG_MAP[langKey] ?? null;
+}
+
+function getLivePreviewModelKey(selectedModelKey) {
+  if (selectedModelKey === 'quality' && state.device !== 'webgpu') {
+    return LIVE_PREVIEW_CPU_MODEL_KEY;
+  }
+  return selectedModelKey;
+}
+
+function getRecordingStatusMessage() {
+  if (!isLivePreviewEnabled()) {
+    return 'Gravando… Clique em "Parar gravação" quando terminar.';
+  }
+
+  const selectedModelKey = getSelectedModelKey();
+  const liveModelKey = getLivePreviewModelKey(selectedModelKey);
+  if (selectedModelKey === 'quality' && liveModelKey !== 'quality') {
+    return 'Gravando com prévia ao vivo. A prévia usa modo rápido e o texto final será refinado em alta qualidade ao parar.';
+  }
+
+  return 'Gravando com transcrição em tempo real. A prévia aparece enquanto você fala e será finalizada ao parar.';
+}
+
+function buildTranscriptionOptions({
+  languageCode,
+  chunkLength = 30,
+  strideLength = 5,
+  returnTimestamps = false,
+  useProgressCallback = true,
+} = {}) {
+  const options = {
+    task: 'transcribe',
+    chunk_length_s: chunkLength,
+    stride_length_s: strideLength,
+    return_timestamps: returnTimestamps,
+  };
+
+  if (languageCode) {
+    options.language = languageCode;
+  }
+
+  if (!useProgressCallback) {
+    delete options.callback_function;
+  }
+
+  return options;
+}
+
+function mapTranscriptionError(err) {
+  let msg = `Erro na transcrição: ${err.message}`;
+
+  if (err.message.includes('fetch')) {
+    msg = 'Erro ao baixar o modelo. Verifique sua conexão com a internet e tente novamente.';
+  } else if (err.message.includes('memory') || err.message.includes('Memory')) {
+    msg = 'Memória insuficiente. Tente o Modo Rápido ou use um arquivo de áudio menor.';
+  } else if (err.message.includes('WebGPU') || err.message.includes('webgpu')) {
+    msg = 'Erro com WebGPU. O sistema voltará para WASM automaticamente na próxima tentativa.';
+    state.device = 'wasm';
+    state.transcribers = {};
+    state.transcriberLoads = {};
+  }
+
+  return msg;
+}
+
+function clearIntervalSafe(timerId) {
+  if (timerId) window.clearInterval(timerId);
+}
+
+function wait(ms) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function resetLiveTranscriptState({ preservePCM = false } = {}) {
+  clearIntervalSafe(state.livePreviewTimer);
+  state.livePreviewTimer = null;
+  state.livePreviewInFlight = false;
+  state.liveCommittedWords = [];
+  state.livePreviewWords = [];
+  state.livePreviewModelKey = null;
+
+  if (!preservePCM) {
+    state.livePcmChunks = [];
+    state.livePcmLength = 0;
+  }
+}
+
+function enqueueLiveChunk(float32Data, sampleRate) {
+  const copied = new Float32Array(float32Data);
+  const normalized = sampleRate === AUDIO_SAMPLE_RATE
+    ? copied
+    : resampleFloat32(copied, sampleRate, AUDIO_SAMPLE_RATE);
+
+  state.livePcmChunks.push(normalized);
+  state.livePcmLength += normalized.length;
+}
+
+function mergeFloat32Chunks(chunks) {
+  const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  const merged = new Float32Array(totalLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.length;
+  }
+  return merged;
+}
+
+function getAudioSliceFromChunks(chunks, startSample, endSample) {
+  const output = new Float32Array(Math.max(0, endSample - startSample));
+  let writeOffset = 0;
+  let currentOffset = 0;
+
+  for (const chunk of chunks) {
+    const chunkEnd = currentOffset + chunk.length;
+    if (chunkEnd <= startSample) {
+      currentOffset = chunkEnd;
+      continue;
+    }
+    if (currentOffset >= endSample) break;
+
+    const localStart = Math.max(0, startSample - currentOffset);
+    const localEnd = Math.min(chunk.length, endSample - currentOffset);
+    if (localEnd > localStart) {
+      output.set(chunk.subarray(localStart, localEnd), writeOffset);
+      writeOffset += localEnd - localStart;
+    }
+
+    currentOffset = chunkEnd;
+  }
+
+  return writeOffset === output.length ? output : output.subarray(0, writeOffset);
+}
+
+function resampleFloat32(raw, srcRate, targetRate) {
+  if (srcRate === targetRate) return new Float32Array(raw);
+
+  const ratio = srcRate / targetRate;
+  const newLength = Math.max(1, Math.round(raw.length / ratio));
+  const resampled = new Float32Array(newLength);
+  for (let i = 0; i < newLength; i++) {
+    const pos = i * ratio;
+    const idx = Math.floor(pos);
+    const a = raw[idx] ?? 0;
+    const b = raw[idx + 1] ?? 0;
+    resampled[i] = a + (pos - idx) * (b - a);
+  }
+  return resampled;
+}
+
+function encodeWaveBlob(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+
+  writeAscii(view, 0, 'RIFF');
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeAscii(view, 8, 'WAVE');
+  writeAscii(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeAscii(view, 36, 'data');
+  view.setUint32(40, samples.length * 2, true);
+
+  let offset = 44;
+  for (let i = 0; i < samples.length; i++) {
+    const sample = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
+    offset += 2;
+  }
+
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+function writeAscii(view, offset, value) {
+  for (let i = 0; i < value.length; i++) {
+    view.setUint8(offset + i, value.charCodeAt(i));
+  }
+}
+
+function normalizeWordChunks(result, offsetSec = 0) {
+  if (!Array.isArray(result?.chunks)) return [];
+
+  return result.chunks
+    .map((chunk) => {
+      const timestamp = chunk?.timestamp;
+      let start = 0;
+      let end = 0;
+
+      if (Array.isArray(timestamp)) {
+        [start, end] = timestamp;
+      } else if (timestamp && typeof timestamp === 'object') {
+        start = timestamp.start ?? timestamp[0] ?? 0;
+        end = timestamp.end ?? timestamp[1] ?? start;
+      }
+
+      const safeStart = Number.isFinite(start) ? start : 0;
+      const safeEnd = Number.isFinite(end) ? end : safeStart;
+
+      return {
+        text: chunk?.text || '',
+        start: offsetSec + safeStart,
+        end: offsetSec + safeEnd,
+      };
+    })
+    .filter((chunk) => chunk.text);
+}
+
+function updateLiveWords(words, commitCutoffSec) {
+  let lastCommittedEnd = state.liveCommittedWords.length
+    ? state.liveCommittedWords[state.liveCommittedWords.length - 1].end
+    : -Infinity;
+
+  for (const word of words) {
+    if (word.end > commitCutoffSec) continue;
+    if (word.end <= lastCommittedEnd + 0.04) continue;
+    state.liveCommittedWords.push(word);
+    lastCommittedEnd = word.end;
+  }
+
+  state.livePreviewWords = words.filter((word) => word.end > lastCommittedEnd + 0.04);
+}
+
+function wordsToText(words) {
+  return words.map((word) => word.text).join('').replace(/^\s+/, '');
+}
+
+function getExtensionFromMimeType(mimeType) {
+  if (mimeType.includes('ogg')) return 'ogg';
+  if (mimeType.includes('mp4')) return 'm4a';
+  if (mimeType.includes('wav')) return 'wav';
+  return 'webm';
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
