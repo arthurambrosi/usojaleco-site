@@ -57,10 +57,10 @@ const MODELS = {
 };
 
 const AUDIO_SAMPLE_RATE = 16000;
-const LIVE_PREVIEW_INTERVAL_MS = 3500;
-const LIVE_PREVIEW_MIN_SEC = 4;
-const LIVE_PREVIEW_WINDOW_SEC = 18;
-const LIVE_PREVIEW_COMMIT_LAG_SEC = 2.2;
+const LIVE_PREVIEW_INTERVAL_MS = 2200;
+const LIVE_PREVIEW_MIN_SEC = 2.4;
+const LIVE_PREVIEW_WINDOW_SEC = 6;
+const LIVE_PREVIEW_COMMIT_LAG_SEC = 1.4;
 const LIVE_PREVIEW_CPU_MODEL_KEY = 'fast';
 
 // Mapeamento de idioma amigável → código aceito pelo Whisper
@@ -102,6 +102,7 @@ const state = {
   livePreviewInFlight: false,
   liveCommittedWords: [],
   livePreviewWords: [],
+  livePreviewFallbackText: '',
   livePreviewModelKey: null,
 };
 
@@ -159,6 +160,9 @@ async function initApp() {
 
   // 4. Ajusta o texto do modo ao vivo conforme o hardware/modo selecionado
   updateLiveModeUI();
+
+  // 5. Pré-carrega o modelo inicial assim que a página abre.
+  void preloadModelsForCurrentSelection({ initial: true });
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -259,9 +263,9 @@ function registerEvents() {
   ui.btnDownload.addEventListener('click', downloadTranscript);
 
   // Atualiza o aviso do modo ao vivo
-  ui.liveToggle.addEventListener('change', updateLiveModeUI);
+  ui.liveToggle.addEventListener('change', handleSelectionChange);
   document.querySelectorAll('input[name="mode"]').forEach((node) => {
-    node.addEventListener('change', updateLiveModeUI);
+    node.addEventListener('change', handleSelectionChange);
   });
 }
 
@@ -709,15 +713,15 @@ async function finalizeRecording() {
   const pcmData = mergeFloat32Chunks(state.livePcmChunks);
   const stamp = formatDateForFilename();
   let blob = null;
-  let filename = `gravacao_${stamp}.${getExtensionFromMimeType(state.mediaRecorderMimeType)}`;
+  let filename = `gravacao_${stamp}.wav`;
 
-  if (state.recordedChunks.length > 0) {
+  if (pcmData.length > 0) {
+    blob = encodeWaveBlob(pcmData, AUDIO_SAMPLE_RATE);
+  } else if (state.recordedChunks.length > 0) {
     blob = new Blob(state.recordedChunks, {
       type: state.mediaRecorderMimeType || 'audio/webm',
     });
-  } else if (pcmData.length > 0) {
-    blob = encodeWaveBlob(pcmData, AUDIO_SAMPLE_RATE);
-    filename = `gravacao_${stamp}.wav`;
+    filename = `gravacao_${stamp}.${getExtensionFromMimeType(state.mediaRecorderMimeType)}`;
   }
 
   state.mediaRecorder = null;
@@ -793,16 +797,25 @@ async function runLivePreview({ force = false } = {}) {
       audioData,
       buildTranscriptionOptions({
         languageCode: getSelectedLanguageCode(),
-        chunkLength: Math.min(18, Math.max(8, totalSec)),
-        strideLength: 2,
+        chunkLength: Math.min(LIVE_PREVIEW_WINDOW_SEC, Math.max(3, totalSec)),
+        strideLength: 1,
         returnTimestamps: 'word',
         useProgressCallback: false,
       })
     );
 
     const words = normalizeWordChunks(result, startSample / AUDIO_SAMPLE_RATE);
+    const previewText = (result?.text ?? '').trim();
     const commitCutoff = force ? Number.POSITIVE_INFINITY : totalSec - LIVE_PREVIEW_COMMIT_LAG_SEC;
-    updateLiveWords(words, commitCutoff);
+
+    if (words.length > 0) {
+      state.livePreviewFallbackText = '';
+      updateLiveWords(words, commitCutoff);
+    } else {
+      state.livePreviewFallbackText = previewText;
+      state.livePreviewWords = [];
+    }
+
     renderLiveTranscript();
 
     if (state.isRecording) {
@@ -944,7 +957,7 @@ function showTranscript(text) {
 
 function renderLiveTranscript() {
   const committed = wordsToText(state.liveCommittedWords);
-  const preview = wordsToText(state.livePreviewWords);
+  const preview = state.livePreviewFallbackText || wordsToText(state.livePreviewWords);
   renderTranscript(committed, preview);
 }
 
@@ -1089,6 +1102,13 @@ function updateLiveModeUI() {
   updateRecordButtonUI();
 }
 
+function handleSelectionChange() {
+  updateLiveModeUI();
+  if (!state.isRecording && !state.isTranscribing) {
+    void preloadModelsForCurrentSelection();
+  }
+}
+
 function isLivePreviewEnabled() {
   return Boolean(ui.liveToggle?.checked);
 }
@@ -1149,6 +1169,44 @@ function buildTranscriptionOptions({
   return options;
 }
 
+async function preloadModelsForCurrentSelection({ initial = false } = {}) {
+  if (state.isRecording || state.isTranscribing) return;
+
+  const selectedModelKey = getSelectedModelKey();
+  const preloadKeys = [getLivePreviewModelKey(selectedModelKey)];
+  if (selectedModelKey !== preloadKeys[0]) {
+    preloadKeys.push(selectedModelKey);
+  }
+
+  try {
+    for (const key of preloadKeys) {
+      await loadModel(key);
+    }
+
+    if (!state.audioBlob && !state.isRecording && !state.isTranscribing) {
+      const summary = describePreloadedModels(preloadKeys);
+      setStatus('idle', initial
+        ? `${summary} pronto. Grave ou envie um áudio para começar.`
+        : `${summary} pronto para uso.`);
+    }
+  } catch (err) {
+    console.error('[TranscreveAI] Falha no pré-carregamento:', err);
+    setStatus('error', mapTranscriptionError(err));
+  }
+}
+
+function describePreloadedModels(modelKeys) {
+  const uniqueKeys = [...new Set(modelKeys)];
+  if (uniqueKeys.length === 1) {
+    return `Modelo ${modelLabel(uniqueKeys[0])}`;
+  }
+  return `Modelos ${uniqueKeys.map(modelLabel).join(' + ')}`;
+}
+
+function modelLabel(modelKey) {
+  return modelKey === 'quality' ? 'Qualidade' : 'Rápido';
+}
+
 function mapTranscriptionError(err) {
   let msg = `Erro na transcrição: ${err.message}`;
 
@@ -1180,6 +1238,7 @@ function resetLiveTranscriptState({ preservePCM = false } = {}) {
   state.livePreviewInFlight = false;
   state.liveCommittedWords = [];
   state.livePreviewWords = [];
+  state.livePreviewFallbackText = '';
   state.livePreviewModelKey = null;
 
   if (!preservePCM) {
