@@ -6,6 +6,7 @@
     {
       "titulo": "Tricomoníase",
       "slug": "tricomoniase",
+      "status": "building",
       "descricaoCurta": "",
       "meta": {
         "orientacoes": "Tratar parceiros concomitantemente\nTratamento em gestantes é igual\nOrientar evitar atividade sexual até o término do tratamento",
@@ -133,6 +134,7 @@
     {
       "titulo": "Vaginose bacteriana",
       "slug": "vaginose-bacteriana",
+      "status": "building",
       "descricaoCurta": "",
       "meta": {
         "orientacoes": "",
@@ -412,6 +414,7 @@
     {
       "titulo": "Candidíase Vulvovaginal",
       "slug": "candidiase-vulvovaginal",
+      "status": "building",
       "descricaoCurta": "",
       "meta": {
         "orientacoes": "Tratamento pode ser por via vaginal ou sistêmica. Eficácias semelhantes\nDeve-se orientar utilizar um aplicador por dia, que deve ser descartado após o uso\nPara gestantes, usar somente tratamento vaginal/intravaginal",
@@ -929,6 +932,7 @@
     {
       "titulo": "Doença inflamatória pélvica",
       "slug": "doenca-inflamatoria-pelvica",
+      "status": "building",
       "descricaoCurta": "",
       "meta": {
         "orientacoes": "Tratar parceiros sexuais",
