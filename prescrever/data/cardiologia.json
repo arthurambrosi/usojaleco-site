@@ -6,6 +6,7 @@
     {
       "titulo": "Hipertensão Arterial",
       "slug": "hipertensao-arterial",
+      "status": "building",
       "descricaoCurta": "Conduta inicial e estratificacao de risco.",
       "meta": {
         "orientacoes": "",
