@@ -6,6 +6,7 @@
     {
       "titulo": "Sifilis",
       "slug": "sifilis",
+      "status": "building",
       "descricaoCurta": "Diagnostico e tratamento por estagio clinico.",
       "meta": {
         "orientacoes": "Tratar parceiro, mesmo que sorologicamente negativo",
