@@ -6,6 +6,7 @@
     {
       "titulo": "Geral",
       "slug": "geral",
+      "status": "building",
       "descricaoCurta": "",
       "meta": {
         "orientacoes": "",
