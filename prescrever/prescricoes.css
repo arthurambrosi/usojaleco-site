@@ -565,6 +565,11 @@ input {
   background: #f4f7f8;
 }
 
+.meta-box.soft p,
+.meta-box.soft .meta-topic-list li {
+  font-family: Poppins, Manrope, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
 .section-list {
   display: grid;
   gap: 8px;
