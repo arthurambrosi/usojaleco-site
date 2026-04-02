@@ -30,6 +30,11 @@
       "slug": "psiquiatria",
       "file": "psiquiatria.json",
       "area": "Psiquiatria"
+    },
+    {
+      "slug": "obstetricia",
+      "file": "obstetricia.json",
+      "area": "Obstetrícia"
     }
   ]
 }
