@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Obstetrícia",
+  "slug": "obstetricia",
+  "assuntos": [
+    {
+      "titulo": "Pré-Natal",
+      "slug": "pre-natal",
+      "status": "building",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "asas"
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-zc9gugg",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-ct8d66r",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-y2mow17",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-3d90qga",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section-1l4k4x7",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-xiagpd2",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
