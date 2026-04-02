@@ -6,6 +6,7 @@
     {
       "titulo": "Pneumonia comunitaria",
       "slug": "pneumonia-comunitaria",
+      "status": "building",
       "descricaoCurta": "Estratificacao de gravidade e esquema empirico.",
       "meta": {
         "orientacoes": "",
