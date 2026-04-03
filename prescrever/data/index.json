@@ -40,6 +40,11 @@
       "slug": "endocrinologia",
       "file": "endocrinologia.json",
       "area": "Endocrinologia"
+    },
+    {
+      "slug": "reumatologia",
+      "file": "reumatologia.json",
+      "area": "Reumatologia"
     }
   ]
 }
