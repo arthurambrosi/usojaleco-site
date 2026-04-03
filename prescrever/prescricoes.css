@@ -575,6 +575,12 @@ input {
   gap: 8px;
 }
 
+.section-list-nested {
+  margin-top: 2px;
+  padding-left: 14px;
+  border-left: 2px solid #dbe4e8;
+}
+
 .section-item {
   border: 1px solid #cfd8de;
   border-radius: 10px;
@@ -627,6 +633,14 @@ input {
   margin: 0;
   font-size: 0.98rem;
   line-height: 1.15;
+}
+
+.section-number {
+  color: #607380;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .section-main-sub {

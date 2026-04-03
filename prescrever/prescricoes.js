@@ -291,10 +291,11 @@ function itemHasPrescriptionContent(item) {
   return isNonEmptyString(item?.nome) || isNonEmptyString(item?.apresentacao) || isNonEmptyString(item?.posologia);
 }
 
-function buildItemKey(protocolId, sectionIndex, groupPath, itemId, itemIndex = 0) {
+function buildItemKey(protocolId, sectionPath, groupPath, itemId, itemIndex = 0) {
+  const safeSectionPath = isNonEmptyString(sectionPath) ? sectionPath : "0";
   const safePath = isNonEmptyString(groupPath) ? groupPath : "0";
   const safeItemId = isNonEmptyString(itemId) ? itemId : `item-${itemIndex + 1}`;
-  return `${protocolId}::${sectionIndex}:${safePath}:${safeItemId}:${itemIndex}`;
+  return `${protocolId}::${safeSectionPath}:${safePath}:${safeItemId}:${itemIndex}`;
 }
 
 function buildDashSeparator() {
@@ -334,14 +335,8 @@ function entriesToPrescriptionText(entries) {
   return lines.join("\n").trim();
 }
 
-function collectStructuredEntries(protocol) {
-  const entries = [];
-
-  protocol.sections.forEach((section, sectionIndex) => {
-    if (section.mode !== "structured") {
-      return;
-    }
-
+function collectStructuredEntriesFromSection(protocol, section, out = []) {
+  if (section.mode === "structured") {
     section.groups.forEach((group, groupIndex) => {
       const groupPath = String(groupIndex);
       const groupSections = getGroupSections(group);
@@ -354,10 +349,10 @@ function collectStructuredEntries(protocol) {
           if (!itemHasPrescriptionContent(item)) {
             return;
           }
-          entries.push({
-            key: buildItemKey(protocol.id, sectionIndex, entryPath, item?.id, itemIndex),
+          out.push({
+            key: buildItemKey(protocol.id, section.path, entryPath, item?.id, itemIndex),
             protocolId: protocol.id,
-            sectionIndex,
+            sectionPath: section.path,
             groupPath: entryPath,
             itemIndex,
             section,
@@ -368,8 +363,20 @@ function collectStructuredEntries(protocol) {
         });
       });
     });
-  });
+  }
 
+  if (Array.isArray(section.children) && section.children.length) {
+    section.children.forEach((child) => collectStructuredEntriesFromSection(protocol, child, out));
+  }
+
+  return out;
+}
+
+function collectStructuredEntries(protocol) {
+  const entries = [];
+  protocol.sections.forEach((section) => {
+    collectStructuredEntriesFromSection(protocol, section, entries);
+  });
   return entries;
 }
 
@@ -555,9 +562,17 @@ function collectSearchTextsFromGroups(groups) {
   return out;
 }
 
-function normalizeSection(tab, index = 0) {
+function normalizeSection(tab, index = 0, lineage = []) {
   const title = isNonEmptyString(tab?.titulo) ? tab.titulo.trim() : `Seção ${index + 1}`;
   const slug = isNonEmptyString(tab?.slug) ? tab.slug : `secao-${index + 1}`;
+  const numberingSegments = [...lineage, index + 1];
+  const rawChildren = Array.isArray(tab?.children)
+    ? tab.children
+    : Array.isArray(tab?.subsections)
+      ? tab.subsections
+      : Array.isArray(tab?.tabs)
+        ? tab.tabs
+        : [];
 
   const groupsRaw = Array.isArray(tab?.structured?.groups)
     ? tab.structured.groups
@@ -569,35 +584,49 @@ function normalizeSection(tab, index = 0) {
   const hasStructured = groups.length > 0;
 
   const mode = tab?.mode === "free" ? "free" : hasStructured ? "structured" : "free";
+  const children = rawChildren.map((child, childIndex) => normalizeSection(child, childIndex, numberingSegments));
 
   return {
-    id: `${slug}-${index}`,
+    id: `${slug}-${numberingSegments.join("-")}`,
     title,
     slug,
     mode,
     meta: normalizeMeta(tab?.meta),
     groups,
     tagDefs: normalizeTagDefs(tab?.tagDefs),
-    blocks: Array.isArray(tab?.blocks) ? tab.blocks : []
+    blocks: Array.isArray(tab?.blocks) ? tab.blocks : [],
+    children,
+    depth: lineage.length,
+    numberingSegments,
+    numbering: numberingSegments.join("."),
+    path: numberingSegments.join(".")
   };
+}
+
+function countSectionsInTree(sections) {
+  if (!Array.isArray(sections)) {
+    return 0;
+  }
+
+  return sections.reduce((total, section) => total + 1 + countSectionsInTree(section.children), 0);
 }
 
 function getMedicationCount(sections) {
   return sections.reduce((total, section) => {
-    if (section.mode !== "structured") {
-      return total;
-    }
-
-    const sectionCount = countNamedItemsInGroups(section.groups);
-    return total + sectionCount;
+    return total + getSectionMedicationCount(section);
   }, 0);
 }
 
 function getSectionMedicationCount(section) {
-  if (section.mode !== "structured") {
-    return 0;
-  }
-  return countNamedItemsInGroups(section.groups);
+  const ownCount = section.mode === "structured" ? countNamedItemsInGroups(section.groups) : 0;
+  const childCount = Array.isArray(section.children)
+    ? section.children.reduce((total, child) => total + getSectionMedicationCount(child), 0)
+    : 0;
+  return ownCount + childCount;
+}
+
+function getSectionDisplayTitle(section) {
+  return `${section.numbering} ${section.title}`.trim();
 }
 
 function getSectionInitial(title) {
@@ -637,6 +666,24 @@ function setSectionExpanded(protocolId, sectionId, expanded) {
   }
 }
 
+function collectSectionSearchTexts(section, out = []) {
+  out.push(
+    section.title,
+    section.numbering,
+    section.meta.orientacoes,
+    section.meta.alertas,
+    section.meta.notas,
+    ...section.tagDefs.flatMap((tag) => [tag.label, tagContentToSearchText(tag.content)]),
+    ...collectSearchTextsFromGroups(section.groups)
+  );
+
+  if (Array.isArray(section.children) && section.children.length) {
+    section.children.forEach((child) => collectSectionSearchTexts(child, out));
+  }
+
+  return out;
+}
+
 function buildProtocol(area, subject) {
   const areaName = isNonEmptyString(area?.area) ? area.area.trim() : "Area";
   const areaSlug = isNonEmptyString(area?.slug) ? area.slug : areaName.toLowerCase().replace(/\s+/g, "-");
@@ -674,14 +721,7 @@ function buildProtocol(area, subject) {
     protocol.meta.orientacoes,
     protocol.meta.alertas,
     protocol.meta.notas,
-    ...protocol.sections.flatMap((section) => [
-      section.title,
-      section.meta.orientacoes,
-      section.meta.alertas,
-      section.meta.notas,
-      ...section.tagDefs.flatMap((tag) => [tag.label, tagContentToSearchText(tag.content)]),
-      ...collectSearchTextsFromGroups(section.groups)
-    ])
+    ...protocol.sections.flatMap((section) => collectSectionSearchTexts(section))
   ]
     .join(" ")
     .toLowerCase();
@@ -946,7 +986,7 @@ function collectVisibleItemsFromGroup(group, out = []) {
 function renderStructuredGroupBlock({
   protocol,
   section,
-  sectionIndex,
+  sectionPath,
   group,
   groupPath
 }) {
@@ -1031,7 +1071,7 @@ function renderStructuredGroupBlock({
 
     items.forEach(({ item, itemIndex }) => {
       const itemPath = `${groupPath}.${groupSectionIndex}`;
-      const itemKey = buildItemKey(protocol.id, sectionIndex, itemPath, item?.id, itemIndex);
+      const itemKey = buildItemKey(protocol.id, sectionPath, itemPath, item?.id, itemIndex);
       const medCard = document.createElement("article");
       medCard.className = "med-card";
       if (item.sus) {
@@ -1264,6 +1304,7 @@ function openTagPopover(anchor, tag) {
 }
 
 function renderProtocolDetail(protocol) {
+  const totalSections = countSectionsInTree(protocol.sections);
   const detail = document.createElement("div");
   detail.className = "protocol-detail";
   const protocolEntries = collectStructuredEntries(protocol);
@@ -1273,7 +1314,7 @@ function renderProtocolDetail(protocol) {
   head.className = "detail-head";
 
   const meta = document.createElement("small");
-  meta.textContent = `${protocol.areaName} · ${protocol.sections.length} seção(ões)`;
+  meta.textContent = `${protocol.areaName} · ${totalSections} seção(ões)`;
   head.appendChild(meta);
 
   const actions = document.createElement("div");
@@ -1347,19 +1388,15 @@ function renderProtocolDetail(protocol) {
   const sectionList = document.createElement("div");
   sectionList.className = "section-list";
 
-  protocol.sections.forEach((section, sectionIndex) => {
+  const renderSectionNode = (section) => {
     const sectionTagDefs = Array.isArray(section.tagDefs) ? section.tagDefs : [];
     sectionTagDefs.forEach((tag) => {
       state.tagLookup.set(`${protocol.id}::${section.id}::${tag.id}`, tag);
     });
-    const inlineContext = {
-      protocolId: protocol.id,
-      sectionId: section.id
-    };
 
     const sectionItem = document.createElement("details");
     sectionItem.className = "section-item";
-    sectionItem.open = isSectionExpanded(protocol.id, section.id, protocol.sections.length);
+    sectionItem.open = isSectionExpanded(protocol.id, section.id, totalSections);
     sectionItem.addEventListener("toggle", () => {
       setSectionExpanded(protocol.id, section.id, sectionItem.open);
     });
@@ -1374,6 +1411,11 @@ function renderProtocolDetail(protocol) {
     const sectionMain = document.createElement("div");
     sectionMain.className = "section-main";
 
+    const sectionNumber = document.createElement("div");
+    sectionNumber.className = "section-number";
+    sectionNumber.textContent = section.numbering;
+    sectionMain.appendChild(sectionNumber);
+
     const sectionTitle = document.createElement("h4");
     sectionTitle.className = "section-main-title";
     sectionTitle.textContent = section.title;
@@ -1382,8 +1424,13 @@ function renderProtocolDetail(protocol) {
     const sectionSub = document.createElement("div");
     sectionSub.className = "section-main-sub";
     const sectionMeds = getSectionMedicationCount(section);
-    const medsLabel = sectionMeds === 1 ? "1 medicamento" : `${sectionMeds} medicamentos`;
-    sectionSub.textContent = `${protocol.areaName} · ${medsLabel}`;
+    const childCount = Array.isArray(section.children) ? section.children.length : 0;
+    const summaryParts = [protocol.areaName];
+    if (childCount) {
+      summaryParts.push(childCount === 1 ? "1 subsecao" : `${childCount} subsecoes`);
+    }
+    summaryParts.push(sectionMeds === 1 ? "1 medicamento" : `${sectionMeds} medicamentos`);
+    sectionSub.textContent = summaryParts.join(" · ");
     sectionMain.appendChild(sectionSub);
 
     const sectionArrow = document.createElement("span");
@@ -1411,12 +1458,17 @@ function renderProtocolDetail(protocol) {
       sectionCard.appendChild(renderMetaBox("Notas da seção", section.meta.notas, "soft"));
     }
 
+    const inlineContext = {
+      protocolId: protocol.id,
+      sectionId: section.id
+    };
+
     if (section.mode === "structured") {
       section.groups.forEach((group, groupIndex) => {
         const groupNode = renderStructuredGroupBlock({
           protocol,
           section,
-          sectionIndex,
+          sectionPath: section.path,
           group,
           groupPath: String(groupIndex)
         });
@@ -1424,13 +1476,29 @@ function renderProtocolDetail(protocol) {
           sectionCard.appendChild(groupNode);
         }
       });
-    } else {
+    } else if (Array.isArray(section.blocks) && section.blocks.length) {
       sectionCard.appendChild(renderFreeBlocks(section.blocks, inlineContext));
     }
 
-    sectionBody.appendChild(sectionCard);
+    if (sectionCard.childNodes.length) {
+      sectionBody.appendChild(sectionCard);
+    }
+
+    if (Array.isArray(section.children) && section.children.length) {
+      const childList = document.createElement("div");
+      childList.className = "section-list section-list-nested";
+      section.children.forEach((child) => {
+        childList.appendChild(renderSectionNode(child));
+      });
+      sectionBody.appendChild(childList);
+    }
+
     sectionItem.appendChild(sectionBody);
-    sectionList.appendChild(sectionItem);
+    return sectionItem;
+  };
+
+  protocol.sections.forEach((section) => {
+    sectionList.appendChild(renderSectionNode(section));
   });
 
   detail.appendChild(sectionList);
@@ -1442,8 +1510,9 @@ function protocolToText(protocol) {
   const lines = [];
   lines.push(`${protocol.title} (${protocol.areaName})`);
 
-  protocol.sections.forEach((section) => {
-    lines.push(`\n[Seção] ${section.title}`);
+  const appendSectionText = (section, depth = 0) => {
+    const baseIndent = "  ".repeat(depth);
+    lines.push(`\n${baseIndent}[Seção ${section.numbering}] ${section.title}`);
 
     if (section.mode === "structured") {
       const counter = { value: 1 };
@@ -1460,21 +1529,29 @@ function protocolToText(protocol) {
           return;
         }
 
-        lines.push(`  (${getGroupDisplayLabel(group)}) ${group.titulo}`);
+        lines.push(`${baseIndent}  (${getGroupDisplayLabel(group)}) ${group.titulo}`);
         visibleSections.forEach((entry) => {
           if (isNonEmptyString(entry.titulo)) {
-            lines.push(`    [${entry.titulo}]`);
+            lines.push(`${baseIndent}    [${entry.titulo}]`);
           }
           entry.items.forEach((item) => {
             const entryLines = buildPrescriptionEntryLines(item, counter.value);
             entryLines.forEach((line) => {
-              lines.push(`      ${line}`);
+              lines.push(`${baseIndent}      ${line}`);
             });
             counter.value += 1;
           });
         });
       });
     }
+
+    if (Array.isArray(section.children) && section.children.length) {
+      section.children.forEach((child) => appendSectionText(child, depth + 1));
+    }
+  };
+
+  protocol.sections.forEach((section) => {
+    appendSectionText(section, 0);
   });
 
   return lines.join("\n");

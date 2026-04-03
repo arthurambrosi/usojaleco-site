@@ -17,11 +17,11 @@ Editor web 100% client-side para organizar protocolos e prescricoes medicas em J
 /data/pneumologia.json
 ```
 
-## Schema JSON (versao 1.1.0)
+## Schema JSON (versao 1.2.0)
 
 Cada area em `/data/*.json`:
 
-- `schemaVersion`: string (`"1.1.0"`)
+- `schemaVersion`: string (`"1.2.0"`)
 - `area`: string (nome exibivel)
 - `slug`: string (`kebab-case`)
 - `assuntos`: array
@@ -42,6 +42,7 @@ Cada tab:
 - `meta`: `{ orientacoes, alertas, notas }`
 - `blocks`: array de blocos (modo `free`)
 - `structured.groups`: array de blocos estruturados (modo `structured`)
+- `children`: array opcional de subsecoes, permitindo hierarquia como `1`, `1.1`, `1.1.1`
 
 Cada `structured.groups[]`:
 
@@ -129,6 +130,8 @@ python -m http.server 8080
 - `Nova Area`: cria um JSON de area em memoria.
 - `Novo Assunto`: cria assunto na area atual.
 - `+ Nova Secao`: cria mini-secao no assunto atual.
+- `+ Subseção`: cria uma secao filha dentro da secao ativa.
+- `Virar subseção` / `Subir nível`: reorganizam uma secao existente dentro da hierarquia.
 - `Modo Estruturado`: construtor por itens (OU/ASSOCIAR + metadados por item).
 - `Texto Livre`: editor TipTap para casos fora do padrao.
 - Toolbar: negrito/italico/sublinhado, listas, H2/H3, callout, divisor, tabela, undo/redo.

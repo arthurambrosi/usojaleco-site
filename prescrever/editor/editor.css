@@ -157,6 +157,10 @@ body {
   font-size: 0.75rem;
 }
 
+.tab-tree-item button {
+  padding-left: calc(8px + var(--tree-depth, 0) * 18px);
+}
+
 .btn {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -253,6 +257,10 @@ body {
   border-color: var(--brand);
   color: var(--brand-strong);
   background: #d8ebff;
+}
+
+.tab-pill {
+  margin-left: calc(var(--tree-depth, 0) * 6px);
 }
 
 .tab-actions {

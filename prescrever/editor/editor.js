@@ -7,7 +7,7 @@ import TableHeaderBase from "https://esm.sh/@tiptap/extension-table-header@2.6.6
 import TableCellBase from "https://esm.sh/@tiptap/extension-table-cell@2.6.6";
 import { Plugin, PluginKey } from "https://esm.sh/prosemirror-state@1.4.3";
 
-const SCHEMA_VERSION = "1.1.0";
+const SCHEMA_VERSION = "1.2.0";
 const MARKS = ["bold", "italic", "underline"];
 const VALID_BLOCK_TYPES = ["heading", "paragraph", "list", "callout", "divider", "table"];
 const CALLOUT_TONES = ["info", "warning", "danger", "success"];
@@ -146,6 +146,7 @@ const dom = {
   btnDeleteSubject: document.getElementById("btnDeleteSubject"),
   btnToggleSubjectStatus: document.getElementById("btnToggleSubjectStatus"),
   btnNewTab: document.getElementById("btnNewTab"),
+  btnNewChildTab: document.getElementById("btnNewChildTab"),
   btnConvertToNotes: document.getElementById("btnConvertToNotes"),
   btnRenameTab: document.getElementById("btnRenameTab"),
   btnTabLeft: document.getElementById("btnTabLeft"),
@@ -869,8 +870,95 @@ function createDefaultTab(title = "Nova Secao", slugBase = "nova-secao") {
     meta: createEntityMeta(),
     blocks: [createParagraphBlock("Edite o protocolo aqui.")],
     tagDefs: [],
-    structured: createStructuredModel()
+    structured: createStructuredModel(),
+    children: []
   };
+}
+
+function getTabChildren(tab) {
+  return Array.isArray(tab?.children) ? tab.children : [];
+}
+
+function ensureUniqueTabSlugs(tabs, used = new Set()) {
+  if (!Array.isArray(tabs)) {
+    return;
+  }
+
+  tabs.forEach((tab) => {
+    tab.slug = makeUniqueSlug(tab.slug || tab.titulo, used);
+    used.add(tab.slug);
+    ensureUniqueTabSlugs(getTabChildren(tab), used);
+  });
+}
+
+function countTabsInTree(tabs) {
+  if (!Array.isArray(tabs)) {
+    return 0;
+  }
+
+  return tabs.reduce((total, tab) => total + 1 + countTabsInTree(getTabChildren(tab)), 0);
+}
+
+function flattenTabs(tabs, out = [], depth = 0, lineage = []) {
+  if (!Array.isArray(tabs)) {
+    return out;
+  }
+
+  tabs.forEach((tab, index) => {
+    const numberingSegments = [...lineage.map((entry) => entry.index + 1), index + 1];
+    const lineageTabs = lineage.map((entry) => entry.tab);
+    out.push({
+      tab,
+      depth,
+      index,
+      siblings: tabs,
+      parent: lineageTabs.length ? lineageTabs[lineageTabs.length - 1] : null,
+      lineage: lineageTabs,
+      numberingSegments,
+      numbering: numberingSegments.join(".")
+    });
+    flattenTabs(getTabChildren(tab), out, depth + 1, [...lineage, { tab, index }]);
+  });
+
+  return out;
+}
+
+function findTabContextInTree(tabs, slug, depth = 0, lineage = []) {
+  if (!Array.isArray(tabs) || !isNonEmptyString(slug)) {
+    return null;
+  }
+
+  for (let index = 0; index < tabs.length; index += 1) {
+    const tab = tabs[index];
+    const numberingSegments = [...lineage.map((entry) => entry.index + 1), index + 1];
+    const lineageTabs = lineage.map((entry) => entry.tab);
+    const context = {
+      tab,
+      depth,
+      index,
+      siblings: tabs,
+      parent: lineageTabs.length ? lineageTabs[lineageTabs.length - 1] : null,
+      lineage: lineageTabs,
+      numberingSegments,
+      numbering: numberingSegments.join(".")
+    };
+
+    if (tab.slug === slug) {
+      return context;
+    }
+
+    const childContext = findTabContextInTree(getTabChildren(tab), slug, depth + 1, [...lineage, { tab, index }]);
+    if (childContext) {
+      return childContext;
+    }
+  }
+
+  return null;
+}
+
+function getFirstTabInTree(tabs) {
+  const flattened = flattenTabs(tabs);
+  return flattened[0]?.tab || null;
 }
 
 function createDefaultSubject(title = "Geral") {
@@ -887,6 +975,13 @@ function createDefaultSubject(title = "Geral") {
 function normalizeTab(rawTab, tabIndex = 0) {
   const title = isNonEmptyString(rawTab?.titulo) ? rawTab.titulo.trim() : `Secao ${tabIndex + 1}`;
   const mode = inferTabMode(rawTab);
+  const rawChildren = Array.isArray(rawTab?.children)
+    ? rawTab.children
+    : Array.isArray(rawTab?.subsections)
+      ? rawTab.subsections
+      : Array.isArray(rawTab?.tabs)
+        ? rawTab.tabs
+        : [];
 
   return {
     titulo: title,
@@ -895,7 +990,8 @@ function normalizeTab(rawTab, tabIndex = 0) {
     meta: normalizeEntityMeta(rawTab?.meta || rawTab?.metadados),
     blocks: normalizeBlocks(rawTab?.blocks),
     tagDefs: normalizeTagDefs(rawTab?.tagDefs),
-    structured: normalizeStructuredModel(rawTab?.structured || rawTab?.prescricaoEstruturada)
+    structured: normalizeStructuredModel(rawTab?.structured || rawTab?.prescricaoEstruturada),
+    children: rawChildren.map((child, childIndex) => normalizeTab(child, childIndex))
   };
 }
 
@@ -907,12 +1003,7 @@ function normalizeSubject(rawSubject, subjectIndex = 0) {
   const rawTabs = Array.isArray(rawSubject?.tabs) ? rawSubject.tabs : [];
   const tabs = rawTabs.map((tab, tabIndex) => normalizeTab(tab, tabIndex));
   const normalizedTabs = tabs.length ? tabs : [createDefaultTab("Resumo", "resumo")];
-
-  const uniqueTabSlugs = new Set();
-  for (const tab of normalizedTabs) {
-    tab.slug = makeUniqueSlug(tab.slug || tab.titulo, uniqueTabSlugs);
-    uniqueTabSlugs.add(tab.slug);
-  }
+  ensureUniqueTabSlugs(normalizedTabs, new Set());
 
   return {
     titulo: title,
@@ -974,11 +1065,15 @@ function getActiveSubject() {
 }
 
 function getActiveTab() {
+  return getActiveTabContext()?.tab || null;
+}
+
+function getActiveTabContext() {
   const subject = getActiveSubject();
   if (!subject) {
     return null;
   }
-  return subject.tabs.find((tab) => tab.slug === state.activeTabSlug) || null;
+  return findTabContextInTree(subject.tabs, state.activeTabSlug);
 }
 
 function getTabMode(tab) {
@@ -1014,6 +1109,7 @@ function ensureTabShape(tab) {
   tab.blocks = normalizeBlocks(tab.blocks);
   tab.tagDefs = normalizeTagDefs(tab.tagDefs);
   tab.structured = normalizeStructuredModel(tab.structured);
+  tab.children = getTabChildren(tab).map((child, index) => normalizeTab(child, index));
 }
 
 function ensureActiveSelection() {
@@ -1034,16 +1130,20 @@ function ensureActiveSelection() {
 
   state.activeSubjectSlug = subject ? subject.slug : "";
 
+  if (subject) {
+    subject.meta = normalizeEntityMeta(subject.meta);
+    subject.tabs = Array.isArray(subject.tabs)
+      ? subject.tabs.map((tab, index) => normalizeTab(tab, index))
+      : [createDefaultTab("Resumo", "resumo")];
+    ensureUniqueTabSlugs(subject.tabs, new Set());
+  }
+
   const tab =
-    subject?.tabs.find((item) => item.slug === state.activeTabSlug) ||
-    subject?.tabs[0] ||
+    getActiveTabContext()?.tab ||
+    getFirstTabInTree(subject?.tabs) ||
     null;
 
   state.activeTabSlug = tab ? tab.slug : "";
-
-  if (subject) {
-    subject.meta = normalizeEntityMeta(subject.meta);
-  }
 
   if (tab) {
     ensureTabShape(tab);
@@ -1519,6 +1619,14 @@ function makeEntityListItem(label, subtitle, isActive, onClick, extraClass = "")
   return li;
 }
 
+function getTabDisplayTitle(tabContext) {
+  if (!tabContext?.tab) {
+    return "Secao";
+  }
+
+  return `${tabContext.numbering} ${tabContext.tab.titulo}`.trim();
+}
+
 function renderAreasList() {
   dom.areasList.innerHTML = "";
 
@@ -1555,7 +1663,7 @@ function renderSubjectsList() {
     subject.status = subjectStatus;
     const subtitle = isNonEmptyString(subject.descricaoCurta)
       ? subject.descricaoCurta
-      : `${subject.tabs.length} secao(oes) · ${getSubjectStatusLabel(subjectStatus)}`;
+      : `${countTabsInTree(subject.tabs)} secao(oes) · ${getSubjectStatusLabel(subjectStatus)}`;
 
     const item = makeEntityListItem(
       subject.titulo,
@@ -1585,12 +1693,15 @@ function renderTabsList() {
     return;
   }
 
-  for (const tab of subject.tabs) {
-    const modeLabel = getTabMode(tab) === "structured" ? "estruturado" : "texto livre";
+  const flatTabs = flattenTabs(subject.tabs);
 
+  for (const tabContext of flatTabs) {
+    const { tab } = tabContext;
+    const modeLabel = getTabMode(tab) === "structured" ? "estruturado" : "texto livre";
+    const childCount = getTabChildren(tab).length;
     const item = makeEntityListItem(
-      tab.titulo,
-      `${tab.slug} · ${modeLabel}`,
+      getTabDisplayTitle(tabContext),
+      `${tab.slug} · ${modeLabel}${childCount ? ` · ${childCount} subsecao(oes)` : ""}`,
       tab.slug === state.activeTabSlug,
       () => {
         persistCurrentTabFromEditor();
@@ -1601,6 +1712,8 @@ function renderTabsList() {
         loadActiveTabIntoEditor();
       }
     );
+    item.classList.add("tab-tree-item");
+    item.style.setProperty("--tree-depth", String(tabContext.depth));
 
     dom.tabsList.appendChild(item);
   }
@@ -1614,11 +1727,13 @@ function renderTabPills() {
     return;
   }
 
-  for (const tab of subject.tabs) {
+  for (const tabContext of flattenTabs(subject.tabs)) {
+    const { tab } = tabContext;
     const button = document.createElement("button");
     button.type = "button";
     button.className = `tab-pill${tab.slug === state.activeTabSlug ? " active" : ""}`;
-    button.textContent = tab.titulo;
+    button.textContent = getTabDisplayTitle(tabContext);
+    button.style.setProperty("--tree-depth", String(tabContext.depth));
     button.addEventListener("click", () => {
       persistCurrentTabFromEditor();
       closeItemMetaModal(true);
@@ -1634,8 +1749,9 @@ function renderTabPills() {
 function renderBreadcrumb() {
   const area = getActiveArea();
   const subject = getActiveSubject();
-  const tab = getActiveTab();
-  dom.breadcrumb.textContent = [area?.area, subject?.titulo, tab?.titulo].filter(Boolean).join(" > ") || "Sem selecao";
+  const tabContext = getActiveTabContext();
+  const tabTrail = tabContext ? [...tabContext.lineage.map((entry) => entry.titulo), tabContext.tab.titulo] : [];
+  dom.breadcrumb.textContent = [area?.area, subject?.titulo, ...tabTrail].filter(Boolean).join(" > ") || "Sem selecao";
 }
 
 function renderModeUI() {
@@ -1707,6 +1823,7 @@ function toggleActionButtons() {
   const hasArea = Boolean(getActiveArea());
   const hasSubject = Boolean(getActiveSubject());
   const hasTab = Boolean(getActiveTab());
+  const activeTabContext = getActiveTabContext();
   const mode = getTabMode(getActiveTab());
 
   dom.btnNewSubject.disabled = !hasArea;
@@ -1714,10 +1831,11 @@ function toggleActionButtons() {
   if (dom.btnDeleteSubject) dom.btnDeleteSubject.disabled = !hasSubject;
   if (dom.btnToggleSubjectStatus) dom.btnToggleSubjectStatus.disabled = !hasSubject;
   dom.btnNewTab.disabled = !hasSubject;
+  if (dom.btnNewChildTab) dom.btnNewChildTab.disabled = !hasTab;
   if (dom.btnConvertToNotes) dom.btnConvertToNotes.disabled = !hasTab;
   dom.btnRenameTab.disabled = !hasTab;
-  dom.btnTabLeft.disabled = !hasTab;
-  dom.btnTabRight.disabled = !hasTab;
+  dom.btnTabLeft.disabled = !hasTab || !activeTabContext || !activeTabContext.parent;
+  dom.btnTabRight.disabled = !hasTab || !activeTabContext || activeTabContext.index <= 0;
   dom.btnDeleteTab.disabled = !hasTab;
   dom.btnDownloadArea.disabled = !hasArea;
   dom.btnExportTab.disabled = !hasTab;
@@ -3626,6 +3744,48 @@ function validateStructured(tab, tabPath, errors) {
   });
 }
 
+function validateTabNode(tab, tabPath, errors, usedTabs, slugRegex) {
+  if (!tab || typeof tab !== "object") {
+    errors.push(`${tabPath} invalido.`);
+    return;
+  }
+
+  if (!isNonEmptyString(tab.titulo)) {
+    errors.push(`${tabPath}.titulo vazio.`);
+  }
+
+  if (!isNonEmptyString(tab.slug) || !slugRegex.test(tab.slug)) {
+    errors.push(`${tabPath}.slug invalido.`);
+  }
+
+  if (usedTabs.has(tab.slug)) {
+    errors.push(`${tabPath}.slug duplicado.`);
+  }
+  usedTabs.add(tab.slug);
+
+  if (!TAB_MODES.includes(tab.mode)) {
+    errors.push(`${tabPath}.mode invalido.`);
+  }
+
+  validateEntityMeta(tab.meta, `${tabPath}.meta`, errors);
+  const validTagIds = validateTagDefs(tab.tagDefs, `${tabPath}.tagDefs`, errors);
+
+  if (getTabMode(tab) === "structured") {
+    validateStructured(tab, tabPath, errors);
+  } else {
+    validateBlocks(tab.blocks, `${tabPath}.blocks`, errors, validTagIds);
+  }
+
+  const children = Array.isArray(tab.children) ? tab.children : [];
+  if (tab.children !== undefined && !Array.isArray(tab.children)) {
+    errors.push(`${tabPath}.children invalido.`);
+  }
+
+  children.forEach((child, childIndex) => {
+    validateTabNode(child, `${tabPath}.children[${childIndex}]`, errors, usedTabs, slugRegex);
+  });
+}
+
 function validateArea(area) {
   const errors = [];
 
@@ -3682,33 +3842,7 @@ function validateArea(area) {
     const usedTabs = new Set();
 
     subject.tabs.forEach((tab, tabIndex) => {
-      const tabPath = `${subjectPath}.tabs[${tabIndex}]`;
-
-      if (!isNonEmptyString(tab.titulo)) {
-        errors.push(`${tabPath}.titulo vazio.`);
-      }
-
-      if (!isNonEmptyString(tab.slug) || !slugRegex.test(tab.slug)) {
-        errors.push(`${tabPath}.slug invalido.`);
-      }
-
-      if (usedTabs.has(tab.slug)) {
-        errors.push(`${tabPath}.slug duplicado.`);
-      }
-      usedTabs.add(tab.slug);
-
-      if (!TAB_MODES.includes(tab.mode)) {
-        errors.push(`${tabPath}.mode invalido.`);
-      }
-
-      validateEntityMeta(tab.meta, `${tabPath}.meta`, errors);
-      const validTagIds = validateTagDefs(tab.tagDefs, `${tabPath}.tagDefs`, errors);
-
-      if (getTabMode(tab) === "structured") {
-        validateStructured(tab, tabPath, errors);
-      } else {
-        validateBlocks(tab.blocks, `${tabPath}.blocks`, errors, validTagIds);
-      }
+      validateTabNode(tab, `${subjectPath}.tabs[${tabIndex}]`, errors, usedTabs, slugRegex);
     });
   });
 
@@ -3735,7 +3869,7 @@ function refreshPreviewAndValidation() {
 
   if (!errors.length) {
     const li = document.createElement("li");
-    li.textContent = "JSON valido para schema 1.1.0.";
+    li.textContent = `JSON valido para schema ${SCHEMA_VERSION}.`;
     li.className = "ok";
     dom.validationList.appendChild(li);
   } else {
@@ -3890,7 +4024,7 @@ function createArea() {
   state.lastSyncedSignatures.delete(area.slug);
   state.activeAreaSlug = area.slug;
   state.activeSubjectSlug = area.assuntos[0].slug;
-  state.activeTabSlug = area.assuntos[0].tabs[0].slug;
+  state.activeTabSlug = getFirstTabInTree(area.assuntos[0].tabs)?.slug || "";
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -3921,7 +4055,7 @@ function createSubject() {
 
   area.assuntos.push(subject);
   state.activeSubjectSlug = subject.slug;
-  state.activeTabSlug = subject.tabs[0].slug;
+  state.activeTabSlug = getFirstTabInTree(subject.tabs)?.slug || "";
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -3980,7 +4114,7 @@ function deleteSubject() {
   const safeIndex = Math.max(0, index - 1);
   const nextSubject = area.assuntos[safeIndex] || area.assuntos[0];
   state.activeSubjectSlug = nextSubject?.slug || "";
-  state.activeTabSlug = nextSubject?.tabs?.[0]?.slug || "";
+  state.activeTabSlug = getFirstTabInTree(nextSubject?.tabs)?.slug || "";
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -4015,7 +4149,7 @@ function createTab() {
     return;
   }
 
-  const usedTabSlugs = new Set(subject.tabs.map((tab) => tab.slug));
+  const usedTabSlugs = new Set(flattenTabs(subject.tabs).map((entry) => entry.tab.slug));
   const tabSlug = makeUniqueSlug(slugify(tabName), usedTabSlugs);
   const tab = normalizeTab({
     titulo: tabName.trim(),
@@ -4026,8 +4160,48 @@ function createTab() {
     structured: createStructuredModel()
   });
 
-  subject.tabs.push(tab);
+  const activeContext = getActiveTabContext();
+  const targetTabs = activeContext?.siblings || subject.tabs;
+  const insertIndex = activeContext ? activeContext.index + 1 : targetTabs.length;
+  targetTabs.splice(insertIndex, 0, tab);
+  ensureUniqueTabSlugs(subject.tabs, new Set());
   state.activeTabSlug = tab.slug;
+
+  renderAll();
+  loadActiveTabIntoEditor();
+}
+
+function createChildTab() {
+  const subject = getActiveSubject();
+  const tabContext = getActiveTabContext();
+  if (!subject || !tabContext) {
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+
+  const tabName = window.prompt("Nome da nova subsecao:", "Nova Subsecao");
+  if (!isNonEmptyString(tabName)) {
+    return;
+  }
+
+  const usedTabSlugs = new Set(flattenTabs(subject.tabs).map((entry) => entry.tab.slug));
+  const tabSlug = makeUniqueSlug(slugify(tabName), usedTabSlugs);
+  const childTab = normalizeTab({
+    titulo: tabName.trim(),
+    slug: tabSlug,
+    mode: "structured",
+    meta: createEntityMeta(),
+    blocks: [createParagraphBlock("Edite o protocolo aqui.")],
+    structured: createStructuredModel()
+  });
+
+  if (!Array.isArray(tabContext.tab.children)) {
+    tabContext.tab.children = [];
+  }
+  tabContext.tab.children.push(childTab);
+  ensureUniqueTabSlugs(subject.tabs, new Set());
+  state.activeTabSlug = childTab.slug;
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -4035,8 +4209,9 @@ function createTab() {
 
 function renameTab() {
   const subject = getActiveSubject();
-  const tab = getActiveTab();
-  if (!subject || !tab) {
+  const tabContext = getActiveTabContext();
+  const tab = tabContext?.tab;
+  if (!subject || !tabContext || !tab) {
     return;
   }
 
@@ -4047,7 +4222,11 @@ function renameTab() {
 
   tab.titulo = nextTitle.trim();
 
-  const used = new Set(subject.tabs.filter((item) => item !== tab).map((item) => item.slug));
+  const used = new Set(
+    flattenTabs(subject.tabs)
+      .filter((entry) => entry.tab !== tab)
+      .map((entry) => entry.tab.slug)
+  );
   tab.slug = makeUniqueSlug(slugify(tab.titulo), used);
   state.activeTabSlug = tab.slug;
 
@@ -4056,46 +4235,69 @@ function renameTab() {
 
 function moveTab(offset) {
   const subject = getActiveSubject();
-  const tab = getActiveTab();
-  if (!subject || !tab) {
+  const tabContext = getActiveTabContext();
+  if (!subject || !tabContext) {
     return;
   }
 
-  const currentIndex = subject.tabs.findIndex((item) => item.slug === tab.slug);
-  const nextIndex = currentIndex + offset;
-  if (currentIndex < 0 || nextIndex < 0 || nextIndex >= subject.tabs.length) {
-    return;
-  }
+  if (offset > 0) {
+    if (tabContext.index <= 0) {
+      return;
+    }
 
-  const temp = subject.tabs[currentIndex];
-  subject.tabs[currentIndex] = subject.tabs[nextIndex];
-  subject.tabs[nextIndex] = temp;
+    const targetParent = tabContext.siblings[tabContext.index - 1];
+    tabContext.siblings.splice(tabContext.index, 1);
+    if (!Array.isArray(targetParent.children)) {
+      targetParent.children = [];
+    }
+    targetParent.children.push(tabContext.tab);
+  } else {
+    if (!tabContext.parent) {
+      return;
+    }
+
+    const parentContext = findTabContextInTree(subject.tabs, tabContext.parent.slug);
+    if (!parentContext) {
+      return;
+    }
+
+    tabContext.siblings.splice(tabContext.index, 1);
+    parentContext.siblings.splice(parentContext.index + 1, 0, tabContext.tab);
+  }
 
   renderAll();
 }
 
 function deleteTab() {
   const subject = getActiveSubject();
-  const tab = getActiveTab();
-  if (!subject || !tab) {
+  const tabContext = getActiveTabContext();
+  const tab = tabContext?.tab;
+  if (!subject || !tabContext || !tab) {
     return;
   }
 
-  if (subject.tabs.length <= 1) {
+  if (countTabsInTree(subject.tabs) <= 1) {
     window.alert("Cada assunto precisa ter pelo menos 1 secao.");
     return;
   }
 
-  const confirmed = window.confirm(`Excluir a secao "${tab.titulo}"?`);
+  const descendants = countTabsInTree(getTabChildren(tab));
+  const confirmed = window.confirm(
+    descendants
+      ? `Excluir a secao "${tab.titulo}" e ${descendants} subsecao(oes)?`
+      : `Excluir a secao "${tab.titulo}"?`
+  );
   if (!confirmed) {
     return;
   }
 
-  const index = subject.tabs.findIndex((item) => item.slug === tab.slug);
-  subject.tabs.splice(index, 1);
+  const flatBefore = flattenTabs(subject.tabs);
+  const previousIndex = flatBefore.findIndex((entry) => entry.tab.slug === tab.slug);
+  tabContext.siblings.splice(tabContext.index, 1);
 
-  const safeIndex = index > 0 ? index - 1 : 0;
-  state.activeTabSlug = subject.tabs[safeIndex].slug;
+  const flatAfter = flattenTabs(subject.tabs);
+  const nextContext = flatAfter[Math.min(previousIndex, flatAfter.length - 1)] || null;
+  state.activeTabSlug = nextContext?.tab?.slug || "";
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -4403,7 +4605,7 @@ async function importAreaFile(file) {
 
   state.activeAreaSlug = incomingArea.slug;
   state.activeSubjectSlug = incomingArea.assuntos[0]?.slug || "";
-  state.activeTabSlug = incomingArea.assuntos[0]?.tabs[0]?.slug || "";
+  state.activeTabSlug = getFirstTabInTree(incomingArea.assuntos[0]?.tabs)?.slug || "";
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -4859,6 +5061,9 @@ function bindEvents() {
     dom.btnToggleSubjectStatus.addEventListener("click", toggleSubjectStatus);
   }
   dom.btnNewTab.addEventListener("click", createTab);
+  if (dom.btnNewChildTab) {
+    dom.btnNewChildTab.addEventListener("click", createChildTab);
+  }
   if (dom.btnConvertToNotes) {
     dom.btnConvertToNotes.addEventListener("click", convertCurrentTabToNotes);
   }
