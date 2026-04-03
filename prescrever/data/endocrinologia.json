@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.1.0",
+  "area": "Endocrinologia",
+  "slug": "endocrinologia",
+  "assuntos": [
+    {
+      "titulo": "Hipotireoidismo",
+      "slug": "hipotireoidismo",
+      "status": "building",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Conduta inicial",
+          "slug": "conduta-inicial",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-sria4fd",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-lg8fjrb",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-andz3y6",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-559mprx",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section-qp0nh9e",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-qsy55ve",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
