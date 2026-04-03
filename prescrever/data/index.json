@@ -35,6 +35,11 @@
       "slug": "obstetricia",
       "file": "obstetricia.json",
       "area": "Obstetrícia"
+    },
+    {
+      "slug": "endocrinologia",
+      "file": "endocrinologia.json",
+      "area": "Endocrinologia"
     }
   ]
 }
