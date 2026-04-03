@@ -42,6 +42,14 @@
               "content": []
             },
             {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "O diagnóstico "
+                }
+              ]
+            },
+            {
               "type": "list",
               "style": "unordered",
               "items": [
@@ -96,6 +104,183 @@
                     "items": [
                       {
                         "id": "item-xiagpd2",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "titulo": "Preconcepcional",
+      "slug": "preconcepcional",
+      "status": "building",
+      "descricaoCurta": "",
+      "meta": {
+        "orientacoes": "",
+        "alertas": "",
+        "notas": "",
+        "revisadoEspecialista": false
+      },
+      "tabs": [
+        {
+          "titulo": "Resumo",
+          "slug": "resumo",
+          "mode": "free",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "|  1º - Identificação de riscos",
+                  "marks": [
+                    "bold"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "|  2º - Programação para suspensão de medicamentos",
+                  "marks": [
+                    "bold"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "table",
+              "headers": [
+                "Devem ser suspensas durante a gestação",
+                ""
+              ],
+              "rows": [
+                [
+                  "Varfarina",
+                  "Isotretinoína"
+                ],
+                [
+                  "Ácido valproico",
+                  "Antagonistas do ácidoo fólico (metotrexato; primetamina; trimetoprima)"
+                ],
+                [
+                  "Lítio",
+                  "Ouro"
+                ],
+                [
+                  "Dietilestilbestrol",
+                  "Talidomida"
+                ],
+                [
+                  "Vacinas de vírus vivos (inclusive atenuados)",
+                  "Antineoplásicos"
+                ]
+              ],
+              "headerBackgrounds": [
+                null,
+                null
+              ],
+              "rowBackgrounds": [
+                [
+                  null,
+                  null
+                ],
+                [
+                  null,
+                  null
+                ],
+                [
+                  null,
+                  null
+                ],
+                [
+                  null,
+                  null
+                ],
+                [
+                  null,
+                  null
+                ]
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-gxphxm9",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-nx93xi9",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-4mc7xf3",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-hgreo78",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section-4zllzd7",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-ip2ktns",
                         "nome": "Novo medicamento",
                         "apresentacao": "",
                         "posologia": "",
