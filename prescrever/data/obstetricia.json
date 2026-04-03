@@ -16,8 +16,8 @@
       },
       "tabs": [
         {
-          "titulo": "Conduta inicial",
-          "slug": "conduta-inicial",
+          "titulo": "Diagnóstico",
+          "slug": "diagnostico",
           "mode": "free",
           "meta": {
             "orientacoes": "",
@@ -30,7 +30,27 @@
               "type": "paragraph",
               "content": [
                 {
-                  "text": "asas"
+                  "text": "| 1º ETAPA > ETAPA DO DIAGNÓSTICO",
+                  "marks": [
+                    "bold"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": []
+            },
+            {
+              "type": "list",
+              "style": "unordered",
+              "items": [
+                {
+                  "content": [
+                    {
+                      "text": "A"
+                    }
+                  ]
                 }
               ]
             }
