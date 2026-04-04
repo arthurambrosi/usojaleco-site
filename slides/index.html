@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UsoJaleco | Templates Premium</title>
+  <title>UsoJaleco | Slides</title>
   <meta name="description" content="Vitrine de templates premium da UsoJaleco para congressos, aulas e apresentações clínicas.">
   <meta name="theme-color" content="#f8f9fa">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
@@ -52,6 +52,26 @@
       font-family: "Plus Jakarta Sans", sans-serif;
     }
 
+    body.no-copy,
+    body.no-copy *:not(input):not(textarea):not([contenteditable="true"]) {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body.no-copy input,
+    body.no-copy textarea,
+    body.no-copy [contenteditable="true"] {
+      -webkit-user-select: text;
+      user-select: text;
+      -webkit-touch-callout: default;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+
     h1, h2, h3 {
       font-family: "Manrope", sans-serif;
     }
@@ -71,7 +91,7 @@
     }
   </style>
 </head>
-<body class="bg-surface text-on-surface selection:bg-primary/30" id="top">
+<body class="bg-surface text-on-surface selection:bg-primary/30 no-copy" id="top">
   <nav class="fixed top-0 z-50 w-full bg-slate-50/85 backdrop-blur-xl border-b border-slate-200/80">
     <div class="mx-auto flex h-20 w-full max-w-screen-2xl items-center justify-between gap-6 px-5 md:px-8">
       <div class="flex min-w-0 items-center gap-5">
@@ -124,34 +144,18 @@
         <div class="absolute -right-20 -top-24 text-white/5 pointer-events-none">
           <span class="material-symbols-outlined text-[360px]">slideshow</span>
         </div>
-        <div class="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,420px)] lg:items-end">
+        <div class="relative z-10">
           <div class="max-w-4xl">
-            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/80">
+            <div class="mb-5 hidden items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/80 md:inline-flex">
               <span class="material-symbols-outlined text-base">workspace_premium</span>
               Templates Premium UsoJaleco
             </div>
             <h1 class="mb-5 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
               Vitrine premium para congressos, aulas e apresentações clínicas.
             </h1>
-            <p class="max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
-              O layout agora segue a direção do seu novo design, mas com os dados reais da UsoJaleco:
-              logo oficial, nome da marca, links de contato e a mesma planilha que alimenta a vitrine.
+            <p class="hidden max-w-2xl text-base leading-relaxed text-white/70 md:block md:text-lg">
+              Escolha templates prontos para apresentações médicas com visual mais elegante, leitura clara e estrutura pensada para valorizar seu conteúdo.
             </p>
-          </div>
-
-          <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Templates ativos</div>
-              <div class="mt-2 text-3xl font-black" id="statTemplates">0</div>
-            </div>
-            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Com vídeo</div>
-              <div class="mt-2 text-3xl font-black" id="statVideos">0</div>
-            </div>
-            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
-              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Compra direta</div>
-              <div class="mt-2 text-3xl font-black" id="statCompras">0</div>
-            </div>
           </div>
         </div>
       </div>
@@ -266,9 +270,6 @@
     const emptyStateEl = document.getElementById("emptyState");
     const resultsSummaryEl = document.getElementById("resultsSummary");
     const filterButtonsEl = document.getElementById("filterButtons");
-    const statTemplatesEl = document.getElementById("statTemplates");
-    const statVideosEl = document.getElementById("statVideos");
-    const statComprasEl = document.getElementById("statCompras");
     const desktopSearchEl = document.getElementById("searchInput");
     const mobileSearchEl = document.getElementById("searchInputMobile");
 
@@ -400,9 +401,7 @@
     }
 
     function updateStats(lista) {
-      statTemplatesEl.textContent = String(lista.length);
-      statVideosEl.textContent = String(lista.filter(function (item) { return hasLink(item.video); }).length);
-      statComprasEl.textContent = String(lista.filter(function (item) { return hasLink(item.link_compra); }).length);
+      return lista;
     }
 
     function getCategorias() {
@@ -528,6 +527,33 @@
       if (mobileSearchEl && mobileSearchEl !== event.target) mobileSearchEl.value = currentValue;
       processarFiltros();
     }
+
+    function isEditableTarget(target) {
+      return !!(target && target.closest && target.closest("input, textarea, [contenteditable='true']"));
+    }
+
+    document.addEventListener("copy", function (event) {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    });
+
+    document.addEventListener("cut", function (event) {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    });
+
+    document.addEventListener("selectstart", function (event) {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    });
+
+    document.addEventListener("contextmenu", function (event) {
+      if (!isEditableTarget(event.target)) event.preventDefault();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      const key = String(event.key || "").toLowerCase();
+      if ((event.ctrlKey || event.metaKey) && (key === "c" || key === "x") && !isEditableTarget(event.target)) {
+        event.preventDefault();
+      }
+    });
 
     desktopSearchEl.addEventListener("input", handleSearchInput);
     if (mobileSearchEl) mobileSearchEl.addEventListener("input", handleSearchInput);
