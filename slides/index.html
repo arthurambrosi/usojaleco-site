@@ -1,0 +1,521 @@
+<!doctype html>
+<html class="scroll-smooth" lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UsoJaleco | Templates Premium</title>
+  <meta name="description" content="Vitrine de templates premium da UsoJaleco para congressos, aulas e apresentacoes clinicas.">
+  <meta name="theme-color" content="#f8f9fa">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ff7a18",
+            "primary-container": "#ffdbca",
+            "on-primary": "#ffffff",
+            secondary: "#ffb702",
+            "secondary-container": "#ffdea9",
+            surface: "#f8f9fa",
+            "on-surface": "#191c1d",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+            outline: "#8c7264",
+            "on-background": "#191c1d"
+          },
+          borderRadius: {
+            DEFAULT: "9999px",
+            lg: "9999px",
+            xl: "9999px",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Manrope"],
+            body: ["Plus Jakarta Sans"],
+            label: ["Plus Jakarta Sans"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      vertical-align: middle;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    h1, h2, h3 {
+      font-family: "Manrope", sans-serif;
+    }
+
+    .filter-btn.active {
+      background-color: #ff7a18;
+      border-color: #ff7a18;
+      color: white;
+      box-shadow: 0 14px 28px rgba(255, 122, 24, 0.22);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/30" id="top">
+  <nav class="fixed top-0 z-50 w-full bg-slate-50/85 backdrop-blur-xl border-b border-slate-200/80">
+    <div class="mx-auto flex h-20 w-full max-w-screen-2xl items-center justify-between gap-6 px-5 md:px-8">
+      <div class="flex min-w-0 items-center gap-5">
+        <a class="flex min-w-0 items-center gap-3" href="#top" aria-label="UsoJaleco">
+          <img
+            class="h-11 w-11 rounded-full bg-white object-contain p-1 shadow-sm ring-1 ring-slate-200"
+            src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png"
+            alt="Logo UsoJaleco"
+          >
+          <div class="min-w-0">
+            <div class="truncate text-xl font-black tracking-tighter text-slate-900 md:text-2xl">UsoJaleco</div>
+            <div class="truncate text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500">Prontuario de apresentacao</div>
+          </div>
+        </a>
+
+        <div class="hidden items-center gap-8 font-['Manrope'] text-sm font-medium tracking-tight lg:flex">
+          <a class="border-b-2 border-orange-600 font-bold text-orange-600" href="#top">Inicio</a>
+          <a class="text-slate-600 transition-colors duration-300 hover:text-slate-900" href="#vitrine">Modelos</a>
+          <a class="text-slate-600 transition-colors duration-300 hover:text-slate-900" href="#filtros">Categorias</a>
+          <a class="text-slate-600 transition-colors duration-300 hover:text-slate-900" href="#sobre">Sobre</a>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 md:gap-4">
+        <div class="relative hidden md:block">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">search</span>
+          <input
+            class="w-64 rounded-full border-none bg-slate-100 py-2 pl-10 pr-4 text-xs focus:ring-2 focus:ring-primary"
+            id="searchInput"
+            placeholder="Buscar template..."
+            type="text"
+          >
+        </div>
+        <a
+          class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-on-primary transition-transform duration-200 hover:shadow-lg active:scale-95 md:px-6"
+          href="https://wa.me/5571981577908"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-28 md:pt-32">
+    <section class="mx-auto max-w-screen-2xl px-5 pb-10 md:px-8">
+      <div class="relative overflow-hidden rounded-[3rem] bg-slate-900 px-8 py-10 text-white md:px-14 md:py-16">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,183,2,0.20),_transparent_28%),radial-gradient(circle_at_left_center,_rgba(255,122,24,0.18),_transparent_32%)]"></div>
+        <div class="absolute -right-20 -top-24 text-white/5 pointer-events-none">
+          <span class="material-symbols-outlined text-[360px]">slideshow</span>
+        </div>
+        <div class="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,420px)] lg:items-end">
+          <div class="max-w-4xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/80">
+              <span class="material-symbols-outlined text-base">workspace_premium</span>
+              Templates Premium UsoJaleco
+            </div>
+            <h1 class="mb-5 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+              Vitrine premium para congressos, aulas e apresentacoes clinicas.
+            </h1>
+            <p class="max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
+              O layout agora segue a direcao do seu novo design, mas com os dados reais da UsoJaleco:
+              logo oficial, nome da marca, links de contato e a mesma planilha que alimenta a vitrine.
+            </p>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Templates ativos</div>
+              <div class="mt-2 text-3xl font-black" id="statTemplates">0</div>
+            </div>
+            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Com video</div>
+              <div class="mt-2 text-3xl font-black" id="statVideos">0</div>
+            </div>
+            <div class="rounded-[2rem] border border-white/10 bg-white/10 p-5 backdrop-blur-sm">
+              <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Compra direta</div>
+              <div class="mt-2 text-3xl font-black" id="statCompras">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-screen-2xl px-5 pb-24 md:px-8">
+      <div class="mb-12" id="filtros">
+        <div class="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 class="mb-2 text-4xl font-extrabold tracking-tight">Catalogo de Templates</h2>
+            <p class="text-slate-500">Design de alto impacto para congressos, aulas e apresentacoes medicas.</p>
+          </div>
+          <div class="flex items-center gap-2 text-sm font-bold text-slate-400">
+            <span class="material-symbols-outlined">analytics</span>
+            <span id="resultsSummary">Carregando catalogo...</span>
+          </div>
+        </div>
+
+        <div class="mb-5 md:hidden">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+            <input
+              class="w-full rounded-full border-none bg-slate-100 py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary"
+              id="searchInputMobile"
+              placeholder="Buscar template..."
+              type="text"
+            >
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pb-4" id="filterButtons">
+          <button class="filter-btn active rounded-full border border-slate-200 px-6 py-2.5 text-sm font-bold transition-all hover:border-primary" type="button">
+            Todos
+          </button>
+        </div>
+      </div>
+
+      <div class="py-20 text-center" id="loading">
+        <div class="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+        <p class="font-bold text-slate-600">Sincronizando vitrine UsoJaleco...</p>
+      </div>
+
+      <div class="hidden rounded-[2rem] border-2 border-dashed border-slate-200 bg-slate-50 py-20 text-center" id="emptyState">
+        <span class="material-symbols-outlined mb-4 text-6xl text-slate-300">search_off</span>
+        <h3 class="mb-2 text-xl font-bold">Nenhum resultado encontrado</h3>
+        <p class="text-slate-500">Tente ajustar seus termos de busca ou filtros.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3" id="vitrine"></div>
+    </section>
+
+    <section class="mx-auto max-w-screen-2xl px-5 py-24 md:px-8" id="sobre">
+      <div class="relative overflow-hidden rounded-[3rem] bg-slate-900 p-10 text-white md:p-16">
+        <div class="absolute right-0 top-0 h-full w-1/3 opacity-5 pointer-events-none">
+          <span class="material-symbols-outlined absolute -right-20 -top-20 text-[300px]">medical_information</span>
+        </div>
+
+        <div class="relative z-10 max-w-2xl text-center md:text-left">
+          <h2 class="mb-6 text-4xl font-extrabold leading-tight">Sua autoridade medica merece um design a altura.</h2>
+          <p class="mb-10 text-xl opacity-70">
+            Templates curados para deixar sua apresentacao mais elegante, mais clara e mais alinhada ao padrao visual do UsoJaleco.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4 md:justify-start">
+            <a
+              class="rounded-full bg-primary px-10 py-4 text-lg font-bold transition-all hover:shadow-xl hover:shadow-primary/20 active:scale-95"
+              href="https://wa.me/5571981577908"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Falar no WhatsApp
+            </a>
+            <a
+              class="rounded-full border border-white/20 px-10 py-4 text-lg font-bold transition-all hover:bg-white/10"
+              href="https://www.instagram.com/usojaleco_/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver Instagram
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-12 bg-slate-50">
+    <div class="mx-auto flex w-full max-w-screen-2xl flex-col items-center justify-between gap-6 px-5 py-12 md:flex-row md:px-8">
+      <div class="text-center md:text-left">
+        <div class="mb-1 font-['Manrope'] text-xl font-bold text-slate-900">UsoJaleco</div>
+        <p class="text-xs font-bold uppercase tracking-[0.26em] text-slate-500">
+          Prontuario de apresentacao
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-8 text-xs font-bold uppercase tracking-[0.26em]">
+        <a class="text-slate-500 transition-colors hover:text-orange-500" href="https://www.instagram.com/usojaleco_/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a class="text-slate-500 transition-colors hover:text-orange-500" href="https://www.tiktok.com/@usojaleco" target="_blank" rel="noopener noreferrer">TikTok</a>
+        <a class="text-slate-500 transition-colors hover:text-orange-500" href="https://wa.me/5571981577908" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0lZ6hE56CdT3lkW4p6m3MeeQqOi4JOXNJNvnMKy4S_j03ISVb7wNG4g-e-D5NCBDt4TUD5p1662mz/pub?output=csv";
+    const PLACEHOLDER_IMAGE = "https://via.placeholder.com/960x600/f4f6f9/ff7a18?text=UsoJaleco+Template";
+
+    const vitrineEl = document.getElementById("vitrine");
+    const loadingEl = document.getElementById("loading");
+    const emptyStateEl = document.getElementById("emptyState");
+    const resultsSummaryEl = document.getElementById("resultsSummary");
+    const filterButtonsEl = document.getElementById("filterButtons");
+    const statTemplatesEl = document.getElementById("statTemplates");
+    const statVideosEl = document.getElementById("statVideos");
+    const statComprasEl = document.getElementById("statCompras");
+    const desktopSearchEl = document.getElementById("searchInput");
+    const mobileSearchEl = document.getElementById("searchInputMobile");
+
+    let todosProdutos = [];
+    let categoriaAtiva = "Todos";
+    let termoBusca = "";
+
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function normalizeKey(value) {
+      return normalizeText(value).replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function hasLink(value) {
+      const text = String(value || "").trim();
+      return text !== "" && text !== "#";
+    }
+
+    function firstValue(source, keys) {
+      for (const key of keys) {
+        const normalized = normalizeKey(key);
+        if (source[normalized]) return source[normalized];
+      }
+      return "";
+    }
+
+    function csvParaJson(texto) {
+      const linhas = [];
+      let linha = [];
+      let valor = "";
+      let aspas = false;
+
+      for (let i = 0; i < texto.length; i += 1) {
+        const atual = texto[i];
+        const proximo = texto[i + 1];
+
+        if (atual === "\"") {
+          if (aspas && proximo === "\"") {
+            valor += "\"";
+            i += 1;
+          } else {
+            aspas = !aspas;
+          }
+          continue;
+        }
+
+        if (atual === "," && !aspas) {
+          linha.push(valor);
+          valor = "";
+          continue;
+        }
+
+        if ((atual === "\n" || atual === "\r") && !aspas) {
+          if (atual === "\r" && proximo === "\n") i += 1;
+          linha.push(valor);
+          if (linha.join("").trim() !== "") linhas.push(linha);
+          linha = [];
+          valor = "";
+          continue;
+        }
+
+        valor += atual;
+      }
+
+      if (valor !== "" || linha.length) {
+        linha.push(valor);
+        if (linha.join("").trim() !== "") linhas.push(linha);
+      }
+
+      if (!linhas.length) return [];
+
+      const headers = linhas[0].map(function (header) {
+        return normalizeKey(header);
+      });
+
+      return linhas.slice(1).map(function (row) {
+        const item = {};
+        headers.forEach(function (header, index) {
+          item[header] = (row[index] || "").trim();
+        });
+        return item;
+      });
+    }
+
+    function mapProduto(row) {
+      const categoria = firstValue(row, ["categoria", "especialidade", "area", "grupo", "tag", "segmento"]);
+      return {
+        ativo: normalizeText(firstValue(row, ["ativo", "status"])) === "x",
+        titulo: firstValue(row, ["titulo", "nome", "template", "produto"]),
+        descricao: firstValue(row, ["descricao", "descricao", "resumo", "texto"]),
+        imagem: firstValue(row, ["imagem", "thumb", "thumbnail", "foto", "capa"]),
+        preco: firstValue(row, ["preco", "valor", "preco_venda"]),
+        video: firstValue(row, ["video", "link_video", "previa", "preview"]),
+        link_compra: firstValue(row, ["link_compra", "compra", "checkout", "link", "link_de_compra"]),
+        categoria: categoria || "Premium"
+      };
+    }
+
+    function updateStats(lista) {
+      statTemplatesEl.textContent = String(lista.length);
+      statVideosEl.textContent = String(lista.filter(function (item) { return hasLink(item.video); }).length);
+      statComprasEl.textContent = String(lista.filter(function (item) { return hasLink(item.link_compra); }).length);
+    }
+
+    function getCategorias() {
+      const categorias = Array.from(new Set(
+        todosProdutos
+          .map(function (produto) { return produto.categoria; })
+          .filter(Boolean)
+      ));
+
+      categorias.sort(function (a, b) {
+        return a.localeCompare(b, "pt-BR");
+      });
+
+      return ["Todos"].concat(categorias);
+    }
+
+    function renderizarFiltros() {
+      const categorias = getCategorias();
+      filterButtonsEl.innerHTML = "";
+
+      categorias.forEach(function (categoria) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "filter-btn rounded-full border border-slate-200 px-6 py-2.5 text-sm font-bold transition-all hover:border-primary";
+        if (categoria === categoriaAtiva) button.classList.add("active");
+        button.textContent = categoria;
+        button.addEventListener("click", function () {
+          categoriaAtiva = categoria;
+          renderizarFiltros();
+          processarFiltros();
+        });
+        filterButtonsEl.appendChild(button);
+      });
+    }
+
+    function processarFiltros() {
+      const filtrados = todosProdutos.filter(function (produto) {
+        const baseBusca = normalizeText([produto.titulo, produto.descricao, produto.categoria].join(" "));
+        const matchBusca = termoBusca === "" || baseBusca.includes(termoBusca);
+        const matchCategoria = categoriaAtiva === "Todos" || produto.categoria === categoriaAtiva;
+        return matchBusca && matchCategoria;
+      });
+
+      renderizar(filtrados);
+    }
+
+    function renderizar(lista) {
+      loadingEl.style.display = "none";
+      vitrineEl.innerHTML = "";
+
+      if (!lista.length) {
+        emptyStateEl.classList.remove("hidden");
+        resultsSummaryEl.textContent = "0 templates encontrados";
+        return;
+      }
+
+      emptyStateEl.classList.add("hidden");
+      resultsSummaryEl.textContent = lista.length + " template" + (lista.length > 1 ? "s" : "") + " disponivel" + (lista.length > 1 ? "s" : "");
+
+      lista.forEach(function (produto) {
+        const card = document.createElement("article");
+        card.className = "group overflow-hidden rounded-[2.5rem] border border-slate-100 bg-surface-container-lowest shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl";
+
+        const preco = produto.preco && produto.preco.trim() !== "" ? "R$ " + produto.preco : "Sob consulta";
+        const imagem = hasLink(produto.imagem) ? produto.imagem : PLACEHOLDER_IMAGE;
+        const videoClass = hasLink(produto.video) ? "" : " opacity-50 pointer-events-none";
+        const compraClass = hasLink(produto.link_compra) ? "" : " opacity-50 pointer-events-none";
+
+        card.innerHTML = [
+          '<div class="relative m-4 aspect-[16/10] overflow-hidden rounded-[2rem]">',
+          '  <img src="' + escapeHtml(imagem) + '" alt="' + escapeHtml(produto.titulo) + '" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">',
+          '  <div class="absolute left-4 top-4">',
+          '    <span class="rounded-full bg-white/90 px-4 py-1.5 text-[10px] font-extrabold uppercase tracking-widest text-slate-900 shadow-sm backdrop-blur-md">',
+               escapeHtml(produto.categoria || "Premium"),
+          '    </span>',
+          '  </div>',
+          '</div>',
+          '<div class="px-8 pb-8">',
+          '  <h3 class="mb-2 text-xl font-bold transition-colors group-hover:text-primary">' + escapeHtml(produto.titulo || "Template premium") + "</h3>",
+          '  <p class="line-clamp-2 mb-6 text-sm leading-relaxed text-slate-500">' + escapeHtml(produto.descricao || "Template premium para elevar a qualidade visual da sua apresentacao.") + "</p>",
+          '  <div class="mb-8 flex items-center justify-between">',
+          '    <div>',
+          '      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Investimento</p>',
+          '      <p class="text-2xl font-black text-slate-900">' + escapeHtml(preco) + "</p>",
+          '    </div>',
+          '  </div>',
+          '  <div class="flex gap-3">',
+          '    <a href="' + escapeHtml(produto.video || "#") + '" target="_blank" rel="noopener noreferrer" class="flex flex-1 items-center justify-center gap-2 rounded-full bg-slate-100 py-3.5 text-sm font-bold text-slate-900 transition-colors hover:bg-slate-200' + videoClass + '">',
+          '      <span class="material-symbols-outlined text-lg">play_circle</span>',
+          '      Video',
+          '    </a>',
+          '    <a href="' + escapeHtml(produto.link_compra || "#") + '" target="_blank" rel="noopener noreferrer" class="flex flex-1 items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-center text-sm font-bold text-white transition-all hover:shadow-lg hover:shadow-primary/30 active:scale-95' + compraClass + '">',
+          '      Comprar',
+          '    </a>',
+          '  </div>',
+          '</div>'
+        ].join("");
+
+        vitrineEl.appendChild(card);
+      });
+    }
+
+    async function init() {
+      try {
+        const response = await fetch(SHEET_CSV_URL);
+        if (!response.ok) throw new Error("Falha ao conectar com a planilha.");
+
+        const text = await response.text();
+        const dados = csvParaJson(text).map(mapProduto);
+        todosProdutos = dados.filter(function (produto) { return produto.ativo; });
+
+        updateStats(todosProdutos);
+        renderizarFiltros();
+        processarFiltros();
+      } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+        loadingEl.innerHTML = "<p class='font-bold text-red-500'>Erro ao carregar o catalogo. Recarregue a pagina.</p>";
+        resultsSummaryEl.textContent = "Falha ao carregar catalogo";
+      }
+    }
+
+    function handleSearchInput(event) {
+      const currentValue = event.target.value;
+      termoBusca = normalizeText(currentValue);
+      if (desktopSearchEl && desktopSearchEl !== event.target) desktopSearchEl.value = currentValue;
+      if (mobileSearchEl && mobileSearchEl !== event.target) mobileSearchEl.value = currentValue;
+      processarFiltros();
+    }
+
+    desktopSearchEl.addEventListener("input", handleSearchInput);
+    if (mobileSearchEl) mobileSearchEl.addEventListener("input", handleSearchInput);
+
+    init();
+  </script>
+</body>
+</html>
