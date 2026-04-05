@@ -1,78 +1,413 @@
-﻿<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UsoJaleco | Prescrever</title>
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png">
-  <script defer src="/analytics-config.js"></script>
-  <script defer src="/analytics.js"></script>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./prescricoes.css?v=20260308-01" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "inverse-surface": "#2d3133",
+            "surface-container": "#eceef1",
+            "tertiary": "#545d65",
+            "on-error": "#ffffff",
+            "secondary": "#595f65",
+            "tertiary-fixed-dim": "#bfc8d0",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#380d00",
+            "on-background": "#191c1e",
+            "surface-variant": "#e0e3e6",
+            "secondary-container": "#dde3eb",
+            "background": "#f7f9fc",
+            "on-tertiary-container": "#fcfcff",
+            "surface-tint": "#a93700",
+            "on-error-container": "#93000a",
+            "outline": "#8d7167",
+            "primary": "#a53600",
+            "primary-container": "#cc480b",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#594139",
+            "on-surface": "#191c1e",
+            "on-primary-fixed-variant": "#812800",
+            "surface-container-low": "#f2f4f7",
+            "surface-dim": "#d8dadd",
+            "on-secondary-fixed": "#161c22",
+            "surface-bright": "#f7f9fc",
+            "surface-container-high": "#e6e8eb",
+            "on-primary-container": "#fffbff",
+            "primary-fixed": "#ffdbcf",
+            "secondary-fixed": "#dde3eb",
+            "on-secondary-container": "#5f656c",
+            "tertiary-fixed": "#dbe4ed",
+            "on-tertiary-fixed": "#141d23",
+            "on-secondary-fixed-variant": "#41474e",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#ffb59b",
+            "tertiary-container": "#6d767e",
+            "on-secondary": "#ffffff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#3f484f",
+            "outline-variant": "#e1bfb4",
+            "surface-container-highest": "#e0e3e6",
+            "inverse-on-surface": "#eff1f4",
+            "inverse-primary": "#ffb59b",
+            "secondary-fixed-dim": "#c1c7ce",
+            "surface": "#f7f9fc"
+          },
+          borderRadius: {
+            DEFAULT: "0.125rem",
+            lg: "0.25rem",
+            xl: "0.5rem",
+            full: "0.75rem"
+          },
+          fontFamily: {
+            headline: ["Manrope", "sans-serif"],
+            body: ["Manrope", "sans-serif"],
+            label: ["Manrope", "sans-serif"]
+          },
+          boxShadow: {
+            soft: "0 24px 60px rgba(32, 37, 41, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 181, 155, 0.20), transparent 28%),
+        linear-gradient(180deg, #fbfcfe 0%, #f7f9fc 45%, #eef2f6 100%);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    .editorial-gradient {
+      background: linear-gradient(135deg, #a53600 0%, #cc480b 100%);
+    }
+
+    .brand-mark {
+      box-shadow: 0 14px 36px rgba(165, 54, 0, 0.18);
+    }
+
+    .glass-stroke {
+      border: 1px solid rgba(255, 255, 255, 0.65);
+    }
+
+    .panel-glow {
+      box-shadow: 0 24px 70px rgba(21, 25, 29, 0.08);
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+    }
+  </style>
 </head>
-<body>
-  <header class="topbarWrap">
-    <div class="topbar">
-      <a class="brand" href="https://www.usojaleco.com.br/inicio/" aria-label="Voltar ao menu">
-        <img src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" alt="UsoJaleco" />
-        <span class="brandName">Uso<b>Jaleco</b></span>
-      </a>
-      <div class="headRight">
-        <a class="headBtn" href="https://www.usojaleco.com.br/inicio/">Voltar ao menu</a>
-        <a class="headBtn headBtnPrimary" href="./editor/?v=20260308-01">Ir para o editor</a>
+<body class="overflow-x-hidden text-on-surface">
+  <header class="fixed top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-xl">
+    <div class="w-full px-4 py-4 md:px-6">
+      <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div class="flex flex-1 flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
+          <a class="inline-flex w-fit items-center gap-3" href="https://www.usojaleco.com.br/inicio/" aria-label="Voltar ao menu">
+            <span class="brand-mark inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/95 p-2">
+              <img class="h-full w-full object-contain" src="https://raw.githubusercontent.com/arthurambrosi/usojaleco/0204905b333f11d1eec3c7c6667d17dbfb457774/Design%20sem%20nome%20(28).png" alt="UsoJaleco" />
+            </span>
+            <span class="text-[1.35rem] font-medium tracking-tight text-slate-600">Uso<b class="font-extrabold text-slate-800">Jaleco</b></span>
+          </a>
+
+          <label class="flex w-full max-w-2xl items-center gap-3 rounded-full bg-surface-container-low px-4 py-3 transition-all focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/15">
+            <span class="material-symbols-outlined text-on-surface-variant">search</span>
+            <input id="searchInput" class="w-full border-none bg-transparent p-0 text-sm placeholder:text-slate-400 focus:ring-0" type="search" placeholder="Buscar doença, sintoma ou protocolo..." />
+          </label>
+        </div>
+
+        <div class="flex items-center gap-3 md:justify-end">
+          <a class="inline-flex h-11 items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-600 transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50" href="https://www.usojaleco.com.br/inicio/">Voltar ao menu</a>
+          <a class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary-container" href="./editor/?v=20260308-01">Ir para o editor</a>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="page-main">
-    <section class="searchCard" aria-label="Buscador de protocolos">
-      <div class="searchCardHead">
-        <h1>Protocolos e Prescrições Rápidas</h1>
-        <p>Busque por doença, sintoma ou protocolo para abrir o conteúdo por área e assunto.</p>
+  <aside class="sidebar-scroll fixed left-0 top-0 hidden h-screen w-60 overflow-y-auto bg-slate-50/95 pt-28 md:block">
+    <div class="px-6 py-4">
+      <h2 class="mb-1 text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Curadoria Clínica</h2>
+      <p class="text-xs text-slate-500">Biblioteca de protocolos por área</p>
+    </div>
+
+    <nav class="pb-10">
+      <div id="areaFilters" class="space-y-1 px-4" aria-label="Sumário de áreas">
+        <button type="button" data-filter="all" class="filter-btn active flex w-full items-center justify-between gap-3 rounded-full bg-white px-4 py-3 text-left text-orange-700 shadow-sm">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">apps</span>
+            <span class="text-sm font-semibold">Todos</span>
+          </span>
+          <span class="count rounded-full bg-primary-fixed px-2.5 py-1 text-xs font-bold text-primary">42</span>
+        </button>
+
+        <button type="button" data-filter="cardiologia" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span>
+            <span class="filter-area-name text-sm font-medium">Cardiologia</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">12</span>
+        </button>
+
+        <button type="button" data-filter="endocrinologia" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined">bloodtype</span>
+            <span class="filter-area-name text-sm font-medium">Endocrinologia</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">7</span>
+        </button>
+
+        <button type="button" data-filter="neurologia" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined">psychology</span>
+            <span class="filter-area-name text-sm font-medium">Neurologia</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">5</span>
+        </button>
+
+        <button type="button" data-filter="pediatria" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined">child_care</span>
+            <span class="filter-area-name text-sm font-medium">Pediatria</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">8</span>
+        </button>
+
+        <button type="button" data-filter="psiquiatria" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined">health_and_safety</span>
+            <span class="filter-area-name text-sm font-medium">Psiquiatria</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">4</span>
+        </button>
+
+        <button type="button" data-filter="emergencia" class="filter-btn flex w-full items-center justify-between gap-3 rounded-full px-4 py-3 text-left text-slate-500 transition hover:bg-white hover:text-orange-600">
+          <span class="flex items-center gap-3">
+            <span class="material-symbols-outlined">emergency</span>
+            <span class="filter-area-name text-sm font-medium">Emergência</span>
+          </span>
+          <span class="count rounded-full bg-slate-200 px-2.5 py-1 text-xs font-bold text-slate-500">6</span>
+        </button>
       </div>
-      <div class="search-wrap search-wrap-card">
-        <span class="search-icon" aria-hidden="true">⌕</span>
-        <input id="searchInput" type="search" placeholder="Buscar doença, sintoma ou protocolo..." />
-      </div>
-    </section>
+    </nav>
+  </aside>
 
-    <div class="app-modal">
-      <aside class="sidebar">
-        <div id="areaFilters" class="area-filters" aria-label="Sumário de áreas"></div>
-      </aside>
+  <main class="min-h-screen px-4 pb-28 pt-32 md:ml-60 md:px-6">
+    <div class="mx-auto max-w-[1400px]">
+      <section class="editorial-gradient panel-glow relative overflow-hidden rounded-[2rem] px-6 py-5 text-white md:px-10 md:py-6">
+        <div class="absolute inset-0 opacity-40">
+          <div class="absolute -right-12 top-10 h-48 w-48 rounded-full bg-white/10 blur-2xl"></div>
+          <div class="absolute bottom-0 left-8 h-40 w-40 rounded-full bg-black/10 blur-2xl"></div>
+        </div>
 
-      <section class="content-panel">
-        <section id="loadingState" class="state-panel">
-          <h3>Carregando protocolos...</h3>
-          <p>Lendo os arquivos JSON em <code>/data</code>.</p>
-        </section>
-
-        <section id="errorState" class="state-panel error" hidden></section>
-
-        <section id="emptyState" class="state-panel" hidden>
-          <div class="empty-icon" aria-hidden="true">▭</div>
-          <h3>Nenhum protocolo encontrado</h3>
-          <p>Tente ajustar a busca ou criar um novo protocolo.</p>
-          <a class="cta-btn" href="./editor/?v=20260308-01">+ Criar Novo Protocolo</a>
-        </section>
-
-        <section id="protocolList" class="protocol-list" hidden></section>
+        <div class="relative">
+          <div class="max-w-3xl">
+            <div class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-white/90 glass-stroke">
+              <span class="material-symbols-outlined !text-base">bolt</span>
+              Biblioteca clínica
+            </div>
+            <h1 class="max-w-2xl text-4xl font-extrabold tracking-tight md:text-5xl">Protocolos e Prescrições Rápidas</h1>
+            <p class="mt-2 max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">Busque por doença, sintoma ou protocolo para abrir o conteúdo por área e assunto com uma estética editorial mais limpa, técnica e contemporânea.</p>
+          </div>
+        </div>
       </section>
+
+      <div class="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <section class="rounded-[1.75rem] border border-white/70 bg-surface-container-low p-4 shadow-soft md:p-6">
+          <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Coleção principal</p>
+              <h2 class="mt-1 text-2xl font-extrabold tracking-tight text-on-surface">Protocolos de Conduta</h2>
+              <p class="mt-2 text-sm text-slate-500 md:text-base">Diretrizes clínicas curadas para prescrição rápida, visualização escaneável e navegação por área.</p>
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500 shadow-sm">
+              <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+              Cardiologia e Emergência
+            </div>
+          </div>
+
+          <section id="loadingState" class="state-panel rounded-[1.5rem] border border-dashed border-slate-200 bg-white px-6 py-10 text-center" hidden>
+            <h3 class="text-lg font-bold text-slate-700">Carregando protocolos...</h3>
+            <p class="mt-2 text-sm text-slate-500">Lendo os arquivos JSON em <code>/data</code>.</p>
+          </section>
+
+          <section id="errorState" class="state-panel rounded-[1.5rem] border border-red-200 bg-error-container px-6 py-10 text-center text-on-error-container" hidden></section>
+
+          <section id="emptyState" class="state-panel rounded-[1.5rem] border border-dashed border-slate-200 bg-white px-6 py-10 text-center" hidden>
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+              <span class="material-symbols-outlined">browse_activity</span>
+            </div>
+            <h3 class="mt-4 text-lg font-bold text-slate-700">Nenhum protocolo encontrado</h3>
+            <p class="mt-2 text-sm text-slate-500">Tente ajustar a busca ou criar um novo protocolo.</p>
+            <a class="mt-5 inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-bold text-white transition hover:bg-primary-container" href="./editor/?v=20260308-01">Criar novo protocolo</a>
+          </section>
+
+          <section id="protocolList" class="protocol-list space-y-3" aria-label="Lista de protocolos">
+            <article class="protocol-card rounded-[1.25rem] border border-transparent bg-surface-container-lowest p-4 transition hover:-translate-y-0.5 hover:border-slate-100 hover:shadow-sm">
+              <div class="protocol-summary flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-4">
+                  <div class="protocol-avatar flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-surface-container-high">
+                    <span class="material-symbols-outlined text-2xl text-orange-700">favorite</span>
+                  </div>
+                  <div class="protocol-main flex min-w-0 flex-col justify-center self-center">
+                    <h3 class="truncate text-lg font-bold leading-tight text-on-surface">Insuficiência Cardíaca Aguda</h3>
+                    <div class="protocol-sub mt-0.5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-normal text-slate-400">
+                      <span class="inline-flex items-center gap-1.5 leading-none">
+                        <span class="material-symbols-outlined !text-sm">library_books</span>
+                        Possui referências
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="protocol-actions flex items-center gap-3">
+                  <span class="reviewed-specialist-tag hidden rounded-full bg-primary-fixed px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary md:inline-flex">Revisado</span>
+                  <span class="icon-btn material-symbols-outlined text-slate-300">chevron_right</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="protocol-card rounded-[1.25rem] border border-transparent bg-surface-container-lowest p-4 transition hover:-translate-y-0.5 hover:border-slate-100 hover:shadow-sm">
+              <div class="protocol-summary flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-4">
+                  <div class="protocol-avatar flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-surface-container-high">
+                    <span class="material-symbols-outlined text-2xl text-orange-700">female</span>
+                  </div>
+                  <div class="protocol-main flex min-w-0 flex-col justify-center self-center">
+                    <h3 class="truncate text-lg font-bold leading-tight text-on-surface">Candidíase Vulvovaginal</h3>
+                    <div class="protocol-sub mt-0.5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-normal text-slate-400">
+                      <span class="inline-flex items-center gap-1.5 leading-none">
+                        <span class="material-symbols-outlined !text-sm">library_books</span>
+                        Possui referências
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="protocol-actions flex items-center gap-3">
+                  <span class="icon-btn material-symbols-outlined text-slate-300">chevron_right</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="protocol-card rounded-[1.25rem] border border-transparent bg-surface-container-lowest p-4 transition hover:-translate-y-0.5 hover:border-slate-100 hover:shadow-sm">
+              <div class="protocol-summary flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-4">
+                  <div class="protocol-avatar flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-surface-container-high">
+                    <span class="material-symbols-outlined text-2xl text-orange-700">psychology</span>
+                  </div>
+                  <div class="protocol-main flex min-w-0 flex-col justify-center self-center">
+                    <h3 class="truncate text-lg font-bold leading-tight text-on-surface">Fibromialgia: Manejo de Dor Crônica</h3>
+                    <div class="protocol-sub mt-0.5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-normal text-slate-400">
+                      <span class="inline-flex items-center gap-1.5 leading-none">
+                        <span class="material-symbols-outlined !text-sm">library_books</span>
+                        Possui referências
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="protocol-actions flex items-center gap-3">
+                  <span class="icon-btn material-symbols-outlined text-slate-300">chevron_right</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="protocol-card rounded-[1.25rem] border border-transparent bg-surface-container-lowest p-4 transition hover:-translate-y-0.5 hover:border-slate-100 hover:shadow-sm">
+              <div class="protocol-summary flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-4">
+                  <div class="protocol-avatar flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-surface-container-high">
+                    <span class="material-symbols-outlined text-2xl text-orange-700">bloodtype</span>
+                  </div>
+                  <div class="protocol-main flex min-w-0 flex-col justify-center self-center">
+                    <h3 class="truncate text-lg font-bold leading-tight text-on-surface">Diabetes Mellitus Tipo 2</h3>
+                    <div class="protocol-sub mt-0.5 flex items-center gap-3 text-[11px] font-bold uppercase tracking-normal text-slate-400">
+                      <span class="inline-flex items-center gap-1.5 leading-none">
+                        <span class="material-symbols-outlined !text-sm">library_books</span>
+                        Possui referências
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="protocol-actions flex items-center gap-3">
+                  <span class="icon-btn material-symbols-outlined text-slate-300">chevron_right</span>
+                </div>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        <aside class="space-y-6">
+          <section class="rounded-[1.75rem] bg-white p-6 shadow-soft">
+            <div class="inline-flex items-center gap-2 rounded-full bg-primary-fixed px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
+              <span class="material-symbols-outlined !text-sm">workspace_premium</span>
+              Baseado em evidências
+            </div>
+            <h3 class="mt-5 text-2xl font-extrabold tracking-tight text-on-surface">Curadoria com leitura rápida</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-500">Os protocolos podem seguir a lógica editorial do layout de referência sem perder a identidade do UsoJaleco. O foco aqui é clareza, contraste e escaneabilidade clínica.</p>
+
+            <div class="mt-6 grid gap-3">
+              <div class="rounded-2xl bg-surface-container-low p-4">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Diretriz visual</p>
+                <p class="mt-1 text-sm font-semibold text-slate-700">Topbar translúcida, sidebar fixa e cartões amplos.</p>
+              </div>
+              <div class="rounded-2xl bg-surface-container-low p-4">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Marca preservada</p>
+                <p class="mt-1 text-sm font-semibold text-slate-700">Logo e naming originais mantidos no cabeçalho.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="relative overflow-hidden rounded-[1.75rem] bg-slate-950 p-6 text-white shadow-soft">
+            <span class="relative z-10 block text-xs font-bold uppercase tracking-[0.18em] text-white/50">Acesso rápido</span>
+            <h3 class="relative z-10 mt-3 text-2xl font-extrabold tracking-tight">Fluxo de edição clínica</h3>
+            <p class="relative z-10 mt-3 text-sm leading-7 text-slate-400">Quando quiser transformar o protocolo em prescrição personalizada, siga direto para o editor mantendo a linguagem visual da nova interface.</p>
+            <a class="relative z-10 mt-6 inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-bold text-slate-900 transition hover:bg-primary-fixed" href="./editor/?v=20260308-01">Abrir editor</a>
+            <span class="material-symbols-outlined absolute -bottom-6 -right-6 text-[9rem] text-white/5">edit_note</span>
+          </section>
+        </aside>
+      </div>
     </div>
   </main>
 
-  <script>
-    (function () {
-      if (!("serviceWorker" in navigator)) return;
-      navigator.serviceWorker.getRegistrations()
-        .then(function (regs) {
-          regs.forEach(function (reg) { reg.unregister(); });
-        })
-        .catch(function () {});
-    })();
-  </script>
-  <script src="./prescricoes.js?v=20260308-01" defer></script>
+  <nav class="fixed bottom-0 left-0 z-50 flex w-full items-center justify-between border-t border-slate-200 bg-white/95 px-5 py-3 backdrop-blur-md md:hidden">
+    <a class="flex flex-col items-center gap-1 text-primary" href="https://www.usojaleco.com.br/inicio/">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+      <span class="text-[10px] font-bold uppercase tracking-[0.12em]">Início</span>
+    </a>
+    <button type="button" class="flex flex-col items-center gap-1 text-slate-400">
+      <span class="material-symbols-outlined">search</span>
+      <span class="text-[10px] font-bold uppercase tracking-[0.12em]">Buscar</span>
+    </button>
+    <a class="-mt-8 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/25" href="./editor/?v=20260308-01">
+      <span class="material-symbols-outlined">add</span>
+    </a>
+    <button type="button" class="flex flex-col items-center gap-1 text-slate-400">
+      <span class="material-symbols-outlined">category</span>
+      <span class="text-[10px] font-bold uppercase tracking-[0.12em]">Áreas</span>
+    </button>
+    <a class="flex flex-col items-center gap-1 text-slate-400" href="https://www.usojaleco.com.br/inicio/">
+      <span class="material-symbols-outlined">person</span>
+      <span class="text-[10px] font-bold uppercase tracking-[0.12em]">Menu</span>
+    </a>
+  </nav>
 </body>
 </html>
