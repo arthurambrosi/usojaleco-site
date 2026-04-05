@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "area": "Infectologia",
   "slug": "infectologia",
   "assuntos": [
@@ -103,7 +103,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Latente tardia ou Sífilis Terciária",
@@ -167,7 +168,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     }
