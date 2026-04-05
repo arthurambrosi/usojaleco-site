@@ -2258,6 +2258,479 @@ input[type="checkbox"] {
   }
 }
 
+/* Refinement: closer to the reference app design while preserving JS behavior */
+body {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 214, 195, 0.22), transparent 24%),
+    linear-gradient(180deg, #fbfcfe 0%, #f7f9fc 58%, #eef2f6 100%);
+}
+
+body::before {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(219, 228, 237, 0.44), transparent 22%),
+    radial-gradient(circle at 0% 100%, rgba(255, 228, 214, 0.34), transparent 24%);
+}
+
+.topbarWrap {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.topbar {
+  padding: 12px 0;
+}
+
+.page-main {
+  gap: 22px;
+}
+
+.searchCard {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 6px 4px 0;
+  gap: 14px;
+}
+
+.searchCard::before,
+.searchCard::after {
+  display: none;
+}
+
+.searchCardHead h1 {
+  max-width: none;
+  color: #191c1e;
+  font-size: clamp(2.2rem, 3vw + 1rem, 3.35rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.searchCardHead p {
+  max-width: 760px;
+  margin-top: 8px;
+  color: #697683;
+  font-size: 1.04rem;
+  line-height: 1.45;
+}
+
+.search-wrap {
+  max-width: 430px;
+}
+
+.search-icon {
+  left: 17px;
+  color: #94a3b8;
+}
+
+.search-wrap input {
+  height: 48px;
+  border: 1px solid #e2e8ef;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: none;
+  padding-left: 46px;
+}
+
+.search-wrap input:focus {
+  border-color: #d7dee6;
+  box-shadow: 0 0 0 4px rgba(165, 54, 0, 0.08);
+}
+
+.app-modal {
+  grid-template-columns: 224px minmax(0, 1fr);
+  gap: 22px;
+}
+
+.sidebar,
+.content-panel {
+  box-shadow: none;
+  border: 0;
+}
+
+.sidebar {
+  top: 84px;
+  min-height: calc(100vh - 114px);
+  border-radius: 26px;
+  background: #f8fafc;
+  padding: 8px 0 10px;
+}
+
+.area-filters {
+  gap: 2px;
+  padding: 0;
+}
+
+.filter-btn {
+  padding: 12px 18px 12px 22px;
+  border-radius: 999px 0 0 999px;
+  color: #66707b;
+  transition: color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.filter-btn:hover {
+  transform: none;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: #d4551f;
+}
+
+.filter-btn .count {
+  min-width: 0;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  color: #9aa5b1;
+  line-height: 1;
+}
+
+.filter-btn.active {
+  margin-left: 16px;
+  background: #fff;
+  color: var(--brand);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.filter-btn.active .count {
+  background: transparent;
+  color: #d4551f;
+}
+
+.area-icon-filter {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+}
+
+.content-panel {
+  min-height: calc(100vh - 114px);
+  border-radius: 28px;
+  background: #eceef1;
+  padding: 16px;
+}
+
+.protocol-list {
+  padding: 0;
+  gap: 12px;
+}
+
+.protocol-card {
+  border-radius: 18px;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.protocol-card:hover {
+  transform: translateX(4px);
+  box-shadow: none;
+}
+
+.protocol-summary {
+  padding: 16px;
+  gap: 16px;
+}
+
+.protocol-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: #e6e8eb;
+  border: 0;
+}
+
+.protocol-main h3 {
+  font-size: 1.08rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.protocol-sub {
+  margin-top: 4px;
+  color: #97a3af;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.protocol-actions {
+  gap: 10px;
+}
+
+.reviewed-specialist-tag {
+  border-color: transparent;
+  background: #eef2f6;
+  color: #6b7782;
+  box-shadow: none;
+}
+
+.icon-btn {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #c2cbd4;
+  box-shadow: none;
+}
+
+.icon-btn:hover {
+  border: 0;
+  background: transparent;
+  color: #9aa5b1;
+}
+
+.icon-btn.active {
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+}
+
+.protocol-detail {
+  margin-top: 2px;
+  border-top: 1px solid #edf1f4;
+  background: #f7f9fb;
+  padding: 14px;
+}
+
+.detail-head small {
+  color: #95a0aa;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+}
+
+.copy-btn {
+  border-color: #e1e8ee;
+  box-shadow: none;
+}
+
+.meta-box,
+.section-item,
+.med-card,
+.tag-popover {
+  box-shadow: none;
+}
+
+.section-item {
+  border-radius: 18px;
+}
+
+.section-summary {
+  padding: 12px 14px;
+}
+
+.section-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #e6e8eb;
+  border: 0;
+}
+
+.section-number {
+  color: #a3adb7;
+}
+
+.section-arrow {
+  width: auto;
+  height: auto;
+  border: 0;
+  background: transparent;
+  color: #9aa5b1;
+}
+
+.section-body {
+  background: #f6f8fa;
+}
+
+.state-panel {
+  margin: 0;
+  border: 1px dashed #dde4ea;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.infoBand {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 42px;
+  align-items: start;
+  border-top: 1px solid #e2e8ee;
+  padding: 12px 4px 20px;
+}
+
+.infoLead h2 {
+  margin: 0 0 14px;
+  color: #191c1e;
+  font-size: 2rem;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.infoLead p {
+  margin: 0;
+  max-width: 760px;
+  color: #6b7782;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.supportCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #12181d;
+  color: #fff;
+  padding: 24px;
+}
+
+.supportEyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.supportCard strong {
+  display: block;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.supportCard p {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.supportCard::after {
+  content: "";
+  position: absolute;
+  right: -26px;
+  bottom: -34px;
+  width: 132px;
+  height: 132px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 68%);
+}
+
+.supportLink {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111827;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.supportLink:hover {
+  background: #ffe7d8;
+  color: var(--brand);
+}
+
+@media (max-width: 1180px) {
+  .searchCard {
+    padding: 2px 2px 0;
+  }
+
+  .searchCardHead h1 {
+    font-size: clamp(1.95rem, 5vw, 2.8rem);
+  }
+
+  .app-modal {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    min-height: auto;
+    padding: 12px;
+  }
+
+  .filter-btn {
+    border-radius: 999px;
+    padding: 11px 16px;
+  }
+
+  .filter-btn.active {
+    margin-left: 0;
+  }
+
+  .content-panel {
+    min-height: auto;
+  }
+
+  .infoBand {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .searchCard {
+    padding: 2px 0 0;
+  }
+
+  .searchCardHead p {
+    font-size: 0.97rem;
+  }
+
+  .search-wrap {
+    max-width: none;
+  }
+
+  .content-panel {
+    padding: 14px;
+  }
+
+  .protocol-card:hover {
+    transform: none;
+  }
+
+  .infoLead h2 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-main {
+    gap: 18px;
+  }
+
+  .searchCardHead h1 {
+    font-size: 1.72rem;
+  }
+
+  .searchWrap input,
+  .search-wrap input {
+    height: 48px;
+  }
+
+  .content-panel {
+    padding: 12px;
+  }
+
+  .supportCard {
+    border-radius: 20px;
+    padding: 20px;
+  }
+}
+
 
 
 
