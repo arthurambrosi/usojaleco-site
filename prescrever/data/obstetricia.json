@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "area": "Obstetrícia",
   "slug": "obstetricia",
   "assuntos": [
@@ -119,7 +119,167 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
+        },
+        {
+          "titulo": "Reposições",
+          "slug": "reposicoes",
+          "mode": "structured",
+          "meta": {
+            "orientacoes": "",
+            "alertas": "",
+            "notas": "",
+            "revisadoEspecialista": false
+          },
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "text": "Edite o protocolo aqui."
+                }
+              ]
+            }
+          ],
+          "tagDefs": [],
+          "structured": {
+            "groups": [
+              {
+                "id": "group-izbt1j6",
+                "type": "or",
+                "rotulo": "OU",
+                "titulo": "Escolha uma das opções abaixo:",
+                "sections": [
+                  {
+                    "id": "section-dnxf0du",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-ws5calo",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "group-n1jcxq8",
+                "type": "add",
+                "rotulo": "ASSOCIAR",
+                "titulo": "Associar / adicionar",
+                "sections": [
+                  {
+                    "id": "section-ncazvss",
+                    "titulo": "",
+                    "items": [
+                      {
+                        "id": "item-uy5w4i0",
+                        "nome": "Novo medicamento",
+                        "apresentacao": "",
+                        "posologia": "",
+                        "sus": false,
+                        "meta": {
+                          "contraindicacoes": "",
+                          "orientacoes": "",
+                          "alertas": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "children": [
+            {
+              "titulo": "Ferro",
+              "slug": "ferro",
+              "mode": "structured",
+              "meta": {
+                "orientacoes": "",
+                "alertas": "",
+                "notas": "",
+                "revisadoEspecialista": false
+              },
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "text": "Edite o protocolo aqui."
+                    }
+                  ]
+                }
+              ],
+              "tagDefs": [],
+              "structured": {
+                "groups": [
+                  {
+                    "id": "group-ov68ebl",
+                    "type": "or",
+                    "rotulo": "OU",
+                    "titulo": "Escolha uma das opções abaixo:",
+                    "sections": [
+                      {
+                        "id": "section-f9n4k4h",
+                        "titulo": "",
+                        "items": [
+                          {
+                            "id": "item-oafqkqy",
+                            "nome": "Novo medicamento",
+                            "apresentacao": "ss",
+                            "posologia": "as",
+                            "sus": false,
+                            "meta": {
+                              "contraindicacoes": "",
+                              "orientacoes": "",
+                              "alertas": ""
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "group-vz6g85c",
+                    "type": "add",
+                    "rotulo": "ASSOCIAR",
+                    "titulo": "Associar / adicionar",
+                    "sections": [
+                      {
+                        "id": "section-4v5qztz",
+                        "titulo": "",
+                        "items": [
+                          {
+                            "id": "item-yny22qz",
+                            "nome": "Novo medicamento",
+                            "apresentacao": "",
+                            "posologia": "",
+                            "sus": false,
+                            "meta": {
+                              "contraindicacoes": "",
+                              "orientacoes": "",
+                              "alertas": ""
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "children": []
+            }
+          ]
         }
       ]
     },
@@ -296,7 +456,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     }
