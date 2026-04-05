@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "area": "Ginecologia",
   "slug": "ginecologia",
   "assuntos": [
@@ -127,7 +127,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     },
@@ -267,7 +268,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "VB recorrente",
@@ -407,7 +409,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     },
@@ -559,7 +562,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Complicada",
@@ -925,7 +929,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     },
@@ -1103,7 +1108,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Ambulatorial",
@@ -1215,7 +1221,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Hospitalar",
@@ -1367,7 +1374,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Parceiro sexual",
@@ -1449,7 +1457,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     }
