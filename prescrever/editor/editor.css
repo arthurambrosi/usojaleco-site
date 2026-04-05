@@ -376,6 +376,101 @@ body {
   margin: 0;
 }
 
+.subject-references-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.subject-references-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.subject-references-list {
+  display: grid;
+  gap: 8px;
+}
+
+.subject-reference-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.subject-reference-card input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  background: #fff;
+}
+
+.subject-reference-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.subject-reference-kind {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #eef5ff;
+  color: #255a87;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.subject-reference-kind.is-pdf {
+  background: #fff4e8;
+  color: #8a4d12;
+}
+
+.subject-reference-filemeta {
+  border: 1px dashed #d7dde2;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.subject-reference-filetext {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+.subject-reference-fileactions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.subject-references-empty {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
 .tag-modal-card {
   width: min(760px, 100%);
 }

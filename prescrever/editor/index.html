@@ -20,7 +20,11 @@
       <section class="panel">
         <div class="panel-header">
           <h2>Áreas</h2>
-          <button id="btnNewArea" class="btn btn-small">Nova Área</button>
+          <div class="panel-actions">
+            <button id="btnNewArea" class="btn btn-small">Nova Área</button>
+            <button id="btnRenameArea" class="btn btn-small btn-ghost">Renomear</button>
+            <button id="btnDeleteArea" class="btn btn-small btn-danger">Excluir</button>
+          </div>
         </div>
         <ul id="areasList" class="entity-list"></ul>
         <button id="btnImportArea" class="btn btn-ghost btn-wide">Importar JSON existente</button>
@@ -55,6 +59,7 @@
           <div id="tabPills" class="tab-pills"></div>
           <div class="tab-actions">
             <button id="btnNewTab" class="btn">+ Nova Seção</button>
+            <button id="btnGroupTabs" class="btn btn-ghost">Agrupar Seções</button>
             <button id="btnNewChildTab" class="btn btn-ghost">+ Subseção</button>
             <button id="btnConvertToNotes" class="btn btn-ghost">Transformar em Notas</button>
             <button id="btnRenameTab" class="btn btn-ghost">Renomear Seção</button>
@@ -84,6 +89,15 @@
             <textarea id="subjectMetaAlertas" rows="2" placeholder="Ex.: Gestacao, interacoes, vigilancias..."></textarea>
             <label for="subjectMetaNotas">Notas gerais</label>
             <textarea id="subjectMetaNotas" rows="2" placeholder="Notas complementares do assunto"></textarea>
+            <div class="subject-references-toolbar">
+              <label>Referências do assunto</label>
+              <div class="subject-references-actions">
+                <button id="btnAddSubjectReferenceLink" class="btn btn-small btn-ghost" type="button">+ Link</button>
+                <button id="btnAddSubjectReferencePdf" class="btn btn-small btn-ghost" type="button">+ PDF</button>
+              </div>
+            </div>
+            <div id="subjectReferencesList" class="subject-references-list"></div>
+            <input id="subjectReferencePdfInput" type="file" accept=".pdf,application/pdf" hidden />
           </article>
 
           <article class="meta-card">

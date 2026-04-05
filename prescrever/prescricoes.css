@@ -2388,7 +2388,7 @@ body::before {
   margin-left: 16px;
   background: #fff;
   color: var(--brand);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: none;
 }
 
 .filter-btn.active .count {
@@ -2731,6 +2731,248 @@ body::before {
   }
 }
 
+/* Layout refinement: left summary + more compact hero */
+.page-main {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  column-gap: 26px;
+  row-gap: 22px;
+  align-items: start;
+}
+
+.searchCard {
+  grid-column: 2;
+  justify-self: start;
+  width: min(100%, 980px);
+  border-radius: 34px;
+  background: linear-gradient(135deg, #b83d02 0%, #d84b09 52%, #c34000 100%);
+  box-shadow: 0 28px 56px rgba(139, 46, 0, 0.18);
+  padding: 24px 28px 22px;
+}
+
+.searchCard::before,
+.searchCard::after {
+  display: block;
+}
+
+.searchCardHead h1 {
+  max-width: 8ch;
+  color: #fff;
+  font-size: clamp(2.25rem, 2.6vw + 1rem, 3.9rem);
+  line-height: 0.95;
+}
+
+.searchCardHead p {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.search-wrap {
+  max-width: 720px;
+}
+
+.search-icon {
+  color: #8b5b3f;
+}
+
+.search-wrap input {
+  border-color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.app-modal {
+  display: contents;
+}
+
+.sidebar {
+  grid-column: 1;
+  position: sticky;
+  top: 86px;
+  min-height: calc(100vh - 116px);
+  align-self: start;
+  border-radius: 28px;
+  background: #f8fafc;
+  padding: 18px 0 14px;
+}
+
+.sidebarMeta {
+  padding: 0 24px 14px;
+}
+
+.sidebarMeta h2 {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sidebarMeta p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.area-filters {
+  gap: 4px;
+}
+
+.filter-btn {
+  padding: 12px 18px 12px 22px;
+}
+
+.sidebar .area-icon,
+.sidebar .area-icon-filter,
+.sidebar .filter-btn.active .area-icon-filter {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.sidebar .area-icon-filter {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.content-panel {
+  grid-column: 2;
+}
+
+.infoBand {
+  grid-column: 2;
+}
+
+@media (max-width: 1180px) {
+  .page-main {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
+  .searchCard,
+  .content-panel,
+  .infoBand,
+  .sidebar {
+    grid-column: auto;
+    width: 100%;
+  }
+
+  .searchCard {
+    justify-self: stretch;
+  }
+
+  .sidebar {
+    position: static;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .sidebarMeta {
+    padding: 0 4px 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .searchCard {
+    width: 100%;
+    padding: 22px 22px 20px;
+  }
+
+  .searchCardHead h1 {
+    max-width: 9ch;
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .searchCard {
+    padding: 18px 16px 18px;
+    border-radius: 24px;
+  }
+
+  .searchCardHead h1 {
+    max-width: none;
+    font-size: 1.86rem;
+  }
+
+  .sidebarMeta {
+    padding: 0 2px 10px;
+  }
+}
+
+
+.protocol-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.references-panel {
+  margin-top: 12px;
+  border-top: 1px solid #d8e0e4;
+  padding-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.references-head {
+  display: grid;
+  gap: 4px;
+}
+
+.references-head h4 {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  color: #1f2c35;
+}
+
+.references-head p {
+  margin: 0;
+  color: #5d7180;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.references-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.reference-item {
+  color: #314652;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.reference-link {
+  color: #b4490e;
+  text-decoration: none;
+}
+
+.reference-link:hover {
+  text-decoration: underline;
+}
+
+.reference-kind {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #fff1e7;
+  color: #9b4c17;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
 
 
 

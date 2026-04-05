@@ -37,6 +37,12 @@ const state = {
   error: ""
 };
 
+const FREE_BLOCK_PLACEHOLDER_TEXTS = new Set([
+  "edite o protocolo aqui.",
+  "notas da seção:",
+  "notas da secao:"
+]);
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -172,6 +178,49 @@ function normalizeMeta(meta) {
   };
 }
 
+function normalizeReferenceAssetPath(value) {
+  return asString(value)
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/^\.?\//, "")
+    .replace(/^data\//i, "")
+    .replace(/^\/+/, "");
+}
+
+function buildReferenceHref(assetPath) {
+  const safePath = normalizeReferenceAssetPath(assetPath);
+  return safePath ? `./data/${safePath}` : "";
+}
+
+function normalizeReference(rawReference, index = 0) {
+  const type = rawReference?.tipo === "pdf" ? "pdf" : "link";
+  const fileName = asString(rawReference?.nomeArquivo ?? rawReference?.fileName).trim();
+  const assetPath = normalizeReferenceAssetPath(
+    rawReference?.arquivo ?? rawReference?.assetPath ?? rawReference?.pdf ?? rawReference?.file
+  );
+  const externalUrl = asString(rawReference?.url ?? rawReference?.href).trim();
+  const href = type === "pdf" ? buildReferenceHref(assetPath) : externalUrl;
+  const fallbackTitle = type === "pdf" ? fileName : externalUrl;
+
+  return {
+    id: isNonEmptyString(rawReference?.id) ? rawReference.id.trim() : `ref-${index + 1}`,
+    type,
+    title: asString(rawReference?.titulo ?? rawReference?.label ?? rawReference?.nome).trim() || fallbackTitle,
+    href,
+    fileName
+  };
+}
+
+function normalizeReferences(rawReferences) {
+  if (!Array.isArray(rawReferences)) {
+    return [];
+  }
+
+  return rawReferences
+    .map((reference, index) => normalizeReference(reference, index))
+    .filter((reference) => isNonEmptyString(reference.title) && isNonEmptyString(reference.href));
+}
+
 function normalizeItemMeta(meta) {
   return {
     contraindicacoes: asString(meta?.contraindicacoes).trim(),
@@ -288,7 +337,98 @@ function requestReloadAfterSync() {
 }
 
 function itemHasPrescriptionContent(item) {
-  return isNonEmptyString(item?.nome) || isNonEmptyString(item?.apresentacao) || isNonEmptyString(item?.posologia);
+  const name = asString(item?.nome).trim();
+  const presentation = asString(item?.apresentacao).trim();
+  const usage = asString(item?.posologia).trim();
+  const isPlaceholderName = name.toLocaleLowerCase("pt-BR") === "novo medicamento";
+
+  if (isPlaceholderName && !presentation && !usage) {
+    return false;
+  }
+
+  return Boolean(name || presentation || usage);
+}
+
+function inlineContentHasMeaning(content) {
+  return normalizeInlineContent(content).some((span) => {
+    const text = asString(span?.text).trim();
+    return text && !FREE_BLOCK_PLACEHOLDER_TEXTS.has(text.toLocaleLowerCase("pt-BR"));
+  });
+}
+
+function listBlockHasMeaning(items) {
+  if (!Array.isArray(items)) {
+    return false;
+  }
+
+  return items.some((item) => inlineContentHasMeaning(item?.content));
+}
+
+function tableBlockHasMeaning(block) {
+  const headers = Array.isArray(block?.headers) ? block.headers : [];
+  const rows = Array.isArray(block?.rows) ? block.rows : [];
+
+  if (headers.some((header) => isNonEmptyString(header))) {
+    return true;
+  }
+
+  return rows.some((row) => Array.isArray(row) && row.some((cell) => isNonEmptyString(cell)));
+}
+
+function blockHasVisibleContent(block) {
+  if (!block || typeof block !== "object") {
+    return false;
+  }
+
+  switch (block.type) {
+    case "heading":
+    case "paragraph":
+      return inlineContentHasMeaning(block.content);
+    case "list":
+      return listBlockHasMeaning(block.items);
+    case "callout": {
+      const title = asString(block.title).trim();
+      const defaultTitle =
+        block.tone === "warning"
+          ? "Atencao"
+          : block.tone === "danger"
+            ? "Contraindicacao"
+            : block.tone === "success"
+              ? "Conduta"
+              : "Info";
+      return (title && title !== defaultTitle) || hasVisibleFreeBlocks(block.blocks);
+    }
+    case "table":
+      return tableBlockHasMeaning(block);
+    case "divider":
+      return false;
+    default:
+      return false;
+  }
+}
+
+function hasVisibleFreeBlocks(blocks) {
+  return Array.isArray(blocks) && blocks.some((block) => blockHasVisibleContent(block));
+}
+
+function sectionHasOwnVisibleContent(section) {
+  if (!section || typeof section !== "object") {
+    return false;
+  }
+
+  if (
+    isNonEmptyString(section.meta?.orientacoes) ||
+    isNonEmptyString(section.meta?.alertas) ||
+    isNonEmptyString(section.meta?.notas)
+  ) {
+    return true;
+  }
+
+  if (section.mode === "structured") {
+    return Array.isArray(section.groups) && section.groups.some((group) => collectVisibleItemsFromGroup(group, []).length > 0);
+  }
+
+  return hasVisibleFreeBlocks(section.blocks);
 }
 
 function buildItemKey(protocolId, sectionPath, groupPath, itemId, itemIndex = 0) {
@@ -709,6 +849,7 @@ function buildProtocol(area, subject) {
     slug: subjectSlug,
     descricao: asString(subject?.descricaoCurta).trim(),
     meta: normalizeMeta(subject?.meta),
+    references: normalizeReferences(subject?.referencias ?? subject?.meta?.referencias),
     sections,
     medications: getMedicationCount(sections),
     tags
@@ -721,6 +862,7 @@ function buildProtocol(area, subject) {
     protocol.meta.orientacoes,
     protocol.meta.alertas,
     protocol.meta.notas,
+    ...protocol.references.flatMap((reference) => [reference.title, reference.href]),
     ...protocol.sections.flatMap((section) => collectSectionSearchTexts(section))
   ]
     .join(" ")
@@ -803,6 +945,9 @@ function renderFreeBlocks(blocks, context = null) {
     if (!block || typeof block !== "object") {
       return;
     }
+    if (!blockHasVisibleContent(block) && block.type !== "divider") {
+      return;
+    }
 
     if (block.type === "heading") {
       const heading = document.createElement(block.level === 3 ? "h5" : "h4");
@@ -831,6 +976,9 @@ function renderFreeBlocks(blocks, context = null) {
     }
 
     if (block.type === "divider") {
+      if (!wrap.childNodes.length) {
+        return;
+      }
       wrap.appendChild(document.createElement("hr"));
       return;
     }
@@ -941,6 +1089,56 @@ function renderMetaBox(title, text, cls = "soft", asTopics = false) {
   }
 
   return box;
+}
+
+function renderReferencesSection(references) {
+  if (!Array.isArray(references) || !references.length) {
+    return null;
+  }
+
+  const section = document.createElement("section");
+  section.className = "references-panel";
+
+  const heading = document.createElement("div");
+  heading.className = "references-head";
+
+  const title = document.createElement("h4");
+  title.textContent = "Referências";
+  heading.appendChild(title);
+
+  const helper = document.createElement("p");
+  helper.textContent = "Links externos e PDFs abrem em uma nova guia.";
+  heading.appendChild(helper);
+
+  section.appendChild(heading);
+
+  const list = document.createElement("ol");
+  list.className = "references-list";
+
+  references.forEach((reference) => {
+    const item = document.createElement("li");
+    item.className = "reference-item";
+
+    const link = document.createElement("a");
+    link.className = "reference-link";
+    link.href = reference.href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = reference.title;
+    item.appendChild(link);
+
+    if (reference.type === "pdf") {
+      const badge = document.createElement("span");
+      badge.className = "reference-kind";
+      badge.textContent = "PDF";
+      item.appendChild(badge);
+    }
+
+    list.appendChild(item);
+  });
+
+  section.appendChild(list);
+  return section;
 }
 
 function medicationMetaEntries(item) {
@@ -1425,13 +1623,17 @@ function renderProtocolDetail(protocol) {
     sectionSub.className = "section-main-sub";
     const sectionMeds = getSectionMedicationCount(section);
     const childCount = Array.isArray(section.children) ? section.children.length : 0;
-    const summaryParts = [protocol.areaName];
+    const summaryParts = [];
     if (childCount) {
-      summaryParts.push(childCount === 1 ? "1 subsecao" : `${childCount} subsecoes`);
+      summaryParts.push(childCount === 1 ? "1 subseção" : `${childCount} subseções`);
     }
-    summaryParts.push(sectionMeds === 1 ? "1 medicamento" : `${sectionMeds} medicamentos`);
-    sectionSub.textContent = summaryParts.join(" · ");
-    sectionMain.appendChild(sectionSub);
+    if (sectionMeds) {
+      summaryParts.push(sectionMeds === 1 ? "1 medicamento" : `${sectionMeds} medicamentos`);
+    }
+    if (summaryParts.length) {
+      sectionSub.textContent = summaryParts.join(" · ");
+      sectionMain.appendChild(sectionSub);
+    }
 
     const sectionArrow = document.createElement("span");
     sectionArrow.className = "section-arrow";
@@ -1476,7 +1678,7 @@ function renderProtocolDetail(protocol) {
           sectionCard.appendChild(groupNode);
         }
       });
-    } else if (Array.isArray(section.blocks) && section.blocks.length) {
+    } else if (hasVisibleFreeBlocks(section.blocks)) {
       sectionCard.appendChild(renderFreeBlocks(section.blocks, inlineContext));
     }
 
@@ -1493,7 +1695,9 @@ function renderProtocolDetail(protocol) {
       sectionBody.appendChild(childList);
     }
 
-    sectionItem.appendChild(sectionBody);
+    if (sectionHasOwnVisibleContent(section) || sectionBody.childNodes.length) {
+      sectionItem.appendChild(sectionBody);
+    }
     return sectionItem;
   };
 
@@ -1502,6 +1706,11 @@ function renderProtocolDetail(protocol) {
   });
 
   detail.appendChild(sectionList);
+
+  const referencesNode = renderReferencesSection(protocol.references);
+  if (referencesNode) {
+    detail.appendChild(referencesNode);
+  }
 
   return detail;
 }
@@ -1553,6 +1762,13 @@ function protocolToText(protocol) {
   protocol.sections.forEach((section) => {
     appendSectionText(section, 0);
   });
+
+  if (Array.isArray(protocol.references) && protocol.references.length) {
+    lines.push("\nReferências");
+    protocol.references.forEach((reference, index) => {
+      lines.push(`${index + 1}. ${reference.title} - ${reference.href}`);
+    });
+  }
 
   return lines.join("\n");
 }
@@ -1705,7 +1921,7 @@ function renderProtocols() {
     const sub = document.createElement("div");
     const medLabel = protocol.medications === 1 ? "1 medicamento" : `${protocol.medications} medicamentos`;
     sub.className = "protocol-sub";
-    sub.textContent = `${protocol.areaName} · ${medLabel}`;
+    sub.textContent = protocol.references.length ? `${medLabel} · Possui referências` : medLabel;
     main.appendChild(sub);
 
     const actions = document.createElement("div");

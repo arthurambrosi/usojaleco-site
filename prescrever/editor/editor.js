@@ -103,6 +103,10 @@ const dom = {
   subjectMetaAlertas: document.getElementById("subjectMetaAlertas"),
   subjectMetaNotas: document.getElementById("subjectMetaNotas"),
   subjectMetaReviewed: document.getElementById("subjectMetaReviewed"),
+  subjectReferencesList: document.getElementById("subjectReferencesList"),
+  btnAddSubjectReferenceLink: document.getElementById("btnAddSubjectReferenceLink"),
+  btnAddSubjectReferencePdf: document.getElementById("btnAddSubjectReferencePdf"),
+  subjectReferencePdfInput: document.getElementById("subjectReferencePdfInput"),
 
   sectionMetaOrientacoes: document.getElementById("sectionMetaOrientacoes"),
   sectionMetaAlertas: document.getElementById("sectionMetaAlertas"),
@@ -139,6 +143,8 @@ const dom = {
   btnFontUp: document.getElementById("btnFontUp"),
 
   btnNewArea: document.getElementById("btnNewArea"),
+  btnRenameArea: document.getElementById("btnRenameArea"),
+  btnDeleteArea: document.getElementById("btnDeleteArea"),
   btnImportArea: document.getElementById("btnImportArea"),
   fileImportArea: document.getElementById("fileImportArea"),
   btnNewSubject: document.getElementById("btnNewSubject"),
@@ -146,6 +152,7 @@ const dom = {
   btnDeleteSubject: document.getElementById("btnDeleteSubject"),
   btnToggleSubjectStatus: document.getElementById("btnToggleSubjectStatus"),
   btnNewTab: document.getElementById("btnNewTab"),
+  btnGroupTabs: document.getElementById("btnGroupTabs"),
   btnNewChildTab: document.getElementById("btnNewChildTab"),
   btnConvertToNotes: document.getElementById("btnConvertToNotes"),
   btnRenameTab: document.getElementById("btnRenameTab"),
@@ -186,7 +193,8 @@ const state = {
   editorFontSize: DEFAULT_EDITOR_FONT_SIZE,
   lastSyncedSignatures: new Map(),
   collapsedStructuredGroups: new Set(),
-  syncFeedbackTimer: null
+  syncFeedbackTimer: null,
+  pendingReferenceUploadId: ""
 };
 
 const CalloutNode = Node.create({
@@ -333,6 +341,125 @@ function createEntityMeta() {
   };
 }
 
+function normalizeReferenceAssetPath(value) {
+  return asString(value)
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/^\.?\//, "")
+    .replace(/^data\//i, "")
+    .replace(/^\/+/, "");
+}
+
+function getReferenceAssetHref(assetPath) {
+  const safePath = normalizeReferenceAssetPath(assetPath);
+  return safePath ? `../data/${safePath}` : "";
+}
+
+function getReferenceAssetFileName(assetPath) {
+  const safePath = normalizeReferenceAssetPath(assetPath);
+  if (!safePath) {
+    return "";
+  }
+  const parts = safePath.split("/").filter(Boolean);
+  return parts[parts.length - 1] || "";
+}
+
+function deriveReferenceTitleFromFileName(fileName) {
+  const raw = asString(fileName).trim().replace(/\.pdf$/i, "");
+  return raw.replace(/[-_]+/g, " ").trim();
+}
+
+function createSubjectReference(type = "link", overrides = {}) {
+  return normalizeSubjectReference(
+    {
+      id: overrides.id || uid("ref"),
+      tipo: type,
+      titulo: overrides.titulo ?? "",
+      url: overrides.url ?? "",
+      arquivo: overrides.arquivo ?? "",
+      nomeArquivo: overrides.nomeArquivo ?? "",
+      uploadBase64: overrides.uploadBase64 ?? "",
+      uploadMimeType: overrides.uploadMimeType ?? "",
+      uploadFileName: overrides.uploadFileName ?? ""
+    },
+    0
+  );
+}
+
+function normalizeSubjectReference(rawReference, index = 0) {
+  const type = rawReference?.tipo === "pdf" ? "pdf" : "link";
+  const assetPath = normalizeReferenceAssetPath(rawReference?.arquivo ?? rawReference?.assetPath);
+  return {
+    id: isNonEmptyString(rawReference?.id) ? rawReference.id : uid(`ref${index + 1}`),
+    tipo: type,
+    titulo: asString(rawReference?.titulo).trim(),
+    url: type === "link" ? asString(rawReference?.url).trim() : "",
+    arquivo: type === "pdf" ? assetPath : "",
+    nomeArquivo:
+      type === "pdf"
+        ? asString(rawReference?.nomeArquivo ?? rawReference?.fileName).trim() || getReferenceAssetFileName(assetPath)
+        : "",
+    uploadBase64: type === "pdf" ? asString(rawReference?.uploadBase64).trim() : "",
+    uploadMimeType: type === "pdf" ? asString(rawReference?.uploadMimeType).trim() : "",
+    uploadFileName:
+      type === "pdf"
+        ? asString(rawReference?.uploadFileName ?? rawReference?.nomeArquivo ?? rawReference?.fileName).trim()
+        : ""
+  };
+}
+
+function normalizeSubjectReferences(rawReferences) {
+  if (!Array.isArray(rawReferences)) {
+    return [];
+  }
+  return rawReferences.map((reference, index) => normalizeSubjectReference(reference, index));
+}
+
+function isMeaningfulSubjectReference(reference) {
+  const normalized = normalizeSubjectReference(reference, 0);
+  if (normalized.tipo === "pdf") {
+    return Boolean(
+      normalized.titulo ||
+      normalized.arquivo ||
+      normalized.uploadBase64 ||
+      normalized.uploadFileName ||
+      normalized.nomeArquivo
+    );
+  }
+  return Boolean(normalized.titulo || normalized.url);
+}
+
+function serializeSubjectReference(reference) {
+  const normalized = normalizeSubjectReference(reference, 0);
+  if (normalized.tipo === "pdf") {
+    const payload = {
+      id: normalized.id,
+      tipo: "pdf",
+      titulo: normalized.titulo || deriveReferenceTitleFromFileName(normalized.uploadFileName || normalized.nomeArquivo),
+      arquivo: normalized.arquivo
+    };
+    if (normalized.nomeArquivo || normalized.uploadFileName) {
+      payload.nomeArquivo = normalized.nomeArquivo || normalized.uploadFileName;
+    }
+    return payload;
+  }
+
+  return {
+    id: normalized.id,
+    tipo: "link",
+    titulo: normalized.titulo,
+    url: normalized.url
+  };
+}
+
+function buildReferenceAssetPath(area, subject, referenceId, fileName) {
+  const areaSlug = slugify(area?.slug || area?.area || "area") || "area";
+  const subjectSlug = slugify(subject?.slug || subject?.titulo || "assunto") || "assunto";
+  const baseName = slugify(deriveReferenceTitleFromFileName(fileName) || "referencia") || "referencia";
+  const safeId = String(referenceId || uid("ref")).replace(/[^a-z0-9]+/gi, "").toLowerCase().slice(-10) || "arquivo";
+  return `referencias/${areaSlug}/${subjectSlug}/${baseName}-${safeId}.pdf`;
+}
+
 function normalizeEntityMeta(rawMeta) {
   return {
     orientacoes: asString(rawMeta?.orientacoes).trim(),
@@ -374,7 +501,8 @@ function getSubjectStatusLabel(status) {
 }
 
 function createStructuredItem(initialName = "Novo medicamento") {
-  const safeName = isNonEmptyString(initialName) ? initialName.trim() : "Novo medicamento";
+  const safeName =
+    arguments.length === 0 ? "Novo medicamento" : isNonEmptyString(initialName) ? initialName.trim() : "";
   return {
     id: uid("item"),
     nome: safeName,
@@ -968,6 +1096,7 @@ function createDefaultSubject(title = "Geral") {
     status: SUBJECT_STATUS_BUILDING,
     descricaoCurta: "",
     meta: createEntityMeta(),
+    referencias: [],
     tabs: [createDefaultTab("Conduta inicial", "conduta-inicial")]
   };
 }
@@ -1013,6 +1142,7 @@ function normalizeSubject(rawSubject, subjectIndex = 0) {
       ? rawSubject.descricaoCurta.trim()
       : "",
     meta: normalizeEntityMeta(rawSubject?.meta || rawSubject?.metadados),
+    referencias: normalizeSubjectReferences(rawSubject?.referencias ?? rawSubject?.references),
     tabs: normalizedTabs
   };
 }
@@ -1112,6 +1242,19 @@ function ensureTabShape(tab) {
   tab.children = getTabChildren(tab).map((child, index) => normalizeTab(child, index));
 }
 
+function ensureSubjectShape(subject) {
+  if (!subject || typeof subject !== "object") {
+    return;
+  }
+
+  subject.meta = normalizeEntityMeta(subject.meta);
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+  subject.tabs = Array.isArray(subject.tabs)
+    ? subject.tabs.map((tab, index) => normalizeTab(tab, index))
+    : [createDefaultTab("Resumo", "resumo")];
+  ensureUniqueTabSlugs(subject.tabs, new Set());
+}
+
 function ensureActiveSelection() {
   if (!state.areas.length) {
     state.activeAreaSlug = "";
@@ -1131,11 +1274,7 @@ function ensureActiveSelection() {
   state.activeSubjectSlug = subject ? subject.slug : "";
 
   if (subject) {
-    subject.meta = normalizeEntityMeta(subject.meta);
-    subject.tabs = Array.isArray(subject.tabs)
-      ? subject.tabs.map((tab, index) => normalizeTab(tab, index))
-      : [createDefaultTab("Resumo", "resumo")];
-    ensureUniqueTabSlugs(subject.tabs, new Set());
+    ensureSubjectShape(subject);
   }
 
   const tab =
@@ -1215,12 +1354,22 @@ function getAreaFileName(area) {
   return `${area.slug}.json`;
 }
 
+function serializeSubject(subject) {
+  ensureSubjectShape(subject);
+  return {
+    ...subject,
+    referencias: normalizeSubjectReferences(subject.referencias)
+      .filter((reference) => isMeaningfulSubjectReference(reference))
+      .map((reference) => serializeSubjectReference(reference))
+  };
+}
+
 function serializeArea(area) {
   return {
     schemaVersion: SCHEMA_VERSION,
     area: area.area,
     slug: area.slug,
-    assuntos: area.assuntos
+    assuntos: Array.isArray(area.assuntos) ? area.assuntos.map((subject) => serializeSubject(subject)) : []
   };
 }
 
@@ -1257,6 +1406,30 @@ function buildDataIndexPayload() {
     schemaVersion: "1.0.0",
     areas
   };
+}
+
+function collectReferenceAssetUploads(config) {
+  const uploads = [];
+
+  state.areas.forEach((area) => {
+    area.assuntos.forEach((subject) => {
+      ensureSubjectShape(subject);
+      subject.referencias.forEach((reference) => {
+        if (reference.tipo !== "pdf" || !isNonEmptyString(reference.arquivo) || !isNonEmptyString(reference.uploadBase64)) {
+          return;
+        }
+
+        uploads.push({
+          area,
+          subject,
+          reference,
+          remoteFilePath: `${config.dataPath}/${normalizeReferenceAssetPath(reference.arquivo)}`
+        });
+      });
+    });
+  });
+
+  return uploads;
 }
 
 async function writeJsonToFileHandle(fileHandle, payload) {
@@ -1375,6 +1548,16 @@ function toBase64Utf8(value) {
   return btoa(binary);
 }
 
+function bytesToBase64(bytes) {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    const chunk = bytes.subarray(index, index + chunkSize);
+    binary += String.fromCharCode(...chunk);
+  }
+  return btoa(binary);
+}
+
 function buildGithubContentUrl(config, filePath) {
   const safePath = String(filePath || "")
     .replace(/\\/g, "/")
@@ -1431,6 +1614,38 @@ async function upsertGithubJsonFile(config, remoteFilePath, payload) {
   const body = {
     message: `chore(data): sincronizar ${remoteFilePath} via editor`,
     content: toBase64Utf8(`${JSON.stringify(payload, null, 2)}\n`),
+    branch: config.branch
+  };
+
+  if (sha) {
+    body.sha = sha;
+  }
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: buildGithubHeaders(config, true),
+    body: JSON.stringify(body)
+  });
+
+  let result = null;
+  try {
+    result = await response.json();
+  } catch (_error) {}
+
+  if (!response.ok) {
+    const msg = result?.message ? ` - ${result.message}` : "";
+    throw new Error(`Falha ao gravar ${remoteFilePath} no GitHub (${response.status})${msg}`);
+  }
+
+  return { created: response.status === 201, updated: response.status === 200 };
+}
+
+async function upsertGithubBase64File(config, remoteFilePath, contentBase64, message) {
+  const sha = await fetchGithubFileSha(config, remoteFilePath);
+  const url = buildGithubContentUrl(config, remoteFilePath);
+  const body = {
+    message: message || `chore(data): sincronizar ${remoteFilePath} via editor`,
+    content: contentBase64,
     branch: config.branch
   };
 
@@ -1663,7 +1878,7 @@ function renderSubjectsList() {
     subject.status = subjectStatus;
     const subtitle = isNonEmptyString(subject.descricaoCurta)
       ? subject.descricaoCurta
-      : `${countTabsInTree(subject.tabs)} secao(oes) · ${getSubjectStatusLabel(subjectStatus)}`;
+      : `${countTabsInTree(subject.tabs)} seção(ões) · ${getSubjectStatusLabel(subjectStatus)}`;
 
     const item = makeEntityListItem(
       subject.titulo,
@@ -1701,7 +1916,7 @@ function renderTabsList() {
     const childCount = getTabChildren(tab).length;
     const item = makeEntityListItem(
       getTabDisplayTitle(tabContext),
-      `${tab.slug} · ${modeLabel}${childCount ? ` · ${childCount} subsecao(oes)` : ""}`,
+      `${tab.slug} · ${modeLabel}${childCount ? ` · ${childCount} subseção(ões)` : ""}`,
       tab.slug === state.activeTabSlug,
       () => {
         persistCurrentTabFromEditor();
@@ -1825,12 +2040,19 @@ function toggleActionButtons() {
   const hasTab = Boolean(getActiveTab());
   const activeTabContext = getActiveTabContext();
   const mode = getTabMode(getActiveTab());
+  const canGroupTabs =
+    Boolean(activeTabContext) &&
+    Array.isArray(activeTabContext?.siblings) &&
+    activeTabContext.siblings.length - activeTabContext.index >= 2;
 
+  if (dom.btnRenameArea) dom.btnRenameArea.disabled = !hasArea;
+  if (dom.btnDeleteArea) dom.btnDeleteArea.disabled = !hasArea;
   dom.btnNewSubject.disabled = !hasArea;
   if (dom.btnRenameSubject) dom.btnRenameSubject.disabled = !hasSubject;
   if (dom.btnDeleteSubject) dom.btnDeleteSubject.disabled = !hasSubject;
   if (dom.btnToggleSubjectStatus) dom.btnToggleSubjectStatus.disabled = !hasSubject;
   dom.btnNewTab.disabled = !hasSubject;
+  if (dom.btnGroupTabs) dom.btnGroupTabs.disabled = !canGroupTabs;
   if (dom.btnNewChildTab) dom.btnNewChildTab.disabled = !hasTab;
   if (dom.btnConvertToNotes) dom.btnConvertToNotes.disabled = !hasTab;
   dom.btnRenameTab.disabled = !hasTab;
@@ -1852,6 +2074,15 @@ function toggleActionButtons() {
   dom.subjectMetaOrientacoes.disabled = disableSubjectMeta;
   dom.subjectMetaAlertas.disabled = disableSubjectMeta;
   dom.subjectMetaNotas.disabled = disableSubjectMeta;
+  if (dom.btnAddSubjectReferenceLink) {
+    dom.btnAddSubjectReferenceLink.disabled = disableSubjectMeta;
+  }
+  if (dom.btnAddSubjectReferencePdf) {
+    dom.btnAddSubjectReferencePdf.disabled = disableSubjectMeta;
+  }
+  if (dom.subjectReferencePdfInput) {
+    dom.subjectReferencePdfInput.disabled = disableSubjectMeta;
+  }
   if (dom.subjectMetaReviewed) {
     dom.subjectMetaReviewed.disabled = disableSubjectMeta;
   }
@@ -1903,10 +2134,139 @@ function renderMetadataFields() {
   if (dom.subjectMetaReviewed) {
     dom.subjectMetaReviewed.checked = Boolean(subjectMeta.revisadoEspecialista);
   }
+  renderSubjectReferences();
 
   setInputValue(dom.sectionMetaOrientacoes, sectionMeta.orientacoes);
   setInputValue(dom.sectionMetaAlertas, sectionMeta.alertas);
   setInputValue(dom.sectionMetaNotas, sectionMeta.notas);
+}
+
+function updateSubjectReferenceField(referenceId, field, value) {
+  const subject = getActiveSubject();
+  if (!subject) {
+    return;
+  }
+
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+  const reference = subject.referencias.find((entry) => entry.id === referenceId);
+  if (!reference) {
+    return;
+  }
+
+  reference[field] = value;
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+  refreshPreviewAndValidation();
+}
+
+function removeSubjectReference(referenceId) {
+  const subject = getActiveSubject();
+  if (!subject) {
+    return;
+  }
+
+  subject.referencias = normalizeSubjectReferences(subject.referencias).filter((reference) => reference.id !== referenceId);
+  renderSubjectReferences();
+  refreshPreviewAndValidation();
+}
+
+function renderSubjectReferences() {
+  if (!dom.subjectReferencesList) {
+    return;
+  }
+
+  const subject = getActiveSubject();
+  dom.subjectReferencesList.innerHTML = "";
+
+  if (!subject) {
+    return;
+  }
+
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+
+  if (!subject.referencias.length) {
+    dom.subjectReferencesList.appendChild(createEl("div", "subject-references-empty", "Nenhuma referência cadastrada."));
+    return;
+  }
+
+  subject.referencias.forEach((reference) => {
+    const card = createEl("article", "subject-reference-card");
+
+    const head = createEl("div", "subject-reference-head");
+    head.appendChild(
+      createEl("span", `subject-reference-kind${reference.tipo === "pdf" ? " is-pdf" : ""}`, reference.tipo === "pdf" ? "PDF" : "LINK")
+    );
+
+    const removeBtn = createEl("button", "btn btn-small btn-danger", "Remover");
+    removeBtn.type = "button";
+    removeBtn.addEventListener("click", () => {
+      removeSubjectReference(reference.id);
+    });
+    head.appendChild(removeBtn);
+    card.appendChild(head);
+
+    const titleLabel = createEl("label", "", "Nome exibido da referência");
+    const titleInput = document.createElement("input");
+    titleInput.type = "text";
+    titleInput.value = reference.titulo || "";
+    titleInput.placeholder = "Ex.: Diretriz da FEBRASGO 2025";
+    titleInput.addEventListener("input", () => {
+      updateSubjectReferenceField(reference.id, "titulo", titleInput.value);
+    });
+    card.appendChild(titleLabel);
+    card.appendChild(titleInput);
+
+    if (reference.tipo === "link") {
+      const urlLabel = createEl("label", "", "Link do site");
+      const urlInput = document.createElement("input");
+      urlInput.type = "url";
+      urlInput.value = reference.url || "";
+      urlInput.placeholder = "https://...";
+      urlInput.addEventListener("input", () => {
+        updateSubjectReferenceField(reference.id, "url", urlInput.value);
+      });
+      card.appendChild(urlLabel);
+      card.appendChild(urlInput);
+    } else {
+      const fileMeta = createEl("div", "subject-reference-filemeta");
+      const fileText = reference.uploadFileName || reference.nomeArquivo || getReferenceAssetFileName(reference.arquivo);
+      fileMeta.appendChild(
+        createEl(
+          "span",
+          "subject-reference-filetext",
+          fileText ? `Arquivo: ${fileText}` : "Nenhum PDF selecionado."
+        )
+      );
+
+      const fileActions = createEl("div", "subject-reference-fileactions");
+
+      const replaceBtn = createEl("button", "btn btn-small btn-ghost", fileText ? "Trocar PDF" : "Selecionar PDF");
+      replaceBtn.type = "button";
+      replaceBtn.addEventListener("click", () => {
+        state.pendingReferenceUploadId = reference.id;
+        if (dom.subjectReferencePdfInput) {
+          dom.subjectReferencePdfInput.value = "";
+          dom.subjectReferencePdfInput.click();
+        }
+      });
+      fileActions.appendChild(replaceBtn);
+
+      const openHref = getReferenceAssetHref(reference.arquivo);
+      if (openHref) {
+        const openLink = document.createElement("a");
+        openLink.className = "btn btn-small";
+        openLink.href = openHref;
+        openLink.target = "_blank";
+        openLink.rel = "noopener noreferrer";
+        openLink.textContent = "Abrir PDF";
+        fileActions.appendChild(openLink);
+      }
+
+      fileMeta.appendChild(fileActions);
+      card.appendChild(fileMeta);
+    }
+
+    dom.subjectReferencesList.appendChild(card);
+  });
 }
 
 function textOrDash(value) {
@@ -2898,6 +3258,82 @@ function readFileAsDataUrl(file) {
     reader.onerror = () => reject(new Error("Falha ao ler imagem colada."));
     reader.readAsDataURL(file);
   });
+}
+
+async function readFileAsBase64(file) {
+  const buffer = await file.arrayBuffer();
+  return bytesToBase64(new Uint8Array(buffer));
+}
+
+function addSubjectReferenceLink() {
+  const subject = getActiveSubject();
+  if (!subject) {
+    return;
+  }
+
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+  subject.referencias.push(createSubjectReference("link"));
+  renderSubjectReferences();
+  refreshPreviewAndValidation();
+}
+
+function queueSubjectReferencePdfUpload(referenceId = "") {
+  if (!dom.subjectReferencePdfInput) {
+    return;
+  }
+  state.pendingReferenceUploadId = referenceId || "";
+  dom.subjectReferencePdfInput.value = "";
+  dom.subjectReferencePdfInput.click();
+}
+
+async function handleSubjectReferencePdfSelection(event) {
+  const subject = getActiveSubject();
+  const area = getActiveArea();
+  const input = event?.target;
+  const file = input?.files?.[0] || null;
+
+  if (!subject || !area || !file) {
+    state.pendingReferenceUploadId = "";
+    return;
+  }
+
+  if (!/\.pdf$/i.test(file.name) && file.type !== "application/pdf") {
+    window.alert("Selecione um arquivo PDF.");
+    state.pendingReferenceUploadId = "";
+    input.value = "";
+    return;
+  }
+
+  subject.referencias = normalizeSubjectReferences(subject.referencias);
+
+  let reference = subject.referencias.find((entry) => entry.id === state.pendingReferenceUploadId) || null;
+  if (!reference) {
+    reference = createSubjectReference("pdf");
+    subject.referencias.push(reference);
+  }
+
+  try {
+    reference.tipo = "pdf";
+    reference.uploadBase64 = await readFileAsBase64(file);
+    reference.uploadMimeType = file.type || "application/pdf";
+    reference.uploadFileName = file.name;
+    reference.nomeArquivo = file.name;
+    reference.arquivo =
+      normalizeReferenceAssetPath(reference.arquivo) ||
+      buildReferenceAssetPath(area, subject, reference.id, file.name);
+    if (!isNonEmptyString(reference.titulo)) {
+      reference.titulo = deriveReferenceTitleFromFileName(file.name);
+    }
+  } catch (error) {
+    console.error(error);
+    window.alert("Não foi possível ler o PDF selecionado.");
+  } finally {
+    state.pendingReferenceUploadId = "";
+    input.value = "";
+  }
+
+  renderSubjectReferences();
+  refreshPreviewAndValidation();
 }
 
 function pasteTagModalText(text) {
@@ -4030,6 +4466,73 @@ function createArea() {
   loadActiveTabIntoEditor();
 }
 
+function renameArea() {
+  const area = getActiveArea();
+  if (!area) {
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+
+  const nextName = window.prompt("Novo nome da area:", area.area);
+  if (!isNonEmptyString(nextName)) {
+    return;
+  }
+
+  const oldSlug = area.slug;
+  area.area = nextName.trim();
+
+  const used = new Set(state.areas.filter((item) => item !== area).map((item) => item.slug));
+  area.slug = makeUniqueSlug(slugify(area.area), used);
+
+  if (oldSlug !== area.slug) {
+    state.areaFileNames.delete(oldSlug);
+    setAreaFileName(area.slug, `${area.slug}.json`);
+    state.areaFileHandles.delete(oldSlug);
+    state.areaFileHandleNames.delete(oldSlug);
+    state.lastSyncedSignatures.delete(oldSlug);
+    state.activeAreaSlug = area.slug;
+  }
+
+  renderAll();
+}
+
+function deleteArea() {
+  const area = getActiveArea();
+  if (!area) {
+    return;
+  }
+
+  const confirmed = window.confirm(`Excluir a área "${area.area}"?`);
+  if (!confirmed) {
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+  closeItemMetaModal(true);
+  closeTagMetaModal(true);
+
+  const index = state.areas.findIndex((item) => item.slug === area.slug);
+  if (index < 0) {
+    return;
+  }
+
+  state.areas.splice(index, 1);
+  state.areaFileNames.delete(area.slug);
+  state.areaFileHandles.delete(area.slug);
+  state.areaFileHandleNames.delete(area.slug);
+  state.lastSyncedSignatures.delete(area.slug);
+
+  const safeIndex = Math.max(0, index - 1);
+  const nextArea = state.areas[safeIndex] || state.areas[0] || null;
+  state.activeAreaSlug = nextArea?.slug || "";
+  state.activeSubjectSlug = "";
+  state.activeTabSlug = "";
+
+  renderAll();
+  loadActiveTabIntoEditor();
+}
+
 function createSubject() {
   const area = getActiveArea();
   if (!area) {
@@ -4180,7 +4683,7 @@ function createChildTab() {
 
   persistCurrentTabFromEditor();
 
-  const tabName = window.prompt("Nome da nova subsecao:", "Nova Subsecao");
+  const tabName = window.prompt("Nome da nova subseção:", "Nova Subseção");
   if (!isNonEmptyString(tabName)) {
     return;
   }
@@ -4202,6 +4705,61 @@ function createChildTab() {
   tabContext.tab.children.push(childTab);
   ensureUniqueTabSlugs(subject.tabs, new Set());
   state.activeTabSlug = childTab.slug;
+
+  renderAll();
+  loadActiveTabIntoEditor();
+}
+
+function groupTabsIntoParent() {
+  const subject = getActiveSubject();
+  const tabContext = getActiveTabContext();
+  if (!subject || !tabContext) {
+    return;
+  }
+
+  const availableCount = tabContext.siblings.length - tabContext.index;
+  if (availableCount < 2) {
+    window.alert("Selecione uma seção que tenha pelo menos mais uma seção abaixo no mesmo nível para agrupar.");
+    return;
+  }
+
+  persistCurrentTabFromEditor();
+
+  const groupTitle = window.prompt("Nome do novo grupo:", "Novo Grupo");
+  if (!isNonEmptyString(groupTitle)) {
+    return;
+  }
+
+  const rawCount = window.prompt(
+    `Quantas seções consecutivas deseja agrupar a partir de "${tabContext.tab.titulo}"? (mínimo 2, máximo ${availableCount})`,
+    "2"
+  );
+  if (!isNonEmptyString(rawCount)) {
+    return;
+  }
+
+  const count = Number.parseInt(rawCount, 10);
+  if (!Number.isInteger(count) || count < 2 || count > availableCount) {
+    window.alert(`Informe um número entre 2 e ${availableCount}.`);
+    return;
+  }
+
+  const groupedTabs = tabContext.siblings.splice(tabContext.index, count);
+  const usedTabSlugs = new Set(flattenTabs(subject.tabs).map((entry) => entry.tab.slug));
+  const groupSlug = makeUniqueSlug(slugify(groupTitle), usedTabSlugs);
+  const groupTab = normalizeTab({
+    titulo: groupTitle.trim(),
+    slug: groupSlug,
+    mode: "free",
+    meta: createEntityMeta(),
+    blocks: [createParagraphBlock("")],
+    tagDefs: [],
+    children: groupedTabs
+  });
+
+  tabContext.siblings.splice(tabContext.index, 0, groupTab);
+  ensureUniqueTabSlugs(subject.tabs, new Set());
+  state.activeTabSlug = groupTab.slug;
 
   renderAll();
   loadActiveTabIntoEditor();
@@ -4284,8 +4842,8 @@ function deleteTab() {
   const descendants = countTabsInTree(getTabChildren(tab));
   const confirmed = window.confirm(
     descendants
-      ? `Excluir a secao "${tab.titulo}" e ${descendants} subsecao(oes)?`
-      : `Excluir a secao "${tab.titulo}"?`
+      ? `Excluir a seção "${tab.titulo}" e ${descendants} subseção(ões)?`
+      : `Excluir a seção "${tab.titulo}"?`
   );
   if (!confirmed) {
     return;
@@ -4474,6 +5032,7 @@ async function syncGithubJsonFiles() {
   }
   persistGithubConfigInputs();
 
+  const referenceUploads = collectReferenceAssetUploads(config);
   const areaPayloads = collectAreaSyncPayloads();
   const indexPayload = buildDataIndexPayload();
   const queue = [
@@ -4495,22 +5054,46 @@ async function syncGithubJsonFiles() {
 
   let createdCount = 0;
   let updatedCount = 0;
+  let uploadedAssetsCount = 0;
 
   if (dom.btnSyncGithub) {
     dom.btnSyncGithub.disabled = true;
   }
 
   try {
+    const totalSteps = referenceUploads.length + queue.length;
+
+    for (let index = 0; index < referenceUploads.length; index += 1) {
+      const item = referenceUploads[index];
+      setStatus(`Sincronizando no GitHub (${index + 1}/${totalSteps}): ${item.remoteFilePath}`);
+      const result = await upsertGithubBase64File(
+        config,
+        item.remoteFilePath,
+        item.reference.uploadBase64,
+        `chore(data): sincronizar ${item.remoteFilePath} via editor`
+      );
+      if (result.created) createdCount += 1;
+      if (result.updated) updatedCount += 1;
+      item.reference.uploadBase64 = "";
+      item.reference.uploadMimeType = "";
+      item.reference.uploadFileName = "";
+      uploadedAssetsCount += 1;
+    }
+
     for (let index = 0; index < queue.length; index += 1) {
       const item = queue[index];
-      setStatus(`Sincronizando no GitHub (${index + 1}/${queue.length}): ${item.remoteFilePath}`);
+      setStatus(`Sincronizando no GitHub (${referenceUploads.length + index + 1}/${totalSteps}): ${item.remoteFilePath}`);
       const result = await upsertGithubJsonFile(config, item.remoteFilePath, item.payload);
       if (result.created) createdCount += 1;
       if (result.updated) updatedCount += 1;
       state.lastSyncedSignatures.set(item.signatureKey, item.signature);
     }
 
-    setStatus(`Sincronização GitHub concluída: ${updatedCount} atualizado(s), ${createdCount} criado(s).`);
+    setStatus(
+      `Sincronização GitHub concluída: ${updatedCount} atualizado(s), ${createdCount} criado(s), ${uploadedAssetsCount} PDF(s) enviado(s).`
+    );
+    renderSubjectReferences();
+    refreshPreviewAndValidation();
   } catch (error) {
     console.error(error);
     const message = String(error?.message || "Falha desconhecida na sincronização com GitHub.");
@@ -5050,6 +5633,12 @@ function fallbackArea() {
 
 function bindEvents() {
   dom.btnNewArea.addEventListener("click", createArea);
+  if (dom.btnRenameArea) {
+    dom.btnRenameArea.addEventListener("click", renameArea);
+  }
+  if (dom.btnDeleteArea) {
+    dom.btnDeleteArea.addEventListener("click", deleteArea);
+  }
   dom.btnNewSubject.addEventListener("click", createSubject);
   if (dom.btnRenameSubject) {
     dom.btnRenameSubject.addEventListener("click", renameSubject);
@@ -5061,6 +5650,9 @@ function bindEvents() {
     dom.btnToggleSubjectStatus.addEventListener("click", toggleSubjectStatus);
   }
   dom.btnNewTab.addEventListener("click", createTab);
+  if (dom.btnGroupTabs) {
+    dom.btnGroupTabs.addEventListener("click", groupTabsIntoParent);
+  }
   if (dom.btnNewChildTab) {
     dom.btnNewChildTab.addEventListener("click", createChildTab);
   }
@@ -5092,6 +5684,15 @@ function bindEvents() {
       persistSubjectMetaFromUI();
       refreshPreviewAndValidation();
     });
+  }
+  if (dom.btnAddSubjectReferenceLink) {
+    dom.btnAddSubjectReferenceLink.addEventListener("click", addSubjectReferenceLink);
+  }
+  if (dom.btnAddSubjectReferencePdf) {
+    dom.btnAddSubjectReferencePdf.addEventListener("click", () => queueSubjectReferencePdfUpload(""));
+  }
+  if (dom.subjectReferencePdfInput) {
+    dom.subjectReferencePdfInput.addEventListener("change", handleSubjectReferencePdfSelection);
   }
 
   dom.sectionMetaOrientacoes.addEventListener("input", () => {
