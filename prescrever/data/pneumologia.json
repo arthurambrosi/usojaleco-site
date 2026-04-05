@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "area": "Pneumologia",
   "slug": "pneumologia",
   "assuntos": [
@@ -85,7 +85,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Internacao",
@@ -144,7 +145,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     }
