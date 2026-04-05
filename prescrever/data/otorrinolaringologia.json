@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "area": "Otorrinolaringologia",
   "slug": "otorrinolaringologia",
   "assuntos": [
@@ -177,7 +177,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Sintomas leves/episódicos",
@@ -303,7 +304,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         },
         {
           "titulo": "Sintomas moderados/graves",
@@ -381,7 +383,8 @@
                 ]
               }
             ]
-          }
+          },
+          "children": []
         }
       ]
     }
