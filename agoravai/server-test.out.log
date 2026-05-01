@@ -1,0 +1,7 @@
+
+> react-example@0.0.0 dev
+> tsx server/index.ts
+
+[2m00:12:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+UsoJaleco rodando em http://localhost:3000/
+Protocolos: data\protocols.json

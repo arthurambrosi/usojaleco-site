@@ -1,0 +1,558 @@
+[
+  {
+    "id": "has",
+    "name": "Hipertensão Arterial Sistêmica",
+    "category": "Cardiologia",
+    "diagnostico": {
+      "criteria": "O diagnóstico de HAS deve ser baseado em pelo menos duas aferições de pressão arterial realizadas em consultas médicas diferentes, ou através da Monitorização Ambulatorial da Pressão Arterial (MAPA) / Medida Residencial da Pressão Arterial (MRPA).",
+      "highlight": {
+        "title": "MAPA de 24 horas",
+        "content": "Indicado em caso de suspeita de HA do avental branco, HA mascarada ou variabilidade excessiva da PA."
+      },
+      "classification": {
+        "title": "Classificação no Consultório",
+        "headers": [
+          "Categoria",
+          "Sistólica (mmHg)",
+          "Diastólica (mmHg)"
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Ótima",
+              "< 120",
+              "< 80"
+            ]
+          },
+          {
+            "cells": [
+              "Normal",
+              "120 - 129",
+              "80 - 84"
+            ]
+          },
+          {
+            "cells": [
+              "Pré-hipertensão",
+              "130 - 139",
+              "85 - 89"
+            ]
+          },
+          {
+            "cells": [
+              "HAS Estágio 1",
+              "140 - 159",
+              "90 - 99"
+            ]
+          },
+          {
+            "cells": [
+              "HAS Estágio 2",
+              "160 - 179",
+              "100 - 109"
+            ],
+            "isHighlight": true
+          },
+          {
+            "cells": [
+              "HAS Estágio 3",
+              "≥ 180",
+              "≥ 110"
+            ],
+            "isHighlight": true
+          }
+        ]
+      }
+    },
+    "exames": {
+      "blocks": [
+        {
+          "title": "Primeiros exames",
+          "sequences": [
+            {
+              "name": "Perfil Metabólico",
+              "exams": [
+                "Creatinina plasmática",
+                "Potássio plasmático",
+                "Glicemia de jejum",
+                "Perfil lipídico completo"
+              ]
+            },
+            {
+              "name": "Urinálise",
+              "exams": [
+                "Sumário de urina (EAS)",
+                "Proteinúria de 24 horas (se necessário)"
+              ]
+            }
+          ],
+          "subtitle": "Solicitados para todo paciente com diagnóstico recente de hipertensão."
+        },
+        {
+          "title": "Avaliação de LOA",
+          "sequences": [
+            {
+              "name": "Cardíaco",
+              "exams": [
+                "Eletrocardiograma de repouso (ECG)",
+                "Ecocardiograma transtorácico"
+              ]
+            }
+          ],
+          "subtitle": "Investigação de Lesões de Órgãos-Alvo."
+        }
+      ],
+      "observations": "Sempre avaliar função renal antes de iniciar iECA ou BRA."
+    },
+    "orientacoes": {
+      "blocks": [
+        {
+          "title": "Dieta e Estilo de Vida",
+          "items": [
+            "Reduzir consumo de sódio para < 2g/dia (5g de sal).",
+            "Adotar padrão alimentar DASH (rico em frutas e vegetais).",
+            "Cessação do tabagismo e moderação no álcool."
+          ]
+        },
+        {
+          "title": "Atividade Física",
+          "items": [
+            "Aeróbico: 150 min/semana de intensidade moderada.",
+            "Exercícios de resistência: 2-3 vezes por semana."
+          ]
+        }
+      ]
+    },
+    "prescricao": {
+      "items": [
+        {
+          "drug": "Losartana Potássica",
+          "dose": "50mg",
+          "presentation": "1 caixa",
+          "posology": "Tomar 1 comprimido por via oral uma vez ao dia.",
+          "orientations": {
+            "cuidados": "Monitorar pressão arterial regularmente e função renal.",
+            "contraindicacoes": "Gravidez, amamentação, hiperpotassemia grave.",
+            "sus": "Disponível na Farmácia Popular / Unidades Básicas de Saúde.",
+            "gerais": ""
+          }
+        },
+        {
+          "drug": "Anlodipino",
+          "dose": "5mg",
+          "presentation": "30 comprimidos",
+          "posology": "Tomar 1 comprimido por via oral uma vez ao dia.",
+          "orientations": {
+            "cuidados": "Pode causar edema maleolar (inchaço nos tornozelos).",
+            "contraindicacoes": "",
+            "sus": "Disponível na rede pública de saúde.",
+            "gerais": ""
+          }
+        }
+      ],
+      "sections": []
+    },
+    "metas": {
+      "blocks": [
+        {
+          "title": "Metas Gerais",
+          "content": "Para a maioria dos pacientes hipertensos, a meta é manter a PA < 140/90 mmHg."
+        },
+        {
+          "title": "Grupos Específicos",
+          "content": "Pacientes com alto risco cardiovascular ou DM.",
+          "table": {
+            "headers": [
+              "Grupo",
+              "Meta (mmHg)"
+            ],
+            "rows": [
+              [
+                "Alto Risco CV",
+                "< 130/80"
+              ],
+              [
+                "Idosos Hígidos",
+                "130 - 139 / 70 - 79"
+              ],
+              [
+                "Doença Renal Crônica",
+                "< 130/80"
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "dm2",
+    "name": "Diabetes Mellitus Tipo 2",
+    "category": "Endocrinologia",
+    "diagnostico": {
+      "criteria": "O diagnóstico é confirmado por Glicemia de Jejum ≥ 126 mg/dL, HbA1c ≥ 6,5% ou TOTG de 2h ≥ 200 mg/dL.",
+      "classification": {
+        "title": "Status Glicêmico",
+        "headers": [
+          "Condição",
+          "Glicemia Jejum (mg/dL)",
+          "HbA1c (%)"
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Normal",
+              "70 - 99",
+              "< 5.7"
+            ]
+          },
+          {
+            "cells": [
+              "Pré-Diabetes",
+              "100 - 125",
+              "5.7 - 6.4"
+            ]
+          },
+          {
+            "cells": [
+              "Diabetes",
+              "≥ 126",
+              "≥ 6.5"
+            ],
+            "isHighlight": true
+          }
+        ]
+      }
+    },
+    "exames": {
+      "blocks": [
+        {
+          "title": "Avaliação Inicial",
+          "sequences": [
+            {
+              "name": "Controle Glicêmico",
+              "exams": [
+                "Glicemia de jejum",
+                "Hemoglobina Glicada (HbA1c)"
+              ]
+            },
+            {
+              "name": "Microvascular",
+              "exams": [
+                "Microalbuminúria em amostra isolada",
+                "Fundo de olho"
+              ]
+            }
+          ],
+          "subtitle": "Exames para estratificação de risco e triagem de complicações."
+        }
+      ]
+    },
+    "orientacoes": {
+      "blocks": [
+        {
+          "title": "Educação em Diabetes",
+          "items": [
+            "Auto-monitorização da glicemia capilar conforme orientação.",
+            "Cuidado diário com os pés (inspeção e calçados adequados).",
+            "Portar identificação de diabético em viagens."
+          ]
+        }
+      ]
+    },
+    "prescricao": {
+      "items": [
+        {
+          "drug": "Metformina XR",
+          "dose": "500mg",
+          "presentation": "60 comprimidos",
+          "posology": "Tomar 1 comprimido por via oral após o jantar.",
+          "orientations": {
+            "cuidados": "Iniciar com dose baixa para minimizar efeitos TGI.",
+            "contraindicacoes": "",
+            "sus": "",
+            "gerais": ""
+          }
+        }
+      ],
+      "sections": []
+    },
+    "metas": {
+      "blocks": [
+        {
+          "title": "Metas de Controle",
+          "content": "As metas devem ser individualizadas considerando idade e comorbidades.",
+          "table": {
+            "headers": [
+              "Parâmetro",
+              "Meta Alvo"
+            ],
+            "rows": [
+              [
+                "Hemoglobina Glicada",
+                "< 7.0%"
+              ],
+              [
+                "Glicemia Pré-prandial",
+                "80 - 130 mg/dL"
+              ],
+              [
+                "Glicemia Pós-prandial",
+                "< 180 mg/dL"
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "qyjwqly4y",
+    "name": "DPOC",
+    "category": "Pneumologia",
+    "diagnostico": {
+      "criteria": "Considerar o diagnóstico de DPOC e realizar espirometria, se houver algum desses indicadores :\n- Dispneia progressiva ao longo do tempo\n- Chiado recorrente\n- Tosse crônica\n- ITR recorrente\n- História de fatores de risco",
+      "highlight": {
+        "title": "DIAGNÓSTICO",
+        "content": "O diagnóstico é realizado através da clínica sugestiva + espirometria!"
+      },
+      "classification": {
+        "title": "Pontuação GOLD",
+        "headers": [
+          "Categoria",
+          "Classificação"
+        ],
+        "rows": []
+      },
+      "blocks": [
+        {
+          "id": "diag-molz1uwf-4okg8y",
+          "type": "criteria",
+          "content": "Considerar o diagnóstico de DPOC e realizar espirometria, se houver algum desses indicadores :\n- Dispneia progressiva ao longo do tempo\n- Chiado recorrente\n- Tosse crônica\n- ITR recorrente\n- História de fatores de risco"
+        },
+        {
+          "id": "diag-molz1uwf-9no5lh",
+          "type": "quote",
+          "title": "DIAGNÓSTICO",
+          "content": "O diagnóstico é realizado através da clínica sugestiva + espirometria!"
+        },
+        {
+          "id": "diag-molz1uwf-n6qxh9",
+          "type": "table",
+          "title": "Pontuação GOLD",
+          "table": {
+            "headers": [
+              "Categoria",
+              "Classificação"
+            ],
+            "rows": []
+          }
+        },
+        {
+          "id": "diag-mom1mhto-tpv88t",
+          "type": "resource",
+          "resource": {
+            "schemaVersion": "1",
+            "type": "clinical_resource",
+            "id": "escala_mmrc_dispneia",
+            "title": "Escala mMRC de dispneia",
+            "mode": "classification_scale",
+            "subtitle": "Classificação da dispneia",
+            "source": "checar",
+            "categories": [
+              {
+                "label": "Classificação 0",
+                "value": "0",
+                "description": "Dispneia só aos grandes esforços/exercício intenso"
+              },
+              {
+                "label": "Classificação 1",
+                "value": "1",
+                "description": "Dispneia se andar rápido ou subir ladeira"
+              },
+              {
+                "label": "Classificação 2",
+                "value": "2",
+                "description": "Anda mais devagar do que pessoas da mesma idade devido falta de ar, ou há necessidade de parar para respirar ao caminhar em seu próprio ritmo, no plano"
+              },
+              {
+                "label": "Classificação 3",
+                "value": "3",
+                "description": "Dispneia após andar menos de 100 metros ou após andar poucos minutos no plano"
+              },
+              {
+                "label": "Classificação 4",
+                "value": "4",
+                "description": "Muita falta de ar para sair de casa, ou falta de ar quando tira ou veste uma roupa"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "exames": {
+      "blocks": [
+        {
+          "title": "Diagnóstico",
+          "sequences": [
+            {
+              "name": "Espirometria",
+              "exams": [
+                "Espirometria com prova de broncodilatação"
+              ],
+              "examNotes": {
+                "Espirometria com prova de broncodilatação": "VEF1 < 70"
+              }
+            }
+          ],
+          "subtitle": "Exame diagnóstico"
+        },
+        {
+          "title": "Exames complementares",
+          "sequences": [
+            {
+              "name": "DPOC",
+              "exams": [
+                "Hemograma",
+                "Potássio"
+              ],
+              "examNotes": {
+                "Potássio": "Uso de SABA pode reduzir potássio"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "orientacoes": {
+      "blocks": [
+        {
+          "title": "Geral",
+          "items": [
+            "Estilo de vida ativo e atividade física",
+            "Orientar uso do inalador",
+            "Atualizar vacinação > COVID-19, Gripe, Pneumo 21 ou Pneumo 20",
+            "Vacinar contra o vírus sincicial respiratório (VSR) para > 60 anos e/ou com doença cardíaca ou pulmonar crônica",
+            "Vacinar para Herpes Zóster em pacientes > 50 anos",
+            "Vacinar dTPa para pacientes com DPOC não vacinados na adolescência"
+          ]
+        },
+        {
+          "title": "Tabagismo",
+          "items": [
+            "Cessação do tabagismo",
+            "Adesivos de nicotina e medicamentos podem ser utilizados"
+          ]
+        }
+      ]
+    },
+    "prescricao": {
+      "items": [],
+      "sections": [
+        {
+          "id": "sec-moltf3a0-x7g4rj",
+          "title": "Grupo A",
+          "items": [],
+          "sections": [
+            {
+              "id": "sec-moltfyid-14xhzj",
+              "title": "Broncodilatador A",
+              "items": [],
+              "sections": [
+                {
+                  "id": "sec-moltvsx8-bp8uam",
+                  "title": "SABA - Beta-2-agonistas de curta ação",
+                  "items": [
+                    {
+                      "drug": "Sulfato de Salbutamol aerossol",
+                      "dose": "100mcg/dose",
+                      "presentation": "CONTÍNUO",
+                      "posology": "1-2 jatos via inalatória de 6/6 horas se necessário",
+                      "orientations": {
+                        "cuidados": "Tremor, taquicardia, cefaleia. Dosar potássio",
+                        "contraindicacoes": "Hipersensibilidade aos componentes; aborto iminente",
+                        "sus": "Fármacia popular e Rede SUS",
+                        "gerais": "Dose máxima de 8 jatos por dia"
+                      }
+                    },
+                    {
+                      "drug": "Sulfato de Salbutamol gotas",
+                      "dose": "5mg/ml",
+                      "presentation": "CONTÍNUO",
+                      "posology": "Diluir 10-20 gotas em 3ml de soro fisiológico 0,9%. Realizar nebulização de 6/6h, se necessário",
+                      "orientations": {
+                        "cuidados": "",
+                        "contraindicacoes": "",
+                        "sus": "",
+                        "gerais": ""
+                      }
+                    },
+                    {
+                      "drug": "Brometo de Iratrópio",
+                      "dose": "25mcg/dose",
+                      "presentation": "CONTÍNUO",
+                      "posology": "2 jatos via inalatória de 6/6 horas se necessário",
+                      "orientations": {
+                        "cuidados": "",
+                        "contraindicacoes": "",
+                        "sus": "",
+                        "gerais": ""
+                      }
+                    }
+                  ],
+                  "sections": []
+                },
+                {
+                  "id": "sec-moltw238-7et434",
+                  "title": "LABA - Beta-2-agonistas de Longa ação",
+                  "items": [],
+                  "sections": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sec-moltfk21-uxexb7",
+          "title": "Grupo B - LABA  + LAMA",
+          "items": [],
+          "sections": [
+            {
+              "id": "sec-moltpkde-7nobm1",
+              "title": "LABA - Beta-2-agonistas de Longa ação",
+              "items": [],
+              "sections": []
+            },
+            {
+              "id": "sec-moltpvsf-sbna0u",
+              "title": "LAMA - Anticolinérgicos de Longa ação",
+              "items": [],
+              "sections": []
+            }
+          ]
+        },
+        {
+          "id": "sec-moltfm5k-2lyev0",
+          "title": "Grupo E",
+          "items": [],
+          "sections": []
+        }
+      ]
+    },
+    "metas": {
+      "blocks": [
+        {
+          "title": "",
+          "content": "",
+          "table": {
+            "headers": [
+              "Coluna 1",
+              "Coluna 2"
+            ],
+            "rows": []
+          }
+        }
+      ]
+    }
+  }
+]
