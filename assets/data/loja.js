@@ -12,6 +12,8 @@
  */
 window.UJ = window.UJ || {};
 window.UJ.loja = {
+  // Capas extraídas dos PDFs públicos, sem alterar o material de venda.
+  capasPDF: { "ITU na pediatria.pdf": "assets/img/loja/itu-na-pediatria.webp" },
   planilhaCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx/pub?gid=0&single=true&output=csv",
 
   // Itens que aparecem em toda página de produto. Ajuste ao seu modelo de venda.

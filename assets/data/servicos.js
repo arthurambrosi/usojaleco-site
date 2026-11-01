@@ -14,12 +14,12 @@ window.UJ = window.UJ || {};
 window.UJ.servicos = [
   {
     id: "apresentacoes",
-    nome: "Apresentações e slides médicos",
+    nome: "Apresentações",
     curto: "Apresentações",
     icone: "apresentacao",
     status: "disponivel",
     destaque: true,
-    resumo: "Slides para congressos, aulas, sessões clínicas e defesas, com design próprio e narrativa científica clara.",
+    resumo: "Slides prontos e apresentações sob medida.",
     descricao: "Você envia o tema, o artigo ou o rascunho. Nós organizamos a narrativa, desenhamos cada slide e entregamos um PowerPoint aberto e 100% editável, pronto para projetar no auditório.",
     paraQuem: [
       "Residentes com sessão clínica, journal club ou apresentação de caso",
@@ -71,7 +71,7 @@ window.UJ.servicos = [
     curto: "Currículo",
     icone: "curriculo",
     status: "disponivel",
-    resumo: "Lattes e currículo vitae organizados para residência, processos seletivos e vagas.",
+    resumo: "Lattes e vitae para o seu próximo passo.",
     descricao: "Organizamos sua trajetória acadêmica e profissional no formato que cada processo exige, com redação objetiva e visual limpo, para que a banca encontre rápido o que importa.",
     paraQuem: [
       "Candidatos a residência médica e análise curricular",

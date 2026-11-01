@@ -49,7 +49,10 @@
   function urlImagem(v) {
     v = String(v || "").trim();
     if (!v) return "";
-    if (/\.pdf(?:[?#]|$)/i.test(v)) return "";
+    if (/\.pdf(?:[?#]|$)/i.test(v)) {
+      var arquivo; try { arquivo = decodeURIComponent(new URL(v,location.href).pathname.split('/').pop()); } catch (_) { return ''; }
+      return (L.capasPDF || {})[arquivo] ? raiz + L.capasPDF[arquivo] : '';
+    }
     if (/^(?:javascript|data|vbscript):/i.test(v)) return "";
     var m = v.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]+)/);
     if (m) return "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1600";
@@ -116,7 +119,7 @@
 
   // ---------- Peças visuais ----------
   function capa(p, grande) {
-    if (p.imagem) return '<img src="' + esc(p.imagem) + '" alt="Capa do slide ' + esc(p.titulo) + '" loading="' + (grande ? "eager" : "lazy") + '" width="1600" height="900" onerror="this.parentNode.classList.add(\'sem-capa\');this.parentNode.querySelector(\'.capa-texto\').hidden=false;this.remove()">' + capaTexto(p);
+    if (p.imagem) return '<img src="' + esc(!grande && /assets\/img\/loja\//.test(p.imagem) ? p.imagem.replace(/\.webp$/, '-sm.webp') : p.imagem) + '" alt="Capa do slide ' + esc(p.titulo) + '" loading="' + (grande ? "eager" : "lazy") + '" width="1600" height="900" onerror="this.parentNode.classList.add(\'sem-capa\');this.parentNode.querySelector(\'.capa-texto\').hidden=false;this.remove()">' + capaTexto(p);
     return capaTexto(p, true);
   }
   function capaTexto(p, ativa) {
@@ -130,7 +133,7 @@
       '<span class="produto-capa' + (p.imagem ? "" : " sem-capa") + '">' + capa(p) + "</span>" +
       '<span class="produto-info"><span class="produto-area">' + esc(p.area) + "</span>" +
       "<strong>" + esc(p.titulo) + "</strong>" +
-      '<span class="produto-rodape"><span class="produto-preco">' + (p.preco ? esc(p.preco) : "Consultar valor") + '</span><span class="produto-ver">Ver detalhes ' + ico("seta") + "</span></span></span></a></li>";
+      '<span class="produto-rodape"><span class="produto-preco">' + (p.preco ? esc(p.preco) : "Consultar valor") + '</span><span class="produto-ver">Ver apresentação ' + ico("seta") + "</span></span></span></a></li>";
   }
   function avisoExemplo(r) {
     return r.exemplo ? '<p class="aviso-exemplo">Prévia com itens de exemplo. No site oficial, a vitrine carrega os slides da sua planilha de vendas.</p>' : "";
@@ -156,20 +159,23 @@
       var areas = [];
       r.lista.forEach(function (p) { if (areas.indexOf(p.area) < 0) areas.push(p.area); });
       areas.sort(function (a, b) { return a.localeCompare(b, "pt-BR"); });
-      var area = "Todas", termo = "";
+      var area = "Todas", termo = "", ordem = "titulo";
       el.innerHTML = avisoExemplo(r) +
         '<div class="vitrine-barra"><div class="filtros" role="group" aria-label="Filtrar por área">' +
         ["Todas"].concat(areas).map(function (a) { return '<button type="button" data-a="' + esc(a) + '" aria-pressed="' + (a === area) + '">' + esc(a) + "</button>"; }).join("") +
         '</div><label class="busca"><span class="sr">Buscar slide</span><input id="busca-slide" type="search" placeholder="Buscar por tema"></label></div>' +
-        '<ul class="vitrine" aria-live="polite"></ul>';
+        '<div class="catalogo-meta"><span class="resultado-contagem" role="status"></span><label>Ordenar por <select class="ordem-produtos"><option value="titulo">Nome</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label></div><ul class="vitrine" aria-live="polite"></ul>';
       var ul = el.querySelector(".vitrine");
       function desenhar() {
         var t = chave(termo);
         var lista = r.lista.filter(function (p) {
           return (area === "Todas" || p.area === area) && (!t || chave(p.titulo + " " + p.area + " " + p.descricao).indexOf(t) >= 0);
         });
+        function numero(p) { var n = Number(p.preco.replace(/[^0-9,.-]/g, '').replace(/\./g,'').replace(',','.')); return p.preco && Number.isFinite(n) ? n : null; }
+        lista.sort(function(a,b) { if(ordem==='titulo') return a.titulo.localeCompare(b.titulo,'pt-BR'); var x=numero(a),y=numero(b); if(x===null) return y===null?0:1; if(y===null) return -1; return ordem==='menor'?x-y:y-x; });
+        el.querySelector('.resultado-contagem').textContent = lista.length + (lista.length===1?' apresentação disponível':' apresentações disponíveis');
         ul.innerHTML = lista.length ? lista.map(cartao).join("") :
-          '<li class="vazio"><strong>Nenhum slide encontrado.</strong><p>Tente outro termo ou peça um slide sob medida.</p><a class="btn btn-tinta" href="' + u("orcamento/?s=apresentacoes") + '">Pedir slide sob medida</a></li>';
+          '<li class="vazio"><strong>Nenhum slide encontrado.</strong><p>Tente outro termo ou peça um slide sob medida.</p><a class="btn btn-tinta" href="' + zap("Olá! Quero uma apresentação sob medida.") + '">Pedir slide sob medida</a></li>';
       }
       el.querySelector(".filtros").addEventListener("click", function (e) {
         var b = e.target.closest("button"); if (!b) return;
@@ -178,6 +184,7 @@
         desenhar();
       });
       el.querySelector("input").addEventListener("input", function (e) { termo = e.target.value; desenhar(); });
+      el.querySelector('.ordem-produtos').addEventListener('change',function(e) { ordem=e.target.value;desenhar(); });
       desenhar();
     });
   }
@@ -216,7 +223,7 @@
         '<p class="nota">Dúvidas antes de comprar? <a class="link-seta" href="' + zap("Olá! Tenho uma dúvida sobre o slide \"" + p.titulo + "\".") + '" target="_blank" rel="noopener">Falar no WhatsApp</a></p>' +
         "</div></div></div></section>" +
         (relacionados.length ? '<section class="sec"><div class="cont"><div class="cab-sec"><h2 class="titulo-sec">Você também pode gostar</h2><a class="link-seta" href="' + u("loja/") + '">Ver a vitrine completa ' + ico("seta") + '</a></div><ul class="vitrine vitrine-3">' + relacionados.map(cartao).join("") + "</ul></div></section>" : "") +
-        '<section class="sec branco"><div class="cont colunas"><div><h2 class="titulo-sec">Precisa de um tema que não está aqui?</h2></div><div><p class="lead" style="margin-bottom:24px">Criamos a apresentação do zero, com o seu conteúdo e o padrão visual Uso Jaleco.</p><a class="btn btn-tinta" href="' + u("orcamento/?s=apresentacoes") + '">Pedir slide sob medida</a></div></div></section>';
+        '<section class="sec branco"><div class="cont colunas"><div><h2 class="titulo-sec">Precisa de um tema que não está aqui?</h2></div><div><p class="lead" style="margin-bottom:24px">Criamos a apresentação do zero, com o seu conteúdo e o padrão visual Uso Jaleco.</p><a class="btn btn-tinta" href="' + zap("Olá! Quero uma apresentação sob medida.") + '">Pedir slide sob medida</a></div></div></section>';
     });
   }
 

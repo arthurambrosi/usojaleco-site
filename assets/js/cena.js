@@ -267,11 +267,11 @@
   // ---------------- Montagem ----------------
   function montar(el) {
     if (!PORT.length) return;
-    var cenaAtual = CFG.inicial === "tutoria" ? "tutoria" : "auditorio";
-    var i = 0, tocando = !semMovimento, ocupado = false, timer = null, visivel = true, ti = 0;
+    var cenaAtual = "auditorio";
+    var i = 0, tocando = true, ocupado = false, timer = null, visivel = true, ti = 0;
     var DUR = 5600;
 
-    var desenhos = Object.keys(CENAS).map(function (k) {
+    var desenhos = ["auditorio"].map(function (k) {
       var c = CENAS[k];
       var conteudo = c.fundo
         ? '<img class="cena-foto" src="' + esc(raiz + c.fundo) + '" alt="">'
@@ -280,10 +280,6 @@
     }).join("");
 
     el.innerHTML =
-      '<div class="cena-topo">' +
-      '<div class="cena-troca" role="group" aria-label="Ambiente">' +
-      Object.keys(CENAS).map(function (k) { return '<button type="button" data-cena="' + k + '" aria-pressed="' + (k === cenaAtual) + '">' + CENAS[k].nome + "</button>"; }).join("") +
-      "</div></div>" +
       '<div class="cena-quadro"><div class="cena-palco">' +
       desenhos +
       '<div class="cena-ambiente"></div>' +
@@ -294,13 +290,8 @@
       '<path d="M798 -60 L802 -60 L1000 300 L960 300 Z M796 -60 L800 -60 L640 330 L610 330 Z" fill="#fff" opacity=".035" filter="url(#feixe-b)"/></svg>' +
       '<canvas class="cena-poeira" aria-hidden="true"></canvas>' +
       "</div></div>" +
-      '<div class="cena-legenda">' +
-      '<div class="tela-num" aria-hidden="true"></div>' +
-      '<div class="tela-info" aria-live="polite"></div>' +
-      '<div class="tela-ctrl"><button type="button" data-a="ant" aria-label="Apresentação anterior">' + UJ.ico("voltar") + '</button>' +
-      '<button type="button" data-a="pausa" aria-label="Pausar">' + UJ.ico("pausa") + '</button>' +
-      '<button type="button" data-a="prox" aria-label="Próxima apresentação">' + UJ.ico("seta") + "</button></div>" +
-      '<div class="tela-barra"><i></i></div></div>';
+      '<button class="cena-pausa" type="button" data-a="pausa" aria-label="Pausar apresentação automática"></button>';
+
 
     var palco = el.querySelector(".cena-palco"), tela = el.querySelector(".cena-tela"), base = el.querySelector(".cena-base");
     var num = el.querySelector(".tela-num"), info = el.querySelector(".tela-info"), barra = el.querySelector(".tela-barra i"), bp = el.querySelector('[data-a="pausa"]');
@@ -314,25 +305,15 @@
       poeira.style.opacity = CENAS[k].feixe ? "" : "0";
     }
 
-    function legenda(t) {
-      var p = PORT[i];
-      num.innerHTML = pad(i + 1) + " <span>/ " + pad(PORT.length) + "</span>";
-      info.innerHTML = "<strong>" + esc(p.titulo) + "</strong><span>" + esc(p.tipo) + ", " + esc(p.contexto) + (t ? '<em>Transição: ' + NOMES_T[t] + "</em>" : "") + "</span>";
-    }
-
-    function barraReset() {
-      barra.style.transition = "none"; barra.style.width = "0";
-      if (!tocando) return;
-      void barra.offsetWidth;
-      barra.style.transition = "width " + DUR + "ms linear"; barra.style.width = "100%";
-    }
+    function legenda() {}
+    function barraReset() {}
 
     function irPara(k, tipo) {
       if (ocupado) return;
       ocupado = true;
       i = (k + PORT.length) % PORT.length;
       var p = PORT[i], url = img(p.img, false);
-      if (!tipo) { tipo = semMovimento ? "fade" : TRANS[ti % TRANS.length]; ti++; }
+      if (!tipo) { tipo = "fade"; }
       Promise.all([precarregar(url), prepararCor(p)]).then(function (r) {
         el.style.setProperty("--luz", r[1]);
         legenda(tipo);
@@ -342,7 +323,7 @@
         palco.classList.remove("trocando");
         ocupado = false;
         agendar();
-      });
+      }).catch(function () { ocupado = false; agendar(); });
       barraReset();
     }
 
@@ -352,8 +333,8 @@
     }
     function setTocando(v) {
       tocando = v;
-      bp.innerHTML = UJ.ico(v ? "pausa" : "tocar");
-      bp.setAttribute("aria-label", v ? "Pausar" : "Reproduzir");
+      bp.textContent = "";
+      bp.setAttribute("aria-label", v ? "Pausar apresentação automática" : "Reproduzir apresentação automática");
       barraReset(); agendar();
     }
 

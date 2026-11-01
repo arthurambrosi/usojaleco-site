@@ -8,7 +8,8 @@
 
   var UJ = window.UJ || {};
   var C = UJ.config || {};
-  var SERV = UJ.servicos || [];
+  var TODOS_SERVICOS = UJ.servicos || [];
+  var SERV = TODOS_SERVICOS.filter(function(s) { return ["apresentacoes", "curriculo"].indexOf(s.id) >= 0; });
   var PORT = UJ.portfolio || [];
   var FERR = UJ.ferramentas || [];
   var doc = document;
@@ -40,7 +41,7 @@
   function zap(texto) { return "https://wa.me/" + C.whatsapp + (texto ? "?text=" + encodeURIComponent(texto) : ""); }
   function linkServico(s) { return u("servicos/" + s.id + "/"); }
   function img(nome, pequeno) { return u("assets/img/portfolio/" + nome + (pequeno ? "-sm" : "") + ".webp"); }
-  function servicoPorId(id) { for (var i = 0; i < SERV.length; i++) if (SERV[i].id === id) return SERV[i]; return null; }
+  function servicoPorId(id) { for (var i = 0; i < TODOS_SERVICOS.length; i++) if (TODOS_SERVICOS[i].id === id) return TODOS_SERVICOS[i]; return null; }
 
   // ---------- Ícones (traço 1.6, 24x24) ----------
   var P = {
@@ -74,75 +75,35 @@
 
   // ---------- Topo ----------
   function montarTopo() {
-    var alvo = $("[data-topo]");
-    if (!alvo) return;
-    var painel = SERV.map(function (s) {
-      return '<a href="' + linkServico(s) + '"><span class="ico">' + ico(s.icone) + "</span><strong>" + esc(s.curto || s.nome) + seloStatus(s) +
-        '</strong><span class="d">' + esc(s.resumo) + "</span></a>";
-    }).join("") + '<a class="todos" href="' + u("servicos/") + '">Ver todos os serviços ' + ico("seta") + "</a>";
-
-    var itens = (C.menu || []).map(function (m) {
-      var atual = pagina && m.href.indexOf(pagina) === 0 ? ' aria-current="page"' : "";
-      if (m.href === "servicos/") {
-        return '<div class="menu-serv"><button type="button" aria-expanded="false" aria-controls="painel-serv"' +
-          (pagina === "servicos" || pagina === "servico" ? ' data-atual' : "") + ">Serviços " + ico("baixo") + "</button>" +
-          '<div class="painel-serv" id="painel-serv">' + painel + "</div></div>";
-      }
-      return '<a href="' + u(m.href) + '"' + atual + ">" + esc(m.rotulo) + "</a>";
-    }).join("");
-
-    var gaveta = '<a class="g-grande" href="' + u("") + '">Início</a>' +
-      '<a class="g-grande" href="' + u("servicos/") + '">Serviços</a>' +
-      SERV.map(function (s) { return '<a class="g-sub" href="' + linkServico(s) + '">' + esc(s.curto || s.nome) + "</a>"; }).join("") +
-      (C.menu || []).filter(function (m) { return m.href !== "servicos/"; }).map(function (m) {
-        return '<a class="g-grande" href="' + u(m.href) + '">' + esc(m.rotulo) + "</a>";
-      }).join("") +
-      '<a class="btn btn-laranja" href="' + u("orcamento/") + '">Pedir orçamento</a>';
-
-    alvo.outerHTML =
-      '<a class="pular" href="#conteudo">Pular para o conteúdo</a>' +
-      '<header class="topo"><div class="cont">' +
-      '<a class="marca" href="' + u("") + '" aria-label="Uso Jaleco, página inicial">uso<b>jaleco</b><i>.</i></a>' +
-      '<nav class="nav" aria-label="Principal">' + itens + "</nav>" +
-      '<a class="btn btn-laranja btn-orc" href="' + u("orcamento/") + '">Pedir orçamento</a>' +
-      '<button class="btn-menu" type="button" aria-expanded="false" aria-controls="gaveta" aria-label="Abrir menu">' + ico("menu") + "</button>" +
-      '</div></header><nav class="gaveta" id="gaveta" aria-label="Menu">' + gaveta + "</nav>";
-
-    var ms = $(".menu-serv");
-    if (ms) {
-      var b = $("button", ms);
-      var abrir = function (v) { if (v) ms.setAttribute("data-aberto", ""); else ms.removeAttribute("data-aberto"); b.setAttribute("aria-expanded", v ? "true" : "false"); };
-      b.addEventListener("click", function (e) { e.stopPropagation(); abrir(!ms.hasAttribute("data-aberto")); });
-      doc.addEventListener("click", function (e) { if (!ms.contains(e.target)) abrir(false); });
-      doc.addEventListener("keydown", function (e) { if (e.key === "Escape") { abrir(false); } });
-    }
-    var bm = $(".btn-menu");
-    bm.addEventListener("click", function () {
-      var aberto = doc.body.classList.toggle("menu-aberto");
-      bm.setAttribute("aria-expanded", aberto ? "true" : "false");
-      bm.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
-      bm.innerHTML = ico(aberto ? "fechar" : "menu");
+    var alvo = $("[data-topo]"); if (!alvo) return;
+    var grupos = [
+      {nome:"Slides", links:[['Conhecer apresentações','apresentacoes/'],['Loja de slides','loja/'],['Valores e sob medida','apresentacoes/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de apresentação sob medida.')]]},
+      {nome:"Currículo", links:[['Conhecer o serviço','servicos/curriculo/'],['Consultar valores','servicos/curriculo/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de currículo.')]]}
+    ];
+    function link(item) { var externo = /^https:/.test(item[1]); return '<a href="' + (externo ? item[1] : u(item[1])) + '"' + (externo ? ' target="_blank" rel="noopener"' : '') + '>' + esc(item[0]) + '</a>'; }
+    var nav = grupos.map(function(g,k) { return '<div class="menu-serv"><button type="button" aria-expanded="false" aria-controls="submenu-' + k + '">' + g.nome + ico('baixo') + '</button><div class="painel-serv" id="submenu-' + k + '">' + g.links.map(link).join('') + '</div></div>'; }).join('');
+    var mobile = grupos.map(function(g) { return '<details><summary>' + g.nome + '</summary>' + g.links.map(link).join('') + '</details>'; }).join('');
+    var contato = zap('Olá! Quero um orçamento pelo site do Uso Jaleco.');
+    alvo.outerHTML = '<a class="pular" href="#conteudo">Pular para o conteúdo</a><header class="topo"><div class="cont"><a class="marca" href="' + u('') + '" aria-label="Uso Jaleco, página inicial">uso<b>jaleco</b><i>.</i></a><nav class="nav" aria-label="Principal">' + nav + '<a href="' + u('sobre/') + '">Sobre</a></nav><a class="btn btn-tinta btn-orc" href="' + contato + '" target="_blank" rel="noopener">Pedir orçamento ↗</a><button class="btn-menu" type="button" aria-expanded="false" aria-controls="gaveta" aria-label="Abrir menu">' + ico('menu') + '</button></div></header><nav class="gaveta" id="gaveta" aria-label="Menu móvel">' + mobile + '<a class="g-grande" href="' + u('sobre/') + '">Sobre</a><a class="btn btn-tinta" href="' + contato + '" target="_blank" rel="noopener">Pedir orçamento ↗</a></nav>';
+    $$('.menu-serv').forEach(function(ms) {
+      var b = $('button',ms);
+      function fechar() { ms.removeAttribute('data-aberto'); b.setAttribute('aria-expanded','false'); }
+      b.addEventListener('click',function() {
+        var abrir = !ms.hasAttribute('data-aberto');
+        $$('.menu-serv').forEach(function(outro) { outro.removeAttribute('data-aberto'); $('button',outro).setAttribute('aria-expanded','false'); });
+        if (abrir) { ms.setAttribute('data-aberto',''); b.setAttribute('aria-expanded','true'); }
+      });
+      doc.addEventListener('click',function(e) { if (!ms.contains(e.target)) fechar(); });
+      ms.addEventListener('focusout',function(e) { if (!ms.contains(e.relatedTarget)) fechar(); });
     });
+    var bm = $('.btn-menu');
+    function fecharMobile() { doc.body.classList.remove('menu-aberto'); bm.setAttribute('aria-expanded','false'); bm.setAttribute('aria-label','Abrir menu'); }
+    bm.addEventListener('click',function() { var aberto=doc.body.classList.toggle('menu-aberto'); bm.setAttribute('aria-expanded',String(aberto)); bm.setAttribute('aria-label',aberto?'Fechar menu':'Abrir menu'); });
+    doc.addEventListener('keydown',function(e) { if(e.key==='Escape') { $$('.menu-serv').forEach(function(ms){ms.removeAttribute('data-aberto');$('button',ms).setAttribute('aria-expanded','false');});fecharMobile(); } });
   }
-
-  // ---------- Rodapé ----------
   function montarRodape() {
-    var alvo = $("[data-rodape]");
-    if (!alvo) return;
-    var ano = new Date().getFullYear();
-    alvo.outerHTML =
-      '<footer class="rodape"><div class="cont"><div class="rodape-grid">' +
-      '<div><a class="marca" href="' + u("") + '">uso<b>jaleco</b><i>.</i></a>' +
-      "<p>Soluções de carreira, educação e comunicação para médicos, residentes e estudantes de medicina.</p><p>" + esc(C.cidade) + "</p></div>" +
-      '<div><h2>Serviços</h2><ul>' + SERV.map(function (s) { return '<li><a href="' + linkServico(s) + '">' + esc(s.curto || s.nome) + "</a></li>"; }).join("") + "</ul></div>" +
-      '<div><h2>Uso Jaleco</h2><ul><li><a href="' + u("loja/") + '">Vitrine de slides</a></li><li><a href="' + u("portfolio/") + '">Portfólio</a></li><li><a href="' + u("conteudos/") + '">Conteúdos</a></li><li><a href="' + u("sobre/") + '">Sobre</a></li><li><a href="' + u("orcamento/") + '">Pedir orçamento</a></li></ul></div>' +
-      '<div><h2>Contato</h2><ul><li><a href="' + zap("Olá! Vim pelo site do Uso Jaleco.") + '" target="_blank" rel="noopener">WhatsApp</a></li>' +
-      '<li><a href="mailto:' + esc(C.email) + '">' + esc(C.email) + "</a></li>" +
-      '<li><a href="https://instagram.com/' + esc(C.instagram) + '" target="_blank" rel="noopener">@' + esc(C.instagram) + "</a></li></ul></div>" +
-      '</div><div class="rodape-base"><span>© ' + ano + " Uso Jaleco. Todos os direitos reservados.</span>" +
-      '<span><a href="' + u('privacidade/') + '">Privacidade e contato</a></span>' +
-      "<span>O Uso Jaleco não realiza consultas nem atendimento médico.</span></div></div></footer>" +
-      '<a class="zap-flutuante" href="' + zap("Olá! Vim pelo site do Uso Jaleco.") + '" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">' + ico("whatsapp") + "</a>";
+    var alvo = $('[data-rodape]'); if(!alvo) return;
+    alvo.outerHTML = '<footer class="rodape rodape-simples"><div class="cont"><div class="footer-row"><div><a class="marca" href="' + u('') + '">uso<b>jaleco</b><i>.</i></a><p>Clareza para as suas ideias.<br>Cuidado com a sua trajetória.</p></div><nav aria-label="Rodapé"><a href="' + u('apresentacoes/') + '">Slides</a><a href="' + u('servicos/curriculo/') + '">Currículo</a><a href="' + u('sobre/') + '">Sobre</a></nav><div><a href="mailto:' + C.email + '">' + C.email + '</a><br><a href="https://instagram.com/' + C.instagram + '" target="_blank" rel="noopener">@' + C.instagram + '</a></div></div><div class="rodape-base"><span>© ' + new Date().getFullYear() + ' Uso Jaleco</span><a href="' + u('privacidade/') + '">Privacidade e contato</a><span>Não realizamos atendimento médico.</span></div></div></footer>';
   }
 
   // ---------- Tela de projeção (home) ----------
@@ -345,7 +306,7 @@
       return;
     }
     doc.title = s.nome + " | Uso Jaleco";
-    var orc = u("orcamento/?s=" + encodeURIComponent(s.id));
+    var orc = zap("Olá! Quero um orçamento de " + s.nome + ".");
     var h = '<section class="cab-pag escuro palco"><div class="cont"><p class="trilha"><a href="' + u("servicos/") + '">Serviços</a> / ' + esc(s.curto || s.nome) + "</p>" +
       '<h1 class="titulo-palco">' + esc(s.nome) + "</h1>" + (s.status === "em-breve" ? '<p style="margin:0 0 20px"><span class="selo breve">Em breve</span></p>' : "") +
       '<p class="lead">' + esc(s.descricao) + '</p><div class="acoes">' +
@@ -360,7 +321,7 @@
         "</div></section>";
     }
     if (s.precos && s.precos.length) {
-      h += '<section class="sec branco"><div class="cont colunas"><div><h2 class="titulo-sec">Valores</h2><p class="nota" style="margin-top:16px">Valores de referência. A proposta final considera prazo e volume do material.</p></div>' +
+      h += '<section class="sec branco" id="valores"><div class="cont colunas"><div><h2 class="titulo-sec">Valores</h2><p class="nota" style="margin-top:16px">Valores de referência. A proposta final considera prazo e volume do material.</p></div>' +
         '<table class="tabela-precos"><tbody>' + s.precos.map(function (p) {
           return "<tr><td><strong>" + esc(p.item) + "</strong>" + (p.obs ? '<span class="o">' + esc(p.obs) + "</span>" : "") + '</td><td class="v">' + esc(p.valor) + "</td></tr>";
         }).join("") + "</tbody></table></div></section>";
@@ -452,6 +413,11 @@
   $$("[data-render]").forEach(renderizar);
   $$("a[data-zap]").forEach(function (a) { a.href = zap(a.getAttribute("data-zap")); a.target = "_blank"; a.rel = "noopener"; });
   $$("a[data-email]").forEach(function (a) { a.href = "mailto:" + C.email; a.textContent = a.textContent || C.email; });
+  $$('a[href]').forEach(function(a) {
+    var h=a.getAttribute('href') || '';
+    if (/^(https?:|mailto:|tel:|#)/.test(h)) return;
+    if (/(^|\/)orcamento\//.test(h)) { a.href=zap('Olá! Quero um orçamento pelo site do Uso Jaleco.'); a.target='_blank'; a.rel='noopener'; }
+  });
   if (explicito) {
     $$('main a[href]').forEach(function (a) {
       var h = a.getAttribute("href");

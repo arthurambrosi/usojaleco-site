@@ -57,3 +57,13 @@
 - Confirmar no checkout preço, entrega, arquivo oferecido e condições. Não houve compra de teste.
 - Validar textos comerciais, preços de currículo e instituições citadas no material importado antes de anunciar. A retirada de prazos garantidos evita prometer uma agenda que não foi confirmada.
 - Conferir a planilha de `inicio/`: corrigir o item ACLS ou escondê-lo até existir uma ferramenta própria.
+
+## Revisão de navegação e home
+
+- Home reduzida a abertura com auditório automático, apresentação de Arthur e dois serviços: apresentações e currículo.
+- Menu principal em `assets/js/site.js`: Slides (visão geral, loja, valores, WhatsApp), Currículo (serviço, valores, WhatsApp) e Sobre. Os demais serviços continuam acessíveis pelos endereços antigos, sem destaque na navegação.
+- `/apresentacoes/` é a página central de Slides. A pasta com acento `/apresentações/` continua preservada.
+- Orçamentos vão diretamente ao WhatsApp. O formulário antigo `/orcamento/` permanece para compatibilidade.
+- Apresentações sob medida não têm preço fixo: dependem de data, tema, complexidade, número de slides e material disponível, conforme confirmado pelo proprietário.
+- A cena fixa de auditório avança automaticamente. Clicar ou usar Enter no auditório pausa/retoma; não há seletor de ambiente, contagem ou legenda visível.
+- A loja tem busca, filtro, ordenação e contagem de resultados. `assets/data/loja.js` mapeia capas extraídas de PDFs públicos em `capasPDF`; atualizar a capa se o PDF do produto mudar. As imagens ficam em `assets/img/loja/`.
