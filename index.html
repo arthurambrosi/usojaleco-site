@@ -1,513 +1,140 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-raiz="">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>UsoJaleco | Menu</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
-
-  <style>
-    :root{
-      /* Base (dark) */
-      --bg:#0b0c10;
-      --surface:#121319;
-      --surface2:#1a1b22;
-      --text:#f8fafc;
-      --muted:#a1a1aa;
-      --hairline: rgba(255,255,255,.08);
-
-      /* Brand */
-      --brand1:#ff7a18;
-      --brand2:#ffb703;
-
-      /* Shadows */
-      --shadow1: 0 18px 45px rgba(0,0,0,.45);
-      --shadow2: 0 10px 22px rgba(0,0,0,.35);
-      --shadow3: 0 2px 10px rgba(0,0,0,.30);
-
-      /* Radius */
-      --r1: 14px;
-      --r2: 18px;
-      --r3: 24px;
-
-      /* Motion */
-      --ease: cubic-bezier(.2,.8,.2,1);
-    }
-
-    *{ box-sizing:border-box; }
-
-    html, body{
-      height: auto;
-      overflow-x: hidden;
-    }
-
-    body{
-      margin:0;
-      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(900px 360px at 80% 0%, rgba(255,122,24,.08), transparent 60%),
-        linear-gradient(180deg, #0b0c10 0%, #17181f 45%, #0b0c10 100%);
-      color: var(--text);
-      padding: 22px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* Layout */
-    .home{
-      min-height: 100%;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      padding-top: 32px;
-      padding-bottom: 32px;
-    }
-
-    .homeMenu{
-      width: min(820px, 100%);
-      border-radius: var(--r3);
-      background: rgba(12,13,18,.72);
-      border: 1px solid var(--hairline);
-      box-shadow: var(--shadow1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      overflow:hidden;
-      position: relative;
-    }
-
-    .homeMenu::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(900px 260px at 30% 0%, rgba(255,122,24,.10), transparent 60%),
-        radial-gradient(700px 260px at 95% 10%, rgba(255,183,3,.08), transparent 55%);
-      opacity: .9;
-    }
-
-    /* Top */
-    .homeTop{
-      position: relative;
-      padding: 30px 18px 22px;
-      text-align:center;
-      color: #fff;
-      background:
-        linear-gradient(135deg, #1b1c22 0%, #2a2d34 45%, #ff7a18 100%);
-    }
-
-    .homeTop::after{
-      content:"";
-      position:absolute;
-      left:0; right:0; bottom:-1px;
-      height: 26px;
-      background: linear-gradient(180deg, rgba(255,255,255,0), rgba(12,13,18,.65));
-      pointer-events:none;
-    }
-
-    .homeLogoRing{
-      width: 92px;
-      height: 92px;
-      border-radius: 999px;
-      margin: 0 auto 12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.35);
-      box-shadow: 0 14px 34px rgba(0,0,0,.40);
-    }
-
-    .homeLogo{
-      width: 76px;
-      height: 76px;
-      border-radius: 999px;
-      overflow:hidden;
-      border: 2px solid rgba(255,255,255,.55);
-      background:#fff;
-    }
-
-    .homeLogo img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .homeTitle{
-      font-family: "Montserrat", sans-serif;
-      font-size: 34px;
-      font-weight: 500;
-      margin: 0 0 4px;
-      letter-spacing: .2px;
-      text-shadow: 0 2px 3px rgba(0,0,0,.45);
-    }
-
-    .homeTitle .bold{
-      font-weight: 900;
-    }
-
-    .homeSub{
-      margin: 0 auto;
-      font-family: "Montserrat", sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .2px;
-      opacity: .95;
-      text-align: center;
-      text-shadow: 0 1px 2px rgba(0,0,0,.35);
-      max-width: 32ch;
-      text-wrap: balance;
-      line-height: 1.25;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* Body */
-    .homeBody{
-      position: relative;
-      padding: 22px 16px 20px;
-      background: transparent;
-    }
-
-    .menuList{
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* Items */
-    .menuItem{
-      display:flex;
-      align-items:center;
-      gap: 14px;
-      padding: 14px 16px;
-      border-radius: var(--r2);
-      background: rgba(18,19,26,.92);
-      border: 1px solid rgba(255,255,255,.06);
-      text-decoration: none;
-      color: var(--text);
-      box-shadow: var(--shadow3);
-      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
-      cursor: pointer;
-      user-select: none;
-      touch-action: manipulation;
-    }
-
-    .menuItem:hover{
-      transform: translateY(-2px);
-      background: rgba(22,24,32,.98);
-      border-color: rgba(255,122,24,.35);
-      box-shadow: var(--shadow2);
-    }
-
-    .menuItem:active{
-      transform: translateY(0px) scale(.995);
-    }
-
-    .menuIco{
-      width: 50px;
-      height: 50px;
-      border-radius: 16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-shrink: 0;
-      background: #0f1116;
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow:
-        6px 8px 14px rgba(0,0,0,.45),
-        0 2px 6px rgba(0,0,0,.25);
-    }
-
-    .menuIco img{
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-    }
-
-    .menuIco.brand{
-      background: linear-gradient(135deg, var(--brand1), var(--brand2));
-      border-color: rgba(255,255,255,.25);
-    }
-
-    /* aumentar somente a logo dentro do degradê */
-    .menuIco.brand img{
-      width: 38px;
-      height: 38px;
-      filter: none;
-    }
-
-    /* retângulo da logo do manual em branco */
-    .menuIco.notion{
-      background: #ffffff;
-      border-color: rgba(15,23,42,.12);
-      box-shadow:
-        6px 8px 14px rgba(0,0,0,.30),
-        0 2px 6px rgba(0,0,0,.18);
-    }
-
-    .menuIco.transparent{
-      background: rgba(15,17,22,.9);
-    }
-
-    .menuTxt{
-      display:flex;
-      flex-direction: column;
-      gap: 3px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .menuT{
-      margin: 0;
-      font-size: 15.5px;
-      font-weight: 700;
-      letter-spacing: .2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .menuD{
-      margin: 0;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Toggle (Currículo) */
-    .toggleBtn{
-      width: 100%;
-      border: 0;
-      background: transparent;
-      padding: 0;
-      font: inherit;
-      color: inherit;
-      text-align: left;
-    }
-
-    .chev{
-      margin-left: auto;
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.08);
-      transition: transform .18s var(--ease), background .18s var(--ease);
-    }
-
-    .chev svg{
-      width: 16px;
-      height: 16px;
-      stroke: #e5e7eb;
-      stroke-width: 2.6;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .chev.open{
-      transform: rotate(180deg);
-      background: rgba(255,122,24,.18);
-      border-color: rgba(255,122,24,.24);
-    }
-
-    /* Subopções */
-    .subWrap{
-      display:none;
-      flex-direction: column;
-      gap: 10px;
-      padding-left: 10px;
-      margin-top: 10px;
-    }
-    .subWrap.open{ display:flex; }
-
-    .subItem{
-      background: rgba(18,19,26,.85);
-      border: 1px solid rgba(255,255,255,.06);
-    }
-
-    .subItem:hover{
-      border-color: rgba(255,183,3,.35);
-    }
-
-    .subIco{
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,.20);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow: none;
-    }
-
-    .subDot{
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,122,24,.98), rgba(255,183,3,.95));
-      box-shadow: 0 3px 8px rgba(255,122,24,.35);
-    }
-
-    /* Focus */
-    .menuItem:focus-visible,
-    .toggleBtn:focus-visible{
-      outline: 3px solid rgba(255,122,24,.28);
-      outline-offset: 3px;
-      border-radius: calc(var(--r2) + 4px);
-    }
-
-    /* Small screens */
-    @media (max-width: 420px){
-      body{ padding: 18px; }
-      .home{ padding-top: 28px; padding-bottom: 28px; }
-      .homeTitle{ font-size: 32px; }
-      .menuItem{ padding: 13px 14px; }
-      .menuIco{ width: 48px; height: 48px; }
-      .subIco{ width: 36px; height: 36px; }
-      .subDot{ width: 16px; height: 16px; }
-    }
-  </style>
-  <script defer src="/analytics-config.js"></script>
-  <script defer src="/analytics.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uso Jaleco | Apresentações médicas e soluções para a carreira na medicina</title>
+  <meta name="description" content="Apresentações para congressos e aulas, currículo médico, sites, identidade visual e conteúdo para médicos, residentes e estudantes de medicina.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Uso Jaleco">
+  <meta property="og:title" content="Uso Jaleco | Apresentações médicas e soluções para a carreira na medicina">
+  <meta property="og:description" content="Apresentações para congressos e aulas, currículo médico, sites, identidade visual e conteúdo para médicos, residentes e estudantes de medicina.">
+  <meta property="og:image" content="https://www.usojaleco.com.br/assets/img/portfolio/slide-01.webp">
+  <meta property="og:url" content="https://www.usojaleco.com.br/">
+  <link rel="canonical" href="https://www.usojaleco.com.br/">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css?v=20261101">
 </head>
+<body data-pagina="inicio">
+  <div data-topo></div>
 
-<body>
-  <div class="home">
-    <div class="homeMenu">
-      <div class="homeTop">
-        <div class="homeLogoRing">
-          <div class="homeLogo">
-            <img src="https://i.imgur.com/KKtsmb6.jpeg" alt="UsoJaleco">
+  <main id="conteudo">
+    <section class="palco">
+      <div class="cont palco-cab">
+        <h1 class="titulo-palco">Seu próximo slide começa aqui</h1>
+        <div>
+          <p class="lead">Encontre apresentações médicas prontas, veja a prévia e escolha seu tema. Precisa de algo exclusivo? Também criamos seus slides sob medida.</p>
+          <div class="acoes">
+            <a class="btn btn-laranja" href="loja/">Explorar slides prontos</a>
+            <a class="btn btn-linha" href="orcamento/?s=apresentacoes">Quero slides sob medida</a>
           </div>
         </div>
-        <h1 class="homeTitle">uso<span class="bold">jaleco</span></h1>
-        <p class="homeSub">Ajudo estudantes e profissionais a economizar tempo!</p>
       </div>
-
-      <div class="homeBody">
-        <ul class="menuList">
-
-          <li>
-            <button class="toggleBtn" id="curriculoToggle" aria-expanded="false" type="button">
-              <div class="menuItem">
-                <div class="menuIco brand">
-                  <img src="https://i.imgur.com/G9lTfbc.png" alt="Currículo">
-                </div>
-                <div class="menuTxt">
-                  <p class="menuT">Currículo</p>
-                  <p class="menuD">Escolha uma opção abaixo.</p>
-                </div>
-                <div class="chev" id="curriculoChev" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M6 9l6 6 6-6"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-
-            <div class="subWrap" id="curriculoSub">
-              <a class="menuItem subItem"
-                 onclick="window.open('https://api.whatsapp.com/send/?phone=5571981577908&text&type=phone_number&app_absent=0', '_blank')">
-                <div class="menuIco subIco">
-                  <span class="subDot" aria-hidden="true"></span>
-                </div>
-                <div class="menuTxt">
-                  <p class="menuT">Produzir currículo</p>
-                  <p class="menuD">Entre em contato conosco.</p>
-                </div>
-              </a>
-
-              <a class="menuItem subItem"
-                 onclick="window.open('https://www.usojaleco.com.br/duvidas-curriculo', '_blank')">
-                <div class="menuIco subIco">
-                  <span class="subDot" aria-hidden="true"></span>
-                </div>
-                <div class="menuTxt">
-                  <p class="menuT">Tirar dúvidas</p>
-                  <p class="menuD">Informações, preços, processo e exemplos.</p>
-                </div>
-              </a>
-            </div>
-          </li>
-
-          <li>
-            <a class="menuItem"
-               onclick="window.open('https://www.usojaleco.com.br/slides', '_blank')">
-              <div class="menuIco notion">
-                <img src="https://i.imgur.com/EXKmJM1.png" alt="PowerPoint">
-              </div>
-              <div class="menuTxt">
-                <p class="menuT">Slides prontos</p>
-                <p class="menuD">Clique para acessar nossa biblioteca!</p>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a class="menuItem"
-               onclick="window.open('https://api.whatsapp.com/send/?phone=5571981577908&text&type=phone_number&app_absent=0', '_blank')">
-              <div class="menuIco transparent">
-                <img src="https://i.imgur.com/EXKmJM1.png" alt="PowerPoint">
-              </div>
-              <div class="menuTxt">
-                <p class="menuT">PowerPoint</p>
-                <p class="menuD">Clique para acessar os serviços!</p>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a class="menuItem"
-               onclick="window.open('https://www.usojaleco.com.br/templates', '_blank')">
-              <div class="menuIco transparent">
-                <img src="https://i.imgur.com/EXKmJM1.png" alt="Templates">
-              </div>
-              <div class="menuTxt">
-                <p class="menuT">Templates</p>
-                <p class="menuD">Veja os templates disponíveis!</p>
-              </div>
-            </a>
-          </li>
-
-        </ul>
+      <div class="cont cont-largo">
+        <div class="cena" data-render="cena" aria-label="Trabalhos do portfólio projetados num auditório"></div>
       </div>
-    </div>
-  </div>
+      <div class="faixa" data-render="faixa"></div>
+    </section>
 
-  <script>
-    (function(){
-      const toggle = document.getElementById('curriculoToggle');
-      const sub = document.getElementById('curriculoSub');
-      const chev = document.getElementById('curriculoChev');
+    <section class="sec branco">
+      <div class="cont">
+        <div class="cab-sec">
+          <h2 class="titulo-sec">Escolha o tema da sua próxima apresentação</h2>
+          <p class="lead">Apresentações completas por especialidade, com o padrão visual Uso Jaleco. Escolha um tema, veja a prévia e compre.</p>
+        </div>
+        <div data-render="vitrine-destaque"></div>
+        <p style="margin:48px 0 0"><a class="link-seta" href="loja/">Ver a vitrine completa</a></p>
+      </div>
+    </section>
 
-      function setOpen(open){
-        sub.classList.toggle('open', open);
-        chev.classList.toggle('open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
+    <section class="sec">
+      <div class="cont">
+        <div class="cab-sec">
+          <h2 class="titulo-sec">Além dos slides, sua presença profissional</h2>
+          <p class="lead">Começamos pelos slides e crescemos para tudo o que um médico precisa apresentar ao mundo: do Lattes ao site, da marca pessoal ao conteúdo nas redes.</p>
+        </div>
+        <div data-render="servicos"></div>
+      </div>
+    </section>
 
-      toggle.addEventListener('click', function(){
-        setOpen(!sub.classList.contains('open'));
-      });
-    })();
-  </script>
+    <section class="sec escuro">
+      <div class="cont">
+        <div class="cab-sec">
+          <h2 class="titulo-sec">Projetado em auditórios de verdade</h2>
+          <p class="lead">Capas de trabalhos apresentados em jornadas, congressos, sessões de residência e aulas de graduação. Toque em uma capa para ampliar.</p>
+        </div>
+        <div data-render="portfolio-destaque"></div>
+        <p style="margin:40px 0 0"><a class="link-seta" href="portfolio/">Ver todos os trabalhos</a></p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="cont">
+        <div class="cab-sec">
+          <h2 class="titulo-sec">Do briefing ao palco</h2>
+          <p class="lead">Um processo curto e previsível, para você saber o que acontece em cada etapa e chegar ao evento com o arquivo revisado.</p>
+        </div>
+        <ol class="passos">
+          <li><h3>Briefing</h3><p>Você envia o tema, o evento, o tempo de fala e o material que já tem: artigo, rascunho ou anotações.</p></li>
+          <li><h3>Proposta</h3><p>Você recebe uma proposta com escopo, prazo e valor. Sem compromisso até aprovar.</p></li>
+          <li><h3>Produção</h3><p>Organizamos a narrativa e desenhamos cada slide. O prazo é combinado na proposta, conforme o volume e a agenda.</p></li>
+          <li><h3>Entrega</h3><p>PowerPoint aberto e 100% editável, com uma rodada de ajustes antes do evento.</p></li>
+        </ol>
+        <div class="numeros" data-render="numeros" style="margin-top:clamp(64px,8vw,104px)"></div>
+      </div>
+    </section>
+
+    <section class="branco">
+      <div class="cont fundador">
+        <div class="fundador-foto">
+          <img src="assets/img/equipe/arthur-ambrosi-sorriso.webp" alt="Dr. Arthur Ambrosi, de jaleco e estetoscópio" width="1041" height="1400" loading="lazy">
+        </div>
+        <div class="fundador-texto">
+          <h2 class="titulo-sec">Feito por quem também sobe ao palco</h2>
+          <div class="texto">
+            <p>O Uso Jaleco é dirigido por um médico. Isso muda o trabalho: entendemos o conteúdo antes de desenhá-lo e sabemos o que a banca, a plateia e o preceptor esperam ver.</p>
+            <p>E porque levamos o design tão a sério quanto a ciência, entregamos peças que você tem orgulho de projetar.</p>
+          </div>
+          <div class="assinatura"><strong>Dr. Arthur Ambrosi</strong><span>Médico e fundador do Uso Jaleco</span></div>
+          <p style="margin:28px 0 0"><a class="link-seta" href="sobre/">Conheça a história</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec escuro">
+      <div class="cont">
+        <div class="cab-sec">
+          <h2 class="titulo-sec">Ferramentas para estudar e praticar</h2>
+          <p class="lead">A área de educação médica está em construção. Algumas ferramentas já estão abertas para você usar hoje.</p>
+        </div>
+        <div class="ferr-mini" data-render="ferramentas-mini"></div>
+        <p style="margin:40px 0 0"><a class="link-seta" href="conteudos/">Ver todos os conteúdos</a></p>
+      </div>
+    </section>
+
+    <section class="cta-final">
+      <div class="cont">
+        <h2 class="titulo-sec">Tem um congresso, uma aula ou um processo seletivo chegando?</h2>
+        <div class="lado">
+          <p class="lead">Conte o tema, a data e o que você precisa. Respondemos com uma proposta de escopo, prazo e valor.</p>
+          <div class="acoes">
+            <a class="btn btn-laranja" href="orcamento/">Pedir orçamento</a>
+            <a class="btn btn-linha" data-zap="Olá! Vim pelo site do Uso Jaleco." href="#">Conversar no WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div data-rodape></div>
+  <script src="assets/data/config.js"></script>
+  <script src="assets/data/servicos.js"></script>
+  <script src="assets/data/portfolio.js"></script>
+  <script src="assets/data/ferramentas.js"></script>
+  <script src="assets/data/loja.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/loja.js"></script>
+  <script src="assets/js/cena.js"></script>
 </body>
 </html>
-
