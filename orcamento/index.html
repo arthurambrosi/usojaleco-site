@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR" data-raiz="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedir orçamento | Uso Jaleco</title>
+  <meta name="description" content="Peça um orçamento de apresentação médica, currículo, site, identidade visual ou conteúdo. Resposta.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Uso Jaleco">
+  <meta property="og:title" content="Pedir orçamento | Uso Jaleco">
+  <meta property="og:description" content="Peça um orçamento de apresentação médica, currículo, site, identidade visual ou conteúdo. Resposta.">
+  <meta property="og:image" content="https://www.usojaleco.com.br/assets/img/portfolio/slide-01.webp">
+  <meta property="og:url" content="https://www.usojaleco.com.br/orcamento/">
+  <link rel="canonical" href="https://www.usojaleco.com.br/orcamento/">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css?v=20261102-dark">
+</head>
+<body data-pagina="orcamento">
+  <div data-topo></div>
+
+  <main id="conteudo">
+    <section class="cab-pag escuro palco">
+      <div class="cont">
+        <h1 class="titulo-palco">Pedir orçamento</h1>
+        <p class="lead">Conte o que você precisa. O pedido segue pelo WhatsApp ou por e-mail, já preenchido, e você recebe escopo, prazo e valor.</p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="cont orc">
+        <form class="form" data-render="orcamento" novalidate>
+          <fieldset>
+            <legend>O que você precisa</legend>
+            <div class="campo">
+              <span class="sr">Serviços</span>
+              <div class="chips" data-chips role="group" aria-label="Serviços"></div>
+              <span class="erro">Escolha pelo menos um serviço.</span>
+            </div>
+            <div class="campos">
+              <div class="campo">
+                <label for="f-evento">Evento ou finalidade <small>(opcional)</small></label>
+                <input id="f-evento" name="evento" placeholder="Ex.: congresso, sessão clínica, residência">
+              </div>
+              <div class="campo">
+                <label for="f-data">Data do evento ou prazo <small>(opcional)</small></label>
+                <input id="f-data" name="data" type="date">
+              </div>
+              <div class="campo largo">
+                <label for="f-detalhes">Detalhes <small>(opcional)</small></label>
+                <textarea id="f-detalhes" name="detalhes" placeholder="Tema, tempo de fala, número aproximado de slides, se já tem material pronto…"></textarea>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Sobre você</legend>
+            <div class="campos">
+              <div class="campo">
+                <label for="f-nome">Nome</label>
+                <input id="f-nome" name="nome" autocomplete="name" required>
+                <span class="erro">Informe seu nome.</span>
+              </div>
+              <div class="campo">
+                <label for="f-contato">WhatsApp ou e-mail</label>
+                <input id="f-contato" name="contato" autocomplete="email" required>
+                <span class="erro">Informe como podemos responder.</span>
+              </div>
+              <div class="campo largo">
+                <label for="f-perfil">Você é <small>(opcional)</small></label>
+                <select id="f-perfil" name="perfil">
+                  <option value="">Selecione</option>
+                  <option>Estudante de medicina</option>
+                  <option>Residente</option>
+                  <option>Médico</option>
+                  <option>Professor ou preceptor</option>
+                  <option>Outro profissional da saúde</option>
+                  <option>Instituição, liga ou evento</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <p class="nota">Estes campos preparam uma mensagem para você enviar pelo WhatsApp ou e-mail. Não inclua dados de pacientes. <a href="../privacidade/">Saiba como usamos seus dados</a>.</p>
+          <div class="form-acoes">
+            <button class="btn btn-laranja" type="submit" data-via="whatsapp">Enviar pelo WhatsApp</button>
+            <button class="btn btn-linha" type="submit" data-via="email">Enviar por e-mail</button>
+          </div>
+          <p class="form-msg" role="status"></p>
+        </form>
+
+        <aside class="lateral">
+          <div>
+            <h2>Outros canais</h2>
+            <div class="canais" data-render="contatos"></div>
+          </div>
+          <div>
+            <h2>Formas de pagamento</h2>
+            <ul class="lista-simples" data-render="pagamento"></ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <div data-rodape></div>
+  <script src="../assets/data/config.js"></script>
+  <script src="../assets/data/servicos.js?v=20261101c"></script>
+  <script src="../assets/data/portfolio.js"></script>
+  <script src="../assets/data/ferramentas.js"></script>
+  <script src="../assets/data/loja.js?v=20261101c"></script>
+  <script src="../assets/js/site.js?v=20261101c"></script>
+  <script src="../assets/js/loja.js?v=20261101c"></script>
+</body>
+</html>

@@ -209,9 +209,9 @@
           return;
         }
 
-        statusText.textContent = "Ativo";
+        statusText.textContent = "Configurado";
         statusText.className = "value status-ok";
-        statusHint.textContent = "A coleta esta ativa. Verifique o relatorio em Tempo Real no Google Analytics.";
+        statusHint.textContent = "ID configurado. Esta página é pública e não exibe relatórios privados. Confirme a coleta no Google Analytics; prévias locais não enviam visitas.";
       }
 
       if (document.readyState === "loading") {

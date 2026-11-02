@@ -692,6 +692,8 @@
 
           var img = document.createElement("img");
           img.src = src;
+          img.srcset = src.replace(/\.webp$/, "-sm.webp") + " 720w, " + src + " 1600w";
+          img.sizes = "(max-width: 720px) 100vw, 960px";
           img.alt = "Projeto " + (index + 1);
           img.loading = "lazy";
 
