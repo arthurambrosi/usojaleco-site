@@ -59,13 +59,16 @@
     if (/^https?:/.test(v)) return v;
     return raiz + v;
   }
-  function urlSegura(v) { v = String(v || "").trim(); return /^https:\/\//i.test(v) ? v : ""; }
+  function urlSegura(v) { try { var url = new URL(String(v || "").trim()); return url.protocol === "https:" && !url.username && !url.password ? url.href : ""; } catch (_) { return ""; } }
   function preco(v) {
     v = String(v || "").trim();
     if (!v) return "";
     return /R\$/.test(v) ? v : "R$ " + v;
   }
   function normalizar(o) {
+    // A planilha antiga usava a coluna video também para PDFs.
+    var video = urlSegura(o.video), previa = urlSegura(o.previa);
+    if (/\.pdf(?:[?#]|$)/i.test(video)) { previa = previa || video; video = ""; }
     return {
       id: slug(o.id || o.titulo),
       titulo: o.titulo,
@@ -73,7 +76,10 @@
       preco: preco(o.preco),
       descricao: o.descricao || "",
       imagem: urlImagem(o.imagem),
-      previa: urlSegura(o.previa),
+      previa: previa,
+      video: video,
+      quantidade: o.quantidade || "",
+      formato: o.formato || "",
       compra: urlSegura(o.compra)
     };
   }
@@ -93,7 +99,10 @@
         preco: pegar(o, ["preco", "valor", "preco_r", "preco_em_reais"]),
         descricao: pegar(o, ["descricao", "descricao_do_slide", "resumo", "subtitulo"]),
         imagem: pegar(o, ["imagem", "thumb", "thumbnail", "capa", "foto"]),
-        previa: pegar(o, ["pdf", "link_pdf", "preview_pdf", "previa", "video", "link_video"]),
+        previa: pegar(o, ["pdf", "link_pdf", "preview_pdf", "previa"]),
+        video: pegar(o, ["video", "link_video", "url_video"]),
+        quantidade: pegar(o, ["numero_slides", "quantidade_slides"]),
+        formato: pegar(o, ["formato", "formato_arquivo"]),
         compra: pegar(o, ["link_compra", "link_de_compra", "link_de_pagamento", "link", "url"]),
         area: pegar(o, ["area_do_tema", "area_tema", "area", "especialidade", "categoria"])
       });
@@ -190,6 +199,22 @@
   }
 
   // ---------- Página do produto ----------
+  function videoProduto(p) {
+    if (!p.video) return "";
+    var url = new URL(p.video), host = url.hostname.toLowerCase(), id = "", embed = "";
+    if (host === "youtu.be") id = url.pathname.split("/")[1];
+    if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].indexOf(host) >= 0) {
+      id = url.searchParams.get("v") || (/^\/(?:embed|shorts)\/([^/]+)/.exec(url.pathname) || [])[1];
+    }
+    if (/^[\w-]{11}$/.test(id || "")) embed = "https://www.youtube-nocookie.com/embed/" + id;
+    if (["vimeo.com", "www.vimeo.com", "player.vimeo.com"].indexOf(host) >= 0) {
+      var match = url.pathname.match(/^\/(?:video\/)?(\d+)(?:\/([\w]+))?\/?$/);
+      if (match) embed = "https://player.vimeo.com/video/" + match[1] + (match[2] || url.searchParams.get('h') ? "?h=" + encodeURIComponent(match[2] || url.searchParams.get('h')) : "");
+    }
+    var media = embed ? '<iframe src="' + esc(embed) + '" title="Vídeo de ' + esc(p.titulo) + '" loading="lazy" allow="fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>' :
+      (/\.(mp4|webm)$/i.test(url.pathname) ? '<video controls playsinline preload="none"' + (p.imagem ? ' poster="' + esc(p.imagem) + '"' : '') + ' src="' + esc(p.video) + '">Seu navegador não suporta este vídeo.</video>' : "");
+    return '<section class="produto-video" id="video"><div class="media-heading"><h2>Veja os slides em movimento.</h2><p>Uma prévia da apresentação, no seu ritmo.</p></div>' + (media ? '<div class="video-quadro">' + media + '</div>' : '') + '<a class="link-seta" href="' + esc(p.video) + '" target="_blank" rel="noopener">Abrir vídeo em outra aba ↗</a></section>';
+  }
   function produto(el) {
     var id = new URLSearchParams(location.search).get("id") || "";
     el.innerHTML = '<div class="cont"><p class="carregando">Carregando slide…</p></div>';
@@ -209,17 +234,18 @@
         '<section class="produto-pag escuro"><div class="cont">' +
         '<p class="trilha"><a href="' + u("loja/") + '">Vitrine</a> / ' + esc(p.area) + "</p>" +
         '<div class="produto-grid">' +
-        '<div class="produto-vitrine"><div class="monitor"><div class="monitor-tela' + (p.imagem ? "" : " sem-capa") + '">' + capa(p, true) + '</div></div><div class="monitor-pe"></div><div class="monitor-base"></div></div>' +
+        '<div class="produto-midia"><div class="produto-preview' + (p.imagem ? "" : " sem-capa") + '">' + capa(p, true) + '</div>' + videoProduto(p) + '</div>' +
         '<div class="produto-dados">' +
         '<span class="produto-area">' + esc(p.area) + "</span>" +
         '<h1 class="titulo-palco">' + esc(p.titulo) + "</h1>" +
+        ((p.quantidade || p.formato) ? '<div class="produto-especificacoes">' + (p.quantidade ? '<span>' + esc(p.quantidade) + ' slides</span>' : '') + (p.formato ? '<span>' + esc(p.formato) + '</span>' : '') + '</div>' : '') +
         (p.descricao ? '<p class="lead">' + esc(p.descricao) + "</p>" : "") +
         '<p class="produto-valor">' + (p.preco ? esc(p.preco) : "Valor sob consulta") + "</p>" +
         '<div class="acoes">' + comprar +
-        (p.previa ? '<a class="btn btn-linha btn-grande" href="' + esc(p.previa) + '" target="_blank" rel="noopener">Ver prévia</a>' : "") +
+        (p.previa ? '<a class="btn btn-linha btn-grande" href="' + esc(p.previa) + '" target="_blank" rel="noopener">Ver prévia em PDF</a>' : "") +
+        (p.video ? '<a class="produto-video-link" href="#video">Assistir ao vídeo ↓</a>' : '') +
         "</div>" +
         '<p class="nota">A compra é concluída no provedor de pagamento. Confira o valor, os arquivos incluídos e as condições de entrega antes de pagar.</p>' +
-        '<ul class="lista-check escura">' + (L.inclui || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
         '<p class="nota">Dúvidas antes de comprar? <a class="link-seta" href="' + zap("Olá! Tenho uma dúvida sobre o slide \"" + p.titulo + "\".") + '" target="_blank" rel="noopener">Falar no WhatsApp</a></p>' +
         "</div></div></div></section>" +
         (relacionados.length ? '<section class="sec"><div class="cont"><div class="cab-sec"><h2 class="titulo-sec">Você também pode gostar</h2><a class="link-seta" href="' + u("loja/") + '">Ver a vitrine completa ' + ico("seta") + '</a></div><ul class="vitrine vitrine-3">' + relacionados.map(cartao).join("") + "</ul></div></section>" : "") +

@@ -16,7 +16,7 @@
 - `servicos/`: apresentações, currículo, sites, identidade visual e outros serviços. `portfolio/`, `sobre/`, `orcamento/`, `privacidade/`: páginas institucionais e comerciais.
 - `assets/data/`: configuração, serviços, produtos/planilha, portfólio e ferramentas. `assets/js/`: renderização e interações. `assets/css/site.css`: identidade e responsividade. `assets/img/`: imagens WebP. `assets/fonts/`: fontes locais.
 - `links/`: menu antigo, adequado para link da bio. `inicio/`: portal antigo alimentado por outra planilha.
-- `comprar-slide/`, `slides/`, `templates/`, `apresentações/`, `curriculo/`, `powerpoint/`: páginas comerciais anteriores, preservadas.
+- `comprar-slide/`, `templates/`, `apresentações/`, `curriculo/`, `powerpoint/`: páginas comerciais anteriores, preservadas.
 - `eventos/`, `diretrizes/`, `questoes/`, `receita/`, `scores/`, `flashcard/`, `gasometria/`, `prescrever/`, `prescrição/`, `atendimento/`, `transcreve/`: ferramentas mantidas nos seus endereços.
 - `criarsolicitacao/`: preenchimento de documentos médicos; `editarsolicitacao/`: editor de modelos.
 - `editor/`: editor local de eventos/diretrizes; o servidor Python não funciona no GitHub Pages. `prompt/`: apoio à elaboração de conteúdo; `cronograma/`: planejamento de estudos; `data/`: bases JSON.
@@ -31,10 +31,10 @@
 - Google Analytics: **G-4E6S9EHGF6**, em `assets/data/config.js` e `analytics-config.js`. Prévias e localhost não enviam visitas. Não enviar dados de formulário, textos de mensagens ou parâmetros pessoais em eventos. Rever a medição avançada no painel GA antes de campanhas.
 - Planilha de vendas: URL em `assets/data/loja.js` (`planilhaCSV`), a mesma publicada usada em `comprar-slide/index.html`:
   `https://docs.google.com/spreadsheets/d/e/2PACX-1vRH5f6s53rGIEkciJUr_uo7ShCYp8JBUOrd3Y2O4TBaaEAQdzNxUAHsA1CAlptPj1HXyDaARWUfS3Tx/pub?gid=0&single=true&output=csv`
-- Colunas: `ativo`, `titulo`, `preco`, `descricao`, `imagem`, `pdf`/`video` (prévia), `link_compra`, `area`. Recomenda-se adicionar `id` estável para que mudar o título não altere o endereço do produto. Sem ID, o título determina o endereço.
+- Colunas: `ativo`, `titulo`, `preco`, `descricao`, `imagem`, `pdf` (prévia), `video`, `numero_slides`, `formato`, `link_compra`, `area`. Recomenda-se adicionar `id` estável para que mudar o título não altere o endereço do produto. Sem ID, o título determina o endereço.
 - Não publicar segredos na planilha pública. O PDF deve ser uma prévia; a entrega do arquivo pago precisa ser configurada no provedor de pagamento.
 - A planilha atual oferece ITU na pediatria com checkout Greenn. Não inventar produtos, avaliações, disponibilidade, prazos ou garantias. Falha da planilha mostra um aviso e contato, nunca estoque fictício.
-- `slides/` e `templates/` usam outra planilha. `inicio/` tem sua própria planilha de ferramentas; alterações feitas no código não editam essas planilhas.
+- `slides/catalogo-anterior.html` e `templates/` usam outra planilha. `inicio/` tem sua própria planilha de ferramentas; alterações feitas no código não editam essas planilhas.
 
 ## Identidade e imagens
 
@@ -62,10 +62,17 @@
 
 - Home reduzida a abertura com auditório automático, apresentação de Arthur e dois serviços: apresentações e currículo.
 - Menu principal em `assets/js/site.js`: Slides (visão geral, loja, valores, WhatsApp), Currículo (serviço, valores, WhatsApp) e Sobre. Os demais serviços continuam acessíveis pelos endereços antigos, sem destaque na navegação.
-- `/apresentacoes/` é a página central de Slides. A pasta com acento `/apresentações/` continua preservada.
+- `/slides/` é a página central de Slides; `/apresentacoes/` redireciona para ela, mantendo parâmetros e âncoras. A pasta com acento `/apresentações/` continua preservada.
 - Orçamentos vão diretamente ao WhatsApp. O formulário antigo `/orcamento/` permanece para compatibilidade.
 - Apresentações sob medida não têm preço fixo: dependem de data, tema, complexidade, número de slides e material disponível, conforme confirmado pelo proprietário.
 - A cena fixa de auditório avança automaticamente. Clicar ou usar Enter no auditório pausa/retoma; não há seletor de ambiente, contagem ou legenda visível.
 - A loja tem busca, filtro, ordenação e contagem de resultados. `assets/data/loja.js` mapeia capas extraídas de PDFs públicos em `capasPDF`; atualizar a capa se o PDF do produto mudar. As imagens ficam em `assets/img/loja/`.
 
 - O proprietário pediu publicação diretamente no GitHub/Pages via PR em 2026-11-02. Não publicar novas versões no Sites do ChatGPT. Tema da área comercial: preto/grafite com laranja; não usar fundo branco.
+
+## Produtos e revisão para celular
+
+- Consulte `GUIA-DA-LOJA.md` para cadastrar produtos sem editar código. Cada linha da planilha gera sua página em `/loja/slide/?id=...`. Nunca trocar um ID divulgado.
+- Vídeo e PDF são independentes. YouTube, Vimeo e MP4/WebM têm player; outros links HTTPS têm saída externa. PDF na antiga coluna vídeo continua sendo tratado como PDF. Não há vídeo real cadastrado no produto atual; o player aparece quando houver um link de vídeo.
+- Teste de compatibilidade da planilha e vídeos: `node scripts/testar_catalogo.cjs`.
+- Home e `/slides/` têm os caminhos Vitrine/Sob medida antes do fundador. O retrato transparente sobressai ao fundo, sem corte no topo. No celular, produto mostra capa, dados de compra e depois vídeo.
