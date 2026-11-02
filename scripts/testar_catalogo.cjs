@@ -1,0 +1,27 @@
+// Testa o contrato da planilha e dos vídeos sem alterar dados de venda.
+const fs = require('node:fs');
+const vm = require('node:vm');
+const assert = require('node:assert/strict');
+const source = fs.readFileSync(require('node:path').join(__dirname, '../assets/js/loja.js'), 'utf8');
+const context = {window:{UJ:{}},document:{documentElement:{getAttribute:()=>''},querySelectorAll:()=>[]},location:{protocol:'https:',hostname:'www.usojaleco.com.br'}, URL, URLSearchParams};
+vm.createContext(context);
+vm.runInContext(source.replace('var mapa = {', 'window.testes = {daPlanilha, videoProduto}; var mapa = {'),context);
+const {daPlanilha,videoProduto}=context.window.testes;
+const rows=daPlanilha('id,titulo,preco,video,pdf,ativo,descricao,numero_slides,formato\nitu-na-pediatria,"Título, atualizado","99,00",https://youtu.be/abcdefghijk,https://example.com/previa.pdf,sim,"Uma descrição\ncom duas linhas",40,PowerPoint\noculto,Oculto,10,,,não,,,');
+assert.equal(rows.length,1);
+assert.equal(rows[0].id,'itu-na-pediatria');
+assert.equal(rows[0].preco,'R$ 99,00');
+assert.equal(rows[0].quantidade,'40');
+assert.match(rows[0].descricao,/\n/);
+assert.match(videoProduto(rows[0]),/youtube-nocookie.com\/embed\/abcdefghijk/);
+assert.match(rows[0].previa,/previa.pdf/);
+const legacy=daPlanilha('titulo,video\nAntigo,https://example.com/previa.pdf')[0];
+assert.equal(legacy.video,'');assert.equal(legacy.previa,'https://example.com/previa.pdf');
+assert.equal(videoProduto(legacy),'');
+const bad=daPlanilha('titulo,video,link_compra\nTeste,javascript:alert(1),https://')[0];
+assert.equal(bad.video,'');assert.equal(bad.compra,'');
+assert.match(videoProduto({video:'https://example.com/demo.mp4',titulo:'Demonstração'}),/<video controls playsinline preload="none"/);
+assert.match(videoProduto({video:'https://vimeo.com/123456/abc123',titulo:'Demo'}),/123456\?h=abc123/);
+assert.doesNotMatch(videoProduto({video:'https://youtube.com.evil.example/watch?v=abcdefghijk',titulo:'Demo'}),/<iframe/);
+assert.match(videoProduto({video:'https://example.com/watch',titulo:'Demo'}),/Abrir vídeo em outra aba/);
+console.log('OK: CSV, IDs estáveis, PDF legado, vídeo + PDF, embeds e URLs inválidas.');

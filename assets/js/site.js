@@ -77,7 +77,7 @@
   function montarTopo() {
     var alvo = $("[data-topo]"); if (!alvo) return;
     var grupos = [
-      {nome:"Slides", links:[['Conhecer apresentações','apresentacoes/'],['Loja de slides','loja/'],['Valores e sob medida','apresentacoes/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de apresentação sob medida.')]]},
+      {nome:"Slides", links:[['Conhecer apresentações','slides/'],['Loja de slides','loja/'],['Valores e sob medida','slides/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de apresentação sob medida.')]]},
       {nome:"Currículo", links:[['Conhecer o serviço','servicos/curriculo/'],['Consultar valores','servicos/curriculo/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de currículo.')]]}
     ];
     function link(item) { var externo = /^https:/.test(item[1]); return '<a href="' + (externo ? item[1] : u(item[1])) + '"' + (externo ? ' target="_blank" rel="noopener"' : '') + '>' + esc(item[0]) + '</a>'; }
@@ -103,7 +103,7 @@
   }
   function montarRodape() {
     var alvo = $('[data-rodape]'); if(!alvo) return;
-    alvo.outerHTML = '<footer class="rodape rodape-simples"><div class="cont"><div class="footer-row"><div><a class="marca" href="' + u('') + '">uso<b>jaleco</b><i>.</i></a><p>Clareza para as suas ideias.<br>Cuidado com a sua trajetória.</p></div><nav aria-label="Rodapé"><a href="' + u('apresentacoes/') + '">Slides</a><a href="' + u('servicos/curriculo/') + '">Currículo</a><a href="' + u('sobre/') + '">Sobre</a></nav><div><a href="mailto:' + C.email + '">' + C.email + '</a><br><a href="https://instagram.com/' + C.instagram + '" target="_blank" rel="noopener">@' + C.instagram + '</a></div></div><div class="rodape-base"><span>© ' + new Date().getFullYear() + ' Uso Jaleco</span><a href="' + u('privacidade/') + '">Privacidade e contato</a><span>Não realizamos atendimento médico.</span></div></div></footer>';
+    alvo.outerHTML = '<footer class="rodape rodape-simples"><div class="cont"><div class="footer-row"><div><a class="marca" href="' + u('') + '">uso<b>jaleco</b><i>.</i></a><p>Clareza para as suas ideias.<br>Cuidado com a sua trajetória.</p></div><nav aria-label="Rodapé"><a href="' + u('slides/') + '">Slides</a><a href="' + u('servicos/curriculo/') + '">Currículo</a><a href="' + u('sobre/') + '">Sobre</a></nav><div><a href="mailto:' + C.email + '">' + C.email + '</a><br><a href="https://instagram.com/' + C.instagram + '" target="_blank" rel="noopener">@' + C.instagram + '</a></div></div><div class="rodape-base"><span>© ' + new Date().getFullYear() + ' Uso Jaleco</span><a href="' + u('privacidade/') + '">Privacidade e contato</a><span>Não realizamos atendimento médico.</span></div></div></footer>';
   }
 
   // ---------- Tela de projeção (home) ----------

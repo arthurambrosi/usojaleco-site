@@ -3,7 +3,7 @@
  *
  * A vitrine lê a mesma planilha publicada que você já usa em /comprar-slide.
  * Colunas reconhecidas (pelo nome do cabeçalho, sem acento ou maiúsculas):
- *   ativo | titulo | preco | descricao | imagem | pdf (prévia) | link_compra | area
+ *   id | ativo | titulo | preco | descricao | imagem | pdf | video | link_compra | area | numero_slides | formato
  * Linhas com "ativo" igual a não/false/0 ficam escondidas.
  *
  * "imagem" aceita link direto de imagem ou link de arquivo do Google Drive
