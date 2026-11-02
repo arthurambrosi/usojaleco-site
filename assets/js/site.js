@@ -9,7 +9,7 @@
   var UJ = window.UJ || {};
   var C = UJ.config || {};
   var TODOS_SERVICOS = UJ.servicos || [];
-  var SERV = TODOS_SERVICOS.filter(function(s) { return ["apresentacoes", "curriculo"].indexOf(s.id) >= 0; });
+  var SERV = TODOS_SERVICOS.filter(function(s) { return ["apresentacoes", "curriculo", "sites", "identidade-visual"].indexOf(s.id) >= 0; });
   var PORT = UJ.portfolio || [];
   var FERR = UJ.ferramentas || [];
   var doc = document;
@@ -76,26 +76,10 @@
   // ---------- Topo ----------
   function montarTopo() {
     var alvo = $("[data-topo]"); if (!alvo) return;
-    var grupos = [
-      {nome:"Slides", links:[['Conhecer apresentações','slides/'],['Loja de slides','loja/'],['Valores e sob medida','slides/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de apresentação sob medida.')]]},
-      {nome:"Currículo", links:[['Conhecer o serviço','servicos/curriculo/'],['Consultar valores','servicos/curriculo/#valores'],['Pedir orçamento',zap('Olá! Quero um orçamento de currículo.')]]}
-    ];
-    function link(item) { var externo = /^https:/.test(item[1]); return '<a href="' + (externo ? item[1] : u(item[1])) + '"' + (externo ? ' target="_blank" rel="noopener"' : '') + '>' + esc(item[0]) + '</a>'; }
-    var nav = grupos.map(function(g,k) { return '<div class="menu-serv"><button type="button" aria-expanded="false" aria-controls="submenu-' + k + '">' + g.nome + ico('baixo') + '</button><div class="painel-serv" id="submenu-' + k + '">' + g.links.map(link).join('') + '</div></div>'; }).join('');
-    var mobile = grupos.map(function(g) { return '<details><summary>' + g.nome + '</summary>' + g.links.map(link).join('') + '</details>'; }).join('');
-    var contato = zap('Olá! Quero um orçamento pelo site do Uso Jaleco.');
-    alvo.outerHTML = '<a class="pular" href="#conteudo">Pular para o conteúdo</a><header class="topo"><div class="cont"><a class="marca" href="' + u('') + '" aria-label="Uso Jaleco, página inicial">uso<b>jaleco</b><i>.</i></a><nav class="nav" aria-label="Principal">' + nav + '<a href="' + u('sobre/') + '">Sobre</a></nav><a class="btn btn-tinta btn-orc" href="' + contato + '" target="_blank" rel="noopener">Pedir orçamento ↗</a><button class="btn-menu" type="button" aria-expanded="false" aria-controls="gaveta" aria-label="Abrir menu">' + ico('menu') + '</button></div></header><nav class="gaveta" id="gaveta" aria-label="Menu móvel">' + mobile + '<a class="g-grande" href="' + u('sobre/') + '">Sobre</a><a class="btn btn-tinta" href="' + contato + '" target="_blank" rel="noopener">Pedir orçamento ↗</a></nav>';
-    $$('.menu-serv').forEach(function(ms) {
-      var b = $('button',ms);
-      function fechar() { ms.removeAttribute('data-aberto'); b.setAttribute('aria-expanded','false'); }
-      b.addEventListener('click',function() {
-        var abrir = !ms.hasAttribute('data-aberto');
-        $$('.menu-serv').forEach(function(outro) { outro.removeAttribute('data-aberto'); $('button',outro).setAttribute('aria-expanded','false'); });
-        if (abrir) { ms.setAttribute('data-aberto',''); b.setAttribute('aria-expanded','true'); }
-      });
-      doc.addEventListener('click',function(e) { if (!ms.contains(e.target)) fechar(); });
-      ms.addEventListener('focusout',function(e) { if (!ms.contains(e.relatedTarget)) fechar(); });
-    });
+    var contato = zap('Olá! Vim pelo Uso Jaleco e quero saber mais sobre os serviços.');
+    var links = [['Compre','loja/'],['Serviços','servicos/'],['Sobre','sobre/']];
+    function itens(classe) { return links.map(function(item) { return '<a class="' + classe + '" href="' + u(item[1]) + '">' + item[0] + '</a>'; }).join(''); }
+    alvo.outerHTML = '<a class="pular" href="#conteudo">Pular para o conteúdo</a><header class="topo"><div class="cont"><a class="marca" href="' + u('') + '" aria-label="Uso Jaleco, página inicial">uso<b>jaleco</b><i>.</i></a><nav class="nav" aria-label="Principal">' + itens('') + '</nav><a class="btn btn-tinta btn-orc" href="' + contato + '" target="_blank" rel="noopener">Fale conosco ↗</a><button class="btn-menu" type="button" aria-expanded="false" aria-controls="gaveta" aria-label="Abrir menu">' + ico('menu') + '</button></div></header><nav class="gaveta" id="gaveta" aria-label="Menu móvel">' + itens('g-grande') + '<a class="g-grande" href="' + u('menu/') + '">Todos os links</a><a class="btn btn-tinta" href="' + contato + '" target="_blank" rel="noopener">Fale conosco ↗</a></nav>';
     var bm = $('.btn-menu');
     function fecharMobile() { doc.body.classList.remove('menu-aberto'); bm.setAttribute('aria-expanded','false'); bm.setAttribute('aria-label','Abrir menu'); }
     bm.addEventListener('click',function() { var aberto=doc.body.classList.toggle('menu-aberto'); bm.setAttribute('aria-expanded',String(aberto)); bm.setAttribute('aria-label',aberto?'Fechar menu':'Abrir menu'); });
@@ -103,7 +87,7 @@
   }
   function montarRodape() {
     var alvo = $('[data-rodape]'); if(!alvo) return;
-    alvo.outerHTML = '<footer class="rodape rodape-simples"><div class="cont"><div class="footer-row"><div><a class="marca" href="' + u('') + '">uso<b>jaleco</b><i>.</i></a><p>Clareza para as suas ideias.<br>Cuidado com a sua trajetória.</p></div><nav aria-label="Rodapé"><a href="' + u('slides/') + '">Slides</a><a href="' + u('servicos/curriculo/') + '">Currículo</a><a href="' + u('sobre/') + '">Sobre</a></nav><div><a href="mailto:' + C.email + '">' + C.email + '</a><br><a href="https://instagram.com/' + C.instagram + '" target="_blank" rel="noopener">@' + C.instagram + '</a></div></div><div class="rodape-base"><span>© ' + new Date().getFullYear() + ' Uso Jaleco</span><a href="' + u('privacidade/') + '">Privacidade e contato</a><span>Não realizamos atendimento médico.</span></div></div></footer>';
+    alvo.outerHTML = '<footer class="rodape rodape-simples"><div class="cont"><div class="footer-row"><div><a class="marca" href="' + u('') + '">uso<b>jaleco</b><i>.</i></a><p>Clareza para as suas ideias.<br>Cuidado com a sua trajetória.</p></div><nav aria-label="Rodapé"><a href="' + u('loja/') + '">Compre</a><a href="' + u('servicos/') + '">Serviços</a><a href="' + u('menu/') + '">Todos os links</a><a href="' + u('sobre/') + '">Sobre</a></nav><div><a href="mailto:' + C.email + '">' + C.email + '</a><br><a href="https://instagram.com/' + C.instagram + '" target="_blank" rel="noopener">@' + C.instagram + '</a></div></div><div class="rodape-base"><span>© ' + new Date().getFullYear() + ' Uso Jaleco</span><a href="' + u('privacidade/') + '">Privacidade e contato</a><span>Não realizamos atendimento médico.</span></div></div></footer>';
   }
 
   // ---------- Tela de projeção (home) ----------

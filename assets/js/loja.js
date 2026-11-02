@@ -20,6 +20,12 @@
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function chave(s) { return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, ""); }
   function slug(s) { return chave(s).replace(/_/g, "-"); }
+  function segmento(area) {
+    var nome = '_' + chave(area) + '_';
+    var materias = L.areasEscolares || ['biologia','geografia','historia','matematica','fisica','quimica','ciencias','ciencias_da_natureza','ciencias_humanas','portugues','lingua_portuguesa','literatura','redacao','gramatica','ingles','lingua_inglesa','espanhol','lingua_espanhola','frances','artes','arte','educacao_artistica','educacao_fisica','filosofia','sociologia','ensino_religioso','informatica','computacao','robotica','tecnologia','educacao_financeira','projeto_de_vida','alfabetizacao','pedagogia','educacao_infantil'];
+    if (/_(ciencias_medicas|ciencias_da_saude)_/.test(nome)) return 'medicina';
+    return materias.some(function(m) { return nome.indexOf('_' + chave(m) + '_') >= 0; }) ? 'escola' : 'medicina';
+  }
   function ico(n) { return UJ.ico ? UJ.ico(n) : ""; }
 
   // ---------- Leitura da planilha ----------
@@ -73,6 +79,7 @@
       id: slug(o.id || o.titulo),
       titulo: o.titulo,
       area: o.area || "Outros temas",
+      segmento: segmento(o.area),
       preco: preco(o.preco),
       descricao: o.descricao || "",
       imagem: urlImagem(o.imagem),
@@ -165,8 +172,17 @@
     el.innerHTML = '<p class="carregando">Carregando slides…</p>';
     carregar().then(function (r) {
       if (r.erro || !r.lista.length) { el.innerHTML = erro(); return; }
+      var selecao = new URLSearchParams(location.search).get('vitrine') === 'escola' ? 'escola' : 'medicina';
+      var estoque = r.lista.filter(function(p) { return p.segmento === selecao; });
+      var titulo = selecao === 'escola' ? 'Vitrine Escola' : 'Vitrine Medicina';
+      var heading = doc.querySelector('.shop-header h1');
+      if (heading) heading.textContent = titulo;
+      var lead = doc.querySelector('.shop-header .lead');
+      if (lead) lead.textContent = selecao === 'escola' ? 'Apresentações para ensinar, explicar e despertar novas ideias.' : 'Apresentações para aulas, congressos e a sua rotina na medicina.';
+      doc.title = titulo + ' | Uso Jaleco';
+      doc.querySelectorAll('[data-vitrine]').forEach(function(a) { if (a.getAttribute('data-vitrine') === selecao) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
       var areas = [];
-      r.lista.forEach(function (p) { if (areas.indexOf(p.area) < 0) areas.push(p.area); });
+      estoque.forEach(function (p) { if (areas.indexOf(p.area) < 0) areas.push(p.area); });
       areas.sort(function (a, b) { return a.localeCompare(b, "pt-BR"); });
       var area = "Todas", termo = "", ordem = "titulo";
       el.innerHTML = avisoExemplo(r) +
@@ -177,7 +193,7 @@
       var ul = el.querySelector(".vitrine");
       function desenhar() {
         var t = chave(termo);
-        var lista = r.lista.filter(function (p) {
+        var lista = estoque.filter(function (p) {
           return (area === "Todas" || p.area === area) && (!t || chave(p.titulo + " " + p.area + " " + p.descricao).indexOf(t) >= 0);
         });
         function numero(p) { var n = Number(p.preco.replace(/[^0-9,.-]/g, '').replace(/\./g,'').replace(',','.')); return p.preco && Number.isFinite(n) ? n : null; }
@@ -229,10 +245,10 @@
       var comprar = p.compra
         ? '<a class="btn btn-laranja btn-grande" href="' + esc(p.compra) + '" target="_blank" rel="noopener">Comprar agora</a>'
         : '<a class="btn btn-laranja btn-grande" href="' + zap("Olá! Quero comprar o slide \"" + p.titulo + "\" da vitrine do Uso Jaleco.") + '" target="_blank" rel="noopener">Comprar pelo WhatsApp</a>';
-      var relacionados = r.lista.filter(function (x) { return x.area === p.area && x.id !== p.id; }).concat(r.lista.filter(function (x) { return x.area !== p.area && x.id !== p.id; })).slice(0, 3);
+      var relacionados = r.lista.filter(function (x) { return x.area === p.area && x.id !== p.id; }).concat(r.lista.filter(function (x) { return x.segmento === p.segmento && x.area !== p.area && x.id !== p.id; })).slice(0, 3);
       el.innerHTML = avisoExemplo(r).replace('class="aviso-exemplo"', 'class="aviso-exemplo aviso-topo"') +
         '<section class="produto-pag escuro"><div class="cont">' +
-        '<p class="trilha"><a href="' + u("loja/") + '">Vitrine</a> / ' + esc(p.area) + "</p>" +
+        '<p class="trilha"><a href="' + u("loja/?vitrine=" + p.segmento) + '">Vitrine ' + (p.segmento === 'escola' ? 'Escola' : 'Medicina') + '</a> / ' + esc(p.area) + "</p>" +
         '<div class="produto-grid">' +
         '<div class="produto-midia"><div class="produto-preview' + (p.imagem ? "" : " sem-capa") + '">' + capa(p, true) + '</div>' + videoProduto(p) + '</div>' +
         '<div class="produto-dados">' +

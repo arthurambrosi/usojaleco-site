@@ -918,3 +918,45 @@ body { background:#101010; color:#f2f2ed; }
  .produto-pag { padding-top:24px; }
  .produto-pag .produto-dados { padding:22px; }
 }
+/* Menu para a bio e divisão do catálogo. */
+.vitrine-segmentos { display:flex; gap:8px; margin-bottom:32px; padding:5px; background:#202020; border:1px solid #383838; border-radius:12px; width:max-content; max-width:100%; }
+.vitrine-segmentos a { min-width:130px; min-height:48px; display:flex; align-items:center; justify-content:center; padding:10px 22px; border-radius:8px; text-decoration:none; color:#ccc; font-weight:600; }
+.vitrine-segmentos a[aria-current="page"] { background:#ff6b1a; color:#111; }
+.servico-editorial.servico-compacto { padding-bottom:36px; min-height:270px; }
+.bio-page { background:radial-gradient(ellipse at 50% 0,#352418 0,transparent 550px),#101010; color:#f4f4f0; min-height:100vh; }
+.bio-wrap { max-width:620px; padding:52px 24px 24px; margin:auto; }
+.bio-header { text-align:center; margin-bottom:40px; }
+.bio-header .marca { font-size:34px; }
+.bio-kicker { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#e9a77c; margin:20px 0 28px; }
+.bio-header h1 { font-size:clamp(32px,7vw,44px); line-height:1.1; margin:0 0 18px; }
+.bio-header > p:last-child { font-size:14px; color:#b8b5b1; line-height:1.65; }
+.bio-section { margin:30px 0; }
+.bio-section h2 { display:flex; align-items:baseline; justify-content:space-between; gap:12px; font-size:16px; letter-spacing:0; margin:0 0 14px; }
+.bio-section h2 span { font-size:11px; font-weight:400; color:#999; }
+.bio-vitrines { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.bio-vitrine { display:flex; flex-direction:column; position:relative; min-height:185px; padding:24px; border:1px solid #58402e; border-radius:16px; text-decoration:none; background:linear-gradient(145deg,#3c2d21,#211e19); }
+.bio-vitrine.escola { background:linear-gradient(145deg,#283a35,#1a2421); border-color:#40594f; }
+.bio-symbol { color:#ff9757; font-size:24px; font-weight:600; height:52px; }
+.escola .bio-symbol { color:#a3cfbb; }
+.bio-vitrine strong { font-size:23px; letter-spacing:-.03em; margin-bottom:6px; }
+.bio-vitrine > span:not(.bio-symbol):not(.bio-arrow) { font-size:12px; color:#c3bdb5; max-width:160px; }
+.bio-arrow { position:absolute; right:20px; top:22px; font-size:20px; color:#c9b6a5; }
+.bio-links { border:1px solid #343434; border-radius:14px; overflow:hidden; background:#1a1a1a; }
+.bio-links a { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 22px; text-decoration:none; min-height:60px; }
+.bio-links a + a { border-top:1px solid #303030; }
+.bio-links strong,.bio-contato strong { display:block; font-size:15px; font-weight:600; }
+.bio-links small,.bio-contato small { display:block; font-size:12px; color:#aaa; margin-top:5px; }
+.bio-links a > span:last-child { color:#c9a184; }
+.bio-contato { display:flex; justify-content:space-between; align-items:center; gap:16px; text-decoration:none; padding:22px; border-radius:14px; color:#17100c; background:#ff7b32; }
+.bio-contato small { color:#492710; }
+.bio-ferramentas { margin-top:26px; }
+.bio-ferramentas summary { display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:18px 0; font-size:13px; color:#bbb; list-style:none; }
+.bio-ferramentas summary::-webkit-details-marker { display:none; }
+.bio-ferramentas[open] summary span { transform:rotate(45deg); }
+.bio-ferramentas .bio-links { font-size:14px; }
+.bio-footer { text-align:center; margin-top:32px; font-size:12px; color:#aaa; }
+.bio-footer > span { margin:0 12px; }
+.bio-footer a { display:inline-block; padding:12px 0; }
+.bio-footer p { font-size:11px; color:#777; margin-top:12px; }
+@media(hover:hover) { .bio-links a:hover { background:#242424; } .bio-vitrine:hover { border-color:#ff9757; } .bio-contato:hover { background:#ff8d50; } }
+@media(max-width:400px) { .bio-wrap { padding:36px 18px 24px; } .bio-vitrine { padding:20px 16px; } .bio-vitrine strong { font-size:21px; } .bio-links a { padding:18px; } .bio-section h2 span { font-size:10px; } }

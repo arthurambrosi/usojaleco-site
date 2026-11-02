@@ -25,3 +25,9 @@ assert.match(videoProduto({video:'https://vimeo.com/123456/abc123',titulo:'Demo'
 assert.doesNotMatch(videoProduto({video:'https://youtube.com.evil.example/watch?v=abcdefghijk',titulo:'Demo'}),/<iframe/);
 assert.match(videoProduto({video:'https://example.com/watch',titulo:'Demo'}),/Abrir vídeo em outra aba/);
 console.log('OK: CSV, IDs estáveis, PDF legado, vídeo + PDF, embeds e URLs inválidas.');
+const areasEscola=['Biologia','Geografia','História','Matemática','Física','Química','Ciências','Língua Portuguesa','Inglês','Arte','Educação Física','Filosofia','Sociologia','Redação','História do Brasil','Geografia / Biologia'];
+for (const area of areasEscola) assert.equal(daPlanilha('titulo,area\nProduto,'+area)[0].segmento,'escola',area);
+for (const area of ['Pediatria','Cardiologia','Histologia','Clínica médica','Ciências da saúde','Outro tema','']) assert.equal(daPlanilha('titulo,area\nProduto,'+area)[0].segmento,'medicina',area);
+const catalogo=daPlanilha('ativo,titulo,area\nx,ITU na pediatria,Pediatria\n,Relevos brasileiros,Geografia\nnão,Oculto,História');
+assert.equal(catalogo.length,2);assert.equal(catalogo[0].segmento,'medicina');assert.equal(catalogo[1].segmento,'escola');
+console.log('OK: matérias escolares, áreas médicas, áreas desconhecidas e ativo em branco/x.');
