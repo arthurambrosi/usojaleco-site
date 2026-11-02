@@ -83,3 +83,5 @@
 - Navegação simplificada: Compre, Serviços, Sobre, Fale conosco. A home apresenta serviços de design/comunicação para profissionais da medicina; não oferece consultas médicas. Apresentações, currículo, sites e identidade visual são os quatro serviços em destaque.
 - `/loja/?vitrine=medicina` e `/loja/?vitrine=escola` usam a mesma planilha, classificando apenas pela coluna área. A função `segmento` de `assets/js/loja.js` identifica matérias escolares; o restante vai para Medicina. Produtos e seus IDs não mudam ao trocar de vitrine.
 - A captura da planilha enviada pelo proprietário confirmou os cabeçalhos atuais e o uso de `x`/vazio na coluna ativo. A fonte CSV existente foi mantida; não foi criada outra planilha.
+
+- Revisão de `/menu/`: manter apenas Apresentações e Currículo na seção de serviços, ambos com mensagens específicas no WhatsApp 5571981577908. Sites e Identidade visual foram retirados apenas do menu, conforme pedido. Ícones no topo levam ao WhatsApp e Instagram `@usojaleco` (sem sublinhado), informado pelo proprietário; o rodapé do menu usa o mesmo perfil.
