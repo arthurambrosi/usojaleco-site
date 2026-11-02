@@ -76,3 +76,10 @@
 - Vídeo e PDF são independentes. YouTube, Vimeo e MP4/WebM têm player; outros links HTTPS têm saída externa. PDF na antiga coluna vídeo continua sendo tratado como PDF. Não há vídeo real cadastrado no produto atual; o player aparece quando houver um link de vídeo.
 - Teste de compatibilidade da planilha e vídeos: `node scripts/testar_catalogo.cjs`.
 - Home e `/slides/` têm os caminhos Vitrine/Sob medida antes do fundador. O retrato transparente sobressai ao fundo, sem corte no topo. No celular, produto mostra capa, dados de compra e depois vídeo.
+
+## Menu e vitrines (novembro de 2026)
+
+- `/menu/`: página de links para a bio, com vitrines Medicina e Escola, serviços, WhatsApp e ferramentas. `/links/` continua intacto.
+- Navegação simplificada: Compre, Serviços, Sobre, Fale conosco. A home apresenta serviços de design/comunicação para profissionais da medicina; não oferece consultas médicas. Apresentações, currículo, sites e identidade visual são os quatro serviços em destaque.
+- `/loja/?vitrine=medicina` e `/loja/?vitrine=escola` usam a mesma planilha, classificando apenas pela coluna área. A função `segmento` de `assets/js/loja.js` identifica matérias escolares; o restante vai para Medicina. Produtos e seus IDs não mudam ao trocar de vitrine.
+- A captura da planilha enviada pelo proprietário confirmou os cabeçalhos atuais e o uso de `x`/vazio na coluna ativo. A fonte CSV existente foi mantida; não foi criada outra planilha.

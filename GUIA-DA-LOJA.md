@@ -10,7 +10,7 @@ Mantenha as colunas existentes; acrescente as novas na primeira linha, à direit
 | --- | --- |
 | `id` | Código único e permanente, como `itu-na-pediatria`. Não altere depois de divulgar o link. Para produtos existentes, use o código que já aparece após `?id=` no endereço. |
 | `titulo` | Nome da apresentação. |
-| `area` | Pediatria, Clínica médica, etc. |
+| `area` | A área define a vitrine: matérias escolares vão para Escola; todas as outras vão para Medicina. |
 | `preco` | Valor como `99,00`. Atualize também o valor no provedor de pagamento: a planilha não altera o checkout. |
 | `descricao` | Conteúdo, o que o cliente recebe e informações relevantes. Aceita quebras de linha. |
 | `imagem` | Link HTTPS da capa, ou link de imagem do Google Drive compartilhada para visualização. Prefira uma imagem horizontal 16:9. |
@@ -44,3 +44,13 @@ O site não exige um novo arquivo HTML para cada produto. Não coloque senhas, d
 A URL pública atual fica em `assets/data/loja.js`, campo `planilhaCSV`. Ela permite ler os dados; não é um link de edição. Abra no seu Google Drive a planilha original usada na antiga página `comprar-slide/`. A configuração continua usando essa mesma fonte, sem migrar seus dados.
 
 O catálogo antigo de `/slides/`, que usava outra planilha, continua em `/slides/catalogo-anterior.html`. A página central atual é `/slides/`; `/apresentacoes/` redireciona para ela, preservando parâmetros e âncoras.
+
+## Medicina e Escola
+
+A coluna `area` separa automaticamente as vitrines. Biologia, Geografia, História, Matemática, Física, Química, Ciências, Português, Literatura, Redação, Gramática, Inglês, Espanhol, Francês, Arte, Educação Física, Filosofia, Sociologia, Ensino Religioso, Informática, Robótica e outras matérias reconhecidas vão para Escola. Acentos e maiúsculas não interferem. As demais áreas, inclusive áreas vazias, vão para Medicina. A lista reconhecida está na função `segmento` em `assets/js/loja.js`; uma matéria nova fora dessa lista pode ser acrescentada.
+
+- Medicina: `/loja/?vitrine=medicina`
+- Escola: `/loja/?vitrine=escola`
+- Link para a bio: `/menu/`
+
+A coluna `ativo` aceita `x`, `sim` ou vazio para exibir, mantendo a compatibilidade com sua planilha. Use `não`, `false`, `0` ou `inativo` para esconder.
