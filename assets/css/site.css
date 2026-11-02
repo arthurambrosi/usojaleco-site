@@ -980,3 +980,23 @@ body { background:#101010; color:#f2f2ed; }
 .contato-numero > span { color:#aaa; font-size:13px; }
 .contato-numero > strong { font-size:23px; }
 .contato-wrap #contato-status { min-height:24px; color:#f8b17d; font-size:13px; }
+.bio-copy summary { cursor:pointer; list-style:none; }
+.bio-copy summary::-webkit-details-marker { display:none; }
+.bio-copy summary:focus-visible { outline:2px solid #ff985e; outline-offset:3px; }
+.bio-social .bio-copy > summary { display:flex; align-items:center; justify-content:center; gap:9px; padding:11px 16px; min-height:46px; border:1px solid #574335; border-radius:24px; color:#e9dfd5; font-size:12px; }
+.bio-social .bio-copy[open] { width:100%; }
+.bio-social .bio-copy:first-child svg { color:#82d9a2; }
+.bio-links .bio-copy + .bio-copy { border-top:1px solid #303030; }
+.bio-links .bio-copy > summary { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 22px; min-height:60px; }
+.bio-copy.bio-contato { display:block; padding:0; }
+.bio-copy.bio-contato > summary { display:flex; align-items:center; justify-content:space-between; padding:22px; }
+.bio-copy-panel { padding:20px; text-align:left; background:#1b1b1b; color:#ddd; border:1px solid #3d3d3d; border-radius:12px; margin:12px 0; }
+.bio-copy-panel > p { color:#bbb; font-size:13px; line-height:1.6; margin:0 0 14px; }
+.bio-copy-panel label { display:block; color:#bbb; font-size:12px; margin:16px 0 8px; }
+.bio-copy-panel input,.bio-copy-panel textarea { display:block; width:100%; background:#262626; color:#eee; border:1px solid #555; border-radius:6px; padding:12px; font:inherit; font-size:13px; line-height:1.5; }
+.bio-copy-panel textarea { resize:vertical; }
+.bio-copy-panel button { min-height:44px; padding:10px 16px; margin-top:10px; border:1px solid #8d6346; border-radius:7px; color:#ffd0af; background:#35271d; cursor:pointer; font:inherit; font-size:13px; }
+.bio-copy-panel .bio-copy-status { margin:12px 0 0; color:#f8b17d; }
+.bio-footer > .bio-copy { display:inline-block; vertical-align:top; }
+.bio-footer > .bio-copy > summary { padding:12px 0; text-decoration:underline; }
+.bio-footer > .bio-copy[open] { display:block; width:100%; }

@@ -87,3 +87,5 @@
 - Revisão de `/menu/`: manter apenas Apresentações e Currículo na seção de serviços, ambos com mensagens específicas no WhatsApp 5571981577908. Sites e Identidade visual foram retirados apenas do menu, conforme pedido. Ícones no topo levam ao WhatsApp e Instagram `@usojaleco` (sem sublinhado), informado pelo proprietário; o rodapé do menu usa o mesmo perfil.
 
 - Contato a partir de `/menu/` passa por `/contato/?assunto=...`, mantendo a mensagem de apresentação, currículo ou projeto. A página oferece abertura explícita de WhatsApp, cópia de link/número/mensagem e orientação para navegador externo. Não redirecionar automaticamente nem prometer contornar bloqueios do TikTok; validar no aparelho real.
+
+- Dois menus: `/menu/` usa WhatsApp e Instagram diretamente, sem página intermediária. `/menu1/` é a variante para TikTok: contatos e serviços expandem painéis locais com link, número/usuário e mensagens copiáveis; não há links externos de WhatsApp/Instagram nem botão para abrir esses aplicativos nessa página. `/contato/` permanece disponível para compatibilidade.
