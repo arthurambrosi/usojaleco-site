@@ -966,3 +966,17 @@ body { background:#101010; color:#f2f2ed; }
 .bio-social svg { width:22px; height:22px; flex:none; }
 .bio-social a:first-child svg { color:#82d9a2; }
 .bio-social a:hover { background:#ffffff12; border-color:#d58c59; }
+/* Contato com alternativa aos navegadores internos de redes sociais. */
+.contato-wrap h1 { font-size:clamp(32px,6vw,44px); margin:0 0 20px; }
+.contato-lead,.contato-ajuda p { color:#bbb; font-size:14px; line-height:1.7; }
+.contato-wrap label { display:block; margin:25px 0 10px; font-size:12px; color:#aaa; }
+.contato-wrap textarea,.contato-wrap input:not(.sr) { width:100%; background:#202020; color:#ddd; border:1px solid #444; border-radius:8px; padding:14px; font:inherit; font-size:13px; }
+.contato-wrap textarea { resize:vertical; line-height:1.65; margin-bottom:18px; }
+.contato-wrap > .btn { width:100%; }
+.contato-ajuda { margin-top:32px; padding-top:26px; border-top:1px solid #383838; }
+.contato-ajuda h2 { font-size:22px; }
+.contato-ajuda button { margin-top:12px; min-height:46px; font-size:13px; }
+.contato-numero { margin-top:28px; display:grid; gap:10px; }
+.contato-numero > span { color:#aaa; font-size:13px; }
+.contato-numero > strong { font-size:23px; }
+.contato-wrap #contato-status { min-height:24px; color:#f8b17d; font-size:13px; }

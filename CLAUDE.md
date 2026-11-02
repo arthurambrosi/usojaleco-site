@@ -85,3 +85,5 @@
 - A captura da planilha enviada pelo proprietário confirmou os cabeçalhos atuais e o uso de `x`/vazio na coluna ativo. A fonte CSV existente foi mantida; não foi criada outra planilha.
 
 - Revisão de `/menu/`: manter apenas Apresentações e Currículo na seção de serviços, ambos com mensagens específicas no WhatsApp 5571981577908. Sites e Identidade visual foram retirados apenas do menu, conforme pedido. Ícones no topo levam ao WhatsApp e Instagram `@usojaleco` (sem sublinhado), informado pelo proprietário; o rodapé do menu usa o mesmo perfil.
+
+- Contato a partir de `/menu/` passa por `/contato/?assunto=...`, mantendo a mensagem de apresentação, currículo ou projeto. A página oferece abertura explícita de WhatsApp, cópia de link/número/mensagem e orientação para navegador externo. Não redirecionar automaticamente nem prometer contornar bloqueios do TikTok; validar no aparelho real.
