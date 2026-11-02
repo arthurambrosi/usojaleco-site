@@ -67,3 +67,5 @@
 - Apresentações sob medida não têm preço fixo: dependem de data, tema, complexidade, número de slides e material disponível, conforme confirmado pelo proprietário.
 - A cena fixa de auditório avança automaticamente. Clicar ou usar Enter no auditório pausa/retoma; não há seletor de ambiente, contagem ou legenda visível.
 - A loja tem busca, filtro, ordenação e contagem de resultados. `assets/data/loja.js` mapeia capas extraídas de PDFs públicos em `capasPDF`; atualizar a capa se o PDF do produto mudar. As imagens ficam em `assets/img/loja/`.
+
+- O proprietário pediu publicação diretamente no GitHub/Pages via PR em 2026-11-02. Não publicar novas versões no Sites do ChatGPT. Tema da área comercial: preto/grafite com laranja; não usar fundo branco.

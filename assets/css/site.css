@@ -756,3 +756,59 @@ h1,h2,h3,.titulo-palco,.titulo-sec,.titulo-peq { text-transform:none; letter-spa
 
 .gaveta .g-grande { text-transform:none; font-size:24px; font-weight:600; letter-spacing:-.02em; }
 @media(min-width:901px) { .home-intro .cena { max-width:1120px; margin:auto; } }
+
+/* Tema aprovado: preto, grafite e laranja. */
+:root {
+  color-scheme: dark;
+  --jaleco: #101010;
+  --grafite: #b5b5af;
+  --linha: #30302e;
+  --laranja-texto: #ff8c4c;
+  --laranja-suave: #2a1a12;
+}
+body { background:#101010; color:#f2f2ed; }
+.topo { background:rgba(16,16,16,.96); color:#f2f2ed; border-color:#2b2b29; }
+.nav > a,.nav > .menu-serv > button,.btn-menu { color:#d0d0ca; }
+.nav > a:hover,.nav > .menu-serv > button:hover,.nav > a[aria-current="page"] { background:#252523; color:#fff; }
+.painel-serv { background:#1d1d1b; color:#f2f2ed; border-color:#393936; box-shadow:0 20px 45px #0008; }
+.painel-serv a:hover { background:#2a2a27; }
+.gaveta { background:#141413; color:#f2f2ed; }
+.gaveta details,.gaveta a { border-color:#343431; }
+.home-intro,.home-autor { background:#101010; }
+.intro-grid h1 em { color:#b2b2aa; }
+.intro-aside p,.autor-copy > p:not(.eyebrow),.servico-editorial p,.hub-opcoes p,.valores-grid p { color:#b5b5af; }
+.eyebrow { color:#ff985a; }
+.autor-foto { background:#232321; }
+.autor-assina { border-color:#343431; }
+.autor-assina span { color:#aaa99f; }
+.home-servicos { background:#161615; border-color:#30302c; }
+.servico-editorial { background:#1e1e1b; border-color:#373733; }
+.servico-editorial:hover { border-color:#69695f; }
+.servico-num,.catalogo-meta,.footer-row p { color:#afafa5; }
+.curriculo-card { background:#25231f; }
+.curriculo-ilustra { background:#35332d; color:#f1eee5; box-shadow:0 0 30px #0002; }
+.curriculo-ilustra i { background:#67645b; }
+.home-fecho { border-color:#393934; }
+.rodape-simples { background:#0b0b0b; color:#eee; }
+.rodape-simples .rodape-base { color:#aaa99f; border-color:#2d2d29; }
+.hub-cab,.shop-header { background:#141413; }
+.branco,.shop-catalogo { background:#191917; color:#f2f2ed; }
+.hub-opcoes article + article,.vitrine-barra { border-color:#383834; }
+.busca input,.catalogo-meta select { background:#22221f; color:#f2f2ed; border-color:#42423d; }
+.filtros button { background:#22221f; color:#ccc; border-color:#42423d; }
+.filtros button[aria-pressed="true"] { background:#f2f2ed; color:#171715; border-color:#f2f2ed; }
+.produto { background:#20201d; border-color:#393935; }
+.produto:hover { box-shadow:0 10px 30px #0003; }
+.produto-ver { color:#eee; }
+.capa-texto { background:#282721; color:#f2f2ed; }
+.btn-tinta,.btn-laranja { background:#ff6b1a; color:#101010; border-color:#ff6b1a; }
+.btn-tinta:hover,.btn-laranja:hover { background:#ff8845; color:#101010; border-color:#ff8845; }
+.btn-linha { background:transparent; color:#eee; border-color:#77776d; }
+.btn-linha:hover { background:#292926; color:#fff; border-color:#bbb; }
+.tabela-precos td,.lista-check li,.faq details { border-color:#3c3c36; }
+.tabela-precos .o,.nota { color:#b5b5af; }
+.campo input,.campo textarea,.campo select { background:#20201d; color:#f2f2ed; border-color:#55554c; }
+.chip span { background:#242420; color:#eee; }
+.fundador,.serv-lista li a,.ferr-mini a { color:#f2f2ed; }
+.serv-lista li a { border-color:#373731; }
+.serv-lista li a:hover { background:#252522; }
